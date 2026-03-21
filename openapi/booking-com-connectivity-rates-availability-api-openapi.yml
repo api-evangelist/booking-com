@@ -1,0 +1,215 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Connectivity Rates and Availability API
+  description: >-
+    The Booking.com Connectivity Rates and Availability API allows Connectivity
+    Partners to set room availability, pricing, and restrictions for properties
+    on Booking.com. Partners can manage advance booking windows, length of stay
+    requirements, and rate plans programmatically. This API is a core component
+    of the Connectivity suite, enabling channel managers and property management
+    systems to keep inventory and pricing synchronized between their platforms
+    and Booking.com without manual extranet updates. Properties should specify
+    availability at least 12 months in advance. The API uses XML request and
+    response formats following B.XML and OTA specifications.
+  version: '2.0'
+  contact:
+    name: Booking.com Connectivity Support
+    url: https://developers.booking.com/connectivity/docs
+  termsOfService: https://www.booking.com/content/terms.html
+externalDocs:
+  description: Booking.com Connectivity Rates and Availability API Documentation
+  url: https://developers.booking.com/connectivity/docs/ari
+servers:
+  - url: https://supply-xml.booking.com
+    description: Production Server (Non-PCI)
+tags:
+  - name: Availability
+    description: >-
+      Endpoints for updating room availability, pricing, and booking
+      restrictions using B.XML format.
+  - name: Inventory
+    description: >-
+      Endpoints for retrieving current inventory and rate details for
+      active room/rate combinations.
+  - name: OTA Availability
+    description: >-
+      OTA-based endpoints for availability and rate notifications following
+      the OpenTravel Alliance specification.
+  - name: Derived Pricing
+    description: >-
+      Endpoints for managing derived pricing rules that automatically
+      calculate rates based on a parent rate plan.
+security:
+  - basicAuth: []
+paths:
+  /hotels/xml/availability:
+    post:
+      operationId: updateAvailability
+      summary: Create or update availability, rates, and restrictions
+      description: >-
+        Specifies a property's availability for specific rooms, rates, and
+        dates, including the number of available rooms, prices depending on
+        occupants, and restrictions on length of stay and check-in/check-out
+        dates. This is the primary endpoint for keeping inventory and pricing
+        synchronized with Booking.com.
+      tags:
+        - Availability
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                B.XML availability request document specifying room counts,
+                rates, and restrictions by date range and room/rate combination.
+      responses:
+        '200':
+          description: Availability update processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: >-
+                  B.XML response indicating success or failure of the
+                  availability update with any error details.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/xml/roomrateavailability:
+    post:
+      operationId: getRoomRateAvailability
+      summary: Retrieve inventory and rate details
+      description: >-
+        Retrieves inventory information per property from Booking.com for all
+        active room/rate (product) combinations. Returns current availability
+        counts, rates, and restrictions that are set in the Booking.com system.
+      tags:
+        - Inventory
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                B.XML request document specifying the hotel ID and date range
+                for inventory retrieval.
+      responses:
+        '200':
+          description: Inventory and rate details retrieved successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: >-
+                  B.XML response containing room/rate availability, pricing,
+                  and restriction details for the requested date range.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/ota/OTA_HotelAvailNotif:
+    post:
+      operationId: notifyHotelAvailability
+      summary: Create or update availability (OTA format)
+      description: >-
+        Updates availability and restrictions using the OTA
+        OTA_HotelAvailNotif specification. An alternative to the B.XML
+        availability endpoint that follows the OpenTravel Alliance format.
+      tags:
+        - OTA Availability
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                OTA_HotelAvailNotifRQ XML document containing availability
+                updates.
+      responses:
+        '200':
+          description: Availability notification processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelAvailNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/ota/OTA_HotelRateAmountNotif:
+    post:
+      operationId: notifyHotelRateAmount
+      summary: Update rate amounts (OTA format)
+      description: >-
+        Updates rate amounts and pricing using the OTA
+        OTA_HotelRateAmountNotif specification. An alternative to the B.XML
+        availability endpoint for rate-only updates.
+      tags:
+        - OTA Availability
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                OTA_HotelRateAmountNotifRQ XML document containing rate
+                amount updates.
+      responses:
+        '200':
+          description: Rate amount notification processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelRateAmountNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/xml/derivedprices:
+    post:
+      operationId: updateDerivedPrices
+      summary: Update derived pricing rules
+      description: >-
+        Creates or updates derived pricing rules that automatically calculate
+        rates based on a parent rate plan. Derived prices allow partners to
+        set percentage or fixed amount adjustments relative to a base rate.
+      tags:
+        - Derived Pricing
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                B.XML request document specifying derived pricing rules
+                including parent rate references and adjustment values.
+      responses:
+        '200':
+          description: Derived pricing rules updated successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: >-
+                  B.XML response indicating success or failure of the
+                  derived pricing update.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >-
+        HTTP Basic authentication using your Connectivity partner
+        username and password.

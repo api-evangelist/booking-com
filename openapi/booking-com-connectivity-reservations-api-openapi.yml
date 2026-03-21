@@ -1,0 +1,179 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Connectivity Reservations API
+  description: >-
+    The Booking.com Connectivity Reservations API allows Connectivity Partners
+    to retrieve and update reservation information for properties listed on
+    Booking.com. It operates over a PCI-compliant secure endpoint and supports
+    reservation retrieval, confirmation, and modification using both B.XML and
+    OTA XML formats (OTA_HotelResNotif and OTA_HotelResModifyNotif). The API
+    follows the OpenTravel Alliance specification and provides a complete and
+    fault-tolerant reservations processing solution. Partners should poll the
+    reservations endpoint once per twenty seconds for timely delivery of data.
+  version: '2.0'
+  contact:
+    name: Booking.com Connectivity Support
+    url: https://developers.booking.com/connectivity/docs
+  termsOfService: https://www.booking.com/content/terms.html
+externalDocs:
+  description: Booking.com Connectivity Reservations API Documentation
+  url: https://developers.booking.com/connectivity/docs/reservations-api/reservations-overview
+servers:
+  - url: https://secure-supply-xml.booking.com
+    description: Production Server (PCI-Compliant)
+tags:
+  - name: Reservations
+    description: >-
+      Endpoints for retrieving new, modified, and cancelled property
+      reservations using B.XML format.
+  - name: OTA Reservations
+    description: >-
+      OTA-based endpoints for reservation notification and modification
+      following the OpenTravel Alliance specification.
+  - name: Recovery
+    description: >-
+      Endpoints for recovering reservations that were not picked up earlier
+      or made prior to the property being connected to the system.
+security:
+  - basicAuth: []
+paths:
+  /hotels/xml/reservations:
+    post:
+      operationId: getReservations
+      summary: Retrieve reservations
+      description: >-
+        Retrieves new, modified, or cancelled property reservations using
+        B.XML format. The response returns the same schema for new, modified,
+        and cancelled reservations with updated information. This endpoint
+        should be polled once per twenty seconds for timely data delivery.
+        Higher frequencies are not recommended due to added server overhead.
+      tags:
+        - Reservations
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                B.XML request document specifying the hotel ID and
+                authentication credentials for reservation retrieval.
+      responses:
+        '200':
+          description: Reservations retrieved successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: >-
+                  B.XML response containing reservation details including
+                  guest information, room details, dates, pricing, and
+                  reservation status.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/xml/reservationssummary:
+    post:
+      operationId: getReservationsSummary
+      summary: Retrieve reservation summary
+      description: >-
+        Retrieves reservation messages that were not picked up earlier.
+        This endpoint is useful for retrieving all reservations that were
+        made prior to the property being connected to the partner system,
+        ensuring no bookings are missed during initial setup.
+      tags:
+        - Recovery
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                B.XML request document for retrieving missed reservation
+                summaries.
+      responses:
+        '200':
+          description: Reservation summaries retrieved successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: >-
+                  B.XML response containing summary of reservations not
+                  previously retrieved.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/ota/OTA_HotelResNotif:
+    post:
+      operationId: processReservationNotification
+      summary: Process reservation notification
+      description: >-
+        Processes reservation notifications following the OTA
+        OTA_HotelResNotif specification. Used for receiving and confirming
+        new reservations through the OpenTravel Alliance standard format.
+      tags:
+        - OTA Reservations
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                OTA_HotelResNotifRQ XML document containing the reservation
+                notification.
+      responses:
+        '200':
+          description: Reservation notification processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelResNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/ota/OTA_HotelResModifyNotif:
+    post:
+      operationId: processReservationModification
+      summary: Process reservation modification
+      description: >-
+        Processes reservation modification notifications following the OTA
+        OTA_HotelResModifyNotif specification. Used for receiving and
+        confirming changes to existing reservations.
+      tags:
+        - OTA Reservations
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                OTA_HotelResModifyNotifRQ XML document containing the
+                reservation modification details.
+      responses:
+        '200':
+          description: Reservation modification processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelResModifyNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >-
+        HTTP Basic authentication using your Connectivity partner
+        username and password.

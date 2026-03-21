@@ -1,0 +1,190 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "booking": "https://developers.booking.com/schemas/",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "geo": "http://www.w3.org/2003/01/geo/wgs84_pos#",
+
+    "Accommodation": {
+      "@id": "schema:LodgingBusiness",
+      "@context": {
+        "accommodation_id": "schema:identifier",
+        "name": "schema:name",
+        "description": "schema:description",
+        "address": "schema:streetAddress",
+        "city": "schema:addressLocality",
+        "country": "schema:addressCountry",
+        "zip": "schema:postalCode",
+        "latitude": "geo:lat",
+        "longitude": "geo:long",
+        "star_rating": "schema:starRating",
+        "review_score": "schema:ratingValue",
+        "total_reviews": "schema:reviewCount",
+        "currency": "schema:priceCurrency",
+        "checkin_from": "schema:checkinTime",
+        "checkout_until": "schema:checkoutTime",
+        "photos": {
+          "@id": "schema:photo",
+          "@container": "@set"
+        },
+        "facilities": {
+          "@id": "schema:amenityFeature",
+          "@container": "@set"
+        },
+        "rooms": {
+          "@id": "schema:containsPlace",
+          "@container": "@set"
+        },
+        "url": {
+          "@id": "schema:url",
+          "@type": "@id"
+        }
+      }
+    },
+
+    "Room": {
+      "@id": "schema:HotelRoom",
+      "@context": {
+        "room_id": "schema:identifier",
+        "name": "schema:name",
+        "max_occupancy": "schema:occupancy",
+        "room_size": "schema:floorSize",
+        "bed_configurations": {
+          "@id": "schema:bed",
+          "@container": "@set"
+        }
+      }
+    },
+
+    "Order": {
+      "@id": "schema:Reservation",
+      "@context": {
+        "order_id": "schema:reservationId",
+        "status": "schema:reservationStatus",
+        "accommodation_id": "schema:reservationFor",
+        "checkin": {
+          "@id": "schema:checkinTime",
+          "@type": "xsd:date"
+        },
+        "checkout": {
+          "@id": "schema:checkoutTime",
+          "@type": "xsd:date"
+        },
+        "total_price": "schema:totalPrice",
+        "booker": "schema:underName",
+        "created_at": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "modified_at": {
+          "@id": "dcterms:modified",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "Booker": {
+      "@id": "schema:Person",
+      "@context": {
+        "first_name": "schema:givenName",
+        "last_name": "schema:familyName",
+        "email": "schema:email",
+        "telephone": "schema:telephone",
+        "country": "schema:nationality"
+      }
+    },
+
+    "Review": {
+      "@id": "schema:Review",
+      "@context": {
+        "review_id": "schema:identifier",
+        "score": "schema:ratingValue",
+        "title": "schema:headline",
+        "positive": "schema:positiveNotes",
+        "negative": "schema:negativeNotes",
+        "author": "schema:author",
+        "date": {
+          "@id": "dcterms:created",
+          "@type": "xsd:date"
+        },
+        "language": "schema:inLanguage"
+      }
+    },
+
+    "CarRental": {
+      "@id": "schema:RentalCarReservation",
+      "@context": {
+        "offer_id": "schema:identifier",
+        "pickup_date": {
+          "@id": "schema:pickupTime",
+          "@type": "xsd:dateTime"
+        },
+        "dropoff_date": {
+          "@id": "schema:dropoffTime",
+          "@type": "xsd:dateTime"
+        },
+        "pickup_depot": "schema:pickupLocation",
+        "dropoff_depot": "schema:dropoffLocation",
+        "vehicle": "schema:reservationFor"
+      }
+    },
+
+    "Vehicle": {
+      "@id": "schema:Car",
+      "@context": {
+        "name": "schema:name",
+        "type": "schema:vehicleType",
+        "transmission": "schema:vehicleTransmission",
+        "fuel_type": "schema:fuelType",
+        "seats": "schema:seatingCapacity",
+        "image_url": {
+          "@id": "schema:image",
+          "@type": "@id"
+        }
+      }
+    },
+
+    "Depot": {
+      "@id": "schema:Place",
+      "@context": {
+        "depot_id": "schema:identifier",
+        "name": "schema:name",
+        "address": "schema:streetAddress",
+        "city": "schema:addressLocality",
+        "country": "schema:addressCountry",
+        "latitude": "geo:lat",
+        "longitude": "geo:long",
+        "phone": "schema:telephone",
+        "opening_hours": "schema:openingHours"
+      }
+    },
+
+    "Promotion": {
+      "@id": "schema:Offer",
+      "@context": {
+        "promotion_id": "schema:identifier",
+        "promotion_type": "schema:category",
+        "discount_percentage": "schema:discount",
+        "bookable_from": {
+          "@id": "schema:validFrom",
+          "@type": "xsd:date"
+        },
+        "bookable_until": {
+          "@id": "schema:validThrough",
+          "@type": "xsd:date"
+        },
+        "status": "schema:availability"
+      }
+    },
+
+    "Price": {
+      "@id": "schema:PriceSpecification",
+      "@context": {
+        "amount": "schema:price",
+        "currency": "schema:priceCurrency"
+      }
+    }
+  }
+}

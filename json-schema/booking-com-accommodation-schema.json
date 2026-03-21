@@ -1,0 +1,255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://booking.com/schemas/booking-com/accommodation.json",
+  "title": "Booking.com Accommodation",
+  "description": "Represents an accommodation property listed on Booking.com, including hotels, apartments, hostels, and other lodging types with their details, facilities, and location information.",
+  "type": "object",
+  "required": ["accommodation_id", "name", "country"],
+  "properties": {
+    "accommodation_id": {
+      "type": "integer",
+      "description": "Unique numeric identifier for the accommodation on Booking.com"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the accommodation property",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed text description of the accommodation and its offerings"
+    },
+    "address": {
+      "type": "string",
+      "description": "Street address of the accommodation"
+    },
+    "city": {
+      "type": "string",
+      "description": "City where the accommodation is located"
+    },
+    "city_id": {
+      "type": "integer",
+      "description": "Booking.com city identifier used for search queries"
+    },
+    "country": {
+      "type": "string",
+      "description": "Two-letter ISO 3166-1 alpha-2 country code",
+      "pattern": "^[A-Za-z]{2}$"
+    },
+    "zip": {
+      "type": "string",
+      "description": "Postal or ZIP code"
+    },
+    "location": {
+      "$ref": "#/$defs/GeoLocation"
+    },
+    "accommodation_type": {
+      "type": "integer",
+      "description": "Numeric identifier for the type of accommodation (hotel, apartment, hostel, etc.)"
+    },
+    "accommodation_type_name": {
+      "type": "string",
+      "description": "Human-readable name for the accommodation type"
+    },
+    "star_rating": {
+      "type": "number",
+      "description": "Official star rating classification of the property",
+      "minimum": 0,
+      "maximum": 5
+    },
+    "review_score": {
+      "type": "number",
+      "description": "Average guest review score on a scale of 1 to 10",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "total_reviews": {
+      "type": "integer",
+      "description": "Total number of guest reviews for this accommodation",
+      "minimum": 0
+    },
+    "chain_id": {
+      "type": "integer",
+      "description": "Identifier for the hotel chain or brand, if applicable"
+    },
+    "chain_name": {
+      "type": "string",
+      "description": "Name of the hotel chain or brand, if applicable"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Default currency code for the property (ISO 4217)",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "checkin_from": {
+      "type": "string",
+      "description": "Earliest check-in time in HH:MM format",
+      "pattern": "^\\d{2}:\\d{2}$"
+    },
+    "checkin_until": {
+      "type": "string",
+      "description": "Latest check-in time in HH:MM format",
+      "pattern": "^\\d{2}:\\d{2}$"
+    },
+    "checkout_from": {
+      "type": "string",
+      "description": "Earliest checkout time in HH:MM format",
+      "pattern": "^\\d{2}:\\d{2}$"
+    },
+    "checkout_until": {
+      "type": "string",
+      "description": "Latest checkout time in HH:MM format",
+      "pattern": "^\\d{2}:\\d{2}$"
+    },
+    "facilities": {
+      "type": "array",
+      "description": "List of facilities and amenities available at the property",
+      "items": {
+        "$ref": "#/$defs/Facility"
+      }
+    },
+    "photos": {
+      "type": "array",
+      "description": "Photos of the accommodation property",
+      "items": {
+        "$ref": "#/$defs/Photo"
+      }
+    },
+    "rooms": {
+      "type": "array",
+      "description": "Room types available at the accommodation",
+      "items": {
+        "$ref": "#/$defs/Room"
+      }
+    },
+    "themes": {
+      "type": "array",
+      "description": "Thematic categories the accommodation belongs to",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "GeoLocation": {
+      "type": "object",
+      "description": "Geographic coordinates of a location",
+      "required": ["latitude", "longitude"],
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "description": "Latitude coordinate in decimal degrees",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "longitude": {
+          "type": "number",
+          "description": "Longitude coordinate in decimal degrees",
+          "minimum": -180,
+          "maximum": 180
+        }
+      }
+    },
+    "Facility": {
+      "type": "object",
+      "description": "A facility or amenity available at the property or room level",
+      "required": ["facility_id", "name"],
+      "properties": {
+        "facility_id": {
+          "type": "integer",
+          "description": "Unique facility identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable facility name"
+        },
+        "facility_type": {
+          "type": "string",
+          "description": "Category of the facility"
+        }
+      }
+    },
+    "Photo": {
+      "type": "object",
+      "description": "A photo of the accommodation or its rooms",
+      "required": ["url"],
+      "properties": {
+        "photo_id": {
+          "type": "string",
+          "description": "Unique photo identifier"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL where the photo can be accessed"
+        },
+        "tag": {
+          "type": "string",
+          "description": "Category tag for the photo (e.g., room, exterior, lobby)"
+        },
+        "sort_order": {
+          "type": "integer",
+          "description": "Display sort order for the photo"
+        }
+      }
+    },
+    "Room": {
+      "type": "object",
+      "description": "A room type available at the accommodation",
+      "required": ["room_id", "name"],
+      "properties": {
+        "room_id": {
+          "type": "integer",
+          "description": "Unique room type identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Room type name"
+        },
+        "max_occupancy": {
+          "type": "integer",
+          "description": "Maximum number of guests the room can accommodate",
+          "minimum": 1
+        },
+        "room_size": {
+          "type": "number",
+          "description": "Room size in square meters"
+        },
+        "bed_configurations": {
+          "type": "array",
+          "description": "Available bed configurations for this room type",
+          "items": {
+            "$ref": "#/$defs/BedConfiguration"
+          }
+        },
+        "facilities": {
+          "type": "array",
+          "description": "Room-level facilities and amenities",
+          "items": {
+            "$ref": "#/$defs/Facility"
+          }
+        }
+      }
+    },
+    "BedConfiguration": {
+      "type": "object",
+      "description": "A bed configuration option for a room",
+      "properties": {
+        "bed_type": {
+          "type": "string",
+          "description": "Type of bed (e.g., double, twin, king, queen)"
+        },
+        "bed_type_id": {
+          "type": "integer",
+          "description": "Numeric bed type identifier"
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "Number of beds of this type",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

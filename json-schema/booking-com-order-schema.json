@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://booking.com/schemas/booking-com/order.json",
+  "title": "Booking.com Order",
+  "description": "Represents a booking order on Booking.com, including accommodation reservations, guest details, pricing, cancellation policies, and order lifecycle status.",
+  "type": "object",
+  "required": ["order_id", "status", "accommodation_id", "checkin", "checkout"],
+  "properties": {
+    "order_id": {
+      "type": "string",
+      "description": "Unique identifier for the booking order"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current status of the order",
+      "enum": ["pending", "confirmed", "cancelled", "modified", "completed", "no_show"]
+    },
+    "accommodation_id": {
+      "type": "integer",
+      "description": "Identifier of the booked accommodation"
+    },
+    "accommodation_name": {
+      "type": "string",
+      "description": "Name of the booked accommodation"
+    },
+    "checkin": {
+      "type": "string",
+      "format": "date",
+      "description": "Check-in date in YYYY-MM-DD format"
+    },
+    "checkout": {
+      "type": "string",
+      "format": "date",
+      "description": "Check-out date in YYYY-MM-DD format"
+    },
+    "booker": {
+      "$ref": "#/$defs/Booker"
+    },
+    "guests": {
+      "$ref": "#/$defs/GuestAllocation"
+    },
+    "products": {
+      "type": "array",
+      "description": "Products (rooms/rates) included in the order",
+      "items": {
+        "$ref": "#/$defs/BookedProduct"
+      }
+    },
+    "total_price": {
+      "$ref": "#/$defs/Price"
+    },
+    "payment": {
+      "$ref": "#/$defs/PaymentSummary"
+    },
+    "cancellation_policy": {
+      "$ref": "#/$defs/CancellationPolicy"
+    },
+    "special_requests": {
+      "type": "string",
+      "description": "Any special requests from the guest"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the order was created"
+    },
+    "modified_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the order was last modified"
+    },
+    "cancelled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the order was cancelled, if applicable"
+    }
+  },
+  "$defs": {
+    "Booker": {
+      "type": "object",
+      "description": "Person who made the booking",
+      "required": ["first_name", "last_name", "email"],
+      "properties": {
+        "first_name": {
+          "type": "string",
+          "description": "Booker first name",
+          "minLength": 1
+        },
+        "last_name": {
+          "type": "string",
+          "description": "Booker last name",
+          "minLength": 1
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Booker email address"
+        },
+        "telephone": {
+          "type": "string",
+          "description": "Booker telephone number"
+        },
+        "country": {
+          "type": "string",
+          "description": "Booker country code (ISO 3166-1 alpha-2)",
+          "pattern": "^[a-z]{2}$"
+        },
+        "platform": {
+          "type": "string",
+          "description": "Platform the booking was made from",
+          "enum": ["desktop", "mobile", "tablet"]
+        }
+      }
+    },
+    "GuestAllocation": {
+      "type": "object",
+      "description": "Guest allocation for the booking",
+      "required": ["number_of_adults", "number_of_rooms"],
+      "properties": {
+        "number_of_adults": {
+          "type": "integer",
+          "description": "Number of adult guests",
+          "minimum": 1
+        },
+        "number_of_rooms": {
+          "type": "integer",
+          "description": "Number of rooms booked",
+          "minimum": 1
+        },
+        "children_ages": {
+          "type": "array",
+          "description": "Ages of children in the booking",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 17
+          }
+        }
+      }
+    },
+    "BookedProduct": {
+      "type": "object",
+      "description": "A room/rate product included in the booking",
+      "required": ["product_id"],
+      "properties": {
+        "product_id": {
+          "type": "string",
+          "description": "Unique product identifier"
+        },
+        "room_name": {
+          "type": "string",
+          "description": "Name of the booked room type"
+        },
+        "meal_plan": {
+          "type": "string",
+          "description": "Included meal plan",
+          "enum": ["room_only", "breakfast_included", "half_board", "full_board", "all_inclusive"]
+        },
+        "cancellation_type": {
+          "type": "string",
+          "description": "Cancellation policy type for this product"
+        },
+        "price": {
+          "$ref": "#/$defs/Price"
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "Number of this product booked",
+          "minimum": 1
+        }
+      }
+    },
+    "Price": {
+      "type": "object",
+      "description": "Monetary amount with currency",
+      "required": ["amount", "currency"],
+      "properties": {
+        "amount": {
+          "type": "number",
+          "description": "Numeric price amount",
+          "minimum": 0
+        },
+        "currency": {
+          "type": "string",
+          "description": "ISO 4217 currency code",
+          "pattern": "^[A-Z]{3}$"
+        }
+      }
+    },
+    "PaymentSummary": {
+      "type": "object",
+      "description": "Summary of payment information for the order",
+      "properties": {
+        "payment_type": {
+          "type": "string",
+          "description": "Payment method used"
+        },
+        "payment_status": {
+          "type": "string",
+          "description": "Current payment status",
+          "enum": ["pending", "paid", "refunded", "partially_refunded"]
+        },
+        "paid_amount": {
+          "$ref": "#/$defs/Price"
+        }
+      }
+    },
+    "CancellationPolicy": {
+      "type": "object",
+      "description": "Cancellation policy details for the order",
+      "properties": {
+        "free_cancellation_until": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Deadline for free cancellation"
+        },
+        "cancellation_fee": {
+          "$ref": "#/$defs/Price"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable cancellation policy text"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,142 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Connectivity Promotions API
+  description: >-
+    The Booking.com Connectivity Promotions API enables Connectivity Partners
+    to create and manage promotional offers for properties listed on
+    Booking.com. Partners can programmatically set up deals, discounts, and
+    special rates to attract travelers and increase bookings. Promotion types
+    include basic deals, last-minute deals, campaign deals, country rates,
+    and mobile rates. Each promotion type has a distinct way to attract
+    customers and drive occupancy and revenue. Discounts are specified as a
+    percentage of the parent rate. Properties must have an XML connection to
+    a provider to be eligible for promotion management via the API.
+  version: '2.0'
+  contact:
+    name: Booking.com Connectivity Support
+    url: https://developers.booking.com/connectivity/docs
+  termsOfService: https://www.booking.com/content/terms.html
+externalDocs:
+  description: Booking.com Connectivity Promotions API Documentation
+  url: https://developers.booking.com/connectivity/docs/promotions
+servers:
+  - url: https://supply-xml.booking.com
+    description: Production Server (Non-PCI)
+tags:
+  - name: Promotions
+    description: >-
+      Endpoints for creating, managing, and retrieving promotional offers
+      for properties on Booking.com.
+security:
+  - basicAuth: []
+paths:
+  /hotels/xml/promotions:
+    post:
+      operationId: managePromotions
+      summary: Create or update promotions
+      description: >-
+        Creates or updates promotional offers for a property. Supports
+        multiple promotion types including basic deals (fully customizable),
+        last-minute deals (available only close to check-in), campaign deals
+        (seasonal events with fixed dates and minimum discounts), country
+        rates (available to customers from specific countries), and mobile
+        rates (available only on mobile devices). Each promotion specifies
+        a discount percentage applied to the parent rate.
+      tags:
+        - Promotions
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                B.XML promotions request document containing promotion
+                definitions including type, discount percentage, applicable
+                dates, room/rate combinations, and eligibility criteria.
+      responses:
+        '200':
+          description: Promotions update processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: >-
+                  B.XML response indicating success or failure of the
+                  promotions update with any error details.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/xml/getpromotions:
+    post:
+      operationId: getPromotions
+      summary: Retrieve promotion details
+      description: >-
+        Retrieves details of existing promotions for a property, including
+        promotion type, discount percentages, applicable date ranges,
+        eligibility status, and associated room/rate combinations.
+      tags:
+        - Promotions
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                B.XML request document specifying the hotel ID and optional
+                filters for retrieving promotion details.
+      responses:
+        '200':
+          description: Promotion details retrieved successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: >-
+                  B.XML response containing promotion details including
+                  type, discounts, dates, and eligibility status.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/xml/getcommissionoverride:
+    post:
+      operationId: getCommissionOverride
+      summary: Get property commission details
+      description: >-
+        Retrieves commission override details for a property, including
+        any special commission arrangements related to promotional campaigns.
+      tags:
+        - Promotions
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                B.XML request document specifying the hotel ID for commission
+                retrieval.
+      responses:
+        '200':
+          description: Commission details retrieved successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: >-
+                  B.XML response containing commission override details.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >-
+        HTTP Basic authentication using your Connectivity partner
+        username and password.

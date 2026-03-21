@@ -1,0 +1,737 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Connectivity Content API
+  description: >-
+    The Booking.com Connectivity Content API enables Connectivity Partners to
+    register properties and modify their content directly without using the
+    Booking.com extranet. Partners can manage facilities, rates, rooms, photos,
+    and other property details programmatically. This API uses XML request and
+    response formats following the OpenTravel Alliance (OTA 2003B) specification
+    and Booking.com's B.XML schema. It is designed for property management
+    systems, channel managers, and other connectivity solutions that need to
+    create and maintain property listings on Booking.com at scale. Booking.com
+    is transitioning to modular REST APIs for property management.
+  version: '2.0'
+  contact:
+    name: Booking.com Connectivity Support
+    url: https://developers.booking.com/connectivity/docs
+  termsOfService: https://www.booking.com/content/terms.html
+externalDocs:
+  description: Booking.com Connectivity Content API Documentation
+  url: https://developers.booking.com/connectivity/docs/content
+servers:
+  - url: https://supply-xml.booking.com
+    description: Production Server (Non-PCI)
+tags:
+  - name: Property Management
+    description: >-
+      Endpoints for creating and updating property information including
+      name, location, contact details, policies, and general settings.
+  - name: Rooms
+    description: >-
+      Endpoints for managing room types, room names, bed configurations,
+      and room-level facilities.
+  - name: Facilities
+    description: >-
+      Endpoints for managing property-level and room-level facilities
+      and amenities.
+  - name: Photos
+    description: >-
+      Endpoints for adding, managing, and organizing property photos.
+  - name: Rates
+    description: >-
+      Endpoints for creating and managing rate plans, including pricing
+      rules and occupancy-based rates.
+  - name: OTA Legacy
+    description: >-
+      Legacy OTA-based endpoints for property content management. These
+      endpoints follow the OpenTravel Alliance specification and are being
+      deprecated in favor of modular APIs.
+security:
+  - basicAuth: []
+paths:
+  /hotels/ota/OTA_HotelDescriptiveContentNotif:
+    post:
+      operationId: updateHotelDescriptiveContent
+      summary: Create or update property content
+      description: >-
+        Creates or modifies the skeleton of a property including location
+        details, policies, contact information, facilities, and other
+        descriptive content. This endpoint follows the OTA 2003B specification.
+        Note: This endpoint was deprecated in December 2024 and will be sunset
+        on December 31, 2026. Transition to the modular Property Management
+        APIs is recommended.
+      tags:
+        - OTA Legacy
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                OTA_HotelDescriptiveContentNotifRQ XML document containing
+                property content updates.
+      responses:
+        '200':
+          description: Content update processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelDescriptiveContentNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/ota/OTA_HotelProductNotif:
+    post:
+      operationId: updateHotelProduct
+      summary: Create or update room and rate products
+      description: >-
+        Creates or updates room types, rate plans, and product configurations
+        for a property. This endpoint allows connectivity partners to define
+        room-rate combinations that will be available for booking.
+      tags:
+        - OTA Legacy
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                OTA_HotelProductNotifRQ XML document containing room and
+                rate product definitions.
+      responses:
+        '200':
+          description: Product update processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelProductNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/ota/OTA_HotelInvNotif:
+    post:
+      operationId: updateHotelInventory
+      summary: Update hotel inventory
+      description: >-
+        Updates room inventory counts for a property, specifying the number
+        of rooms available for specific dates and room types.
+      tags:
+        - OTA Legacy
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: >-
+                OTA_HotelInvNotifRQ XML document containing inventory updates.
+      responses:
+        '200':
+          description: Inventory update processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelInvNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/ota/OTA_HotelSearch:
+    post:
+      operationId: searchHotels
+      summary: Search properties
+      description: >-
+        Searches for properties managed by the connectivity partner, returning
+        property identifiers and basic information.
+      tags:
+        - OTA Legacy
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: OTA_HotelSearchRQ XML document
+      responses:
+        '200':
+          description: Search results returned successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelSearchRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /properties:
+    post:
+      operationId: createProperty
+      summary: Create a property
+      description: >-
+        Creates a new property on Booking.com with basic details including
+        name, location, and property type. Part of the new modular Property
+        Management APIs replacing the legacy OTA endpoints.
+      tags:
+        - Property Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyCreateRequest'
+      responses:
+        '200':
+          description: Property created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Authentication failed
+  /properties/{property_id}:
+    put:
+      operationId: updateProperty
+      summary: Update property details
+      description: >-
+        Updates an existing property's details including name, description,
+        contact information, and settings.
+      tags:
+        - Property Management
+      parameters:
+        - $ref: '#/components/parameters/PropertyId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyUpdateRequest'
+      responses:
+        '200':
+          description: Property updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Authentication failed
+        '404':
+          description: Property not found
+    get:
+      operationId: getProperty
+      summary: Get property details
+      description: >-
+        Retrieves the full details of a specific property including all
+        configured content.
+      tags:
+        - Property Management
+      parameters:
+        - $ref: '#/components/parameters/PropertyId'
+      responses:
+        '200':
+          description: Property details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyResponse'
+        '401':
+          description: Authentication failed
+        '404':
+          description: Property not found
+  /properties/{property_id}/rooms:
+    post:
+      operationId: createRoom
+      summary: Create a room type
+      description: >-
+        Creates a new room type for a property, including room name, bed
+        configuration, maximum occupancy, and room-level facilities.
+      tags:
+        - Rooms
+      parameters:
+        - $ref: '#/components/parameters/PropertyId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomCreateRequest'
+      responses:
+        '200':
+          description: Room type created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Authentication failed
+    get:
+      operationId: listRooms
+      summary: List room types
+      description: >-
+        Retrieves all room types configured for a specific property.
+      tags:
+        - Rooms
+      parameters:
+        - $ref: '#/components/parameters/PropertyId'
+      responses:
+        '200':
+          description: Room types retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomListResponse'
+        '401':
+          description: Authentication failed
+        '404':
+          description: Property not found
+  /properties/{property_id}/facilities:
+    put:
+      operationId: updateFacilities
+      summary: Update property facilities
+      description: >-
+        Updates the list of facilities and amenities available at a property,
+        such as parking, WiFi, swimming pool, and restaurant.
+      tags:
+        - Facilities
+      parameters:
+        - $ref: '#/components/parameters/PropertyId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilitiesUpdateRequest'
+      responses:
+        '200':
+          description: Facilities updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilitiesResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Authentication failed
+    get:
+      operationId: getFacilities
+      summary: Get property facilities
+      description: >-
+        Retrieves the list of facilities configured for a property.
+      tags:
+        - Facilities
+      parameters:
+        - $ref: '#/components/parameters/PropertyId'
+      responses:
+        '200':
+          description: Facilities retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilitiesResponse'
+        '401':
+          description: Authentication failed
+        '404':
+          description: Property not found
+  /properties/{property_id}/photos:
+    post:
+      operationId: uploadPhoto
+      summary: Upload a property photo
+      description: >-
+        Uploads a new photo for a property. Photos can be tagged with
+        categories and assigned to specific rooms or the property overall.
+      tags:
+        - Photos
+      parameters:
+        - $ref: '#/components/parameters/PropertyId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhotoUploadRequest'
+      responses:
+        '200':
+          description: Photo uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotoResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Authentication failed
+    get:
+      operationId: listPhotos
+      summary: List property photos
+      description: >-
+        Retrieves all photos associated with a property.
+      tags:
+        - Photos
+      parameters:
+        - $ref: '#/components/parameters/PropertyId'
+      responses:
+        '200':
+          description: Photos retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotoListResponse'
+        '401':
+          description: Authentication failed
+        '404':
+          description: Property not found
+  /properties/{property_id}/rates:
+    post:
+      operationId: createRatePlan
+      summary: Create a rate plan
+      description: >-
+        Creates a new rate plan for a property, defining pricing rules,
+        cancellation policies, and meal plan inclusions.
+      tags:
+        - Rates
+      parameters:
+        - $ref: '#/components/parameters/PropertyId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatePlanCreateRequest'
+      responses:
+        '200':
+          description: Rate plan created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatePlanResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Authentication failed
+    get:
+      operationId: listRatePlans
+      summary: List rate plans
+      description: >-
+        Retrieves all rate plans configured for a specific property.
+      tags:
+        - Rates
+      parameters:
+        - $ref: '#/components/parameters/PropertyId'
+      responses:
+        '200':
+          description: Rate plans retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatePlanListResponse'
+        '401':
+          description: Authentication failed
+        '404':
+          description: Property not found
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >-
+        HTTP Basic authentication using your Connectivity partner
+        username and password.
+  parameters:
+    PropertyId:
+      name: property_id
+      in: path
+      required: true
+      description: Unique identifier of the property on Booking.com
+      schema:
+        type: integer
+  schemas:
+    PropertyCreateRequest:
+      type: object
+      required:
+        - name
+        - address
+        - city
+        - country
+        - property_type
+      properties:
+        name:
+          type: string
+          description: Property name
+        address:
+          type: string
+          description: Street address
+        city:
+          type: string
+          description: City name
+        country:
+          type: string
+          description: Two-letter country code
+        zip:
+          type: string
+          description: Postal/ZIP code
+        property_type:
+          type: string
+          description: Type of property
+        latitude:
+          type: number
+          description: Latitude coordinate
+        longitude:
+          type: number
+          description: Longitude coordinate
+        currency:
+          type: string
+          description: Default currency for the property
+        star_rating:
+          type: integer
+          description: Star rating classification
+          minimum: 1
+          maximum: 5
+    PropertyUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Property name
+        address:
+          type: string
+          description: Street address
+        description:
+          type: string
+          description: Property description
+        contact_email:
+          type: string
+          format: email
+          description: Primary contact email
+        contact_phone:
+          type: string
+          description: Primary contact phone number
+        checkin_from:
+          type: string
+          description: Earliest check-in time
+        checkin_until:
+          type: string
+          description: Latest check-in time
+        checkout_from:
+          type: string
+          description: Earliest checkout time
+        checkout_until:
+          type: string
+          description: Latest checkout time
+    PropertyResponse:
+      type: object
+      properties:
+        property_id:
+          type: integer
+          description: Unique property identifier
+        name:
+          type: string
+          description: Property name
+        address:
+          type: string
+          description: Street address
+        city:
+          type: string
+          description: City name
+        country:
+          type: string
+          description: Country code
+        status:
+          type: string
+          description: Property status on Booking.com
+    RoomCreateRequest:
+      type: object
+      required:
+        - name
+        - max_occupancy
+      properties:
+        name:
+          type: string
+          description: Room type name
+        max_occupancy:
+          type: integer
+          description: Maximum number of guests
+        room_size:
+          type: number
+          description: Room size in square meters
+        bed_configurations:
+          type: array
+          description: Available bed configurations
+          items:
+            type: object
+            properties:
+              bed_type:
+                type: string
+                description: Type of bed
+              quantity:
+                type: integer
+                description: Number of beds of this type
+        facilities:
+          type: array
+          description: Room-level facilities
+          items:
+            type: string
+    RoomResponse:
+      type: object
+      properties:
+        room_id:
+          type: integer
+          description: Unique room type identifier
+        name:
+          type: string
+          description: Room type name
+        max_occupancy:
+          type: integer
+          description: Maximum number of guests
+        status:
+          type: string
+          description: Room type status
+    RoomListResponse:
+      type: object
+      properties:
+        rooms:
+          type: array
+          description: List of room types
+          items:
+            $ref: '#/components/schemas/RoomResponse'
+    FacilitiesUpdateRequest:
+      type: object
+      properties:
+        facilities:
+          type: array
+          description: List of facility identifiers to set
+          items:
+            type: object
+            properties:
+              facility_id:
+                type: integer
+                description: Facility identifier
+              value:
+                type: string
+                description: Facility value or detail
+    FacilitiesResponse:
+      type: object
+      properties:
+        facilities:
+          type: array
+          description: List of configured facilities
+          items:
+            type: object
+            properties:
+              facility_id:
+                type: integer
+                description: Facility identifier
+              name:
+                type: string
+                description: Facility name
+              value:
+                type: string
+                description: Facility value or detail
+    PhotoUploadRequest:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+          format: uri
+          description: URL of the photo to upload
+        tag:
+          type: string
+          description: Photo category tag
+        room_id:
+          type: integer
+          description: Room type to associate the photo with
+        sort_order:
+          type: integer
+          description: Display sort order
+    PhotoResponse:
+      type: object
+      properties:
+        photo_id:
+          type: string
+          description: Unique photo identifier
+        url:
+          type: string
+          format: uri
+          description: Photo URL on Booking.com
+        tag:
+          type: string
+          description: Photo category tag
+    PhotoListResponse:
+      type: object
+      properties:
+        photos:
+          type: array
+          description: List of property photos
+          items:
+            $ref: '#/components/schemas/PhotoResponse'
+    RatePlanCreateRequest:
+      type: object
+      required:
+        - name
+        - room_id
+      properties:
+        name:
+          type: string
+          description: Rate plan name
+        room_id:
+          type: integer
+          description: Room type this rate plan applies to
+        meal_plan:
+          type: string
+          description: Included meal plan
+          enum:
+            - room_only
+            - breakfast_included
+            - half_board
+            - full_board
+            - all_inclusive
+        cancellation_policy:
+          type: string
+          description: Cancellation policy type
+        min_stay:
+          type: integer
+          description: Minimum length of stay in nights
+        max_stay:
+          type: integer
+          description: Maximum length of stay in nights
+    RatePlanResponse:
+      type: object
+      properties:
+        rate_plan_id:
+          type: integer
+          description: Unique rate plan identifier
+        name:
+          type: string
+          description: Rate plan name
+        room_id:
+          type: integer
+          description: Associated room type ID
+        meal_plan:
+          type: string
+          description: Included meal plan
+        status:
+          type: string
+          description: Rate plan status
+    RatePlanListResponse:
+      type: object
+      properties:
+        rate_plans:
+          type: array
+          description: List of rate plans
+          items:
+            $ref: '#/components/schemas/RatePlanResponse'

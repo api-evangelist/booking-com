@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://booking.com/schemas/booking-com/promotion.json",
+  "title": "Booking.com Promotion",
+  "description": "Represents a promotional offer on Booking.com, including deals, discounts, and special rates that properties use to attract travelers and increase bookings.",
+  "type": "object",
+  "required": ["promotion_id", "promotion_type", "discount_percentage"],
+  "properties": {
+    "promotion_id": {
+      "type": "string",
+      "description": "Unique identifier for the promotion"
+    },
+    "promotion_type": {
+      "type": "string",
+      "description": "Type of promotional offer",
+      "enum": ["basic_deal", "last_minute_deal", "campaign_deal", "country_rate", "mobile_rate"]
+    },
+    "hotel_id": {
+      "type": "integer",
+      "description": "Booking.com property identifier this promotion applies to"
+    },
+    "discount_percentage": {
+      "type": "number",
+      "description": "Discount percentage applied to the parent rate",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "status": {
+      "type": "string",
+      "description": "Current status of the promotion",
+      "enum": ["active", "inactive", "expired", "pending"]
+    },
+    "bookable_from": {
+      "type": "string",
+      "format": "date",
+      "description": "Start date from which the promotion can be booked"
+    },
+    "bookable_until": {
+      "type": "string",
+      "format": "date",
+      "description": "End date until which the promotion can be booked"
+    },
+    "stay_from": {
+      "type": "string",
+      "format": "date",
+      "description": "Earliest check-in date for stays using this promotion"
+    },
+    "stay_until": {
+      "type": "string",
+      "format": "date",
+      "description": "Latest check-out date for stays using this promotion"
+    },
+    "min_advance_days": {
+      "type": "integer",
+      "description": "Minimum number of days in advance the booking must be made",
+      "minimum": 0
+    },
+    "max_advance_days": {
+      "type": "integer",
+      "description": "Maximum number of days in advance the booking can be made"
+    },
+    "min_stay_nights": {
+      "type": "integer",
+      "description": "Minimum number of nights required for the stay",
+      "minimum": 1
+    },
+    "applicable_rooms": {
+      "type": "array",
+      "description": "Room type IDs this promotion applies to; empty means all rooms",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "applicable_rates": {
+      "type": "array",
+      "description": "Rate plan IDs this promotion applies to; empty means all rates",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "target_countries": {
+      "type": "array",
+      "description": "Country codes eligible for this promotion (country_rate type only)",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z]{2}$"
+      }
+    },
+    "target_devices": {
+      "type": "array",
+      "description": "Device types eligible for this promotion (mobile_rate type only)",
+      "items": {
+        "type": "string",
+        "enum": ["mobile", "tablet"]
+      }
+    },
+    "campaign_name": {
+      "type": "string",
+      "description": "Name of the campaign (campaign_deal type only)"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the promotion was created"
+    },
+    "modified_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the promotion was last modified"
+    }
+  }
+}
