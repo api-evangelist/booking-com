@@ -1,5 +1,6 @@
 aid: booking-com
-url: https://raw.githubusercontent.com/api-evangelist/booking-com/refs/heads/main/apis.yml
+url: 
+  https://raw.githubusercontent.com/api-evangelist/booking-com/refs/heads/main/apis.yml
 modified: '2026-03-20'
 apis:
   - aid: booking-com:demand-api
@@ -11,9 +12,11 @@ apis:
       - Search
       - Booking
       - Affiliates
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: 
+      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://demandapi.booking.com
-    humanURL: https://developers.booking.com/demand/docs/getting-started/overview
+    humanURL: 
+      https://developers.booking.com/demand/docs/getting-started/overview
     properties:
       - url: https://developers.booking.com/demand/docs/getting-started/overview
         type: Documentation
@@ -21,13 +24,11 @@ apis:
         type: OpenAPI
     description: >-
       The Booking.com Demand API is a RESTful API that enables Affiliate Partners
-      to access Booking.com's extensive travel inventory. It provides endpoints
-      for searching accommodations such as hotels and apartments, checking
-      availability, retrieving reviews, and getting detailed property information.
-      The API uses JSON responses and requires HTTPS POST requests with Affiliate
-      ID and token authentication. The latest version (V3.1) offers improved
-      functionality and additional endpoints for building travel booking
-      experiences.
+      to access Booking.com's extensive travel inventory. It provides endpoints for
+      searching accommodations such as hotels and apartments, checking availability,
+      retrieving reviews, and getting detailed property information. The API uses
+      JSON responses and requires HTTPS POST requests with Affiliate ID and token
+      authentication.
   - aid: booking-com:car-rentals-api
     name: Booking.com Car Rentals API
     tags:
@@ -35,9 +36,11 @@ apis:
       - Travel
       - Transportation
       - Vehicles
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: 
+      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://demandapi.booking.com
-    humanURL: https://developers.booking.com/demand/docs/open-api/demand-api/cars
+    humanURL: 
+      https://developers.booking.com/demand/docs/open-api/demand-api/cars
     properties:
       - url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
         type: Documentation
@@ -58,7 +61,8 @@ apis:
       - Hotels
       - Content Management
       - Connectivity
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: 
+      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://supply-xml.booking.com
     humanURL: https://developers.booking.com/connectivity/docs/content
     properties:
@@ -81,7 +85,8 @@ apis:
       - Hotels
       - Booking
       - Connectivity
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: 
+      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://secure-supply-xml.booking.com
     humanURL: https://developers.booking.com/connectivity/docs
     properties:
@@ -105,7 +110,8 @@ apis:
       - Pricing
       - Inventory
       - Connectivity
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: 
+      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://supply-xml.booking.com
     humanURL: https://developers.booking.com/connectivity/docs/ari
     properties:
@@ -117,10 +123,7 @@ apis:
       The Booking.com Connectivity Rates and Availability API allows Connectivity
       Partners to set room availability, pricing, and restrictions for properties
       on Booking.com. Partners can manage advance booking windows, length of stay
-      requirements, and rate plans programmatically. This API is a core component
-      of the Connectivity suite, enabling channel managers and property management
-      systems to keep inventory and pricing synchronized between their platforms
-      and Booking.com without manual extranet updates.
+      requirements, and rate plans programmatically.
   - aid: booking-com:connectivity-promotions-api
     name: Booking.com Connectivity Promotions API
     tags:
@@ -129,7 +132,8 @@ apis:
       - Discounts
       - Marketing
       - Connectivity
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: 
+      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://supply-xml.booking.com
     humanURL: https://developers.booking.com/connectivity/docs
     properties:
@@ -138,14 +142,10 @@ apis:
       - url: openapi/booking-com-connectivity-promotions-api-openapi.yml
         type: OpenAPI
     description: >-
-      The Booking.com Connectivity Promotions API enables Connectivity Partners
-      to create and manage promotional offers for properties listed on
-      Booking.com. Partners can programmatically set up deals, discounts, and
-      special rates to attract travelers and increase bookings. This API
-      integrates with the broader Connectivity suite, allowing property
-      management systems and channel managers to coordinate promotional
-      campaigns across distribution channels without requiring manual
-      configuration through the Booking.com extranet.
+      The Booking.com Connectivity Promotions API enables Connectivity Partners to
+      create and manage promotional offers for properties listed on Booking.com. Partners
+      can programmatically set up deals, discounts, and special rates to attract travelers
+      and increase bookings.
 common:
   - type: JSON-LD
     url: json-ld/booking-com-context.jsonld
@@ -155,3 +155,5 @@ common:
     url: json-schema/booking-com-order-schema.json
   - type: JSONSchema
     url: json-schema/booking-com-promotion-schema.json
+description: >-
+  Seamlessly incorporate Booking.com inventory into your travel application.
