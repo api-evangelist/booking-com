@@ -22,10 +22,6 @@ servers:
   - url: https://secure-supply-xml.booking.com
     description: Production Server (PCI-Compliant)
 tags:
-  - name: Reservations
-    description: >-
-      Endpoints for retrieving new, modified, and cancelled property
-      reservations using B.XML format.
   - name: OTA Reservations
     description: >-
       OTA-based endpoints for reservation notification and modification
@@ -34,6 +30,10 @@ tags:
     description: >-
       Endpoints for recovering reservations that were not picked up earlier
       or made prior to the property being connected to the system.
+  - name: Reservations
+    description: >-
+      Endpoints for retrieving new, modified, and cancelled property
+      reservations using B.XML format.
 security:
   - basicAuth: []
 paths:

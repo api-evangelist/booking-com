@@ -26,31 +26,31 @@ tags:
     description: >-
       Endpoints to search for stays such as hotels and apartments, check
       availability, retrieve reviews, and get detailed property information.
-  - name: Orders
+  - name: Constants
     description: >-
-      Endpoints to preview and create new orders, check order details,
-      cancel or modify existing orders.
+      Endpoints for retrieving reference data such as accommodation types,
+      facility types, room types, and other enumerated values.
+  - name: Conversations
+    description: >-
+      Endpoints to retrieve and manage messaging conversations, list
+      conversations, fetch conversation details, and track updates.
+  - name: Locations
+    description: >-
+      Endpoints for retrieving geographical location data including
+      countries, cities, regions, and airports.
   - name: Messages
     description: >-
       Endpoints for two-way post-booking communication between guests and
       properties, allowing you to send and retrieve messages, exchange
       images, and check conversation details.
-  - name: Conversations
+  - name: Orders
     description: >-
-      Endpoints to retrieve and manage messaging conversations, list
-      conversations, fetch conversation details, and track updates.
+      Endpoints to preview and create new orders, check order details,
+      cancel or modify existing orders.
   - name: Payments
     description: >-
       Generic payment-related endpoints, including supported currencies
       and payment types.
-  - name: Locations
-    description: >-
-      Endpoints for retrieving geographical location data including
-      countries, cities, regions, and airports.
-  - name: Constants
-    description: >-
-      Endpoints for retrieving reference data such as accommodation types,
-      facility types, room types, and other enumerated values.
 security:
   - bearerAuth: []
     affiliateId: []

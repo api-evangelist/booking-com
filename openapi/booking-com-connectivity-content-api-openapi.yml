@@ -23,30 +23,30 @@ servers:
   - url: https://supply-xml.booking.com
     description: Production Server (Non-PCI)
 tags:
-  - name: Property Management
-    description: >-
-      Endpoints for creating and updating property information including
-      name, location, contact details, policies, and general settings.
-  - name: Rooms
-    description: >-
-      Endpoints for managing room types, room names, bed configurations,
-      and room-level facilities.
   - name: Facilities
     description: >-
       Endpoints for managing property-level and room-level facilities
       and amenities.
-  - name: Photos
-    description: >-
-      Endpoints for adding, managing, and organizing property photos.
-  - name: Rates
-    description: >-
-      Endpoints for creating and managing rate plans, including pricing
-      rules and occupancy-based rates.
   - name: OTA Legacy
     description: >-
       Legacy OTA-based endpoints for property content management. These
       endpoints follow the OpenTravel Alliance specification and are being
       deprecated in favor of modular APIs.
+  - name: Photos
+    description: >-
+      Endpoints for adding, managing, and organizing property photos.
+  - name: Property Management
+    description: >-
+      Endpoints for creating and updating property information including
+      name, location, contact details, policies, and general settings.
+  - name: Rates
+    description: >-
+      Endpoints for creating and managing rate plans, including pricing
+      rules and occupancy-based rates.
+  - name: Rooms
+    description: >-
+      Endpoints for managing room types, room names, bed configurations,
+      and room-level facilities.
 security:
   - basicAuth: []
 paths:

@@ -27,6 +27,10 @@ tags:
     description: >-
       Endpoints for updating room availability, pricing, and booking
       restrictions using B.XML format.
+  - name: Derived Pricing
+    description: >-
+      Endpoints for managing derived pricing rules that automatically
+      calculate rates based on a parent rate plan.
   - name: Inventory
     description: >-
       Endpoints for retrieving current inventory and rate details for
@@ -35,10 +39,6 @@ tags:
     description: >-
       OTA-based endpoints for availability and rate notifications following
       the OpenTravel Alliance specification.
-  - name: Derived Pricing
-    description: >-
-      Endpoints for managing derived pricing rules that automatically
-      calculate rates based on a parent rate plan.
 security:
   - basicAuth: []
 paths:

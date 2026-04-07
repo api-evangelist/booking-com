@@ -1,22 +1,19 @@
 aid: booking-com
-url: 
-  https://raw.githubusercontent.com/api-evangelist/booking-com/refs/heads/main/apis.yml
+url: https://raw.githubusercontent.com/api-evangelist/booking-com/refs/heads/main/apis.yml
 modified: '2026-03-20'
 apis:
   - aid: booking-com:demand-api
     name: Booking.com Demand API
     tags:
-      - Travel
-      - Hotels
       - Accommodations
-      - Search
-      - Booking
       - Affiliates
-    image: 
-      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+      - Booking
+      - Hotels
+      - Search
+      - Travel
+    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://demandapi.booking.com
-    humanURL: 
-      https://developers.booking.com/demand/docs/getting-started/overview
+    humanURL: https://developers.booking.com/demand/docs/getting-started/overview
     properties:
       - url: https://developers.booking.com/demand/docs/getting-started/overview
         type: Documentation
@@ -33,14 +30,12 @@ apis:
     name: Booking.com Car Rentals API
     tags:
       - Car Rentals
-      - Travel
       - Transportation
+      - Travel
       - Vehicles
-    image: 
-      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://demandapi.booking.com
-    humanURL: 
-      https://developers.booking.com/demand/docs/open-api/demand-api/cars
+    humanURL: https://developers.booking.com/demand/docs/open-api/demand-api/cars
     properties:
       - url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
         type: Documentation
@@ -57,12 +52,11 @@ apis:
   - aid: booking-com:connectivity-content-api
     name: Booking.com Connectivity Content API
     tags:
-      - Properties
-      - Hotels
-      - Content Management
       - Connectivity
-    image: 
-      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+      - Content Management
+      - Hotels
+      - Properties
+    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://supply-xml.booking.com
     humanURL: https://developers.booking.com/connectivity/docs/content
     properties:
@@ -81,12 +75,11 @@ apis:
   - aid: booking-com:connectivity-reservations-api
     name: Booking.com Connectivity Reservations API
     tags:
-      - Reservations
-      - Hotels
       - Booking
       - Connectivity
-    image: 
-      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+      - Hotels
+      - Reservations
+    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://secure-supply-xml.booking.com
     humanURL: https://developers.booking.com/connectivity/docs
     properties:
@@ -105,13 +98,12 @@ apis:
   - aid: booking-com:connectivity-rates-availability-api
     name: Booking.com Connectivity Rates and Availability API
     tags:
-      - Rates
       - Availability
-      - Pricing
-      - Inventory
       - Connectivity
-    image: 
-      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+      - Inventory
+      - Pricing
+      - Rates
+    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://supply-xml.booking.com
     humanURL: https://developers.booking.com/connectivity/docs/ari
     properties:
@@ -127,13 +119,12 @@ apis:
   - aid: booking-com:connectivity-promotions-api
     name: Booking.com Connectivity Promotions API
     tags:
-      - Promotions
+      - Connectivity
       - Deals
       - Discounts
       - Marketing
-      - Connectivity
-    image: 
-      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+      - Promotions
+    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://supply-xml.booking.com
     humanURL: https://developers.booking.com/connectivity/docs
     properties:
