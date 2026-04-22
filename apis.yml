@@ -1,6 +1,6 @@
 aid: booking-com
 url: https://raw.githubusercontent.com/api-evangelist/booking-com/refs/heads/main/apis.yml
-modified: '2026-03-20'
+modified: '2026-04-19'
 apis:
   - aid: booking-com:demand-api
     name: Booking.com Demand API
