@@ -1,0 +1,39 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Booking.com
+providerId: booking-com
+created: '2026-05-04'
+modified: '2026-05-04'
+reconciled: true
+tags:
+  - Travel / Hospitality
+  - Enterprise
+  - B2B
+description: Booking.com does not publish public API pricing. Access is via partner/B2B contracts negotiated
+  through the provider's enterprise sales team. Booking.com Connectivity APIs require Hotel Manager/Connectivity
+  Partner approval; commission per booking.
+sources:
+  - https://connect.booking.com/
+plans:
+  - id: booking-com-partner
+    name: Partner / B2B Contract
+    type: enterprise
+    description: Custom pricing through enterprise sales / partner program.
+    entries:
+      - label: Annual contract (custom)
+        name: annual
+        type: subscription
+        metric: year
+        limit: -1
+        timeFrame: year
+        geo: global
+        unit: 1
+        price: custom
+        userMultiplied: false
+    elements:
+      - name: Negotiated contracts
+      - name: Volume discounts
+      - name: Service-level agreements
+      - name: Dedicated account team
+      - name: 'Partner program: https://connect.booking.com/'
