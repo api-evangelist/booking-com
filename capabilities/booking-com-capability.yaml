@@ -1,0 +1,195 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Car Rentals API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental
+    segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details,
+    look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's
+    car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel
+    planning workflow.
+  tags:
+  - Booking
+  - Com
+  - API
+  created: '2026-05-06'
+  modified: '2026-05-06'
+capability:
+  consumes:
+  - type: http
+    namespace: booking-com
+    baseUri: https://demandapi.booking.com/3.1
+    description: Booking.com Car Rentals API HTTP API.
+    authentication:
+      type: bearer
+      token: '{{BOOKING_COM_TOKEN}}'
+    resources:
+    - name: cars-search
+      path: /cars/search
+      operations:
+      - name: searchcarrentals
+        method: POST
+        description: Search car rentals
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cars-details
+      path: /cars/details
+      operations:
+      - name: getcardetails
+        method: POST
+        description: Get car rental details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cars-depots
+      path: /cars/depots
+      operations:
+      - name: getcardepots
+        method: POST
+        description: Get car rental depots
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cars-depots-reviews-scores
+      path: /cars/depots/reviews/scores
+      operations:
+      - name: getdepotreviewscores
+        method: POST
+        description: Get depot review scores
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cars-suppliers
+      path: /cars/suppliers
+      operations:
+      - name: getcarsuppliers
+        method: POST
+        description: Get car rental suppliers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    port: 8080
+    namespace: booking-com-rest
+    description: REST adapter for Booking.com Car Rentals API.
+    resources:
+    - path: /cars/search
+      name: searchcarrentals
+      operations:
+      - method: POST
+        name: searchcarrentals
+        description: Search car rentals
+        call: booking-com.searchcarrentals
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cars/details
+      name: getcardetails
+      operations:
+      - method: POST
+        name: getcardetails
+        description: Get car rental details
+        call: booking-com.getcardetails
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cars/depots
+      name: getcardepots
+      operations:
+      - method: POST
+        name: getcardepots
+        description: Get car rental depots
+        call: booking-com.getcardepots
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cars/depots/reviews/scores
+      name: getdepotreviewscores
+      operations:
+      - method: POST
+        name: getdepotreviewscores
+        description: Get depot review scores
+        call: booking-com.getdepotreviewscores
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cars/suppliers
+      name: getcarsuppliers
+      operations:
+      - method: POST
+        name: getcarsuppliers
+        description: Get car rental suppliers
+        call: booking-com.getcarsuppliers
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: booking-com-mcp
+    transport: http
+    description: MCP adapter for Booking.com Car Rentals API for AI agent use.
+    tools:
+    - name: searchcarrentals
+      description: Search car rentals
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: booking-com.searchcarrentals
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcardetails
+      description: Get car rental details
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: booking-com.getcardetails
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcardepots
+      description: Get car rental depots
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: booking-com.getcardepots
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getdepotreviewscores
+      description: Get depot review scores
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: booking-com.getdepotreviewscores
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcarsuppliers
+      description: Get car rental suppliers
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: booking-com.getcarsuppliers
+      outputParameters:
+      - type: object
+        mapping: $.
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_TOKEN: BOOKING_COM_TOKEN
