@@ -123,7 +123,7 @@ apis:
       manage promotional offers for properties listed on Booking.com. Partners can programmatically set
       up deals, discounts, and special rates to attract travelers and increase bookings.
 common:
-  - type: JSON-LD
+  - type: JSONLD
     url: json-ld/booking-com-context.jsonld
   - type: JSONSchema
     url: json-schema/booking-com-accommodation-schema.json
