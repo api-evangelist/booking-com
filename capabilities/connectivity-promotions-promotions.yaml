@@ -1,0 +1,165 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Connectivity Promotions API — Promotions
+  description: 'Booking.com Connectivity Promotions API — Promotions. 3 operations. Lead operation: Get property commission
+    details. Self-contained Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Promotions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: connectivity-promotions-promotions
+    baseUri: https://supply-xml.booking.com
+    description: Booking.com Connectivity Promotions API — Promotions business capability. Self-contained, no shared references.
+    resources:
+    - name: hotels-xml-getcommissionoverride
+      path: /hotels/xml/getcommissionoverride
+      operations:
+      - name: getcommissionoverride
+        method: POST
+        description: Get property commission details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: hotels-xml-getpromotions
+      path: /hotels/xml/getpromotions
+      operations:
+      - name: getpromotions
+        method: POST
+        description: Retrieve promotion details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: hotels-xml-promotions
+      path: /hotels/xml/promotions
+      operations:
+      - name: managepromotions
+        method: POST
+        description: Create or update promotions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.BOOKING_COM_USER}}'
+      password: '{{env.BOOKING_COM_PASS}}'
+  exposes:
+  - type: rest
+    namespace: connectivity-promotions-promotions-rest
+    port: 8080
+    description: REST adapter for Booking.com Connectivity Promotions API — Promotions. One Spectral-compliant resource per
+      consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/hotels/xml/getcommissionoverride
+      name: hotels-xml-getcommissionoverride
+      description: REST surface for hotels-xml-getcommissionoverride.
+      operations:
+      - method: POST
+        name: getcommissionoverride
+        description: Get property commission details
+        call: connectivity-promotions-promotions.getcommissionoverride
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/hotels/xml/getpromotions
+      name: hotels-xml-getpromotions
+      description: REST surface for hotels-xml-getpromotions.
+      operations:
+      - method: POST
+        name: getpromotions
+        description: Retrieve promotion details
+        call: connectivity-promotions-promotions.getpromotions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/hotels/xml/promotions
+      name: hotels-xml-promotions
+      description: REST surface for hotels-xml-promotions.
+      operations:
+      - method: POST
+        name: managepromotions
+        description: Create or update promotions
+        call: connectivity-promotions-promotions.managepromotions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: connectivity-promotions-promotions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Connectivity Promotions API — Promotions. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: get-property-commission-details
+      description: Get property commission details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: connectivity-promotions-promotions.getcommissionoverride
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-promotion-details
+      description: Retrieve promotion details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: connectivity-promotions-promotions.getpromotions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-update-promotions
+      description: Create or update promotions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connectivity-promotions-promotions.managepromotions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

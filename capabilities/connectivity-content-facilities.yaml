@@ -1,0 +1,106 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Connectivity Content API — Facilities
+  description: 'Booking.com Connectivity Content API — Facilities. 2 operations. Lead operation: Update property facilities.
+    Self-contained Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Facilities
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: connectivity-content-facilities
+    baseUri: https://supply-xml.booking.com
+    description: Booking.com Connectivity Content API — Facilities business capability. Self-contained, no shared references.
+    resources:
+    - name: properties-property_id-facilities
+      path: /properties/{property_id}/facilities
+      operations:
+      - name: updatefacilities
+        method: PUT
+        description: Update property facilities
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: getfacilities
+        method: GET
+        description: Get property facilities
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: basic
+      username: '{{env.BOOKING_COM_USER}}'
+      password: '{{env.BOOKING_COM_PASS}}'
+  exposes:
+  - type: rest
+    namespace: connectivity-content-facilities-rest
+    port: 8080
+    description: REST adapter for Booking.com Connectivity Content API — Facilities. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/properties/{property-id}/facilities
+      name: properties-property-id-facilities
+      description: REST surface for properties-property_id-facilities.
+      operations:
+      - method: PUT
+        name: updatefacilities
+        description: Update property facilities
+        call: connectivity-content-facilities.updatefacilities
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getfacilities
+        description: Get property facilities
+        call: connectivity-content-facilities.getfacilities
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: connectivity-content-facilities-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Connectivity Content API — Facilities. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: update-property-facilities
+      description: Update property facilities
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: connectivity-content-facilities.updatefacilities
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-property-facilities
+      description: Get property facilities
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: connectivity-content-facilities.getfacilities
+      outputParameters:
+      - type: object
+        mapping: $.

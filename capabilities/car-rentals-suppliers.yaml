@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Car Rentals API — Suppliers
+  description: 'Booking.com Car Rentals API — Suppliers. 1 operations. Lead operation: Get car rental suppliers. Self-contained
+    Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Suppliers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: car-rentals-suppliers
+    baseUri: https://demandapi.booking.com/3.1
+    description: Booking.com Car Rentals API — Suppliers business capability. Self-contained, no shared references.
+    resources:
+    - name: cars-suppliers
+      path: /cars/suppliers
+      operations:
+      - name: getcarsuppliers
+        method: POST
+        description: Get car rental suppliers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.BOOKING_COM_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: car-rentals-suppliers-rest
+    port: 8080
+    description: REST adapter for Booking.com Car Rentals API — Suppliers. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/cars/suppliers
+      name: cars-suppliers
+      description: REST surface for cars-suppliers.
+      operations:
+      - method: POST
+        name: getcarsuppliers
+        description: Get car rental suppliers
+        call: car-rentals-suppliers.getcarsuppliers
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: car-rentals-suppliers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Car Rentals API — Suppliers. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: get-car-rental-suppliers
+      description: Get car rental suppliers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: car-rentals-suppliers.getcarsuppliers
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

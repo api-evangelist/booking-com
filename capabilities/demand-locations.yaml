@@ -1,0 +1,164 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Demand API — Locations
+  description: 'Booking.com Demand API — Locations. 3 operations. Lead operation: Get cities. Self-contained Naftiko capability
+    covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Locations
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: demand-locations
+    baseUri: https://demandapi.booking.com/3.1
+    description: Booking.com Demand API — Locations business capability. Self-contained, no shared references.
+    resources:
+    - name: locations-cities
+      path: /locations/cities
+      operations:
+      - name: getcities
+        method: POST
+        description: Get cities
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: locations-countries
+      path: /locations/countries
+      operations:
+      - name: getcountries
+        method: POST
+        description: Get countries
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: locations-regions
+      path: /locations/regions
+      operations:
+      - name: getregions
+        method: POST
+        description: Get regions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.BOOKING_COM_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: demand-locations-rest
+    port: 8080
+    description: REST adapter for Booking.com Demand API — Locations. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/locations/cities
+      name: locations-cities
+      description: REST surface for locations-cities.
+      operations:
+      - method: POST
+        name: getcities
+        description: Get cities
+        call: demand-locations.getcities
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/locations/countries
+      name: locations-countries
+      description: REST surface for locations-countries.
+      operations:
+      - method: POST
+        name: getcountries
+        description: Get countries
+        call: demand-locations.getcountries
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/locations/regions
+      name: locations-regions
+      description: REST surface for locations-regions.
+      operations:
+      - method: POST
+        name: getregions
+        description: Get regions
+        call: demand-locations.getregions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: demand-locations-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Demand API — Locations. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: get-cities
+      description: Get cities
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: demand-locations.getcities
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-countries
+      description: Get countries
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: demand-locations.getcountries
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-regions
+      description: Get regions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: demand-locations.getregions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

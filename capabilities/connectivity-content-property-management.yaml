@@ -1,0 +1,149 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Connectivity Content API — Property Management
+  description: 'Booking.com Connectivity Content API — Property Management. 3 operations. Lead operation: Create a property.
+    Self-contained Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Property Management
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: connectivity-content-property-management
+    baseUri: https://supply-xml.booking.com
+    description: Booking.com Connectivity Content API — Property Management business capability. Self-contained, no shared
+      references.
+    resources:
+    - name: properties
+      path: /properties
+      operations:
+      - name: createproperty
+        method: POST
+        description: Create a property
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: properties-property_id
+      path: /properties/{property_id}
+      operations:
+      - name: updateproperty
+        method: PUT
+        description: Update property details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: getproperty
+        method: GET
+        description: Get property details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: basic
+      username: '{{env.BOOKING_COM_USER}}'
+      password: '{{env.BOOKING_COM_PASS}}'
+  exposes:
+  - type: rest
+    namespace: connectivity-content-property-management-rest
+    port: 8080
+    description: REST adapter for Booking.com Connectivity Content API — Property Management. One Spectral-compliant resource
+      per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/properties
+      name: properties
+      description: REST surface for properties.
+      operations:
+      - method: POST
+        name: createproperty
+        description: Create a property
+        call: connectivity-content-property-management.createproperty
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/properties/{property-id}
+      name: properties-property-id
+      description: REST surface for properties-property_id.
+      operations:
+      - method: PUT
+        name: updateproperty
+        description: Update property details
+        call: connectivity-content-property-management.updateproperty
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getproperty
+        description: Get property details
+        call: connectivity-content-property-management.getproperty
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: connectivity-content-property-management-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Connectivity Content API — Property Management. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: create-property
+      description: Create a property
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connectivity-content-property-management.createproperty
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-property-details
+      description: Update property details
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: connectivity-content-property-management.updateproperty
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-property-details
+      description: Get property details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: connectivity-content-property-management.getproperty
+      outputParameters:
+      - type: object
+        mapping: $.

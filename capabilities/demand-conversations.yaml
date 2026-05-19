@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Demand API — Conversations
+  description: 'Booking.com Demand API — Conversations. 2 operations. Lead operation: Get conversation details. Self-contained
+    Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Conversations
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: demand-conversations
+    baseUri: https://demandapi.booking.com/3.1
+    description: Booking.com Demand API — Conversations business capability. Self-contained, no shared references.
+    resources:
+    - name: conversations-details
+      path: /conversations/details
+      operations:
+      - name: getconversationdetails
+        method: POST
+        description: Get conversation details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: conversations-list
+      path: /conversations/list
+      operations:
+      - name: listconversations
+        method: POST
+        description: List conversations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.BOOKING_COM_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: demand-conversations-rest
+    port: 8080
+    description: REST adapter for Booking.com Demand API — Conversations. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/conversations/details
+      name: conversations-details
+      description: REST surface for conversations-details.
+      operations:
+      - method: POST
+        name: getconversationdetails
+        description: Get conversation details
+        call: demand-conversations.getconversationdetails
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/conversations/list
+      name: conversations-list
+      description: REST surface for conversations-list.
+      operations:
+      - method: POST
+        name: listconversations
+        description: List conversations
+        call: demand-conversations.listconversations
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: demand-conversations-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Demand API — Conversations. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: get-conversation-details
+      description: Get conversation details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: demand-conversations.getconversationdetails
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-conversations
+      description: List conversations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: demand-conversations.listconversations
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

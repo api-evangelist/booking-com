@@ -1,0 +1,82 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Connectivity Rates and Availability API — Derived Pricing
+  description: 'Booking.com Connectivity Rates and Availability API — Derived Pricing. 1 operations. Lead operation: Update
+    derived pricing rules. Self-contained Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Derived Pricing
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: connectivity-rates-availability-derived-pricing
+    baseUri: https://supply-xml.booking.com
+    description: Booking.com Connectivity Rates and Availability API — Derived Pricing business capability. Self-contained,
+      no shared references.
+    resources:
+    - name: hotels-xml-derivedprices
+      path: /hotels/xml/derivedprices
+      operations:
+      - name: updatederivedprices
+        method: POST
+        description: Update derived pricing rules
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.BOOKING_COM_USER}}'
+      password: '{{env.BOOKING_COM_PASS}}'
+  exposes:
+  - type: rest
+    namespace: connectivity-rates-availability-derived-pricing-rest
+    port: 8080
+    description: REST adapter for Booking.com Connectivity Rates and Availability API — Derived Pricing. One Spectral-compliant
+      resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/hotels/xml/derivedprices
+      name: hotels-xml-derivedprices
+      description: REST surface for hotels-xml-derivedprices.
+      operations:
+      - method: POST
+        name: updatederivedprices
+        description: Update derived pricing rules
+        call: connectivity-rates-availability-derived-pricing.updatederivedprices
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: connectivity-rates-availability-derived-pricing-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Connectivity Rates and Availability API — Derived Pricing. One tool per consumed
+      operation, routed inline through this capability's consumes block.
+    tools:
+    - name: update-derived-pricing-rules
+      description: Update derived pricing rules
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connectivity-rates-availability-derived-pricing.updatederivedprices
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

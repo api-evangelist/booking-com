@@ -1,0 +1,206 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Demand API — Orders
+  description: 'Booking.com Demand API — Orders. 4 operations. Lead operation: Cancel an order. Self-contained Naftiko capability
+    covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Orders
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: demand-orders
+    baseUri: https://demandapi.booking.com/3.1
+    description: Booking.com Demand API — Orders business capability. Self-contained, no shared references.
+    resources:
+    - name: orders-cancel
+      path: /orders/cancel
+      operations:
+      - name: cancelorder
+        method: POST
+        description: Cancel an order
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: orders-create
+      path: /orders/create
+      operations:
+      - name: createorder
+        method: POST
+        description: Create an order
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: orders-details
+      path: /orders/details
+      operations:
+      - name: getorderdetails
+        method: POST
+        description: Get order details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: orders-preview
+      path: /orders/preview
+      operations:
+      - name: previeworder
+        method: POST
+        description: Preview an order
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.BOOKING_COM_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: demand-orders-rest
+    port: 8080
+    description: REST adapter for Booking.com Demand API — Orders. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/orders/cancel
+      name: orders-cancel
+      description: REST surface for orders-cancel.
+      operations:
+      - method: POST
+        name: cancelorder
+        description: Cancel an order
+        call: demand-orders.cancelorder
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orders/create
+      name: orders-create
+      description: REST surface for orders-create.
+      operations:
+      - method: POST
+        name: createorder
+        description: Create an order
+        call: demand-orders.createorder
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orders/details
+      name: orders-details
+      description: REST surface for orders-details.
+      operations:
+      - method: POST
+        name: getorderdetails
+        description: Get order details
+        call: demand-orders.getorderdetails
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orders/preview
+      name: orders-preview
+      description: REST surface for orders-preview.
+      operations:
+      - method: POST
+        name: previeworder
+        description: Preview an order
+        call: demand-orders.previeworder
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: demand-orders-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Demand API — Orders. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: cancel-order
+      description: Cancel an order
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: demand-orders.cancelorder
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-order
+      description: Create an order
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: demand-orders.createorder
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-order-details
+      description: Get order details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: demand-orders.getorderdetails
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: preview-order
+      description: Preview an order
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: demand-orders.previeworder
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

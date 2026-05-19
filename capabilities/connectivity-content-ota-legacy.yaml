@@ -1,0 +1,207 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Connectivity Content API — OTA Legacy
+  description: 'Booking.com Connectivity Content API — OTA Legacy. 4 operations. Lead operation: Create or update property
+    content. Self-contained Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - OTA Legacy
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: connectivity-content-ota-legacy
+    baseUri: https://supply-xml.booking.com
+    description: Booking.com Connectivity Content API — OTA Legacy business capability. Self-contained, no shared references.
+    resources:
+    - name: hotels-ota-OTA_HotelDescriptiveContentNotif
+      path: /hotels/ota/OTA_HotelDescriptiveContentNotif
+      operations:
+      - name: updatehoteldescriptivecontent
+        method: POST
+        description: Create or update property content
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: hotels-ota-OTA_HotelInvNotif
+      path: /hotels/ota/OTA_HotelInvNotif
+      operations:
+      - name: updatehotelinventory
+        method: POST
+        description: Update hotel inventory
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: hotels-ota-OTA_HotelProductNotif
+      path: /hotels/ota/OTA_HotelProductNotif
+      operations:
+      - name: updatehotelproduct
+        method: POST
+        description: Create or update room and rate products
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: hotels-ota-OTA_HotelSearch
+      path: /hotels/ota/OTA_HotelSearch
+      operations:
+      - name: searchhotels
+        method: POST
+        description: Search properties
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.BOOKING_COM_USER}}'
+      password: '{{env.BOOKING_COM_PASS}}'
+  exposes:
+  - type: rest
+    namespace: connectivity-content-ota-legacy-rest
+    port: 8080
+    description: REST adapter for Booking.com Connectivity Content API — OTA Legacy. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/hotels/ota/ota-hoteldescriptivecontentnotif
+      name: hotels-ota-ota-hoteldescriptivecontentnotif
+      description: REST surface for hotels-ota-OTA_HotelDescriptiveContentNotif.
+      operations:
+      - method: POST
+        name: updatehoteldescriptivecontent
+        description: Create or update property content
+        call: connectivity-content-ota-legacy.updatehoteldescriptivecontent
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/hotels/ota/ota-hotelinvnotif
+      name: hotels-ota-ota-hotelinvnotif
+      description: REST surface for hotels-ota-OTA_HotelInvNotif.
+      operations:
+      - method: POST
+        name: updatehotelinventory
+        description: Update hotel inventory
+        call: connectivity-content-ota-legacy.updatehotelinventory
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/hotels/ota/ota-hotelproductnotif
+      name: hotels-ota-ota-hotelproductnotif
+      description: REST surface for hotels-ota-OTA_HotelProductNotif.
+      operations:
+      - method: POST
+        name: updatehotelproduct
+        description: Create or update room and rate products
+        call: connectivity-content-ota-legacy.updatehotelproduct
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/hotels/ota/ota-hotelsearch
+      name: hotels-ota-ota-hotelsearch
+      description: REST surface for hotels-ota-OTA_HotelSearch.
+      operations:
+      - method: POST
+        name: searchhotels
+        description: Search properties
+        call: connectivity-content-ota-legacy.searchhotels
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: connectivity-content-ota-legacy-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Connectivity Content API — OTA Legacy. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: create-update-property-content
+      description: Create or update property content
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connectivity-content-ota-legacy.updatehoteldescriptivecontent
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-hotel-inventory
+      description: Update hotel inventory
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connectivity-content-ota-legacy.updatehotelinventory
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-update-room-and-rate
+      description: Create or update room and rate products
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connectivity-content-ota-legacy.updatehotelproduct
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: search-properties
+      description: Search properties
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: connectivity-content-ota-legacy.searchhotels
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

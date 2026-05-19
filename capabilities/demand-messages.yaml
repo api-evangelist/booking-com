@@ -1,0 +1,164 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Demand API — Messages
+  description: 'Booking.com Demand API — Messages. 3 operations. Lead operation: Fetch latest messages. Self-contained Naftiko
+    capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Messages
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: demand-messages
+    baseUri: https://demandapi.booking.com/3.1
+    description: Booking.com Demand API — Messages business capability. Self-contained, no shared references.
+    resources:
+    - name: messages-latest
+      path: /messages/latest
+      operations:
+      - name: fetchlatestmessages
+        method: POST
+        description: Fetch latest messages
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: messages-latest-confirm
+      path: /messages/latest/confirm
+      operations:
+      - name: confirmmessages
+        method: POST
+        description: Confirm message receipt
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: messages-send
+      path: /messages/send
+      operations:
+      - name: sendmessage
+        method: POST
+        description: Send a message
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.BOOKING_COM_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: demand-messages-rest
+    port: 8080
+    description: REST adapter for Booking.com Demand API — Messages. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/messages/latest
+      name: messages-latest
+      description: REST surface for messages-latest.
+      operations:
+      - method: POST
+        name: fetchlatestmessages
+        description: Fetch latest messages
+        call: demand-messages.fetchlatestmessages
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/messages/latest/confirm
+      name: messages-latest-confirm
+      description: REST surface for messages-latest-confirm.
+      operations:
+      - method: POST
+        name: confirmmessages
+        description: Confirm message receipt
+        call: demand-messages.confirmmessages
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/messages/send
+      name: messages-send
+      description: REST surface for messages-send.
+      operations:
+      - method: POST
+        name: sendmessage
+        description: Send a message
+        call: demand-messages.sendmessage
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: demand-messages-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Demand API — Messages. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: fetch-latest-messages
+      description: Fetch latest messages
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: demand-messages.fetchlatestmessages
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: confirm-message-receipt
+      description: Confirm message receipt
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: demand-messages.confirmmessages
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: send-message
+      description: Send a message
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: demand-messages.sendmessage
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

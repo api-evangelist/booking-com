@@ -1,0 +1,106 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Connectivity Content API — Rooms
+  description: 'Booking.com Connectivity Content API — Rooms. 2 operations. Lead operation: Create a room type. Self-contained
+    Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Rooms
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: connectivity-content-rooms
+    baseUri: https://supply-xml.booking.com
+    description: Booking.com Connectivity Content API — Rooms business capability. Self-contained, no shared references.
+    resources:
+    - name: properties-property_id-rooms
+      path: /properties/{property_id}/rooms
+      operations:
+      - name: createroom
+        method: POST
+        description: Create a room type
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: listrooms
+        method: GET
+        description: List room types
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: basic
+      username: '{{env.BOOKING_COM_USER}}'
+      password: '{{env.BOOKING_COM_PASS}}'
+  exposes:
+  - type: rest
+    namespace: connectivity-content-rooms-rest
+    port: 8080
+    description: REST adapter for Booking.com Connectivity Content API — Rooms. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/properties/{property-id}/rooms
+      name: properties-property-id-rooms
+      description: REST surface for properties-property_id-rooms.
+      operations:
+      - method: POST
+        name: createroom
+        description: Create a room type
+        call: connectivity-content-rooms.createroom
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: listrooms
+        description: List room types
+        call: connectivity-content-rooms.listrooms
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: connectivity-content-rooms-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Connectivity Content API — Rooms. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: create-room-type
+      description: Create a room type
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connectivity-content-rooms.createroom
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-room-types
+      description: List room types
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: connectivity-content-rooms.listrooms
+      outputParameters:
+      - type: object
+        mapping: $.

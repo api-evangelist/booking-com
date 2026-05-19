@@ -1,0 +1,81 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Connectivity Reservations API — Recovery
+  description: 'Booking.com Connectivity Reservations API — Recovery. 1 operations. Lead operation: Retrieve reservation summary.
+    Self-contained Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Recovery
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: connectivity-reservations-recovery
+    baseUri: https://secure-supply-xml.booking.com
+    description: Booking.com Connectivity Reservations API — Recovery business capability. Self-contained, no shared references.
+    resources:
+    - name: hotels-xml-reservationssummary
+      path: /hotels/xml/reservationssummary
+      operations:
+      - name: getreservationssummary
+        method: POST
+        description: Retrieve reservation summary
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.BOOKING_COM_USER}}'
+      password: '{{env.BOOKING_COM_PASS}}'
+  exposes:
+  - type: rest
+    namespace: connectivity-reservations-recovery-rest
+    port: 8080
+    description: REST adapter for Booking.com Connectivity Reservations API — Recovery. One Spectral-compliant resource per
+      consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/hotels/xml/reservationssummary
+      name: hotels-xml-reservationssummary
+      description: REST surface for hotels-xml-reservationssummary.
+      operations:
+      - method: POST
+        name: getreservationssummary
+        description: Retrieve reservation summary
+        call: connectivity-reservations-recovery.getreservationssummary
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: connectivity-reservations-recovery-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Connectivity Reservations API — Recovery. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: retrieve-reservation-summary
+      description: Retrieve reservation summary
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: connectivity-reservations-recovery.getreservationssummary
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

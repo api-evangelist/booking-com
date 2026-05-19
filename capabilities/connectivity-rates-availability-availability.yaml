@@ -1,0 +1,82 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Connectivity Rates and Availability API — Availability
+  description: 'Booking.com Connectivity Rates and Availability API — Availability. 1 operations. Lead operation: Create or
+    update availability, rates, and restrictions. Self-contained Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Availability
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: connectivity-rates-availability-availability
+    baseUri: https://supply-xml.booking.com
+    description: Booking.com Connectivity Rates and Availability API — Availability business capability. Self-contained, no
+      shared references.
+    resources:
+    - name: hotels-xml-availability
+      path: /hotels/xml/availability
+      operations:
+      - name: updateavailability
+        method: POST
+        description: Create or update availability, rates, and restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.BOOKING_COM_USER}}'
+      password: '{{env.BOOKING_COM_PASS}}'
+  exposes:
+  - type: rest
+    namespace: connectivity-rates-availability-availability-rest
+    port: 8080
+    description: REST adapter for Booking.com Connectivity Rates and Availability API — Availability. One Spectral-compliant
+      resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/hotels/xml/availability
+      name: hotels-xml-availability
+      description: REST surface for hotels-xml-availability.
+      operations:
+      - method: POST
+        name: updateavailability
+        description: Create or update availability, rates, and restrictions
+        call: connectivity-rates-availability-availability.updateavailability
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: connectivity-rates-availability-availability-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Connectivity Rates and Availability API — Availability. One tool per consumed
+      operation, routed inline through this capability's consumes block.
+    tools:
+    - name: create-update-availability-rates-and
+      description: Create or update availability, rates, and restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connectivity-rates-availability-availability.updateavailability
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

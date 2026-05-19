@@ -1,0 +1,82 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Connectivity Rates and Availability API — Inventory
+  description: 'Booking.com Connectivity Rates and Availability API — Inventory. 1 operations. Lead operation: Retrieve inventory
+    and rate details. Self-contained Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Inventory
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: connectivity-rates-availability-inventory
+    baseUri: https://supply-xml.booking.com
+    description: Booking.com Connectivity Rates and Availability API — Inventory business capability. Self-contained, no shared
+      references.
+    resources:
+    - name: hotels-xml-roomrateavailability
+      path: /hotels/xml/roomrateavailability
+      operations:
+      - name: getroomrateavailability
+        method: POST
+        description: Retrieve inventory and rate details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.BOOKING_COM_USER}}'
+      password: '{{env.BOOKING_COM_PASS}}'
+  exposes:
+  - type: rest
+    namespace: connectivity-rates-availability-inventory-rest
+    port: 8080
+    description: REST adapter for Booking.com Connectivity Rates and Availability API — Inventory. One Spectral-compliant
+      resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/hotels/xml/roomrateavailability
+      name: hotels-xml-roomrateavailability
+      description: REST surface for hotels-xml-roomrateavailability.
+      operations:
+      - method: POST
+        name: getroomrateavailability
+        description: Retrieve inventory and rate details
+        call: connectivity-rates-availability-inventory.getroomrateavailability
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: connectivity-rates-availability-inventory-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Connectivity Rates and Availability API — Inventory. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: retrieve-inventory-and-rate-details
+      description: Retrieve inventory and rate details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: connectivity-rates-availability-inventory.getroomrateavailability
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

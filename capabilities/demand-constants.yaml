@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Demand API — Constants
+  description: 'Booking.com Demand API — Constants. 1 operations. Lead operation: Get accommodation constants. Self-contained
+    Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Constants
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: demand-constants
+    baseUri: https://demandapi.booking.com/3.1
+    description: Booking.com Demand API — Constants business capability. Self-contained, no shared references.
+    resources:
+    - name: accommodations-constants
+      path: /accommodations/constants
+      operations:
+      - name: getaccommodationconstants
+        method: POST
+        description: Get accommodation constants
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.BOOKING_COM_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: demand-constants-rest
+    port: 8080
+    description: REST adapter for Booking.com Demand API — Constants. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/accommodations/constants
+      name: accommodations-constants
+      description: REST surface for accommodations-constants.
+      operations:
+      - method: POST
+        name: getaccommodationconstants
+        description: Get accommodation constants
+        call: demand-constants.getaccommodationconstants
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: demand-constants-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Demand API — Constants. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: get-accommodation-constants
+      description: Get accommodation constants
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: demand-constants.getaccommodationconstants
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

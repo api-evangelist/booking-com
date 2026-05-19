@@ -1,0 +1,106 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Connectivity Content API — Rates
+  description: 'Booking.com Connectivity Content API — Rates. 2 operations. Lead operation: Create a rate plan. Self-contained
+    Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Rates
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: connectivity-content-rates
+    baseUri: https://supply-xml.booking.com
+    description: Booking.com Connectivity Content API — Rates business capability. Self-contained, no shared references.
+    resources:
+    - name: properties-property_id-rates
+      path: /properties/{property_id}/rates
+      operations:
+      - name: createrateplan
+        method: POST
+        description: Create a rate plan
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: listrateplans
+        method: GET
+        description: List rate plans
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: basic
+      username: '{{env.BOOKING_COM_USER}}'
+      password: '{{env.BOOKING_COM_PASS}}'
+  exposes:
+  - type: rest
+    namespace: connectivity-content-rates-rest
+    port: 8080
+    description: REST adapter for Booking.com Connectivity Content API — Rates. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/properties/{property-id}/rates
+      name: properties-property-id-rates
+      description: REST surface for properties-property_id-rates.
+      operations:
+      - method: POST
+        name: createrateplan
+        description: Create a rate plan
+        call: connectivity-content-rates.createrateplan
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: listrateplans
+        description: List rate plans
+        call: connectivity-content-rates.listrateplans
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: connectivity-content-rates-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Connectivity Content API — Rates. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: create-rate-plan
+      description: Create a rate plan
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connectivity-content-rates.createrateplan
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-rate-plans
+      description: List rate plans
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: connectivity-content-rates.listrateplans
+      outputParameters:
+      - type: object
+        mapping: $.

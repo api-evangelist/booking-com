@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Booking.com Car Rentals API — Depots
+  description: 'Booking.com Car Rentals API — Depots. 2 operations. Lead operation: Get car rental depots. Self-contained
+    Naftiko capability covering one Booking Com business surface.'
+  tags:
+  - Booking Com
+  - Depots
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BOOKING_COM_API_KEY: BOOKING_COM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: car-rentals-depots
+    baseUri: https://demandapi.booking.com/3.1
+    description: Booking.com Car Rentals API — Depots business capability. Self-contained, no shared references.
+    resources:
+    - name: cars-depots
+      path: /cars/depots
+      operations:
+      - name: getcardepots
+        method: POST
+        description: Get car rental depots
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: cars-depots-reviews-scores
+      path: /cars/depots/reviews/scores
+      operations:
+      - name: getdepotreviewscores
+        method: POST
+        description: Get depot review scores
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.BOOKING_COM_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: car-rentals-depots-rest
+    port: 8080
+    description: REST adapter for Booking.com Car Rentals API — Depots. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/cars/depots
+      name: cars-depots
+      description: REST surface for cars-depots.
+      operations:
+      - method: POST
+        name: getcardepots
+        description: Get car rental depots
+        call: car-rentals-depots.getcardepots
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/cars/depots/reviews/scores
+      name: cars-depots-reviews-scores
+      description: REST surface for cars-depots-reviews-scores.
+      operations:
+      - method: POST
+        name: getdepotreviewscores
+        description: Get depot review scores
+        call: car-rentals-depots.getdepotreviewscores
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: car-rentals-depots-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Booking.com Car Rentals API — Depots. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: get-car-rental-depots
+      description: Get car rental depots
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: car-rentals-depots.getcardepots
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-depot-review-scores
+      description: Get depot review scores
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: car-rentals-depots.getdepotreviewscores
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
