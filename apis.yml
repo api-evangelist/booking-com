@@ -185,4 +185,6 @@ common:
     sources:
     - https://connect.booking.com/
     updated: '2026-05-04'
+  - type: LLMsTxt
+    url: https://developers.booking.com/llms.txt
 description: Seamlessly incorporate Booking.com inventory into your travel application.
