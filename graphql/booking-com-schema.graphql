@@ -1,0 +1,789 @@
+"""
+Booking.com Conceptual GraphQL Schema
+Derived from the Booking.com Demand API and Connectivity APIs.
+https://developers.booking.com
+"""
+
+scalar Date
+scalar DateTime
+scalar URL
+
+# ──────────────────────────────────────────────
+# Core Property Types
+# ──────────────────────────────────────────────
+
+"""A generic accommodation property on Booking.com."""
+type Property {
+  id: ID!
+  name: String!
+  type: AccommodationType!
+  description: String
+  location: PropertyLocation!
+  images: [Image!]
+  highlights: [PropertyHighlight!]
+  facilities: [Facility!]
+  amenities: AmenityList
+  reviewScore: ReviewScore
+  policies: [PaymentPolicy!]
+  cancellationPolicies: [CancellationPolicy!]
+  petPolicy: PetPolicy
+  childPolicy: ChildPolicy
+  rooms: [Room!]
+  languages: [Language!]
+  affiliatePartner: AffiliatePartner
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+"""A hotel property."""
+type Hotel {
+  id: ID!
+  name: String!
+  starRating: Int
+  chainName: String
+  brandName: String
+  location: PropertyLocation!
+  images: [Image!]
+  facilities: [Facility!]
+  amenities: AmenityList
+  reviewScore: ReviewScore
+  rooms: [Room!]
+  highlights: [PropertyHighlight!]
+  policies: [PaymentPolicy!]
+  cancellationPolicies: [CancellationPolicy!]
+  checkInTime: String
+  checkOutTime: String
+}
+
+"""A generic accommodation (apartment, villa, hostel, etc.)."""
+type Accommodation {
+  id: ID!
+  name: String!
+  type: AccommodationType!
+  location: PropertyLocation!
+  description: String
+  images: [Image!]
+  facilities: [Facility!]
+  reviewScore: ReviewScore
+  rooms: [Room!]
+  maxGuests: Int
+  minNights: Int
+}
+
+"""An apartment-type accommodation."""
+type Apartment {
+  id: ID!
+  name: String!
+  location: PropertyLocation!
+  squareMeters: Float
+  floor: Int
+  maxGuests: Int
+  bedConfig: BedConfig
+  images: [Image!]
+  facilities: [Facility!]
+  reviewScore: ReviewScore
+}
+
+"""A villa-type accommodation."""
+type Villa {
+  id: ID!
+  name: String!
+  location: PropertyLocation!
+  squareMeters: Float
+  numBedrooms: Int
+  numBathrooms: Int
+  hasPool: Boolean
+  maxGuests: Int
+  images: [Image!]
+  facilities: [Facility!]
+  reviewScore: ReviewScore
+}
+
+"""A hostel-type accommodation."""
+type Hostel {
+  id: ID!
+  name: String!
+  location: PropertyLocation!
+  images: [Image!]
+  facilities: [Facility!]
+  reviewScore: ReviewScore
+  rooms: [Room!]
+  hasDormitoryBeds: Boolean
+}
+
+"""Enumeration of accommodation types."""
+enum AccommodationType {
+  HOTEL
+  APARTMENT
+  VILLA
+  HOSTEL
+  GUEST_HOUSE
+  BED_AND_BREAKFAST
+  RESORT
+  MOTEL
+  CAMPSITE
+  BOAT
+  OTHER
+}
+
+# ──────────────────────────────────────────────
+# Room and Bed Types
+# ──────────────────────────────────────────────
+
+"""A room within a property."""
+type Room {
+  id: ID!
+  name: String!
+  roomType: RoomType!
+  description: String
+  maxOccupancy: Int
+  bedConfig: BedConfig
+  squareMeters: Float
+  images: [Image!]
+  facilities: [Facility!]
+  extraBeds: ExtraBeds
+  babyBed: BabyBed
+  smokingPolicy: String
+  viewType: String
+}
+
+"""Categorization of room type."""
+type RoomType {
+  id: ID!
+  name: String!
+  code: String
+  description: String
+}
+
+"""The type of bed (e.g., double, twin, king)."""
+type BedType {
+  id: ID!
+  name: String!
+  widthCm: Int
+  lengthCm: Int
+}
+
+"""Bed configuration for a room."""
+type BedConfig {
+  numBeds: Int!
+  bedTypes: [BedType!]
+  description: String
+}
+
+# ──────────────────────────────────────────────
+# Availability and Pricing
+# ──────────────────────────────────────────────
+
+"""Overall availability for a property."""
+type Availability {
+  propertyId: ID!
+  checkIn: Date!
+  checkOut: Date!
+  numNights: Int!
+  rooms: [RoomAvailability!]
+}
+
+"""Availability of a specific room for given dates."""
+type RoomAvailability {
+  room: Room!
+  isAvailable: Boolean!
+  rateInfo: RateInfo
+  remainingCount: Int
+}
+
+"""Rate information for a room stay."""
+type RateInfo {
+  ratePlanId: ID!
+  ratePlanName: String
+  price: Price!
+  priceBreakdown: PriceBreakdown
+  cancellationPolicy: CancellationPolicy
+  paymentPolicy: PaymentPolicy
+  mealPlan: String
+  isRefundable: Boolean
+  discountedRate: DiscountedRate
+}
+
+"""A monetary price."""
+type Price {
+  amount: Float!
+  currency: String!
+  formattedAmount: String
+}
+
+"""Breakdown of a total price."""
+type PriceBreakdown {
+  baseRate: Price!
+  taxes: [Tax!]
+  fees: [Fee!]
+  totalPrice: Price!
+  pricePerNight: Price
+  discounts: [DiscountedRate!]
+}
+
+"""A tax applied to a booking."""
+type Tax {
+  id: ID!
+  name: String!
+  amount: Price!
+  type: String
+  includedInTotal: Boolean
+}
+
+"""A fee applied to a booking."""
+type Fee {
+  id: ID!
+  name: String!
+  amount: Price!
+  type: String
+  payableAt: String
+  includedInTotal: Boolean
+}
+
+# ──────────────────────────────────────────────
+# Policies
+# ──────────────────────────────────────────────
+
+"""Cancellation policy for a booking."""
+type CancellationPolicy {
+  id: ID!
+  name: String!
+  description: String
+  isFreeCancellation: Boolean!
+  freeCancellationDeadline: DateTime
+  penaltyAmount: Price
+  penaltyType: String
+}
+
+"""Payment policy for a booking."""
+type PaymentPolicy {
+  id: ID!
+  name: String!
+  description: String
+  prepaymentRequired: Boolean
+  prepaymentAmount: Price
+  payAtProperty: Boolean
+  acceptedPaymentMethods: [PaymentMethod!]
+}
+
+# ──────────────────────────────────────────────
+# Reservations and Bookings
+# ──────────────────────────────────────────────
+
+"""A reservation made on Booking.com."""
+type Reservation {
+  id: ID!
+  bookingNumber: String!
+  status: ReservationStatus!
+  property: Property!
+  room: Room!
+  checkIn: Date!
+  checkOut: Date!
+  numNights: Int!
+  numAdults: Int!
+  numChildren: Int
+  guests: [BookingGuest!]
+  primaryGuest: GuestInfo!
+  totalPrice: Price!
+  priceBreakdown: PriceBreakdown
+  payment: Payment
+  cancellationPolicy: CancellationPolicy
+  specialRequests: String
+  createdAt: DateTime!
+  updatedAt: DateTime
+}
+
+"""A confirmed booking."""
+type Booking {
+  id: ID!
+  reservation: Reservation!
+  confirmationNumber: String!
+  bookedAt: DateTime!
+  affiliatePartner: AffiliatePartner
+  commission: Commission
+}
+
+"""A guest associated with a booking."""
+type BookingGuest {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String
+  phone: String
+  isMainGuest: Boolean
+}
+
+"""Contact and demographic info for a guest."""
+type GuestInfo {
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String
+  country: String
+  language: String
+  loyaltyNumber: String
+}
+
+"""Status of a reservation."""
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  MODIFIED
+  NO_SHOW
+  COMPLETED
+}
+
+# ──────────────────────────────────────────────
+# Payments
+# ──────────────────────────────────────────────
+
+"""A payment transaction."""
+type Payment {
+  id: ID!
+  amount: Price!
+  method: PaymentMethod!
+  status: PaymentStatus!
+  transactionId: String
+  paidAt: DateTime
+}
+
+"""A payment method accepted by the property."""
+type PaymentMethod {
+  id: ID!
+  name: String!
+  type: PaymentMethodType!
+  cardBrand: String
+}
+
+"""Types of payment methods."""
+enum PaymentMethodType {
+  CREDIT_CARD
+  DEBIT_CARD
+  BANK_TRANSFER
+  CASH
+  VIRTUAL_CARD
+  OTHER
+}
+
+"""Status of a payment."""
+enum PaymentStatus {
+  PENDING
+  AUTHORIZED
+  CAPTURED
+  REFUNDED
+  FAILED
+  CANCELLED
+}
+
+# ──────────────────────────────────────────────
+# Reviews
+# ──────────────────────────────────────────────
+
+"""An aggregate review score for a property."""
+type ReviewScore {
+  score: Float!
+  maxScore: Float!
+  numReviews: Int!
+  label: String
+  breakdown: [ReviewCategory!]
+}
+
+"""A category within a review score breakdown."""
+type ReviewCategory {
+  name: String!
+  score: Float!
+  maxScore: Float!
+}
+
+"""A detailed breakdown of review scores."""
+type ReviewBreakdown {
+  cleanliness: Float
+  comfort: Float
+  location: Float
+  facilities: Float
+  staff: Float
+  valueForMoney: Float
+  freeWifi: Float
+}
+
+"""A single guest review."""
+type Review {
+  id: ID!
+  propertyId: ID!
+  score: Float!
+  title: String
+  text: ReviewText
+  reviewer: GuestReview
+  stayDate: Date
+  createdAt: DateTime!
+  hotelResponse: String
+  tags: [String!]
+}
+
+"""The text components of a review."""
+type ReviewText {
+  positive: String
+  negative: String
+  summary: String
+}
+
+"""Reviewer information."""
+type GuestReview {
+  displayName: String!
+  country: String
+  numReviews: Int
+  isVerified: Boolean
+}
+
+# ──────────────────────────────────────────────
+# Amenities and Facilities
+# ──────────────────────────────────────────────
+
+"""A grouped list of amenities for a property or room."""
+type AmenityList {
+  general: [String!]
+  bathroom: [String!]
+  kitchen: [String!]
+  entertainment: [String!]
+  outdoor: [String!]
+  services: [String!]
+  accessibility: [String!]
+}
+
+"""A specific facility offered by a property."""
+type Facility {
+  id: ID!
+  name: String!
+  category: String
+  isFree: Boolean
+  description: String
+}
+
+"""Pet policy for a property."""
+type PetPolicy {
+  petsAllowed: Boolean!
+  maxPets: Int
+  petTypes: [String!]
+  fee: Price
+  conditions: String
+}
+
+"""Baby bed / crib availability."""
+type BabyBed {
+  available: Boolean!
+  maxCount: Int
+  fee: Price
+  conditions: String
+}
+
+"""Child policy for a property."""
+type ChildPolicy {
+  childrenAllowed: Boolean!
+  maxChildAge: Int
+  childrenFreeUpToAge: Int
+  extraBedRequired: Boolean
+  conditions: String
+}
+
+"""Extra bed policy for a room."""
+type ExtraBeds {
+  available: Boolean!
+  maxCount: Int
+  bedType: BedType
+  fee: Price
+  conditions: String
+}
+
+# ──────────────────────────────────────────────
+# Location and Geography
+# ──────────────────────────────────────────────
+
+"""Location details for a property."""
+type PropertyLocation {
+  address: String
+  city: String!
+  region: String
+  country: String!
+  postalCode: String
+  coordinates: GeoCoordinate
+  distanceToCenter: Float
+  distanceToCenterUnit: String
+  nearbyPlaces: [NearbyPlace!]
+}
+
+"""GPS coordinates."""
+type GeoCoordinate {
+  latitude: Float!
+  longitude: Float!
+}
+
+"""A nearby point of interest."""
+type NearbyPlace {
+  id: ID!
+  name: String!
+  type: String
+  distanceKm: Float
+  coordinates: GeoCoordinate
+}
+
+"""A visual highlight of a property."""
+type PropertyHighlight {
+  id: ID!
+  name: String!
+  icon: String
+  description: String
+}
+
+# ──────────────────────────────────────────────
+# Search and Filters
+# ──────────────────────────────────────────────
+
+"""Input for searching hotels."""
+input HotelSearchInput {
+  destination: String
+  checkIn: Date!
+  checkOut: Date!
+  numAdults: Int!
+  numChildren: Int
+  childAges: [Int!]
+  numRooms: Int
+  currency: String
+  language: String
+  filters: FilterInput
+  sortOrder: SortOrderInput
+  page: Int
+  pageSize: Int
+}
+
+"""Filters for narrowing hotel search results."""
+input FilterInput {
+  minPrice: Float
+  maxPrice: Float
+  minReviewScore: Float
+  accommodationTypes: [AccommodationType!]
+  facilities: [ID!]
+  mealPlans: [String!]
+  freeCancellation: Boolean
+  payAtProperty: Boolean
+  starRatings: [Int!]
+}
+
+"""Sort order for search results."""
+input SortOrderInput {
+  field: SortField!
+  direction: SortDirection!
+}
+
+"""Fields available for sorting."""
+enum SortField {
+  PRICE
+  REVIEW_SCORE
+  DISTANCE_TO_CENTER
+  POPULARITY
+  STAR_RATING
+}
+
+"""Sort direction."""
+enum SortDirection {
+  ASC
+  DESC
+}
+
+"""Filter type (for output)."""
+type Filter {
+  id: ID!
+  name: String!
+  type: String!
+  options: [String!]
+}
+
+"""Sort order type (for output)."""
+type SortOrder {
+  field: SortField!
+  direction: SortDirection!
+}
+
+"""Search results for hotels."""
+type SearchResult {
+  hotels: [Hotel!]!
+  totalCount: Int!
+  page: Int!
+  pageSize: Int!
+  hasNextPage: Boolean!
+  appliedFilters: [Filter!]
+  sortOrder: SortOrder
+}
+
+"""Input for availability search."""
+input AvailabilitySearchInput {
+  propertyId: ID!
+  checkIn: Date!
+  checkOut: Date!
+  numAdults: Int!
+  numChildren: Int
+  childAges: [Int!]
+  currency: String
+}
+
+"""Paginated result set."""
+type PageResult {
+  items: [Property!]!
+  totalCount: Int!
+  page: Int!
+  pageSize: Int!
+  hasNextPage: Boolean!
+}
+
+# ──────────────────────────────────────────────
+# Promotions and Affiliate
+# ──────────────────────────────────────────────
+
+"""A discounted rate."""
+type DiscountedRate {
+  id: ID!
+  originalPrice: Price!
+  discountedPrice: Price!
+  discountPercentage: Float!
+  promoCode: String
+  campaign: PromoCampaign
+  validUntil: DateTime
+}
+
+"""A promotional campaign."""
+type PromoCampaign {
+  id: ID!
+  name: String!
+  description: String
+  startDate: DateTime
+  endDate: DateTime
+  targetAudience: String
+  discountType: String
+}
+
+"""An affiliate partner using the Booking.com API."""
+type AffiliatePartner {
+  id: ID!
+  name: String!
+  affiliateId: String!
+  websiteUrl: URL
+  commission: Commission
+  status: String
+}
+
+"""Commission information for an affiliate partner."""
+type Commission {
+  id: ID!
+  rate: Float!
+  type: CommissionType!
+  currency: String
+  minAmount: Price
+  maxAmount: Price
+}
+
+"""Types of commission structures."""
+enum CommissionType {
+  PERCENTAGE
+  FLAT_FEE
+  TIERED
+}
+
+# ──────────────────────────────────────────────
+# Media and Localization
+# ──────────────────────────────────────────────
+
+"""An image associated with a property or room."""
+type Image {
+  id: ID!
+  url: URL!
+  thumbnailUrl: URL
+  caption: String
+  category: String
+  isPrimary: Boolean
+  width: Int
+  height: Int
+}
+
+"""A language supported by a property or the API."""
+type Language {
+  code: String!
+  name: String!
+  isDefault: Boolean
+}
+
+# ──────────────────────────────────────────────
+# Input Types for Mutations
+# ──────────────────────────────────────────────
+
+"""Input for creating a reservation."""
+input ReservationInput {
+  propertyId: ID!
+  roomId: ID!
+  ratePlanId: ID!
+  checkIn: Date!
+  checkOut: Date!
+  numAdults: Int!
+  numChildren: Int
+  childAges: [Int!]
+  primaryGuest: GuestInfoInput!
+  additionalGuests: [GuestInfoInput!]
+  specialRequests: String
+  paymentMethodId: ID
+  currency: String
+  affiliateId: String
+}
+
+"""Input for guest information."""
+input GuestInfoInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String
+  country: String
+  language: String
+  loyaltyNumber: String
+}
+
+# ──────────────────────────────────────────────
+# Root Operations
+# ──────────────────────────────────────────────
+
+type Query {
+  """Retrieve a property by ID."""
+  property(id: ID!): Property
+
+  """Retrieve a hotel by ID."""
+  hotel(id: ID!): Hotel
+
+  """Search for hotels."""
+  searchHotels(input: HotelSearchInput!): SearchResult!
+
+  """Check availability for a property."""
+  availability(input: AvailabilitySearchInput!): Availability
+
+  """Get a single review by ID."""
+  review(id: ID!): Review
+
+  """Get reviews for a property."""
+  reviews(propertyId: ID!, page: Int, pageSize: Int): PageResult!
+
+  """Get nearby places for a property."""
+  nearbyPlaces(propertyId: ID!, radius: Float): [NearbyPlace!]!
+
+  """Get available promotions."""
+  promotions(propertyId: ID, affiliateId: String): [PromoCampaign!]!
+
+  """Get affiliate partner info."""
+  affiliatePartner(affiliateId: String!): AffiliatePartner
+}
+
+type Mutation {
+  """Create a new reservation."""
+  createReservation(input: ReservationInput!): Reservation!
+
+  """Cancel an existing reservation."""
+  cancelReservation(id: ID!, reason: String): Reservation!
+
+  """Update an existing reservation."""
+  updateReservation(id: ID!, input: ReservationInput!): Reservation!
+}
