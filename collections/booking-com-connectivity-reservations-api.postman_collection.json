@@ -1,0 +1,871 @@
+{
+  "item": [
+    {
+      "id": "5816b97a-5734-4956-a2b3-1bb6126de74b",
+      "name": "OTA Reservations",
+      "description": {
+        "content": "OTA-based endpoints for reservation notification and modification following the OpenTravel Alliance specification.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fff34dfc-9909-40f7-acb5-b1bbe9266751",
+          "name": "Process reservation notification",
+          "request": {
+            "name": "Process reservation notification",
+            "description": {
+              "content": "Processes reservation notifications following the OTA OTA_HotelResNotif specification. Used for receiving and confirming new reservations through the OpenTravel Alliance standard format.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                "ota",
+                "OTA_HotelResNotif"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              },
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d264520d-81cb-402b-bb82-148cabbd1420",
+              "name": "Reservation notification processed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelResNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            },
+            {
+              "id": "6c41316a-b2db-41cc-976e-8bbe311daab1",
+              "name": "Invalid XML request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelResNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "646a321c-3a96-48ac-8881-cd632113d5e2",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelResNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a9390cd4-e256-4821-a73b-d0e720e28158",
+          "name": "Process reservation modification",
+          "request": {
+            "name": "Process reservation modification",
+            "description": {
+              "content": "Processes reservation modification notifications following the OTA OTA_HotelResModifyNotif specification. Used for receiving and confirming changes to existing reservations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                "ota",
+                "OTA_HotelResModifyNotif"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              },
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3c72ecd4-8545-4bc2-8706-aff1efc85589",
+              "name": "Reservation modification processed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelResModifyNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            },
+            {
+              "id": "6422179f-3bc8-4aac-b694-589604074b5e",
+              "name": "Invalid XML request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelResModifyNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "88ee296e-0ebd-42cf-b62c-f5c95ec25abc",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelResModifyNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "70ed0d6f-d288-467a-85b5-c391b3e8ad36",
+      "name": "Recovery",
+      "description": {
+        "content": "Endpoints for recovering reservations that were not picked up earlier or made prior to the property being connected to the system.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "02a6b62b-3ad4-42ab-a71a-4e17189401e9",
+          "name": "Retrieve reservation summary",
+          "request": {
+            "name": "Retrieve reservation summary",
+            "description": {
+              "content": "Retrieves reservation messages that were not picked up earlier. This endpoint is useful for retrieving all reservations that were made prior to the property being connected to the partner system, ensuring no bookings are missed during initial setup.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                "xml",
+                "reservationssummary"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              },
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ae75efc7-9edb-4044-be04-c8e92ca99a7c",
+              "name": "Reservation summaries retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "reservationssummary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            },
+            {
+              "id": "0a4deb65-67dc-48be-96eb-03c3b8836314",
+              "name": "Invalid XML request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "reservationssummary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "24ea6849-d64d-40ad-a25c-220880620ed0",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "reservationssummary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "39e4272b-9b87-4e57-92e2-2c5d9fa9bb63",
+      "name": "Reservations",
+      "description": {
+        "content": "Endpoints for retrieving new, modified, and cancelled property reservations using B.XML format.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "38d1303c-2446-4f7d-a470-319db673bbea",
+          "name": "Retrieve reservations",
+          "request": {
+            "name": "Retrieve reservations",
+            "description": {
+              "content": "Retrieves new, modified, or cancelled property reservations using B.XML format. The response returns the same schema for new, modified, and cancelled reservations with updated information. This endpoint should be polled once per twenty seconds for timely data delivery. Higher frequencies are not recommended due to added server overhead.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                "xml",
+                "reservations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              },
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f71203c0-e026-4b4d-aa95-f2d2638b0511",
+              "name": "Reservations retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "reservations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            },
+            {
+              "id": "66bab57d-b07a-406a-b0a7-7604eda4f3fe",
+              "name": "Invalid XML request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "reservations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3d95985a-b6ca-4ca2-97c5-a3d4823f88df",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "reservations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://secure-supply-xml.booking.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7d101cd1-9b8d-47ab-bea5-216299fd384d",
+    "name": "Booking.com Connectivity Reservations API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Booking.com Connectivity Reservations API allows Connectivity Partners to retrieve and update reservation information for properties listed on Booking.com. It operates over a PCI-compliant secure endpoint and supports reservation retrieval, confirmation, and modification using both B.XML and OTA XML formats (OTA_HotelResNotif and OTA_HotelResModifyNotif). The API follows the OpenTravel Alliance specification and provides a complete and fault-tolerant reservations processing solution. Partners should poll the reservations endpoint once per twenty seconds for timely delivery of data.\n\nContact Support:\n Name: Booking.com Connectivity Support",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,1096 @@
+{
+  "item": [
+    {
+      "id": "ee54fc99-7953-4f78-8cfe-b89fce2ea1ea",
+      "name": "Cars",
+      "description": {
+        "content": "Endpoints for searching available car rentals and retrieving vehicle details, pricing, and availability.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3587dfe4-5d4e-43f0-a444-5261092e3f39",
+          "name": "Search car rentals",
+          "request": {
+            "name": "Search car rentals",
+            "description": {
+              "content": "Allows travelers to search for car rentals and view the price and list of available vehicles for the route they are interested in. Results include vehicle types, pricing, and availability for the specified pickup and dropoff locations and dates.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cars",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup_location\": \"<string>\",\n  \"dropoff_location\": \"<string>\",\n  \"pickup_date\": \"<dateTime>\",\n  \"dropoff_date\": \"<dateTime>\",\n  \"driver_age\": \"<integer>\",\n  \"currency\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1fd4259f-700c-4d9a-be8b-136351b0ab51",
+              "name": "Car rental search results retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pickup_location\": \"<string>\",\n  \"dropoff_location\": \"<string>\",\n  \"pickup_date\": \"<dateTime>\",\n  \"dropoff_date\": \"<dateTime>\",\n  \"driver_age\": \"<integer>\",\n  \"currency\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"offer_id\": \"string\",\n      \"vehicle\": {\n        \"type\": \"string\",\n        \"name\": \"string\",\n        \"transmission\": \"automatic\",\n        \"fuel_type\": \"string\",\n        \"seats\": 2801,\n        \"doors\": 4944,\n        \"bags_large\": 4362,\n        \"bags_small\": 9018,\n        \"air_conditioning\": false,\n        \"image_url\": \"https://UsVuxdA.qrbfcxHRNqJ.9pBOOFgm3fYyC2iQ-l+qU\"\n      },\n      \"supplier\": {\n        \"supplier_id\": \"string\",\n        \"name\": \"string\"\n      },\n      \"pickup_depot\": {\n        \"depot_id\": \"string\",\n        \"name\": \"string\",\n        \"address\": \"string\"\n      },\n      \"dropoff_depot\": {\n        \"depot_id\": \"string\",\n        \"name\": \"string\",\n        \"address\": \"string\"\n      },\n      \"price\": {\n        \"amount\": 1253.6767337024569,\n        \"currency\": \"string\"\n      },\n      \"included_extras\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"offer_id\": \"string\",\n      \"vehicle\": {\n        \"type\": \"string\",\n        \"name\": \"string\",\n        \"transmission\": \"automatic\",\n        \"fuel_type\": \"string\",\n        \"seats\": 167,\n        \"doors\": 9161,\n        \"bags_large\": 5220,\n        \"bags_small\": 1323,\n        \"air_conditioning\": true,\n        \"image_url\": \"https://xztQTEQQClwDBSoFXwthG.klfcBzzR6MMcVRiMlVi3oCqiZ,XhCqGauZyN+VOh4TJLnCG\"\n      },\n      \"supplier\": {\n        \"supplier_id\": \"string\",\n        \"name\": \"string\"\n      },\n      \"pickup_depot\": {\n        \"depot_id\": \"string\",\n        \"name\": \"string\",\n        \"address\": \"string\"\n      },\n      \"dropoff_depot\": {\n        \"depot_id\": \"string\",\n        \"name\": \"string\",\n        \"address\": \"string\"\n      },\n      \"price\": {\n        \"amount\": 8429.080697117966,\n        \"currency\": \"string\"\n      },\n      \"included_extras\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e49848b4-67de-4429-84a1-b63fbd41e135",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pickup_location\": \"<string>\",\n  \"dropoff_location\": \"<string>\",\n  \"pickup_date\": \"<dateTime>\",\n  \"dropoff_date\": \"<dateTime>\",\n  \"driver_age\": \"<integer>\",\n  \"currency\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c8e03eb5-f7f5-4bd7-b18b-bda0f9f7b976",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pickup_location\": \"<string>\",\n  \"dropoff_location\": \"<string>\",\n  \"pickup_date\": \"<dateTime>\",\n  \"dropoff_date\": \"<dateTime>\",\n  \"driver_age\": \"<integer>\",\n  \"currency\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0d10b059-8059-470b-9ba1-69f04d4c8593",
+          "name": "Get car rental details",
+          "request": {
+            "name": "Get car rental details",
+            "description": {
+              "content": "Retrieves detailed information about specific car rental offerings, including vehicle specifications, included equipment, insurance details, and rental terms.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cars",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"offer_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "172ade07-6303-4e29-b197-92bb0c50e06e",
+              "name": "Car details retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"offer_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": {\n    \"offer_id\": \"string\",\n    \"vehicle\": {\n      \"type\": \"string\",\n      \"name\": \"string\",\n      \"transmission\": \"automatic\",\n      \"fuel_type\": \"string\",\n      \"seats\": 6827,\n      \"doors\": 1098,\n      \"bags_large\": 1956,\n      \"bags_small\": 1990,\n      \"air_conditioning\": false,\n      \"image_url\": \"http://NmvTnXdexaHDNuNypaNbcYsESq.oxnkOtiGqqmMDWNKejn,bBHYoTY2\"\n    },\n    \"supplier\": {\n      \"supplier_id\": \"string\",\n      \"name\": \"string\"\n    },\n    \"pickup_depot\": {\n      \"depot_id\": \"string\",\n      \"name\": \"string\",\n      \"address\": \"string\",\n      \"city\": \"string\",\n      \"country\": \"string\",\n      \"location\": {\n        \"latitude\": 8539.862593115738,\n        \"longitude\": 6025.204264027354\n      },\n      \"opening_hours\": \"string\",\n      \"phone\": \"string\"\n    },\n    \"dropoff_depot\": {\n      \"depot_id\": \"string\",\n      \"name\": \"string\",\n      \"address\": \"string\",\n      \"city\": \"string\",\n      \"country\": \"string\",\n      \"location\": {\n        \"latitude\": 5286.583151828862,\n        \"longitude\": 724.046586285949\n      },\n      \"opening_hours\": \"string\",\n      \"phone\": \"string\"\n    },\n    \"price\": {\n      \"amount\": 8214.621436713558,\n      \"currency\": \"string\"\n    },\n    \"insurance\": {\n      \"type\": \"string\",\n      \"coverage\": \"string\",\n      \"excess\": {\n        \"amount\": 4501.178679761123,\n        \"currency\": \"string\"\n      }\n    },\n    \"fuel_policy\": \"string\",\n    \"mileage_limit\": \"string\",\n    \"terms_and_conditions\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3eb55b6-c185-4e9d-bd27-8469640a8158",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"offer_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c4603c91-3914-4be0-bbcd-0b620b4ca9d0",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"offer_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "5b2781a9-a279-47a9-b506-b90e9e5efa2e",
+      "name": "Depots",
+      "description": {
+        "content": "Endpoints for looking up car rental depots, including locations, reviews, and score breakdowns.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "630f4abe-b51c-4cbe-a95c-7cf5c9db5c3d",
+          "name": "Get car rental depots",
+          "request": {
+            "name": "Get car rental depots",
+            "description": {
+              "content": "Retrieves information about car rental depot locations, including addresses, operating hours, and available services.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cars",
+                "depots"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"depot_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"location\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "11ee9411-cbe9-4501-a5fa-85c8c6b8c0d3",
+              "name": "Depot information retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "depots"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"depot_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"location\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"depot_id\": \"string\",\n      \"name\": \"string\",\n      \"address\": \"string\",\n      \"city\": \"string\",\n      \"country\": \"string\",\n      \"location\": {\n        \"latitude\": 6323.363707456683,\n        \"longitude\": 7533.600299913249\n      },\n      \"opening_hours\": \"string\",\n      \"phone\": \"string\"\n    },\n    {\n      \"depot_id\": \"string\",\n      \"name\": \"string\",\n      \"address\": \"string\",\n      \"city\": \"string\",\n      \"country\": \"string\",\n      \"location\": {\n        \"latitude\": 8934.788558049364,\n        \"longitude\": 9084.691746261886\n      },\n      \"opening_hours\": \"string\",\n      \"phone\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2b934dd1-351a-43e1-a062-ff89e0947e9b",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "depots"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"depot_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"location\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30424a62-2235-4c60-943b-43bce87c82e8",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "depots"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"depot_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"location\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b8ed4e72-1488-4465-805b-0ed3d5ebdb10",
+          "name": "Get depot review scores",
+          "request": {
+            "name": "Get depot review scores",
+            "description": {
+              "content": "Retrieves the score breakdown assigned to a depot based on customer ratings, including overall scores and category-specific breakdowns.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cars",
+                "depots",
+                "reviews",
+                "scores"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"depot_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "55a4077e-5b24-469e-b2f7-df0b9cec631f",
+              "name": "Depot review scores retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "depots",
+                    "reviews",
+                    "scores"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"depot_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"depot_id\": \"string\",\n      \"overall_score\": 7548.480717379107,\n      \"total_reviews\": 8038,\n      \"categories\": {\n        \"vehicle_condition\": 6218.7446647491815,\n        \"service\": 7320.559093698734,\n        \"value\": 5862.655236104422,\n        \"pickup_process\": 7604.330031494254\n      }\n    },\n    {\n      \"depot_id\": \"string\",\n      \"overall_score\": 4405.7799403718855,\n      \"total_reviews\": 7108,\n      \"categories\": {\n        \"vehicle_condition\": 1652.7204298721854,\n        \"service\": 8201.057100181577,\n        \"value\": 9955.159995699905,\n        \"pickup_process\": 7521.970522027694\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cc39f17d-7417-4bcc-8ad2-90f043501307",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "depots",
+                    "reviews",
+                    "scores"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"depot_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "482c8c12-2430-4aed-b68a-edde76362365",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "depots",
+                    "reviews",
+                    "scores"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"depot_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "509132e6-db97-4e2a-95fd-ab6e17883947",
+      "name": "Suppliers",
+      "description": {
+        "content": "Endpoints for retrieving information about car rental suppliers and their offerings.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "68a15786-42c2-4f8d-aee1-8b82b5651ca5",
+          "name": "Get car rental suppliers",
+          "request": {
+            "name": "Get car rental suppliers",
+            "description": {
+              "content": "Retrieves information about car rental suppliers available through Booking.com, including supplier names, logos, and service details.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cars",
+                "suppliers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"supplier_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8dc53289-7850-43c7-a43a-597f0bf43c58",
+              "name": "Supplier information retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "suppliers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"supplier_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"supplier_id\": \"string\",\n      \"name\": \"string\",\n      \"logo_url\": \"http://eadbzCCqp.whvhbjzDKPy\"\n    },\n    {\n      \"supplier_id\": \"string\",\n      \"name\": \"string\",\n      \"logo_url\": \"http://KLzJBNSilNZlUom.gscSERpYui3ZXGx5I,-+eObVYrGxDHNU-b9S.hTk.jF3bWl2tG9zq1y68sxOeSzmZasldia\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b2e0bc47-ef34-4ccb-aaab-9ab30139ca14",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "suppliers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"supplier_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a722338c-3b23-4f0d-ad0e-8d8f9eafd9ed",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cars",
+                    "suppliers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"supplier_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://demandapi.booking.com/3.1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "b983fb70-6906-4adb-ae01-b23cf44c6e2b",
+    "name": "Booking.com Car Rentals API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.\n\nContact Support:\n Name: Booking.com Developer Support",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,4469 @@
+{
+  "item": [
+    {
+      "id": "91a87d59-6065-4405-9c90-359e35b77577",
+      "name": "Accommodations",
+      "description": {
+        "content": "Endpoints to search for stays such as hotels and apartments, check availability, retrieve reviews, and get detailed property information.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7a25251a-c12d-4af4-aae6-df59905a5025",
+          "name": "Search accommodations",
+          "request": {
+            "name": "Search accommodations",
+            "description": {
+              "content": "Returns the cheapest available product for each accommodation that matches the specified search criteria. When location filters such as country or region ID are applied, results are sorted by Booking.com popularity instead of price. Results include product availability, price, and charges by default.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accommodations",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"booker\": {\n    \"country\": \"<string>\",\n    \"platform\": \"<string>\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": \"<integer>\",\n    \"number_of_rooms\": \"<integer>\",\n    \"children_ages\": [\n      \"<integer>\",\n      \"<integer>\"\n    ]\n  },\n  \"city\": \"<integer>\",\n  \"country\": \"<string>\",\n  \"region\": \"<integer>\",\n  \"accommodation_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"filters\": {\n    \"meal_plan\": \"<string>\",\n    \"cancellation_type\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3185ef47-4b72-41d6-9d97-329a7592d650",
+              "name": "Successful search results",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      16,\n      13\n    ]\n  },\n  \"city\": -2140479,\n  \"country\": \"<string>\",\n  \"region\": \"<integer>\",\n  \"accommodation_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"filters\": {\n    \"meal_plan\": \"<string>\",\n    \"cancellation_type\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"accommodation_id\": 5934,\n      \"name\": \"string\",\n      \"city\": \"string\",\n      \"country\": \"string\",\n      \"price\": {\n        \"amount\": 4537.21963429968,\n        \"currency\": \"string\"\n      },\n      \"products\": [\n        {\n          \"product_id\": \"string\",\n          \"room_name\": \"string\",\n          \"meal_plan\": \"string\",\n          \"cancellation_type\": \"string\",\n          \"price\": {\n            \"amount\": 1432.958728367021,\n            \"currency\": \"string\"\n          }\n        },\n        {\n          \"product_id\": \"string\",\n          \"room_name\": \"string\",\n          \"meal_plan\": \"string\",\n          \"cancellation_type\": \"string\",\n          \"price\": {\n            \"amount\": 8531.597403824155,\n            \"currency\": \"string\"\n          }\n        }\n      ]\n    },\n    {\n      \"accommodation_id\": 3017,\n      \"name\": \"string\",\n      \"city\": \"string\",\n      \"country\": \"string\",\n      \"price\": {\n        \"amount\": 2000.6615307115694,\n        \"currency\": \"string\"\n      },\n      \"products\": [\n        {\n          \"product_id\": \"string\",\n          \"room_name\": \"string\",\n          \"meal_plan\": \"string\",\n          \"cancellation_type\": \"string\",\n          \"price\": {\n            \"amount\": 6887.164916705134,\n            \"currency\": \"string\"\n          }\n        },\n        {\n          \"product_id\": \"string\",\n          \"room_name\": \"string\",\n          \"meal_plan\": \"string\",\n          \"cancellation_type\": \"string\",\n          \"price\": {\n            \"amount\": 3582.207545656786,\n            \"currency\": \"string\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "14111d3d-f5b5-4991-a93d-e0e1b4e4ed59",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      16,\n      13\n    ]\n  },\n  \"city\": -2140479,\n  \"country\": \"<string>\",\n  \"region\": \"<integer>\",\n  \"accommodation_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"filters\": {\n    \"meal_plan\": \"<string>\",\n    \"cancellation_type\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "190a21ab-698c-4229-83e4-4e8a40857ee8",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      16,\n      13\n    ]\n  },\n  \"city\": -2140479,\n  \"country\": \"<string>\",\n  \"region\": \"<integer>\",\n  \"accommodation_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"filters\": {\n    \"meal_plan\": \"<string>\",\n    \"cancellation_type\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ce5ab3e2-a5ac-4a9e-97d8-2b45ee7922ab",
+          "name": "Get accommodation details",
+          "request": {
+            "name": "Get accommodation details",
+            "description": {
+              "content": "Returns detailed information on all accommodation properties matching the given criteria including property descriptions, facilities, photos, location data, and policies.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accommodations",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodation_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3e3493a6-f485-42a0-9f01-769e25cf7e2b",
+              "name": "Accommodation details retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"accommodation_id\": 6144,\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"address\": \"string\",\n      \"city\": \"string\",\n      \"country\": \"string\",\n      \"zip\": \"string\",\n      \"location\": {\n        \"latitude\": 1900.0832812597846,\n        \"longitude\": 2634.989816797323\n      },\n      \"star_rating\": 9129.663009524114,\n      \"review_score\": 7371.062915156701,\n      \"photos\": [\n        {\n          \"url\": \"http://ZjMiPjlqjfwkrzhvQkWkSHNiAbZRQNpB.elcfsimuewGcCPf3y,daKhl0F4sXwCdUVj-TNHEkgTlXPCdsf9yQ\",\n          \"tag\": \"string\"\n        },\n        {\n          \"url\": \"http://FOHTVwyqRBjSDzdahPzYhuQThVjK.wopoGqVvNnXDfRbUKDcgTcyJH7rBcFDEBfg7nZZ63a0JvOCE-l8SdU4XQ8wklM\",\n          \"tag\": \"string\"\n        }\n      ],\n      \"facilities\": [\n        {\n          \"facility_id\": 9316,\n          \"name\": \"string\"\n        },\n        {\n          \"facility_id\": 5645,\n          \"name\": \"string\"\n        }\n      ],\n      \"accommodation_type\": 8306,\n      \"chain_id\": 4097\n    },\n    {\n      \"accommodation_id\": 2347,\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"address\": \"string\",\n      \"city\": \"string\",\n      \"country\": \"string\",\n      \"zip\": \"string\",\n      \"location\": {\n        \"latitude\": 7586.547568631677,\n        \"longitude\": 5634.5997151756865\n      },\n      \"star_rating\": 2424.6240335963,\n      \"review_score\": 9789.072020179608,\n      \"photos\": [\n        {\n          \"url\": \"https://FOAcythNdyRoufHRBBKwPGy.msjafe3skDt-f6LINE.ycap28S+Os2H4jaJwLAM0PfKjmo\",\n          \"tag\": \"string\"\n        },\n        {\n          \"url\": \"https://dviAuyoYKTN.ajbVo4bNqhYRWhZ-xHKV2K8Lf2W5xrZEwyDl\",\n          \"tag\": \"string\"\n        }\n      ],\n      \"facilities\": [\n        {\n          \"facility_id\": 8459,\n          \"name\": \"string\"\n        },\n        {\n          \"facility_id\": 8288,\n          \"name\": \"string\"\n        }\n      ],\n      \"accommodation_type\": 8263,\n      \"chain_id\": 997\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "81aa64ea-1b9c-40e7-86f2-ec5e51bf7095",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f181c5a0-1a00-4410-aaa3-936e9435eec4",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bd9d43a6-e29f-41ac-a270-bfd753732f76",
+          "name": "Check accommodation availability",
+          "request": {
+            "name": "Check accommodation availability",
+            "description": {
+              "content": "Checks availability for a specific accommodation, returning detailed product availability, pricing, and extra charges. The checkin date must be within 500 days and checkout must be between 1 and 90 days after checkin.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accommodations",
+                "availability"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"<string>\",\n    \"platform\": \"<string>\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": \"<integer>\",\n    \"number_of_rooms\": \"<integer>\",\n    \"children_ages\": [\n      \"<integer>\",\n      \"<integer>\"\n    ]\n  },\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "caf9f7df-4be9-4229-8a6d-8312d9a8a6a6",
+              "name": "Availability information retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      7,\n      6\n    ]\n  },\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": {\n    \"accommodation_id\": 6449,\n    \"products\": [\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 4439.495043188072,\n          \"currency\": \"string\"\n        }\n      },\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 8170.2694047407385,\n          \"currency\": \"string\"\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0e455a6d-feca-476a-8b52-a365ae1c5008",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      7,\n      6\n    ]\n  },\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e49f0f93-9aad-4167-96db-370cd71b9de3",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      7,\n      6\n    ]\n  },\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2bc6e359-e575-459e-bef2-024e6f150af6",
+          "name": "Check multiple accommodation availability",
+          "request": {
+            "name": "Check multiple accommodation availability",
+            "description": {
+              "content": "Checks availability for multiple accommodations at once. Accepts an array of accommodation IDs along with dates, guest information, and optional filters for meal plan and cancellation type.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accommodations",
+                "bulk-availability"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodations\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"booker\": {\n    \"country\": \"<string>\",\n    \"platform\": \"<string>\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": \"<integer>\",\n    \"number_of_rooms\": \"<integer>\",\n    \"children_ages\": [\n      \"<integer>\",\n      \"<integer>\"\n    ]\n  },\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"filters\": {\n    \"meal_plan\": \"<string>\",\n    \"cancellation_type\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bd8681b1-72b7-4a4d-ae79-5b12ec7abc30",
+              "name": "Bulk availability results retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "bulk-availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodations\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      8,\n      10\n    ]\n  },\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"filters\": {\n    \"meal_plan\": \"<string>\",\n    \"cancellation_type\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"accommodation_id\": 3532,\n      \"products\": [\n        {\n          \"product_id\": \"string\",\n          \"room_name\": \"string\",\n          \"meal_plan\": \"string\",\n          \"cancellation_type\": \"string\",\n          \"price\": {\n            \"amount\": 7668.213187869885,\n            \"currency\": \"string\"\n          }\n        },\n        {\n          \"product_id\": \"string\",\n          \"room_name\": \"string\",\n          \"meal_plan\": \"string\",\n          \"cancellation_type\": \"string\",\n          \"price\": {\n            \"amount\": 3393.63445707637,\n            \"currency\": \"string\"\n          }\n        }\n      ]\n    },\n    {\n      \"accommodation_id\": 1529,\n      \"products\": [\n        {\n          \"product_id\": \"string\",\n          \"room_name\": \"string\",\n          \"meal_plan\": \"string\",\n          \"cancellation_type\": \"string\",\n          \"price\": {\n            \"amount\": 2190.1972363023638,\n            \"currency\": \"string\"\n          }\n        },\n        {\n          \"product_id\": \"string\",\n          \"room_name\": \"string\",\n          \"meal_plan\": \"string\",\n          \"cancellation_type\": \"string\",\n          \"price\": {\n            \"amount\": 9657.249057822868,\n            \"currency\": \"string\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "64ac19d5-f474-48dd-9635-a4d008a5ba07",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "bulk-availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodations\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      8,\n      10\n    ]\n  },\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"filters\": {\n    \"meal_plan\": \"<string>\",\n    \"cancellation_type\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1f73bed7-4ee1-4499-bcfa-87e184e842b1",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "bulk-availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodations\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      8,\n      10\n    ]\n  },\n  \"extras\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"filters\": {\n    \"meal_plan\": \"<string>\",\n    \"cancellation_type\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a1257d7e-4d71-4ff0-a169-081f3966a1c6",
+          "name": "Get accommodation reviews",
+          "request": {
+            "name": "Get accommodation reviews",
+            "description": {
+              "content": "Retrieves traveler reviews for specified accommodations, providing feedback associated with particular properties. Reviews can be filtered by reviewer parameters and languages.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accommodations",
+                "reviews"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"language\": \"<string>\",\n  \"sort\": \"<string>\",\n  \"rows\": \"<integer>\",\n  \"offset\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cc02508c-5207-4ab2-9039-23c3e5e6b78f",
+              "name": "Reviews retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "reviews"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"language\": \"<string>\",\n  \"sort\": \"<string>\",\n  \"rows\": \"<integer>\",\n  \"offset\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"review_id\": \"string\",\n      \"score\": 6388.425157526104,\n      \"title\": \"string\",\n      \"positive\": \"string\",\n      \"negative\": \"string\",\n      \"author\": \"string\",\n      \"date\": \"1953-10-26\",\n      \"language\": \"string\"\n    },\n    {\n      \"review_id\": \"string\",\n      \"score\": 8048.947189369006,\n      \"title\": \"string\",\n      \"positive\": \"string\",\n      \"negative\": \"string\",\n      \"author\": \"string\",\n      \"date\": \"1966-12-04\",\n      \"language\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa1bea89-7276-45ac-ba61-1b6664a5c9e9",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "reviews"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"language\": \"<string>\",\n  \"sort\": \"<string>\",\n  \"rows\": \"<integer>\",\n  \"offset\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b15f6ac8-5627-430a-bda3-6afd8b5344f3",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "reviews"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"language\": \"<string>\",\n  \"sort\": \"<string>\",\n  \"rows\": \"<integer>\",\n  \"offset\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f201bdfd-f1c5-4887-a18d-2a004818c143",
+          "name": "Get accommodation review scores",
+          "request": {
+            "name": "Get accommodation review scores",
+            "description": {
+              "content": "Returns score distribution and score breakdown for the specified accommodations. The scores information can be filtered by reviewer parameters and languages.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accommodations",
+                "reviews",
+                "scores"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodation_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"language\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "dcd12f6c-659a-40d4-bcd3-2e20fa840031",
+              "name": "Review scores retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "reviews",
+                    "scores"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"language\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"accommodation_id\": 6757,\n      \"overall_score\": 9731.704137744508,\n      \"total_reviews\": 8911,\n      \"categories\": {\n        \"cleanliness\": 6749.481843998244,\n        \"comfort\": 3997.81898407202,\n        \"location\": 1459.1785492633114,\n        \"facilities\": 6428.882172380857,\n        \"staff\": 8150.545947077025,\n        \"value_for_money\": 1978.4831550604265\n      }\n    },\n    {\n      \"accommodation_id\": 2053,\n      \"overall_score\": 7106.151260773257,\n      \"total_reviews\": 4010,\n      \"categories\": {\n        \"cleanliness\": 8087.042122515253,\n        \"comfort\": 2848.150537574964,\n        \"location\": 3248.8264650084807,\n        \"facilities\": 2463.3659685552125,\n        \"staff\": 4013.444950410542,\n        \"value_for_money\": 2608.413670546267\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d5d98fb5-781b-4625-bdca-73e8fdf5c62b",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "reviews",
+                    "scores"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"language\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "99892fe2-f870-4a87-b2b7-f94ddf0ccf92",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "reviews",
+                    "scores"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"language\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7ce212f6-8cee-45ef-9e8f-e4b2ab0664ea",
+          "name": "Get accommodation chains",
+          "request": {
+            "name": "Get accommodation chains",
+            "description": {
+              "content": "Retrieves information about hotel chains and brand affiliations for accommodations listed on Booking.com.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accommodations",
+                "chains"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chain_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "37daf9df-3c64-4a01-821b-983b1512960c",
+              "name": "Chain information retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "chains"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chain_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"chain_id\": 5227,\n      \"name\": \"string\"\n    },\n    {\n      \"chain_id\": 6729,\n      \"name\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1c806211-597b-4c9c-aaba-55f14b9dc7a7",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "chains"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chain_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd2d296d-1fec-422e-9723-83f78957069e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "chains"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chain_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "54dbd194-dd7e-4128-8a05-cae794f76f9c",
+      "name": "Constants",
+      "description": {
+        "content": "Endpoints for retrieving reference data such as accommodation types, facility types, room types, and other enumerated values.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "13c02dcd-e1fc-4d3b-80a4-63ae14b6998f",
+          "name": "Get accommodation constants",
+          "request": {
+            "name": "Get accommodation constants",
+            "description": {
+              "content": "Retrieves reference data constants including accommodation types, accommodation facilities, accommodation themes, bed types, charge types, facility types, review scores, room facilities, and room types.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accommodations",
+                "constants"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"constants\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ec072c6f-c364-4c60-bd7e-ec86d9d962f7",
+              "name": "Constants retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "constants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"constants\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a4c85992-fbd0-4550-b6e3-5a5cda3fd689",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "constants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"constants\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d37962c5-c8a4-4f12-b5d6-c90c80654605",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accommodations",
+                    "constants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"constants\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "512fd4bb-c812-4605-8773-7e4476b8b657",
+      "name": "Conversations",
+      "description": {
+        "content": "Endpoints to retrieve and manage messaging conversations, list conversations, fetch conversation details, and track updates.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "72abde24-fa7e-4275-97fe-887cadaf5b0b",
+          "name": "List conversations",
+          "request": {
+            "name": "List conversations",
+            "description": {
+              "content": "Retrieves a list of messaging conversations, allowing you to browse and manage communication threads between guests and properties.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "conversations",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": \"<string>\",\n  \"offset\": \"<integer>\",\n  \"limit\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "27204bfd-197f-42da-9c32-059e96005ff6",
+              "name": "Conversations listed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversations",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\",\n  \"offset\": \"<integer>\",\n  \"limit\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"conversation_id\": \"string\",\n      \"order_id\": \"string\",\n      \"accommodation_id\": 1028,\n      \"message_count\": 586,\n      \"last_message_at\": \"1958-07-09T17:39:04.799Z\",\n      \"status\": \"string\"\n    },\n    {\n      \"conversation_id\": \"string\",\n      \"order_id\": \"string\",\n      \"accommodation_id\": 8931,\n      \"message_count\": 9179,\n      \"last_message_at\": \"2023-04-26T05:00:49.336Z\",\n      \"status\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c4d99f60-b58f-4635-946f-b108f7828be3",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversations",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\",\n  \"offset\": \"<integer>\",\n  \"limit\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8fcacd12-819e-4598-8524-a2787763bd8f",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversations",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\",\n  \"offset\": \"<integer>\",\n  \"limit\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7bc36981-9126-4f75-b8cc-2670ff1b1e53",
+          "name": "Get conversation details",
+          "request": {
+            "name": "Get conversation details",
+            "description": {
+              "content": "Fetches detailed information about a specific conversation, including participants, message count, and status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "conversations",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversation_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6bf3f227-fca0-4531-b358-3075a901ffe7",
+              "name": "Conversation details retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversations",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"conversation_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": {\n    \"conversation_id\": \"string\",\n    \"order_id\": \"string\",\n    \"accommodation_id\": 4005,\n    \"message_count\": 6827,\n    \"last_message_at\": \"1994-03-14T11:55:23.954Z\",\n    \"status\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "efd6a6c9-2da0-48a1-8779-5bba0b4bb0e0",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversations",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"conversation_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5fab8eae-a4bb-42be-933e-e4727017da8b",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversations",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"conversation_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "8c552b4a-d65b-4ef6-bcbb-4f93665dbc63",
+      "name": "Locations",
+      "description": {
+        "content": "Endpoints for retrieving geographical location data including countries, cities, regions, and airports.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8576252b-3040-4fc1-b2cb-b049265ccf7f",
+          "name": "Get countries",
+          "request": {
+            "name": "Get countries",
+            "description": {
+              "content": "Retrieves geographical location data for countries supported on Booking.com.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "locations",
+                "countries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"countries\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "10638b3c-4790-43cf-8378-573e82f0da6a",
+              "name": "Countries retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "locations",
+                    "countries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"countries\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30ecedbb-af7d-4442-80ab-dfdb10e00987",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "locations",
+                    "countries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"countries\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "77d49fc2-4633-43b8-a378-5d8192680f16",
+          "name": "Get cities",
+          "request": {
+            "name": "Get cities",
+            "description": {
+              "content": "Retrieves geographical location data for cities, including city identifiers used in accommodation search queries.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "locations",
+                "cities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"city_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"country\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "95ec219a-1205-4a47-b685-83e48826006e",
+              "name": "Cities retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "locations",
+                    "cities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"city_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"country\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ecbe3a1d-bb1c-402a-b01e-47dd9b5b21e9",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "locations",
+                    "cities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"city_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"country\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8092a0ba-08cd-4166-9927-6615ded0ee1b",
+          "name": "Get regions",
+          "request": {
+            "name": "Get regions",
+            "description": {
+              "content": "Retrieves geographical location data for regions, including region identifiers used in accommodation search queries.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "locations",
+                "regions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"region_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"country\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cd1fdffe-350e-475c-bf9c-4046c6223ba6",
+              "name": "Regions retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "locations",
+                    "regions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"region_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"country\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4d99f5a7-fe0b-4cce-af70-bfb7904fad6c",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "locations",
+                    "regions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"region_ids\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"country\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "458ed895-bc42-497a-9820-b2ce24afce7a",
+      "name": "Messages",
+      "description": {
+        "content": "Endpoints for two-way post-booking communication between guests and properties, allowing you to send and retrieve messages, exchange images, and check conversation details.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "601a51ca-9621-4c3c-aaa7-162d59e4671e",
+          "name": "Send a message",
+          "request": {
+            "name": "Send a message",
+            "description": {
+              "content": "Sends a message within a conversation. The message body supports plain text and optionally allows attaching a file by referencing a previously uploaded attachment ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "messages",
+                "send"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversation_id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"attachment_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cc413aa7-aa2b-4f8e-91a4-c3dcebcaad22",
+              "name": "Message sent successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    "send"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"conversation_id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"attachment_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": {\n    \"message_id\": \"string\",\n    \"status\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3efdaf27-a3c5-4069-8da8-31b00f481631",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    "send"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"conversation_id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"attachment_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e01e28e-6d73-4a98-90e5-6d56d10a1a36",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    "send"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"conversation_id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"attachment_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ab63ab41-53cf-43ee-ba1e-13901167ae0f",
+          "name": "Fetch latest messages",
+          "request": {
+            "name": "Fetch latest messages",
+            "description": {
+              "content": "Retrieves up to 100 of the most recent messages from a specified conversation, including messages from both property and guest, returned in reverse chronological order (newest first). Can be used to sync message threads or poll for updates.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "messages",
+                "latest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversation_id\": \"<string>\",\n  \"limit\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6027e301-61ff-48ae-a307-735323d94f91",
+              "name": "Messages retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    "latest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"conversation_id\": \"<string>\",\n  \"limit\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"message_id\": \"string\",\n      \"conversation_id\": \"string\",\n      \"sender\": \"guest\",\n      \"body\": \"string\",\n      \"attachment\": {\n        \"attachment_id\": \"string\",\n        \"url\": \"http://FLhlJMWqQsEYaFkRXcHNVkbRc.njolLZz+,U-FR77u+75Rhux,SdR+Qr2fm\"\n      },\n      \"created_at\": \"1988-09-12T16:07:08.248Z\"\n    },\n    {\n      \"message_id\": \"string\",\n      \"conversation_id\": \"string\",\n      \"sender\": \"guest\",\n      \"body\": \"string\",\n      \"attachment\": {\n        \"attachment_id\": \"string\",\n        \"url\": \"https://kmnkzXxIIqmvkQfbUDFeGbSjpGvw.mrbMnXJHRaW3+KPvXN5K-wQob-JDkmoZooLB3IsNfG\"\n      },\n      \"created_at\": \"2005-08-22T04:59:23.328Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cf15aa57-f75a-4db1-86f6-d82eb0f51e43",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    "latest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"conversation_id\": \"<string>\",\n  \"limit\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "738641d1-8bdc-4029-895b-f18fb2c15a43",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    "latest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"conversation_id\": \"<string>\",\n  \"limit\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4c07d439-3ed0-48cf-b57f-9cc003aefb1b",
+          "name": "Confirm message receipt",
+          "request": {
+            "name": "Confirm message receipt",
+            "description": {
+              "content": "Confirms receipt of specified messages. This confirmation is required before receiving new messages from the POST /messages/latest endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "messages",
+                "latest",
+                "confirm"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversation_id\": \"<string>\",\n  \"message_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "36995a46-79dc-491d-8a5b-2fec6014aa3d",
+              "name": "Messages confirmed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    "latest",
+                    "confirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"conversation_id\": \"<string>\",\n  \"message_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": {\n    \"confirmed\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2e6bf8fb-0510-4889-ae39-c4cb35090318",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    "latest",
+                    "confirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"conversation_id\": \"<string>\",\n  \"message_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "485ab6b2-e923-47d6-9290-43b3b10262ae",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    "latest",
+                    "confirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"conversation_id\": \"<string>\",\n  \"message_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "9ea02ef3-77f0-436b-9a4a-82d56e992bc5",
+      "name": "Orders",
+      "description": {
+        "content": "Endpoints to preview and create new orders, check order details, cancel or modify existing orders.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "91dd3a17-d478-4e87-97b7-a7452d5231fc",
+          "name": "Preview an order",
+          "request": {
+            "name": "Preview an order",
+            "description": {
+              "content": "Generates a preview of an order before creation, allowing the traveler to review the booking details, pricing, and policies before committing.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                "preview"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"<string>\",\n    \"platform\": \"<string>\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": \"<integer>\",\n    \"number_of_rooms\": \"<integer>\",\n    \"children_ages\": [\n      \"<integer>\",\n      \"<integer>\"\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"product_id\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7219218d-f381-4194-a200-00b126cfdee8",
+              "name": "Order preview generated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      12,\n      4\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 7609\n    },\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 4263\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": {\n    \"total_price\": {\n      \"amount\": 4253.195223998058,\n      \"currency\": \"string\"\n    },\n    \"cancellation_policy\": \"string\",\n    \"products\": [\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 2705.13653374146,\n          \"currency\": \"string\"\n        }\n      },\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 5503.291153196602,\n          \"currency\": \"string\"\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9789b312-eec4-4e95-a907-f54b604decc2",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      12,\n      4\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 7609\n    },\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 4263\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "69a22a91-752e-4803-b8b0-494ecc8a4091",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      12,\n      4\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 7609\n    },\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 4263\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "341a3688-d93b-4e8f-b61a-690b14e7fa6b",
+          "name": "Create an order",
+          "request": {
+            "name": "Create an order",
+            "description": {
+              "content": "Creates a new booking order, allowing travelers to book and pay for travel services and products directly from the affiliate application. Manages bookings efficiently without redirecting users to Booking.com.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                "create"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"<string>\",\n    \"platform\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"email\": \"<email>\",\n    \"telephone\": \"<string>\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": \"<integer>\",\n    \"number_of_rooms\": \"<integer>\",\n    \"children_ages\": [\n      \"<integer>\",\n      \"<integer>\"\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"product_id\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"payment\": {\n    \"payment_type\": \"<string>\",\n    \"card_number\": \"<string>\",\n    \"expiry_date\": \"<string>\",\n    \"cvc\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "68215cf9-fba5-48f0-83a1-b9f65171a8e8",
+              "name": "Order created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"email\": \"<email>\",\n    \"telephone\": \"<string>\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      4,\n      0\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 3576\n    },\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 9855\n    }\n  ],\n  \"payment\": {\n    \"payment_type\": \"string\",\n    \"card_number\": \"string\",\n    \"expiry_date\": \"string\",\n    \"cvc\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": {\n    \"order_id\": \"string\",\n    \"status\": \"confirmed\",\n    \"accommodation_id\": 6922,\n    \"checkin\": \"1963-12-14\",\n    \"checkout\": \"2002-07-10\",\n    \"total_price\": {\n      \"amount\": 4510.590511891393,\n      \"currency\": \"string\"\n    },\n    \"booker\": {\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"products\": [\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 1102.6204824067088,\n          \"currency\": \"string\"\n        }\n      },\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 3441.8046802131007,\n          \"currency\": \"string\"\n        }\n      }\n    ],\n    \"created_at\": \"2024-11-17T14:17:22.896Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "699bfe61-6e29-4cef-8705-f313b7e479db",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"email\": \"<email>\",\n    \"telephone\": \"<string>\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      4,\n      0\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 3576\n    },\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 9855\n    }\n  ],\n  \"payment\": {\n    \"payment_type\": \"string\",\n    \"card_number\": \"string\",\n    \"expiry_date\": \"string\",\n    \"cvc\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "80c9ba40-cb3d-4733-a45d-8f3e6f6e09a0",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"email\": \"<email>\",\n    \"telephone\": \"<string>\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      4,\n      0\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 3576\n    },\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 9855\n    }\n  ],\n  \"payment\": {\n    \"payment_type\": \"string\",\n    \"card_number\": \"string\",\n    \"expiry_date\": \"string\",\n    \"cvc\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a4b670f7-26e1-4227-9bdb-aa98285b6d41",
+          "name": "Get order details",
+          "request": {
+            "name": "Get order details",
+            "description": {
+              "content": "Retrieves relevant booking details for a specific order, including status, pricing, guest information, and accommodation details.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0922b9f2-2ddc-432f-a999-fe00f82f54e7",
+              "name": "Order details retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": {\n    \"order_id\": \"string\",\n    \"status\": \"confirmed\",\n    \"accommodation_id\": 6922,\n    \"checkin\": \"1963-12-14\",\n    \"checkout\": \"2002-07-10\",\n    \"total_price\": {\n      \"amount\": 4510.590511891393,\n      \"currency\": \"string\"\n    },\n    \"booker\": {\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"products\": [\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 1102.6204824067088,\n          \"currency\": \"string\"\n        }\n      },\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 3441.8046802131007,\n          \"currency\": \"string\"\n        }\n      }\n    ],\n    \"created_at\": \"2024-11-17T14:17:22.896Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec0b9acb-95a2-4ab3-9654-447a6a7ab25d",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6768e4f3-7e88-4df1-b403-487d11b72465",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d9b4be1e-928d-4c00-8918-dee2a15bb954",
+              "name": "Order not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "28a7eea6-fe49-4d4b-8e4d-0968fd97d1bf",
+          "name": "Cancel an order",
+          "request": {
+            "name": "Cancel an order",
+            "description": {
+              "content": "Processes the cancellation of an existing order. Cancellation policies and any applicable fees are determined by the property and rate plan.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "76e0f702-76ed-46b1-b4e5-f7789a6a09cc",
+              "name": "Order cancelled successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": {\n    \"order_id\": \"string\",\n    \"status\": \"cancelled\",\n    \"cancellation_fee\": {\n      \"amount\": 8571.435568268089,\n      \"currency\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b8c9c9eb-f0cc-4ca6-b127-a5e14ec3e22e",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8c23db77-4720-40a1-806d-d5f8fc78fd24",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b2879cbf-ca4a-4cb3-a774-41db8328b646",
+              "name": "Order not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "f320ea2b-3e47-41ca-8056-3ba94b37a847",
+      "name": "Payments",
+      "description": {
+        "content": "Generic payment-related endpoints, including supported currencies and payment types.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8378c2ca-7bd5-422f-ab86-34efc6c22af8",
+          "name": "Get supported currencies",
+          "request": {
+            "name": "Get supported currencies",
+            "description": {
+              "content": "Retrieves the list of currencies supported for payments on Booking.com, including currency codes and display information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                "currencies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d2158826-d3fa-47f4-a8a4-e9232f4363cc",
+              "name": "Currencies retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "currencies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"currency_code\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"currency_code\": \"string\",\n      \"name\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ceb7b0f1-3e58-4df0-a20c-f4a997528b8c",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "currencies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "185f6d64-3b3f-4946-b24e-b2cd1e574c29",
+          "name": "Get payment types",
+          "request": {
+            "name": "Get payment types",
+            "description": {
+              "content": "Retrieves the list of payment types supported on Booking.com, including credit cards and other payment methods.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                "types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "de8888bd-3718-4edb-94a5-449a541348fc",
+              "name": "Payment types retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"payment_type_id\": 1333,\n      \"name\": \"string\"\n    },\n    {\n      \"payment_type_id\": 4778,\n      \"name\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d19d8e4b-097c-41ce-9926-8f651cc99a30",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://demandapi.booking.com/3.1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "69830877-1a8a-4233-90ad-9bdf875092a3",
+    "name": "Booking.com Demand API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Booking.com Demand API is a RESTful API that enables Affiliate Partners to access Booking.com's extensive travel inventory. It provides endpoints for searching accommodations such as hotels and apartments, checking availability, retrieving reviews, and getting detailed property information. The API uses JSON responses and requires HTTPS POST requests with Affiliate ID and Bearer token authentication. The latest version (V3.1) offers improved functionality and additional endpoints for building travel booking experiences including orders management, messaging, and payment information.\n\nContact Support:\n Name: Booking.com Developer Support",
+      "type": "text/plain"
+    }
+  }
+}

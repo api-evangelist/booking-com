@@ -1,0 +1,85 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Connectivity Reservations API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reservations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve reservations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://secure-supply-xml.booking.com/hotels/xml/reservations"
+          },
+          "docs": "Retrieves new, modified, or cancelled property reservations using B.XML format. The response returns the same schema for new, modified, and cancelled reservations with updated information. This endpoint should be polled once per twenty seconds for timely data delivery. Higher frequencies are not recommended due to added server overhead."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Recovery",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve reservation summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://secure-supply-xml.booking.com/hotels/xml/reservationssummary"
+          },
+          "docs": "Retrieves reservation messages that were not picked up earlier. This endpoint is useful for retrieving all reservations that were made prior to the property being connected to the partner system, ensuring no bookings are missed during initial setup."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "OTA Reservations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Process reservation notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://secure-supply-xml.booking.com/hotels/ota/OTA_HotelResNotif"
+          },
+          "docs": "Processes reservation notifications following the OTA OTA_HotelResNotif specification. Used for receiving and confirming new reservations through the OpenTravel Alliance standard format."
+        },
+        {
+          "info": {
+            "name": "Process reservation modification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://secure-supply-xml.booking.com/hotels/ota/OTA_HotelResModifyNotif"
+          },
+          "docs": "Processes reservation modification notifications following the OTA OTA_HotelResModifyNotif specification. Used for receiving and confirming changes to existing reservations."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,3290 @@
+{
+  "item": [
+    {
+      "id": "e0eeabd4-69d7-4874-a4e4-8f07cab4a3ae",
+      "name": "Facilities",
+      "description": {
+        "content": "Endpoints for managing property-level and room-level facilities and amenities.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1f8b5c8d-9234-47bd-891d-87431b7de551",
+          "name": "Update property facilities",
+          "request": {
+            "name": "Update property facilities",
+            "description": {
+              "content": "Updates the list of facilities and amenities available at a property, such as parking, WiFi, swimming pool, and restaurant.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "properties",
+                ":property_id",
+                "facilities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "property_id",
+                  "description": "(Required) Unique identifier of the property on Booking.com"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"facilities\": [\n    {\n      \"facility_id\": \"<integer>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"facility_id\": \"<integer>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d3766c6a-57ec-4673-b82f-060248e92985",
+              "name": "Facilities updated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "facilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"facilities\": [\n    {\n      \"facility_id\": \"<integer>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"facility_id\": \"<integer>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"facilities\": [\n    {\n      \"facility_id\": 6039,\n      \"name\": \"string\",\n      \"value\": \"string\"\n    },\n    {\n      \"facility_id\": 8532,\n      \"name\": \"string\",\n      \"value\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1c1f1fe7-ba28-44fe-a732-a2d02ef24f91",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "facilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"facilities\": [\n    {\n      \"facility_id\": \"<integer>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"facility_id\": \"<integer>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "53ccb8d4-a6fb-4d93-ae30-8df7e39dacae",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "facilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"facilities\": [\n    {\n      \"facility_id\": \"<integer>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"facility_id\": \"<integer>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0c9f4d1a-db83-4da4-9e40-2402a0a5676c",
+          "name": "Get property facilities",
+          "request": {
+            "name": "Get property facilities",
+            "description": {
+              "content": "Retrieves the list of facilities configured for a property.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "properties",
+                ":property_id",
+                "facilities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "property_id",
+                  "description": "(Required) Unique identifier of the property on Booking.com"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "408b1bac-7d83-44b9-8d5a-3ab582f64d4b",
+              "name": "Facilities retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "facilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"facilities\": [\n    {\n      \"facility_id\": 6039,\n      \"name\": \"string\",\n      \"value\": \"string\"\n    },\n    {\n      \"facility_id\": 8532,\n      \"name\": \"string\",\n      \"value\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "244cb91b-de6b-405b-afc1-134c47455bc0",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "facilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "86914a7b-05b8-4729-a087-8bddf13ff84d",
+              "name": "Property not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "facilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "e652ad8f-f58f-406c-ae86-c15812880592",
+      "name": "OTA Legacy",
+      "description": {
+        "content": "Legacy OTA-based endpoints for property content management. These endpoints follow the OpenTravel Alliance specification and are being deprecated in favor of modular APIs.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "98856fd9-7881-4e3e-ac40-33b281e11f40",
+          "name": "Create or update property content",
+          "request": {
+            "name": "Create or update property content",
+            "description": {
+              "content": "Creates or modifies the skeleton of a property including location details, policies, contact information, facilities, and other descriptive content. This endpoint follows the OTA 2003B specification. Note: This endpoint was deprecated in December 2024 and will be sunset on December 31, 2026. Transition to the modular Property Management APIs is recommended.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                "ota",
+                "OTA_HotelDescriptiveContentNotif"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              },
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0c92ea71-7e2a-46f7-8502-9d504645e148",
+              "name": "Content update processed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelDescriptiveContentNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            },
+            {
+              "id": "6255b14d-005c-4c83-ac72-5f08e24a84d3",
+              "name": "Invalid XML request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelDescriptiveContentNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "38f529f9-cb23-4a0b-a151-0c64077ba21d",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelDescriptiveContentNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d461cd7b-a18f-494c-9764-897b770d8a56",
+          "name": "Create or update room and rate products",
+          "request": {
+            "name": "Create or update room and rate products",
+            "description": {
+              "content": "Creates or updates room types, rate plans, and product configurations for a property. This endpoint allows connectivity partners to define room-rate combinations that will be available for booking.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                "ota",
+                "OTA_HotelProductNotif"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              },
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1d68c05a-3222-4646-8f14-137b22c48b3b",
+              "name": "Product update processed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelProductNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            },
+            {
+              "id": "90c5330c-da99-44fb-8e6a-b9eb76ab91bd",
+              "name": "Invalid XML request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelProductNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e81b6eef-3f1a-430d-a35f-cdf446b15d78",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelProductNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3bc1b931-8240-46a2-868c-92724a6ac4c3",
+          "name": "Update hotel inventory",
+          "request": {
+            "name": "Update hotel inventory",
+            "description": {
+              "content": "Updates room inventory counts for a property, specifying the number of rooms available for specific dates and room types.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                "ota",
+                "OTA_HotelInvNotif"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              },
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3160a474-7019-405a-a59a-287404cd4359",
+              "name": "Inventory update processed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelInvNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            },
+            {
+              "id": "328552d7-9fac-4d50-8db4-d7c2d1be5de5",
+              "name": "Invalid XML request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelInvNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7d66fdd5-7612-4287-99fc-59fc13278ab7",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelInvNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2ab0606c-b9d9-4dee-86dd-14b773ba5569",
+          "name": "Search properties",
+          "request": {
+            "name": "Search properties",
+            "description": {
+              "content": "Searches for properties managed by the connectivity partner, returning property identifiers and basic information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                "ota",
+                "OTA_HotelSearch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              },
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9ede26c4-079f-4802-b30b-393f6a88a695",
+              "name": "Search results returned successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelSearch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            },
+            {
+              "id": "e723e954-89bd-4786-aef6-8c04422a919d",
+              "name": "Invalid XML request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelSearch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0d0c8114-8e2c-44f9-b0fb-f4e5b6922807",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelSearch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "84347e8e-a0ab-4a96-b627-5ed13b425439",
+      "name": "Photos",
+      "description": {
+        "content": "Endpoints for adding, managing, and organizing property photos.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7f3df43d-3c66-4c0d-a3a3-c2b4a6b3aff2",
+          "name": "Upload a property photo",
+          "request": {
+            "name": "Upload a property photo",
+            "description": {
+              "content": "Uploads a new photo for a property. Photos can be tagged with categories and assigned to specific rooms or the property overall.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "properties",
+                ":property_id",
+                "photos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "property_id",
+                  "description": "(Required) Unique identifier of the property on Booking.com"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"<uri>\",\n  \"tag\": \"<string>\",\n  \"room_id\": \"<integer>\",\n  \"sort_order\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9d436c10-e387-4f1f-ae01-0759ff6ec29a",
+              "name": "Photo uploaded successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "photos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"url\": \"<uri>\",\n  \"tag\": \"<string>\",\n  \"room_id\": \"<integer>\",\n  \"sort_order\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"photo_id\": \"string\",\n  \"url\": \"https://xv.gflskImTqjPErWxshYlX0JdXXBjejxwi4OAE+y30zgBbYHLxLLGSOcFrgFTGls\",\n  \"tag\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d0e2ec04-9a87-4748-bb7c-6b457e97b500",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "photos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"url\": \"<uri>\",\n  \"tag\": \"<string>\",\n  \"room_id\": \"<integer>\",\n  \"sort_order\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d61ee1b2-f341-4f48-9d34-0864ab93d8e9",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "photos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"url\": \"<uri>\",\n  \"tag\": \"<string>\",\n  \"room_id\": \"<integer>\",\n  \"sort_order\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "73574350-61da-404d-b56f-4d63ea0e46f4",
+          "name": "List property photos",
+          "request": {
+            "name": "List property photos",
+            "description": {
+              "content": "Retrieves all photos associated with a property.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "properties",
+                ":property_id",
+                "photos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "property_id",
+                  "description": "(Required) Unique identifier of the property on Booking.com"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4db6696f-1a5a-4bd8-a0f6-3cfb9038bc42",
+              "name": "Photos retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "photos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"photos\": [\n    {\n      \"photo_id\": \"string\",\n      \"url\": \"https://L.tmmiMhJCEG7ZY+c0eFRM3uXzwr9amjZ,XuFtM.V6naMfHYHIdP1yF7\",\n      \"tag\": \"string\"\n    },\n    {\n      \"photo_id\": \"string\",\n      \"url\": \"http://ibWRjOGZLu.doeyFSSyAZOfO\",\n      \"tag\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2491c9f6-aab3-4393-842d-2c86ba48c67a",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "photos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f4655a47-ebcf-4b8a-a919-4cd72b4778c2",
+              "name": "Property not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "photos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "6a9f3aa9-fa0d-46d9-a077-085a8a94ca1e",
+      "name": "Property Management",
+      "description": {
+        "content": "Endpoints for creating and updating property information including name, location, contact details, policies, and general settings.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d4f72dd5-ee6e-46c1-a695-b8fcb89d3890",
+          "name": "Create a property",
+          "request": {
+            "name": "Create a property",
+            "description": {
+              "content": "Creates a new property on Booking.com with basic details including name, location, and property type. Part of the new modular Property Management APIs replacing the legacy OTA endpoints.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "properties"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"address\": \"<string>\",\n  \"city\": \"<string>\",\n  \"country\": \"<string>\",\n  \"property_type\": \"<string>\",\n  \"zip\": \"<string>\",\n  \"latitude\": \"<number>\",\n  \"longitude\": \"<number>\",\n  \"currency\": \"<string>\",\n  \"star_rating\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "efe456d2-fde9-4b63-a8bf-978b94268673",
+              "name": "Property created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"address\": \"<string>\",\n  \"city\": \"<string>\",\n  \"country\": \"<string>\",\n  \"property_type\": \"<string>\",\n  \"zip\": \"<string>\",\n  \"latitude\": \"<number>\",\n  \"longitude\": \"<number>\",\n  \"currency\": \"<string>\",\n  \"star_rating\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"property_id\": 5692,\n  \"name\": \"string\",\n  \"address\": \"string\",\n  \"city\": \"string\",\n  \"country\": \"string\",\n  \"status\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cb22c78b-60a8-4107-b09b-d93814670f32",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"address\": \"<string>\",\n  \"city\": \"<string>\",\n  \"country\": \"<string>\",\n  \"property_type\": \"<string>\",\n  \"zip\": \"<string>\",\n  \"latitude\": \"<number>\",\n  \"longitude\": \"<number>\",\n  \"currency\": \"<string>\",\n  \"star_rating\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "14efd1ba-846b-46a7-96b7-a27cfda2c704",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"address\": \"<string>\",\n  \"city\": \"<string>\",\n  \"country\": \"<string>\",\n  \"property_type\": \"<string>\",\n  \"zip\": \"<string>\",\n  \"latitude\": \"<number>\",\n  \"longitude\": \"<number>\",\n  \"currency\": \"<string>\",\n  \"star_rating\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8475189e-adb5-4a39-ab51-b47bc15bbf05",
+          "name": "Update property details",
+          "request": {
+            "name": "Update property details",
+            "description": {
+              "content": "Updates an existing property's details including name, description, contact information, and settings.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "properties",
+                ":property_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "property_id",
+                  "description": "(Required) Unique identifier of the property on Booking.com"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"address\": \"<string>\",\n  \"description\": \"<string>\",\n  \"contact_email\": \"<email>\",\n  \"contact_phone\": \"<string>\",\n  \"checkin_from\": \"<string>\",\n  \"checkin_until\": \"<string>\",\n  \"checkout_from\": \"<string>\",\n  \"checkout_until\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "454493e0-1cea-4b9a-962d-da71144aeb46",
+              "name": "Property updated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"address\": \"<string>\",\n  \"description\": \"<string>\",\n  \"contact_email\": \"<email>\",\n  \"contact_phone\": \"<string>\",\n  \"checkin_from\": \"<string>\",\n  \"checkin_until\": \"<string>\",\n  \"checkout_from\": \"<string>\",\n  \"checkout_until\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"property_id\": 5692,\n  \"name\": \"string\",\n  \"address\": \"string\",\n  \"city\": \"string\",\n  \"country\": \"string\",\n  \"status\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e9f3b5b8-2d61-4f59-9e00-021e8749c4e7",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"address\": \"<string>\",\n  \"description\": \"<string>\",\n  \"contact_email\": \"<email>\",\n  \"contact_phone\": \"<string>\",\n  \"checkin_from\": \"<string>\",\n  \"checkin_until\": \"<string>\",\n  \"checkout_from\": \"<string>\",\n  \"checkout_until\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2dc1f7a5-4252-4591-a5d6-8b8c00630ce1",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"address\": \"<string>\",\n  \"description\": \"<string>\",\n  \"contact_email\": \"<email>\",\n  \"contact_phone\": \"<string>\",\n  \"checkin_from\": \"<string>\",\n  \"checkin_until\": \"<string>\",\n  \"checkout_from\": \"<string>\",\n  \"checkout_until\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "15d97fc5-1442-4de3-8c46-c7765c4d1411",
+              "name": "Property not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"address\": \"<string>\",\n  \"description\": \"<string>\",\n  \"contact_email\": \"<email>\",\n  \"contact_phone\": \"<string>\",\n  \"checkin_from\": \"<string>\",\n  \"checkin_until\": \"<string>\",\n  \"checkout_from\": \"<string>\",\n  \"checkout_until\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "695ebc2c-6db6-4d5b-a5eb-53bef0e8e73e",
+          "name": "Get property details",
+          "request": {
+            "name": "Get property details",
+            "description": {
+              "content": "Retrieves the full details of a specific property including all configured content.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "properties",
+                ":property_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "property_id",
+                  "description": "(Required) Unique identifier of the property on Booking.com"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c8463b74-4934-417d-b5e2-177bcba4845b",
+              "name": "Property details retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"property_id\": 5692,\n  \"name\": \"string\",\n  \"address\": \"string\",\n  \"city\": \"string\",\n  \"country\": \"string\",\n  \"status\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d8dd85a3-8b21-48a8-8ab1-b2c20697f4f1",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b8417bce-1c25-4c88-851a-2d472deeb06e",
+              "name": "Property not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "c5a1146b-4246-4c16-baa2-b531382f81a1",
+      "name": "Rates",
+      "description": {
+        "content": "Endpoints for creating and managing rate plans, including pricing rules and occupancy-based rates.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d9814a3f-973b-4746-a0b8-e2d74ece3387",
+          "name": "Create a rate plan",
+          "request": {
+            "name": "Create a rate plan",
+            "description": {
+              "content": "Creates a new rate plan for a property, defining pricing rules, cancellation policies, and meal plan inclusions.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "properties",
+                ":property_id",
+                "rates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "property_id",
+                  "description": "(Required) Unique identifier of the property on Booking.com"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"room_id\": \"<integer>\",\n  \"meal_plan\": \"<string>\",\n  \"cancellation_policy\": \"<string>\",\n  \"min_stay\": \"<integer>\",\n  \"max_stay\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c52d0a8d-7071-4bff-812b-ed4f0ab9faf2",
+              "name": "Rate plan created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"room_id\": \"<integer>\",\n  \"meal_plan\": \"<string>\",\n  \"cancellation_policy\": \"<string>\",\n  \"min_stay\": \"<integer>\",\n  \"max_stay\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"rate_plan_id\": 7584,\n  \"name\": \"string\",\n  \"room_id\": 2746,\n  \"meal_plan\": \"string\",\n  \"status\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e9b6cfff-6e17-413b-88b3-06a7ae07b6be",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"room_id\": \"<integer>\",\n  \"meal_plan\": \"<string>\",\n  \"cancellation_policy\": \"<string>\",\n  \"min_stay\": \"<integer>\",\n  \"max_stay\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3c6594b8-8d1d-4a70-95f4-3c256db59ad2",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"room_id\": \"<integer>\",\n  \"meal_plan\": \"<string>\",\n  \"cancellation_policy\": \"<string>\",\n  \"min_stay\": \"<integer>\",\n  \"max_stay\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0acc447c-aca1-47f0-9ac6-f9921ccddc69",
+          "name": "List rate plans",
+          "request": {
+            "name": "List rate plans",
+            "description": {
+              "content": "Retrieves all rate plans configured for a specific property.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "properties",
+                ":property_id",
+                "rates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "property_id",
+                  "description": "(Required) Unique identifier of the property on Booking.com"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0d95944d-2bd6-4559-9ff7-8d63cea46472",
+              "name": "Rate plans retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"rate_plans\": [\n    {\n      \"rate_plan_id\": 6021,\n      \"name\": \"string\",\n      \"room_id\": 7528,\n      \"meal_plan\": \"string\",\n      \"status\": \"string\"\n    },\n    {\n      \"rate_plan_id\": 5644,\n      \"name\": \"string\",\n      \"room_id\": 7846,\n      \"meal_plan\": \"string\",\n      \"status\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8fb94576-9225-45fe-a62e-a8e061e00af1",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0af9fcfb-8d3d-41b8-9139-698735ba3ac6",
+              "name": "Property not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "7f806e3c-7be6-4385-8ef3-09f7e62883c4",
+      "name": "Rooms",
+      "description": {
+        "content": "Endpoints for managing room types, room names, bed configurations, and room-level facilities.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "71a047fc-0acb-4c8a-a07a-c87dcd4710d6",
+          "name": "Create a room type",
+          "request": {
+            "name": "Create a room type",
+            "description": {
+              "content": "Creates a new room type for a property, including room name, bed configuration, maximum occupancy, and room-level facilities.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "properties",
+                ":property_id",
+                "rooms"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "property_id",
+                  "description": "(Required) Unique identifier of the property on Booking.com"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"max_occupancy\": \"<integer>\",\n  \"room_size\": \"<number>\",\n  \"bed_configurations\": [\n    {\n      \"bed_type\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"bed_type\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"facilities\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bdd97431-fc58-40b2-9cfe-9debdbf3261b",
+              "name": "Room type created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "rooms"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"max_occupancy\": \"<integer>\",\n  \"room_size\": \"<number>\",\n  \"bed_configurations\": [\n    {\n      \"bed_type\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"bed_type\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"facilities\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"room_id\": 6446,\n  \"name\": \"string\",\n  \"max_occupancy\": 7279,\n  \"status\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "435e2ed3-ba50-4b10-9749-4eefcac4785b",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "rooms"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"max_occupancy\": \"<integer>\",\n  \"room_size\": \"<number>\",\n  \"bed_configurations\": [\n    {\n      \"bed_type\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"bed_type\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"facilities\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c081bba3-9fca-4b81-9926-94b52ea40d86",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "rooms"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"max_occupancy\": \"<integer>\",\n  \"room_size\": \"<number>\",\n  \"bed_configurations\": [\n    {\n      \"bed_type\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"bed_type\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"facilities\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "020b71ef-e8ff-43b2-a70f-e74abb708110",
+          "name": "List room types",
+          "request": {
+            "name": "List room types",
+            "description": {
+              "content": "Retrieves all room types configured for a specific property.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "properties",
+                ":property_id",
+                "rooms"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "property_id",
+                  "description": "(Required) Unique identifier of the property on Booking.com"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "85312a14-84a8-40dd-80d2-cbcf05af5eb1",
+              "name": "Room types retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "rooms"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"rooms\": [\n    {\n      \"room_id\": 6050,\n      \"name\": \"string\",\n      \"max_occupancy\": 8848,\n      \"status\": \"string\"\n    },\n    {\n      \"room_id\": 5860,\n      \"name\": \"string\",\n      \"max_occupancy\": 8338,\n      \"status\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4b2d2736-e22e-4b37-921a-3ec3544e03ac",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "rooms"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "43b1f3f0-7e1b-4148-9834-adb5759a0d4d",
+              "name": "Property not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "properties",
+                    ":property_id",
+                    "rooms"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "property_id",
+                      "description": "(Required) Unique identifier of the property on Booking.com"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://supply-xml.booking.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "fb7ae0fb-7b42-4340-8acd-f8c873b2e8c5",
+    "name": "Booking.com Connectivity Content API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Booking.com Connectivity Content API enables Connectivity Partners to register properties and modify their content directly without using the Booking.com extranet. Partners can manage facilities, rates, rooms, photos, and other property details programmatically. This API uses XML request and response formats following the OpenTravel Alliance (OTA 2003B) specification and Booking.com's B.XML schema. It is designed for property management systems, channel managers, and other connectivity solutions that need to create and maintain property listings on Booking.com at scale. Booking.com is transitioning to modular REST APIs for property management.\n\nContact Support:\n Name: Booking.com Connectivity Support",
+      "type": "text/plain"
+    }
+  }
+}

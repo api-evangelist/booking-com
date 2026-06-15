@@ -1,0 +1,334 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Connectivity Content API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "OTA Legacy",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create or update property content",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://supply-xml.booking.com/hotels/ota/OTA_HotelDescriptiveContentNotif"
+          },
+          "docs": "Creates or modifies the skeleton of a property including location details, policies, contact information, facilities, and other descriptive content. This endpoint follows the OTA 2003B specification. Note: This endpoint was deprecated in December 2024 and will be sunset on December 31, 2026. Transition to the modular Property Management APIs is recommended."
+        },
+        {
+          "info": {
+            "name": "Create or update room and rate products",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://supply-xml.booking.com/hotels/ota/OTA_HotelProductNotif"
+          },
+          "docs": "Creates or updates room types, rate plans, and product configurations for a property. This endpoint allows connectivity partners to define room-rate combinations that will be available for booking."
+        },
+        {
+          "info": {
+            "name": "Update hotel inventory",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://supply-xml.booking.com/hotels/ota/OTA_HotelInvNotif"
+          },
+          "docs": "Updates room inventory counts for a property, specifying the number of rooms available for specific dates and room types."
+        },
+        {
+          "info": {
+            "name": "Search properties",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://supply-xml.booking.com/hotels/ota/OTA_HotelSearch"
+          },
+          "docs": "Searches for properties managed by the connectivity partner, returning property identifiers and basic information."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Property Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a property",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://supply-xml.booking.com/properties",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new property on Booking.com with basic details including name, location, and property type. Part of the new modular Property Management APIs replacing the legacy OTA endpoints."
+        },
+        {
+          "info": {
+            "name": "Get property details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://supply-xml.booking.com/properties/:property_id",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ]
+          },
+          "docs": "Retrieves the full details of a specific property including all configured content."
+        },
+        {
+          "info": {
+            "name": "Update property details",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://supply-xml.booking.com/properties/:property_id",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing property's details including name, description, contact information, and settings."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Rooms",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List room types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://supply-xml.booking.com/properties/:property_id/rooms",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ]
+          },
+          "docs": "Retrieves all room types configured for a specific property."
+        },
+        {
+          "info": {
+            "name": "Create a room type",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://supply-xml.booking.com/properties/:property_id/rooms",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new room type for a property, including room name, bed configuration, maximum occupancy, and room-level facilities."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Facilities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get property facilities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://supply-xml.booking.com/properties/:property_id/facilities",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ]
+          },
+          "docs": "Retrieves the list of facilities configured for a property."
+        },
+        {
+          "info": {
+            "name": "Update property facilities",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://supply-xml.booking.com/properties/:property_id/facilities",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the list of facilities and amenities available at a property, such as parking, WiFi, swimming pool, and restaurant."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Photos",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List property photos",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://supply-xml.booking.com/properties/:property_id/photos",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ]
+          },
+          "docs": "Retrieves all photos associated with a property."
+        },
+        {
+          "info": {
+            "name": "Upload a property photo",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://supply-xml.booking.com/properties/:property_id/photos",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Uploads a new photo for a property. Photos can be tagged with categories and assigned to specific rooms or the property overall."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Rates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List rate plans",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://supply-xml.booking.com/properties/:property_id/rates",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ]
+          },
+          "docs": "Retrieves all rate plans configured for a specific property."
+        },
+        {
+          "info": {
+            "name": "Create a rate plan",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://supply-xml.booking.com/properties/:property_id/rates",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new rate plan for a property, defining pricing rules, cancellation policies, and meal plan inclusions."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1083 @@
+{
+  "item": [
+    {
+      "id": "d7484f3d-3755-44db-96d9-dbcf9df4f1a4",
+      "name": "Availability",
+      "description": {
+        "content": "Endpoints for updating room availability, pricing, and booking restrictions using B.XML format.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "28b720aa-09d4-4717-aca3-84708b135105",
+          "name": "Create or update availability, rates, and restrictions",
+          "request": {
+            "name": "Create or update availability, rates, and restrictions",
+            "description": {
+              "content": "Specifies a property's availability for specific rooms, rates, and dates, including the number of available rooms, prices depending on occupants, and restrictions on length of stay and check-in/check-out dates. This is the primary endpoint for keeping inventory and pricing synchronized with Booking.com.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                "xml",
+                "availability"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              },
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cf970441-0c91-4dfb-8f5d-21556dbd4dce",
+              "name": "Availability update processed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            },
+            {
+              "id": "fa47ca10-d6e6-4533-ab40-6e63cf2bd020",
+              "name": "Invalid XML request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3f3a3a08-86c3-4865-b013-99ee7b8dd3d7",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "081e32f8-d156-4ff5-8f49-bc26d342dda3",
+      "name": "Derived Pricing",
+      "description": {
+        "content": "Endpoints for managing derived pricing rules that automatically calculate rates based on a parent rate plan.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "cdefde06-8fd3-478f-9673-c70029fd4176",
+          "name": "Update derived pricing rules",
+          "request": {
+            "name": "Update derived pricing rules",
+            "description": {
+              "content": "Creates or updates derived pricing rules that automatically calculate rates based on a parent rate plan. Derived prices allow partners to set percentage or fixed amount adjustments relative to a base rate.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                "xml",
+                "derivedprices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              },
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "dcb497f3-4881-40d9-b626-140cb9c5ba1b",
+              "name": "Derived pricing rules updated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "derivedprices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            },
+            {
+              "id": "7492423c-2e06-4ef8-9251-6dbf3cd23249",
+              "name": "Invalid XML request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "derivedprices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6f68e40a-bfea-49d8-86d6-76282a06834e",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "derivedprices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "5520e866-b0ed-4a7c-92b2-12031a3c6613",
+      "name": "Inventory",
+      "description": {
+        "content": "Endpoints for retrieving current inventory and rate details for active room/rate combinations.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9a64a3ef-6b99-49e5-b487-0895babd1547",
+          "name": "Retrieve inventory and rate details",
+          "request": {
+            "name": "Retrieve inventory and rate details",
+            "description": {
+              "content": "Retrieves inventory information per property from Booking.com for all active room/rate (product) combinations. Returns current availability counts, rates, and restrictions that are set in the Booking.com system.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                "xml",
+                "roomrateavailability"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              },
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "811b32bb-66a0-4da4-aea1-ab024f4e39f1",
+              "name": "Inventory and rate details retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "roomrateavailability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            },
+            {
+              "id": "7add2b10-c2d9-418f-9f41-213cd4d0bb20",
+              "name": "Invalid XML request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "roomrateavailability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f76049d3-1dcb-46cb-941e-e0c91601307e",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "xml",
+                    "roomrateavailability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "8ad32f41-5859-43a2-a593-e47aca44f2be",
+      "name": "OTA Availability",
+      "description": {
+        "content": "OTA-based endpoints for availability and rate notifications following the OpenTravel Alliance specification.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "264aae75-e2c8-4fe5-b268-2465d5b14169",
+          "name": "Create or update availability (OTA format)",
+          "request": {
+            "name": "Create or update availability (OTA format)",
+            "description": {
+              "content": "Updates availability and restrictions using the OTA OTA_HotelAvailNotif specification. An alternative to the B.XML availability endpoint that follows the OpenTravel Alliance format.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                "ota",
+                "OTA_HotelAvailNotif"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              },
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d44bd510-a03b-45d6-af6d-0c688f156ab2",
+              "name": "Availability notification processed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelAvailNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            },
+            {
+              "id": "20089162-096c-4559-9cfe-48cd6dd5a7e8",
+              "name": "Invalid XML request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelAvailNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6c5b6587-97d6-475c-a671-72f43a2b0ec6",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelAvailNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "64577c30-6870-4159-b63f-a8449502a89a",
+          "name": "Update rate amounts (OTA format)",
+          "request": {
+            "name": "Update rate amounts (OTA format)",
+            "description": {
+              "content": "Updates rate amounts and pricing using the OTA OTA_HotelRateAmountNotif specification. An alternative to the B.XML availability endpoint for rate-only updates.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hotels",
+                "ota",
+                "OTA_HotelRateAmountNotif"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              },
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a9b780f9-2115-4eda-8a5f-76f9530e421f",
+              "name": "Rate amount notification processed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelRateAmountNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            },
+            {
+              "id": "1b87ead0-ce75-4039-8e11-e21e92a40b41",
+              "name": "Invalid XML request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelRateAmountNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "728240a5-67da-4b2d-82cf-ee983c32cbf9",
+              "name": "Authentication failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hotels",
+                    "ota",
+                    "OTA_HotelRateAmountNotif"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>(string)</element>",
+                  "options": {
+                    "raw": {
+                      "language": "xml"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://supply-xml.booking.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "013f7de3-0846-4cfc-966b-36dbf7dc7fdc",
+    "name": "Booking.com Connectivity Rates and Availability API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Booking.com Connectivity Rates and Availability API allows Connectivity Partners to set room availability, pricing, and restrictions for properties on Booking.com. Partners can manage advance booking windows, length of stay requirements, and rate plans programmatically. This API is a core component of the Connectivity suite, enabling channel managers and property management systems to keep inventory and pricing synchronized between their platforms and Booking.com without manual extranet updates. Properties should specify availability at least 12 months in advance. The API uses XML request and response formats following B.XML and OTA specifications.\n\nContact Support:\n Name: Booking.com Connectivity Support",
+      "type": "text/plain"
+    }
+  }
+}

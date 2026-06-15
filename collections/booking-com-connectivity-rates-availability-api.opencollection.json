@@ -1,0 +1,104 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Connectivity Rates and Availability API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Availability",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create or update availability, rates, and restrictions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://supply-xml.booking.com/hotels/xml/availability"
+          },
+          "docs": "Specifies a property's availability for specific rooms, rates, and dates, including the number of available rooms, prices depending on occupants, and restrictions on length of stay and check-in/check-out dates. This is the primary endpoint for keeping inventory and pricing synchronized with Booking.com."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Inventory",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve inventory and rate details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://supply-xml.booking.com/hotels/xml/roomrateavailability"
+          },
+          "docs": "Retrieves inventory information per property from Booking.com for all active room/rate (product) combinations. Returns current availability counts, rates, and restrictions that are set in the Booking.com system."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "OTA Availability",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create or update availability (OTA format)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://supply-xml.booking.com/hotels/ota/OTA_HotelAvailNotif"
+          },
+          "docs": "Updates availability and restrictions using the OTA OTA_HotelAvailNotif specification. An alternative to the B.XML availability endpoint that follows the OpenTravel Alliance format."
+        },
+        {
+          "info": {
+            "name": "Update rate amounts (OTA format)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://supply-xml.booking.com/hotels/ota/OTA_HotelRateAmountNotif"
+          },
+          "docs": "Updates rate amounts and pricing using the OTA OTA_HotelRateAmountNotif specification. An alternative to the B.XML availability endpoint for rate-only updates."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Derived Pricing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Update derived pricing rules",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://supply-xml.booking.com/hotels/xml/derivedprices"
+          },
+          "docs": "Creates or updates derived pricing rules that automatically calculate rates based on a parent rate plan. Derived prices allow partners to set percentage or fixed amount adjustments relative to a base rate."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
