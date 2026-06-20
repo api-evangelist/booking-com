@@ -11,7 +11,7 @@ apis:
   - Hotels
   - Search
   - Travel
-  image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   baseURL: https://demandapi.booking.com
   humanURL: https://developers.booking.com/demand/docs/getting-started/overview
   properties:
@@ -33,7 +33,7 @@ apis:
   - Transportation
   - Travel
   - Vehicles
-  image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   baseURL: https://demandapi.booking.com
   humanURL: https://developers.booking.com/demand/docs/open-api/demand-api/cars
   properties:
@@ -54,7 +54,7 @@ apis:
   - Content Management
   - Hotels
   - Properties
-  image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   baseURL: https://supply-xml.booking.com
   humanURL: https://developers.booking.com/connectivity/docs/content
   properties:
@@ -75,7 +75,7 @@ apis:
   - Connectivity
   - Hotels
   - Reservations
-  image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   baseURL: https://secure-supply-xml.booking.com
   humanURL: https://developers.booking.com/connectivity/docs
   properties:
@@ -97,7 +97,7 @@ apis:
   - Inventory
   - Pricing
   - Rates
-  image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   baseURL: https://supply-xml.booking.com
   humanURL: https://developers.booking.com/connectivity/docs/ari
   properties:
@@ -117,7 +117,7 @@ apis:
   - Discounts
   - Marketing
   - Promotions
-  image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   baseURL: https://supply-xml.booking.com
   humanURL: https://developers.booking.com/connectivity/docs
   properties:
