@@ -130,6 +130,12 @@ apis:
     Partners can programmatically set up deals, discounts, and special rates to attract
     travelers and increase bookings.
 common:
+- type: VulnerabilityDisclosure
+  url: security/booking-com-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/booking-com-domain-security.yml
+- type: Authentication
+  url: authentication/booking-com-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/bookingcom
 - type: JSONLD
@@ -151,4 +157,6 @@ common:
   updated: '2026-05-04'
 - type: LlmsText
   url: https://developers.booking.com/llms.txt
+- url: https://news.booking.com/feed/
+  type: Blog
 description: Seamlessly incorporate Booking.com inventory into your travel application.
