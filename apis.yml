@@ -130,6 +130,8 @@ apis:
     Partners can programmatically set up deals, discounts, and special rates to attract
     travelers and increase bookings.
 common:
+- type: AgenticAccess
+  url: agentic-access/booking-com-agentic-access.yml
 - type: VulnerabilityDisclosure
   url: security/booking-com-vulnerability-disclosure.yml
 - type: DomainSecurity
