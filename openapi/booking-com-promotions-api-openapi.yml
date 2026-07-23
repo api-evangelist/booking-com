@@ -1,0 +1,111 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Promotions API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Promotions
+  description: Endpoints for creating, managing, and retrieving promotional offers for properties on Booking.com.
+paths:
+  /hotels/xml/promotions:
+    post:
+      operationId: managePromotions
+      summary: Create or update promotions
+      description: Creates or updates promotional offers for a property. Supports multiple promotion types including basic deals (fully customizable), last-minute deals (available only close to check-in), campaign deals (seasonal events with fixed dates and minimum discounts), country rates (available to customers from specific countries), and mobile rates (available only on mobile devices). Each promotion specifies a discount percentage applied to the parent rate.
+      tags:
+      - Promotions
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: B.XML promotions request document containing promotion definitions including type, discount percentage, applicable dates, room/rate combinations, and eligibility criteria.
+      responses:
+        '200':
+          description: Promotions update processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: B.XML response indicating success or failure of the promotions update with any error details.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/xml/getpromotions:
+    post:
+      operationId: getPromotions
+      summary: Retrieve promotion details
+      description: Retrieves details of existing promotions for a property, including promotion type, discount percentages, applicable date ranges, eligibility status, and associated room/rate combinations.
+      tags:
+      - Promotions
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: B.XML request document specifying the hotel ID and optional filters for retrieving promotion details.
+      responses:
+        '200':
+          description: Promotion details retrieved successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: B.XML response containing promotion details including type, discounts, dates, and eligibility status.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/xml/getcommissionoverride:
+    post:
+      operationId: getCommissionOverride
+      summary: Get property commission details
+      description: Retrieves commission override details for a property, including any special commission arrangements related to promotional campaigns.
+      tags:
+      - Promotions
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: B.XML request document specifying the hotel ID for commission retrieval.
+      responses:
+        '200':
+          description: Commission details retrieved successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: B.XML response containing commission override details.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

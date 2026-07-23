@@ -1,0 +1,59 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Inventory API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Inventory
+  description: Endpoints for retrieving current inventory and rate details for active room/rate combinations.
+paths:
+  /hotels/xml/roomrateavailability:
+    post:
+      operationId: getRoomRateAvailability
+      summary: Retrieve inventory and rate details
+      description: Retrieves inventory information per property from Booking.com for all active room/rate (product) combinations. Returns current availability counts, rates, and restrictions that are set in the Booking.com system.
+      tags:
+      - Inventory
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: B.XML request document specifying the hotel ID and date range for inventory retrieval.
+      responses:
+        '200':
+          description: Inventory and rate details retrieved successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: B.XML response containing room/rate availability, pricing, and restriction details for the requested date range.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

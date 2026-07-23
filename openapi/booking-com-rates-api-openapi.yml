@@ -1,0 +1,143 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Rates API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Rates
+  description: Endpoints for creating and managing rate plans, including pricing rules and occupancy-based rates.
+paths:
+  /properties/{property_id}/rates:
+    post:
+      operationId: createRatePlan
+      summary: Create a rate plan
+      description: Creates a new rate plan for a property, defining pricing rules, cancellation policies, and meal plan inclusions.
+      tags:
+      - Rates
+      parameters:
+      - $ref: '#/components/parameters/PropertyId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatePlanCreateRequest'
+      responses:
+        '200':
+          description: Rate plan created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatePlanResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Authentication failed
+    get:
+      operationId: listRatePlans
+      summary: List rate plans
+      description: Retrieves all rate plans configured for a specific property.
+      tags:
+      - Rates
+      parameters:
+      - $ref: '#/components/parameters/PropertyId'
+      responses:
+        '200':
+          description: Rate plans retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatePlanListResponse'
+        '401':
+          description: Authentication failed
+        '404':
+          description: Property not found
+components:
+  schemas:
+    RatePlanResponse:
+      type: object
+      properties:
+        rate_plan_id:
+          type: integer
+          description: Unique rate plan identifier
+        name:
+          type: string
+          description: Rate plan name
+        room_id:
+          type: integer
+          description: Associated room type ID
+        meal_plan:
+          type: string
+          description: Included meal plan
+        status:
+          type: string
+          description: Rate plan status
+    RatePlanCreateRequest:
+      type: object
+      required:
+      - name
+      - room_id
+      properties:
+        name:
+          type: string
+          description: Rate plan name
+        room_id:
+          type: integer
+          description: Room type this rate plan applies to
+        meal_plan:
+          type: string
+          description: Included meal plan
+          enum:
+          - room_only
+          - breakfast_included
+          - half_board
+          - full_board
+          - all_inclusive
+        cancellation_policy:
+          type: string
+          description: Cancellation policy type
+        min_stay:
+          type: integer
+          description: Minimum length of stay in nights
+        max_stay:
+          type: integer
+          description: Maximum length of stay in nights
+    RatePlanListResponse:
+      type: object
+      properties:
+        rate_plans:
+          type: array
+          description: List of rate plans
+          items:
+            $ref: '#/components/schemas/RatePlanResponse'
+  parameters:
+    PropertyId:
+      name: property_id
+      in: path
+      required: true
+      description: Unique identifier of the property on Booking.com
+      schema:
+        type: integer
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

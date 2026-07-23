@@ -1,0 +1,758 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Accommodations
+  description: Endpoints to search for stays such as hotels and apartments, check availability, retrieve reviews, and get detailed property information.
+paths:
+  /accommodations/search:
+    post:
+      operationId: searchAccommodations
+      summary: Search accommodations
+      description: Returns the cheapest available product for each accommodation that matches the specified search criteria. When location filters such as country or region ID are applied, results are sorted by Booking.com popularity instead of price. Results include product availability, price, and charges by default.
+      tags:
+      - Accommodations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccommodationSearchRequest'
+      responses:
+        '200':
+          description: Successful search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccommodationSearchResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accommodations/details:
+    post:
+      operationId: getAccommodationDetails
+      summary: Get accommodation details
+      description: Returns detailed information on all accommodation properties matching the given criteria including property descriptions, facilities, photos, location data, and policies.
+      tags:
+      - Accommodations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccommodationDetailsRequest'
+      responses:
+        '200':
+          description: Accommodation details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccommodationDetailsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accommodations/availability:
+    post:
+      operationId: checkAccommodationAvailability
+      summary: Check accommodation availability
+      description: Checks availability for a specific accommodation, returning detailed product availability, pricing, and extra charges. The checkin date must be within 500 days and checkout must be between 1 and 90 days after checkin.
+      tags:
+      - Accommodations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccommodationAvailabilityRequest'
+      responses:
+        '200':
+          description: Availability information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccommodationAvailabilityResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accommodations/bulk-availability:
+    post:
+      operationId: checkBulkAccommodationAvailability
+      summary: Check multiple accommodation availability
+      description: Checks availability for multiple accommodations at once. Accepts an array of accommodation IDs along with dates, guest information, and optional filters for meal plan and cancellation type.
+      tags:
+      - Accommodations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkAvailabilityRequest'
+      responses:
+        '200':
+          description: Bulk availability results retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkAvailabilityResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accommodations/reviews:
+    post:
+      operationId: getAccommodationReviews
+      summary: Get accommodation reviews
+      description: Retrieves traveler reviews for specified accommodations, providing feedback associated with particular properties. Reviews can be filtered by reviewer parameters and languages.
+      tags:
+      - Accommodations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccommodationReviewsRequest'
+      responses:
+        '200':
+          description: Reviews retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccommodationReviewsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accommodations/reviews/scores:
+    post:
+      operationId: getAccommodationReviewScores
+      summary: Get accommodation review scores
+      description: Returns score distribution and score breakdown for the specified accommodations. The scores information can be filtered by reviewer parameters and languages.
+      tags:
+      - Accommodations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccommodationReviewScoresRequest'
+      responses:
+        '200':
+          description: Review scores retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccommodationReviewScoresResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accommodations/chains:
+    post:
+      operationId: getAccommodationChains
+      summary: Get accommodation chains
+      description: Retrieves information about hotel chains and brand affiliations for accommodations listed on Booking.com.
+      tags:
+      - Accommodations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                chain_ids:
+                  type: array
+                  description: List of chain IDs to retrieve
+                  items:
+                    type: integer
+      responses:
+        '200':
+          description: Chain information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccommodationChainsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Photo:
+      type: object
+      description: Property photo
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Photo URL
+        tag:
+          type: string
+          description: Photo category tag
+    Price:
+      type: object
+      description: Price information
+      properties:
+        amount:
+          type: number
+          description: Price amount
+        currency:
+          type: string
+          description: ISO 4217 currency code
+    AccommodationReviewScoresResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          description: List of review score breakdowns
+          items:
+            $ref: '#/components/schemas/ReviewScores'
+    Guests:
+      type: object
+      description: Guest allocation for the search or booking
+      required:
+      - number_of_adults
+      - number_of_rooms
+      properties:
+        number_of_adults:
+          type: integer
+          description: Number of adult guests
+          minimum: 1
+          example: 2
+        number_of_rooms:
+          type: integer
+          description: Number of rooms needed
+          minimum: 1
+          example: 1
+        children_ages:
+          type: array
+          description: Ages of children traveling
+          items:
+            type: integer
+            minimum: 0
+            maximum: 17
+    AccommodationReviewsResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          description: List of reviews
+          items:
+            $ref: '#/components/schemas/Review'
+    AccommodationAvailabilityResponse:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/AvailabilityResult'
+    BulkAvailabilityResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          description: Availability results for each accommodation
+          items:
+            $ref: '#/components/schemas/AvailabilityResult'
+    AvailabilityResult:
+      type: object
+      properties:
+        accommodation_id:
+          type: integer
+          description: Unique identifier for the accommodation
+        products:
+          type: array
+          description: Available products with pricing
+          items:
+            $ref: '#/components/schemas/Product'
+    Facility:
+      type: object
+      description: Property facility or amenity
+      properties:
+        facility_id:
+          type: integer
+          description: Facility identifier
+        name:
+          type: string
+          description: Facility name
+    AccommodationDetail:
+      type: object
+      properties:
+        accommodation_id:
+          type: integer
+          description: Unique identifier for the accommodation
+        name:
+          type: string
+          description: Name of the accommodation
+        description:
+          type: string
+          description: Detailed description of the accommodation
+        address:
+          type: string
+          description: Street address
+        city:
+          type: string
+          description: City name
+        country:
+          type: string
+          description: Country code
+        zip:
+          type: string
+          description: Postal/ZIP code
+        location:
+          $ref: '#/components/schemas/GeoLocation'
+        star_rating:
+          type: number
+          description: Star rating of the accommodation
+        review_score:
+          type: number
+          description: Average review score
+        photos:
+          type: array
+          description: Property photos
+          items:
+            $ref: '#/components/schemas/Photo'
+        facilities:
+          type: array
+          description: Available facilities
+          items:
+            $ref: '#/components/schemas/Facility'
+        accommodation_type:
+          type: integer
+          description: Type identifier for the accommodation
+        chain_id:
+          type: integer
+          description: Hotel chain identifier
+    Product:
+      type: object
+      description: An available room or product at an accommodation
+      properties:
+        product_id:
+          type: string
+          description: Unique product identifier
+        room_name:
+          type: string
+          description: Name of the room type
+        meal_plan:
+          type: string
+          description: Included meal plan
+        cancellation_type:
+          type: string
+          description: Cancellation policy type
+        price:
+          $ref: '#/components/schemas/Price'
+    AccommodationAvailabilityRequest:
+      type: object
+      required:
+      - accommodation_id
+      - booker
+      - checkin
+      - checkout
+      - guests
+      properties:
+        accommodation_id:
+          type: integer
+          description: Unique identifier for the accommodation
+        booker:
+          $ref: '#/components/schemas/Booker'
+        checkin:
+          type: string
+          format: date
+          description: Check-in date in yyyy-mm-dd format
+        checkout:
+          type: string
+          format: date
+          description: Check-out date in yyyy-mm-dd format
+        guests:
+          $ref: '#/components/schemas/Guests'
+        extras:
+          type: array
+          description: Additional data to include
+          items:
+            type: string
+            enum:
+            - extra_charges
+    AccommodationSearchResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          description: List of matching accommodations
+          items:
+            $ref: '#/components/schemas/AccommodationSearchResult'
+    ErrorResponse:
+      type: object
+      description: Standard error response
+      properties:
+        errors:
+          type: array
+          description: List of errors
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+              message:
+                type: string
+                description: Human-readable error message
+    AccommodationReviewScoresRequest:
+      type: object
+      required:
+      - accommodation_ids
+      properties:
+        accommodation_ids:
+          type: array
+          description: Accommodation IDs to retrieve scores for
+          items:
+            type: integer
+        language:
+          type: string
+          description: Language code to filter
+    AccommodationDetailsResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          description: List of accommodation details
+          items:
+            $ref: '#/components/schemas/AccommodationDetail'
+    BulkAvailabilityRequest:
+      type: object
+      required:
+      - accommodations
+      - booker
+      - checkin
+      - checkout
+      - guests
+      properties:
+        accommodations:
+          type: array
+          description: List of accommodation IDs to check availability for
+          items:
+            type: integer
+        booker:
+          $ref: '#/components/schemas/Booker'
+        checkin:
+          type: string
+          format: date
+          description: Check-in date in yyyy-mm-dd format
+        checkout:
+          type: string
+          format: date
+          description: Check-out date in yyyy-mm-dd format
+        guests:
+          $ref: '#/components/schemas/Guests'
+        extras:
+          type: array
+          description: Additional data to include
+          items:
+            type: string
+        filters:
+          type: object
+          description: Filters for availability results
+          properties:
+            meal_plan:
+              type: string
+              description: Filter by meal plan type
+            cancellation_type:
+              type: string
+              description: Filter by cancellation policy type
+    AccommodationReviewsRequest:
+      type: object
+      required:
+      - accommodation_id
+      properties:
+        accommodation_id:
+          type: integer
+          description: Accommodation to retrieve reviews for
+        language:
+          type: string
+          description: Language code to filter reviews
+        sort:
+          type: string
+          description: Sort order for reviews
+        rows:
+          type: integer
+          description: Number of reviews to return
+          maximum: 100
+        offset:
+          type: integer
+          description: Offset for pagination
+    ReviewScores:
+      type: object
+      description: Review score breakdown for an accommodation
+      properties:
+        accommodation_id:
+          type: integer
+          description: Accommodation identifier
+        overall_score:
+          type: number
+          description: Overall average score
+        total_reviews:
+          type: integer
+          description: Total number of reviews
+        categories:
+          type: object
+          description: Scores by category
+          properties:
+            cleanliness:
+              type: number
+              description: Cleanliness score
+            comfort:
+              type: number
+              description: Comfort score
+            location:
+              type: number
+              description: Location score
+            facilities:
+              type: number
+              description: Facilities score
+            staff:
+              type: number
+              description: Staff score
+            value_for_money:
+              type: number
+              description: Value for money score
+    AccommodationSearchRequest:
+      type: object
+      required:
+      - booker
+      - checkin
+      - checkout
+      - guests
+      properties:
+        booker:
+          $ref: '#/components/schemas/Booker'
+        checkin:
+          type: string
+          format: date
+          description: Check-in date in yyyy-mm-dd format. Must be within 500 days in the future.
+        checkout:
+          type: string
+          format: date
+          description: Check-out date in yyyy-mm-dd format. Must be between 1 and 90 days after checkin and within 500 days in the future.
+        city:
+          type: integer
+          description: City identifier for location-based search
+          example: -2140479
+        country:
+          type: string
+          description: Country code to filter by
+        region:
+          type: integer
+          description: Region identifier for location-based search
+        accommodation_ids:
+          type: array
+          description: Specific accommodation IDs to search
+          items:
+            type: integer
+        guests:
+          $ref: '#/components/schemas/Guests'
+        extras:
+          type: array
+          description: Additional data to include in the response
+          items:
+            type: string
+            enum:
+            - extra_charges
+            - products
+        filters:
+          type: object
+          description: Filters to narrow search results
+          properties:
+            meal_plan:
+              type: string
+              description: Filter by meal plan type
+            cancellation_type:
+              type: string
+              description: Filter by cancellation policy type
+    AccommodationSearchResult:
+      type: object
+      properties:
+        accommodation_id:
+          type: integer
+          description: Unique identifier for the accommodation
+        name:
+          type: string
+          description: Name of the accommodation
+        city:
+          type: string
+          description: City where the accommodation is located
+        country:
+          type: string
+          description: Country code of the accommodation
+        price:
+          $ref: '#/components/schemas/Price'
+        products:
+          type: array
+          description: Available products/rooms
+          items:
+            $ref: '#/components/schemas/Product'
+    AccommodationDetailsRequest:
+      type: object
+      required:
+      - accommodation_ids
+      properties:
+        accommodation_ids:
+          type: array
+          description: List of accommodation IDs to retrieve details for
+          items:
+            type: integer
+        extras:
+          type: array
+          description: Additional detail categories to include
+          items:
+            type: string
+    AccommodationChainsResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          description: List of accommodation chains
+          items:
+            type: object
+            properties:
+              chain_id:
+                type: integer
+                description: Unique chain identifier
+              name:
+                type: string
+                description: Chain name
+    Booker:
+      type: object
+      description: Information about the person making the booking
+      properties:
+        country:
+          type: string
+          description: Two-letter country code of the booker
+          example: nl
+        platform:
+          type: string
+          description: Platform the booker is using
+          enum:
+          - desktop
+          - mobile
+          - tablet
+          example: desktop
+    GeoLocation:
+      type: object
+      description: Geographic coordinates
+      properties:
+        latitude:
+          type: number
+          description: Latitude coordinate
+        longitude:
+          type: number
+          description: Longitude coordinate
+    Review:
+      type: object
+      description: Guest review
+      properties:
+        review_id:
+          type: string
+          description: Unique review identifier
+        score:
+          type: number
+          description: Review score
+        title:
+          type: string
+          description: Review title
+        positive:
+          type: string
+          description: Positive feedback text
+        negative:
+          type: string
+          description: Negative feedback text
+        author:
+          type: string
+          description: Reviewer name
+        date:
+          type: string
+          format: date
+          description: Review date
+        language:
+          type: string
+          description: Review language code
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

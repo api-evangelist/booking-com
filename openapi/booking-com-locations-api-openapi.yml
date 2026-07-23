@@ -1,0 +1,152 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Locations API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Locations
+  description: Endpoints for retrieving geographical location data including countries, cities, regions, and airports.
+paths:
+  /locations/countries:
+    post:
+      operationId: getCountries
+      summary: Get countries
+      description: Retrieves geographical location data for countries supported on Booking.com.
+      tags:
+      - Locations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                countries:
+                  type: array
+                  description: List of country codes to filter by
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Countries retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /locations/cities:
+    post:
+      operationId: getCities
+      summary: Get cities
+      description: Retrieves geographical location data for cities, including city identifiers used in accommodation search queries.
+      tags:
+      - Locations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                city_ids:
+                  type: array
+                  description: List of city IDs to retrieve
+                  items:
+                    type: integer
+                country:
+                  type: string
+                  description: Country code to filter cities
+      responses:
+        '200':
+          description: Cities retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /locations/regions:
+    post:
+      operationId: getRegions
+      summary: Get regions
+      description: Retrieves geographical location data for regions, including region identifiers used in accommodation search queries.
+      tags:
+      - Locations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                region_ids:
+                  type: array
+                  description: List of region IDs to retrieve
+                  items:
+                    type: integer
+                country:
+                  type: string
+                  description: Country code to filter regions
+      responses:
+        '200':
+          description: Regions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      description: Standard error response
+      properties:
+        errors:
+          type: array
+          description: List of errors
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+              message:
+                type: string
+                description: Human-readable error message
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

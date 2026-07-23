@@ -1,0 +1,59 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Availability API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Availability
+  description: Endpoints for updating room availability, pricing, and booking restrictions using B.XML format.
+paths:
+  /hotels/xml/availability:
+    post:
+      operationId: updateAvailability
+      summary: Create or update availability, rates, and restrictions
+      description: Specifies a property's availability for specific rooms, rates, and dates, including the number of available rooms, prices depending on occupants, and restrictions on length of stay and check-in/check-out dates. This is the primary endpoint for keeping inventory and pricing synchronized with Booking.com.
+      tags:
+      - Availability
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: B.XML availability request document specifying room counts, rates, and restrictions by date range and room/rate combination.
+      responses:
+        '200':
+          description: Availability update processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: B.XML response indicating success or failure of the availability update with any error details.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

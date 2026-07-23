@@ -1,0 +1,126 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Photos API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Photos
+  description: Endpoints for adding, managing, and organizing property photos.
+paths:
+  /properties/{property_id}/photos:
+    post:
+      operationId: uploadPhoto
+      summary: Upload a property photo
+      description: Uploads a new photo for a property. Photos can be tagged with categories and assigned to specific rooms or the property overall.
+      tags:
+      - Photos
+      parameters:
+      - $ref: '#/components/parameters/PropertyId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhotoUploadRequest'
+      responses:
+        '200':
+          description: Photo uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotoResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Authentication failed
+    get:
+      operationId: listPhotos
+      summary: List property photos
+      description: Retrieves all photos associated with a property.
+      tags:
+      - Photos
+      parameters:
+      - $ref: '#/components/parameters/PropertyId'
+      responses:
+        '200':
+          description: Photos retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotoListResponse'
+        '401':
+          description: Authentication failed
+        '404':
+          description: Property not found
+components:
+  parameters:
+    PropertyId:
+      name: property_id
+      in: path
+      required: true
+      description: Unique identifier of the property on Booking.com
+      schema:
+        type: integer
+  schemas:
+    PhotoListResponse:
+      type: object
+      properties:
+        photos:
+          type: array
+          description: List of property photos
+          items:
+            $ref: '#/components/schemas/PhotoResponse'
+    PhotoResponse:
+      type: object
+      properties:
+        photo_id:
+          type: string
+          description: Unique photo identifier
+        url:
+          type: string
+          format: uri
+          description: Photo URL on Booking.com
+        tag:
+          type: string
+          description: Photo category tag
+    PhotoUploadRequest:
+      type: object
+      required:
+      - url
+      properties:
+        url:
+          type: string
+          format: uri
+          description: URL of the photo to upload
+        tag:
+          type: string
+          description: Photo category tag
+        room_id:
+          type: integer
+          description: Room type to associate the photo with
+        sort_order:
+          type: integer
+          description: Display sort order
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

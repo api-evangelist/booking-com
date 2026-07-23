@@ -1,0 +1,217 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Depots API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Depots
+  description: Endpoints for looking up car rental depots, including locations, reviews, and score breakdowns.
+paths:
+  /cars/depots:
+    post:
+      operationId: getCarDepots
+      summary: Get car rental depots
+      description: Retrieves information about car rental depot locations, including addresses, operating hours, and available services.
+      tags:
+      - Depots
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarDepotsRequest'
+      responses:
+        '200':
+          description: Depot information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarDepotsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /cars/depots/reviews/scores:
+    post:
+      operationId: getDepotReviewScores
+      summary: Get depot review scores
+      description: Retrieves the score breakdown assigned to a depot based on customer ratings, including overall scores and category-specific breakdowns.
+      tags:
+      - Depots
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepotReviewScoresRequest'
+      responses:
+        '200':
+          description: Depot review scores retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepotReviewScoresResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    CarDepotsRequest:
+      type: object
+      properties:
+        depot_ids:
+          type: array
+          description: Specific depot IDs to retrieve
+          items:
+            type: string
+        location:
+          type: string
+          description: Location to search for nearby depots
+    Depot:
+      type: object
+      description: Car rental depot with full details
+      properties:
+        depot_id:
+          type: string
+          description: Unique depot identifier
+        name:
+          type: string
+          description: Depot name
+        address:
+          type: string
+          description: Street address
+        city:
+          type: string
+          description: City name
+        country:
+          type: string
+          description: Country code
+        location:
+          $ref: '#/components/schemas/GeoLocation'
+        opening_hours:
+          type: string
+          description: Operating hours
+        phone:
+          type: string
+          description: Contact phone number
+    ErrorResponse:
+      type: object
+      description: Standard error response
+      properties:
+        errors:
+          type: array
+          description: List of errors
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+              message:
+                type: string
+                description: Human-readable error message
+    CarDepotsResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          description: List of depots
+          items:
+            $ref: '#/components/schemas/Depot'
+    DepotReviewScoresRequest:
+      type: object
+      required:
+      - depot_ids
+      properties:
+        depot_ids:
+          type: array
+          description: Depot IDs to retrieve review scores for
+          items:
+            type: string
+    DepotReviewScore:
+      type: object
+      description: Review score breakdown for a depot
+      properties:
+        depot_id:
+          type: string
+          description: Depot identifier
+        overall_score:
+          type: number
+          description: Overall review score
+        total_reviews:
+          type: integer
+          description: Total number of reviews
+        categories:
+          type: object
+          description: Scores by category
+          properties:
+            vehicle_condition:
+              type: number
+              description: Vehicle condition score
+            service:
+              type: number
+              description: Service quality score
+            value:
+              type: number
+              description: Value for money score
+            pickup_process:
+              type: number
+              description: Pickup process efficiency score
+    DepotReviewScoresResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          description: Review score breakdowns per depot
+          items:
+            $ref: '#/components/schemas/DepotReviewScore'
+    GeoLocation:
+      type: object
+      description: Geographic coordinates
+      properties:
+        latitude:
+          type: number
+          description: Latitude coordinate
+        longitude:
+          type: number
+          description: Longitude coordinate
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

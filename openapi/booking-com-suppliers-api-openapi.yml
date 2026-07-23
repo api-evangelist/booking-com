@@ -1,0 +1,112 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Suppliers API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Suppliers
+  description: Endpoints for retrieving information about car rental suppliers and their offerings.
+paths:
+  /cars/suppliers:
+    post:
+      operationId: getCarSuppliers
+      summary: Get car rental suppliers
+      description: Retrieves information about car rental suppliers available through Booking.com, including supplier names, logos, and service details.
+      tags:
+      - Suppliers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarSuppliersRequest'
+      responses:
+        '200':
+          description: Supplier information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarSuppliersResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    CarSuppliersRequest:
+      type: object
+      properties:
+        supplier_ids:
+          type: array
+          description: Specific supplier IDs to retrieve
+          items:
+            type: string
+    Supplier:
+      type: object
+      description: Car rental supplier
+      properties:
+        supplier_id:
+          type: string
+          description: Unique supplier identifier
+        name:
+          type: string
+          description: Supplier name
+        logo_url:
+          type: string
+          format: uri
+          description: Supplier logo URL
+    CarSuppliersResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          description: List of car rental suppliers
+          items:
+            $ref: '#/components/schemas/Supplier'
+    ErrorResponse:
+      type: object
+      description: Standard error response
+      properties:
+        errors:
+          type: array
+          description: List of errors
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+              message:
+                type: string
+                description: Human-readable error message
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

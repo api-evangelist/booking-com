@@ -1,0 +1,59 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Recovery API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Recovery
+  description: Endpoints for recovering reservations that were not picked up earlier or made prior to the property being connected to the system.
+paths:
+  /hotels/xml/reservationssummary:
+    post:
+      operationId: getReservationsSummary
+      summary: Retrieve reservation summary
+      description: Retrieves reservation messages that were not picked up earlier. This endpoint is useful for retrieving all reservations that were made prior to the property being connected to the partner system, ensuring no bookings are missed during initial setup.
+      tags:
+      - Recovery
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: B.XML request document for retrieving missed reservation summaries.
+      responses:
+        '200':
+          description: Reservation summaries retrieved successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: B.XML response containing summary of reservations not previously retrieved.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

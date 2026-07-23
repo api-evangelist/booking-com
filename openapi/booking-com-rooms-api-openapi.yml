@@ -1,0 +1,142 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Rooms API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Rooms
+  description: Endpoints for managing room types, room names, bed configurations, and room-level facilities.
+paths:
+  /properties/{property_id}/rooms:
+    post:
+      operationId: createRoom
+      summary: Create a room type
+      description: Creates a new room type for a property, including room name, bed configuration, maximum occupancy, and room-level facilities.
+      tags:
+      - Rooms
+      parameters:
+      - $ref: '#/components/parameters/PropertyId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomCreateRequest'
+      responses:
+        '200':
+          description: Room type created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Authentication failed
+    get:
+      operationId: listRooms
+      summary: List room types
+      description: Retrieves all room types configured for a specific property.
+      tags:
+      - Rooms
+      parameters:
+      - $ref: '#/components/parameters/PropertyId'
+      responses:
+        '200':
+          description: Room types retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomListResponse'
+        '401':
+          description: Authentication failed
+        '404':
+          description: Property not found
+components:
+  schemas:
+    RoomResponse:
+      type: object
+      properties:
+        room_id:
+          type: integer
+          description: Unique room type identifier
+        name:
+          type: string
+          description: Room type name
+        max_occupancy:
+          type: integer
+          description: Maximum number of guests
+        status:
+          type: string
+          description: Room type status
+    RoomCreateRequest:
+      type: object
+      required:
+      - name
+      - max_occupancy
+      properties:
+        name:
+          type: string
+          description: Room type name
+        max_occupancy:
+          type: integer
+          description: Maximum number of guests
+        room_size:
+          type: number
+          description: Room size in square meters
+        bed_configurations:
+          type: array
+          description: Available bed configurations
+          items:
+            type: object
+            properties:
+              bed_type:
+                type: string
+                description: Type of bed
+              quantity:
+                type: integer
+                description: Number of beds of this type
+        facilities:
+          type: array
+          description: Room-level facilities
+          items:
+            type: string
+    RoomListResponse:
+      type: object
+      properties:
+        rooms:
+          type: array
+          description: List of room types
+          items:
+            $ref: '#/components/schemas/RoomResponse'
+  parameters:
+    PropertyId:
+      name: property_id
+      in: path
+      required: true
+      description: Unique identifier of the property on Booking.com
+      schema:
+        type: integer
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

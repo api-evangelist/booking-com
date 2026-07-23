@@ -1,0 +1,137 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations OTA Legacy API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: OTA Legacy
+  description: Legacy OTA-based endpoints for property content management. These endpoints follow the OpenTravel Alliance specification and are being deprecated in favor of modular APIs.
+paths:
+  /hotels/ota/OTA_HotelDescriptiveContentNotif:
+    post:
+      operationId: updateHotelDescriptiveContent
+      summary: Create or update property content
+      description: 'Creates or modifies the skeleton of a property including location details, policies, contact information, facilities, and other descriptive content. This endpoint follows the OTA 2003B specification. Note: This endpoint was deprecated in December 2024 and will be sunset on December 31, 2026. Transition to the modular Property Management APIs is recommended.'
+      tags:
+      - OTA Legacy
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: OTA_HotelDescriptiveContentNotifRQ XML document containing property content updates.
+      responses:
+        '200':
+          description: Content update processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelDescriptiveContentNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/ota/OTA_HotelProductNotif:
+    post:
+      operationId: updateHotelProduct
+      summary: Create or update room and rate products
+      description: Creates or updates room types, rate plans, and product configurations for a property. This endpoint allows connectivity partners to define room-rate combinations that will be available for booking.
+      tags:
+      - OTA Legacy
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: OTA_HotelProductNotifRQ XML document containing room and rate product definitions.
+      responses:
+        '200':
+          description: Product update processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelProductNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/ota/OTA_HotelInvNotif:
+    post:
+      operationId: updateHotelInventory
+      summary: Update hotel inventory
+      description: Updates room inventory counts for a property, specifying the number of rooms available for specific dates and room types.
+      tags:
+      - OTA Legacy
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: OTA_HotelInvNotifRQ XML document containing inventory updates.
+      responses:
+        '200':
+          description: Inventory update processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelInvNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/ota/OTA_HotelSearch:
+    post:
+      operationId: searchHotels
+      summary: Search properties
+      description: Searches for properties managed by the connectivity partner, returning property identifiers and basic information.
+      tags:
+      - OTA Legacy
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: OTA_HotelSearchRQ XML document
+      responses:
+        '200':
+          description: Search results returned successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelSearchRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

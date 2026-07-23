@@ -1,0 +1,170 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Conversations API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Conversations
+  description: Endpoints to retrieve and manage messaging conversations, list conversations, fetch conversation details, and track updates.
+paths:
+  /conversations/list:
+    post:
+      operationId: listConversations
+      summary: List conversations
+      description: Retrieves a list of messaging conversations, allowing you to browse and manage communication threads between guests and properties.
+      tags:
+      - Conversations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListConversationsRequest'
+      responses:
+        '200':
+          description: Conversations listed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListConversationsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /conversations/details:
+    post:
+      operationId: getConversationDetails
+      summary: Get conversation details
+      description: Fetches detailed information about a specific conversation, including participants, message count, and status.
+      tags:
+      - Conversations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConversationDetailsRequest'
+      responses:
+        '200':
+          description: Conversation details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationDetailsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ConversationDetailsRequest:
+      type: object
+      required:
+      - conversation_id
+      properties:
+        conversation_id:
+          type: string
+          description: Unique identifier of the conversation
+    Conversation:
+      type: object
+      description: A messaging conversation between guest and property
+      properties:
+        conversation_id:
+          type: string
+          description: Unique conversation identifier
+        order_id:
+          type: string
+          description: Associated order identifier
+        accommodation_id:
+          type: integer
+          description: Associated accommodation identifier
+        message_count:
+          type: integer
+          description: Total number of messages in the conversation
+        last_message_at:
+          type: string
+          format: date-time
+          description: Timestamp of the most recent message
+        status:
+          type: string
+          description: Conversation status
+    ListConversationsResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          description: List of conversations
+          items:
+            $ref: '#/components/schemas/Conversation'
+    ErrorResponse:
+      type: object
+      description: Standard error response
+      properties:
+        errors:
+          type: array
+          description: List of errors
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+              message:
+                type: string
+                description: Human-readable error message
+    ListConversationsRequest:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: Filter conversations by order ID
+        offset:
+          type: integer
+          description: Pagination offset
+        limit:
+          type: integer
+          description: Maximum conversations to return
+    ConversationDetailsResponse:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/Conversation'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

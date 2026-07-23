@@ -1,0 +1,120 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Facilities API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Facilities
+  description: Endpoints for managing property-level and room-level facilities and amenities.
+paths:
+  /properties/{property_id}/facilities:
+    put:
+      operationId: updateFacilities
+      summary: Update property facilities
+      description: Updates the list of facilities and amenities available at a property, such as parking, WiFi, swimming pool, and restaurant.
+      tags:
+      - Facilities
+      parameters:
+      - $ref: '#/components/parameters/PropertyId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilitiesUpdateRequest'
+      responses:
+        '200':
+          description: Facilities updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilitiesResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Authentication failed
+    get:
+      operationId: getFacilities
+      summary: Get property facilities
+      description: Retrieves the list of facilities configured for a property.
+      tags:
+      - Facilities
+      parameters:
+      - $ref: '#/components/parameters/PropertyId'
+      responses:
+        '200':
+          description: Facilities retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilitiesResponse'
+        '401':
+          description: Authentication failed
+        '404':
+          description: Property not found
+components:
+  parameters:
+    PropertyId:
+      name: property_id
+      in: path
+      required: true
+      description: Unique identifier of the property on Booking.com
+      schema:
+        type: integer
+  schemas:
+    FacilitiesUpdateRequest:
+      type: object
+      properties:
+        facilities:
+          type: array
+          description: List of facility identifiers to set
+          items:
+            type: object
+            properties:
+              facility_id:
+                type: integer
+                description: Facility identifier
+              value:
+                type: string
+                description: Facility value or detail
+    FacilitiesResponse:
+      type: object
+      properties:
+        facilities:
+          type: array
+          description: List of configured facilities
+          items:
+            type: object
+            properties:
+              facility_id:
+                type: integer
+                description: Facility identifier
+              name:
+                type: string
+                description: Facility name
+              value:
+                type: string
+                description: Facility value or detail
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

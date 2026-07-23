@@ -1,0 +1,330 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Cars API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Cars
+  description: Endpoints for searching available car rentals and retrieving vehicle details, pricing, and availability.
+paths:
+  /cars/search:
+    post:
+      operationId: searchCarRentals
+      summary: Search car rentals
+      description: Allows travelers to search for car rentals and view the price and list of available vehicles for the route they are interested in. Results include vehicle types, pricing, and availability for the specified pickup and dropoff locations and dates.
+      tags:
+      - Cars
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarSearchRequest'
+      responses:
+        '200':
+          description: Car rental search results retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarSearchResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /cars/details:
+    post:
+      operationId: getCarDetails
+      summary: Get car rental details
+      description: Retrieves detailed information about specific car rental offerings, including vehicle specifications, included equipment, insurance details, and rental terms.
+      tags:
+      - Cars
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarDetailsRequest'
+      responses:
+        '200':
+          description: Car details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarDetailsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Depot:
+      type: object
+      description: Car rental depot with full details
+      properties:
+        depot_id:
+          type: string
+          description: Unique depot identifier
+        name:
+          type: string
+          description: Depot name
+        address:
+          type: string
+          description: Street address
+        city:
+          type: string
+          description: City name
+        country:
+          type: string
+          description: Country code
+        location:
+          $ref: '#/components/schemas/GeoLocation'
+        opening_hours:
+          type: string
+          description: Operating hours
+        phone:
+          type: string
+          description: Contact phone number
+    SupplierSummary:
+      type: object
+      description: Brief supplier information
+      properties:
+        supplier_id:
+          type: string
+          description: Unique supplier identifier
+        name:
+          type: string
+          description: Supplier name
+    Vehicle:
+      type: object
+      description: Vehicle information
+      properties:
+        type:
+          type: string
+          description: Vehicle type category
+        name:
+          type: string
+          description: Vehicle name or model
+        transmission:
+          type: string
+          description: Transmission type
+          enum:
+          - automatic
+          - manual
+        fuel_type:
+          type: string
+          description: Fuel type
+        seats:
+          type: integer
+          description: Number of seats
+        doors:
+          type: integer
+          description: Number of doors
+        bags_large:
+          type: integer
+          description: Number of large bags that fit
+        bags_small:
+          type: integer
+          description: Number of small bags that fit
+        air_conditioning:
+          type: boolean
+          description: Whether vehicle has air conditioning
+        image_url:
+          type: string
+          format: uri
+          description: URL of the vehicle image
+    CarSearchResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          description: List of available car rental offers
+          items:
+            $ref: '#/components/schemas/CarOffer'
+    DepotSummary:
+      type: object
+      description: Brief depot information
+      properties:
+        depot_id:
+          type: string
+          description: Unique depot identifier
+        name:
+          type: string
+          description: Depot name
+        address:
+          type: string
+          description: Street address
+    ErrorResponse:
+      type: object
+      description: Standard error response
+      properties:
+        errors:
+          type: array
+          description: List of errors
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+              message:
+                type: string
+                description: Human-readable error message
+    Price:
+      type: object
+      description: Price information
+      properties:
+        amount:
+          type: number
+          description: Price amount
+        currency:
+          type: string
+          description: ISO 4217 currency code
+    CarDetail:
+      type: object
+      properties:
+        offer_id:
+          type: string
+          description: Unique offer identifier
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        supplier:
+          $ref: '#/components/schemas/SupplierSummary'
+        pickup_depot:
+          $ref: '#/components/schemas/Depot'
+        dropoff_depot:
+          $ref: '#/components/schemas/Depot'
+        price:
+          $ref: '#/components/schemas/Price'
+        insurance:
+          type: object
+          description: Insurance details
+          properties:
+            type:
+              type: string
+              description: Insurance type
+            coverage:
+              type: string
+              description: Coverage description
+            excess:
+              $ref: '#/components/schemas/Price'
+        fuel_policy:
+          type: string
+          description: Fuel policy for the rental
+        mileage_limit:
+          type: string
+          description: Mileage allowance details
+        terms_and_conditions:
+          type: string
+          description: Rental terms and conditions
+    CarSearchRequest:
+      type: object
+      required:
+      - pickup_location
+      - dropoff_location
+      - pickup_date
+      - dropoff_date
+      properties:
+        pickup_location:
+          type: string
+          description: Pickup location identifier or coordinates
+        dropoff_location:
+          type: string
+          description: Dropoff location identifier or coordinates
+        pickup_date:
+          type: string
+          format: date-time
+          description: Pickup date and time
+        dropoff_date:
+          type: string
+          format: date-time
+          description: Dropoff date and time
+        driver_age:
+          type: integer
+          description: Age of the primary driver
+          minimum: 18
+        currency:
+          type: string
+          description: Preferred currency for pricing
+    CarDetailsResponse:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/CarDetail'
+    CarDetailsRequest:
+      type: object
+      required:
+      - offer_id
+      properties:
+        offer_id:
+          type: string
+          description: Offer identifier from search results
+    CarOffer:
+      type: object
+      properties:
+        offer_id:
+          type: string
+          description: Unique offer identifier
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        supplier:
+          $ref: '#/components/schemas/SupplierSummary'
+        pickup_depot:
+          $ref: '#/components/schemas/DepotSummary'
+        dropoff_depot:
+          $ref: '#/components/schemas/DepotSummary'
+        price:
+          $ref: '#/components/schemas/Price'
+        included_extras:
+          type: array
+          description: Extras included in the rental price
+          items:
+            type: string
+    GeoLocation:
+      type: object
+      description: Geographic coordinates
+      properties:
+        latitude:
+          type: number
+          description: Latitude coordinate
+        longitude:
+          type: number
+          description: Longitude coordinate
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

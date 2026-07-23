@@ -1,0 +1,85 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations OTA Availability API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: OTA Availability
+  description: OTA-based endpoints for availability and rate notifications following the OpenTravel Alliance specification.
+paths:
+  /hotels/ota/OTA_HotelAvailNotif:
+    post:
+      operationId: notifyHotelAvailability
+      summary: Create or update availability (OTA format)
+      description: Updates availability and restrictions using the OTA OTA_HotelAvailNotif specification. An alternative to the B.XML availability endpoint that follows the OpenTravel Alliance format.
+      tags:
+      - OTA Availability
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: OTA_HotelAvailNotifRQ XML document containing availability updates.
+      responses:
+        '200':
+          description: Availability notification processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelAvailNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/ota/OTA_HotelRateAmountNotif:
+    post:
+      operationId: notifyHotelRateAmount
+      summary: Update rate amounts (OTA format)
+      description: Updates rate amounts and pricing using the OTA OTA_HotelRateAmountNotif specification. An alternative to the B.XML availability endpoint for rate-only updates.
+      tags:
+      - OTA Availability
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: OTA_HotelRateAmountNotifRQ XML document containing rate amount updates.
+      responses:
+        '200':
+          description: Rate amount notification processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelRateAmountNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

@@ -1,0 +1,250 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Messages API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Messages
+  description: Endpoints for two-way post-booking communication between guests and properties, allowing you to send and retrieve messages, exchange images, and check conversation details.
+paths:
+  /messages/send:
+    post:
+      operationId: sendMessage
+      summary: Send a message
+      description: Sends a message within a conversation. The message body supports plain text and optionally allows attaching a file by referencing a previously uploaded attachment ID.
+      tags:
+      - Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageRequest'
+      responses:
+        '200':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendMessageResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /messages/latest:
+    post:
+      operationId: fetchLatestMessages
+      summary: Fetch latest messages
+      description: Retrieves up to 100 of the most recent messages from a specified conversation, including messages from both property and guest, returned in reverse chronological order (newest first). Can be used to sync message threads or poll for updates.
+      tags:
+      - Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FetchMessagesRequest'
+      responses:
+        '200':
+          description: Messages retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FetchMessagesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /messages/latest/confirm:
+    post:
+      operationId: confirmMessages
+      summary: Confirm message receipt
+      description: Confirms receipt of specified messages. This confirmation is required before receiving new messages from the POST /messages/latest endpoint.
+      tags:
+      - Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmMessagesRequest'
+      responses:
+        '200':
+          description: Messages confirmed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfirmMessagesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    SendMessageResponse:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            message_id:
+              type: string
+              description: Unique identifier of the sent message
+            status:
+              type: string
+              description: Message delivery status
+    SendMessageRequest:
+      type: object
+      required:
+      - conversation_id
+      - message
+      properties:
+        conversation_id:
+          type: string
+          description: Identifier of the conversation to send the message in
+        message:
+          type: string
+          description: Plain text message body
+        attachment_id:
+          type: string
+          description: ID of a previously uploaded attachment to include
+    ConfirmMessagesRequest:
+      type: object
+      required:
+      - conversation_id
+      - message_ids
+      properties:
+        conversation_id:
+          type: string
+          description: Identifier of the conversation
+        message_ids:
+          type: array
+          description: IDs of messages to confirm receipt of
+          items:
+            type: string
+    ConfirmMessagesResponse:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            confirmed:
+              type: boolean
+              description: Whether confirmation was successful
+    FetchMessagesResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          description: List of messages in reverse chronological order
+          items:
+            $ref: '#/components/schemas/Message'
+    ErrorResponse:
+      type: object
+      description: Standard error response
+      properties:
+        errors:
+          type: array
+          description: List of errors
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+              message:
+                type: string
+                description: Human-readable error message
+    Message:
+      type: object
+      description: A message in a conversation
+      properties:
+        message_id:
+          type: string
+          description: Unique message identifier
+        conversation_id:
+          type: string
+          description: Conversation this message belongs to
+        sender:
+          type: string
+          description: Who sent the message
+          enum:
+          - guest
+          - property
+        body:
+          type: string
+          description: Message text content
+        attachment:
+          type: object
+          description: Optional attachment
+          properties:
+            attachment_id:
+              type: string
+              description: Attachment identifier
+            url:
+              type: string
+              format: uri
+              description: Attachment URL
+        created_at:
+          type: string
+          format: date-time
+          description: Message creation timestamp
+    FetchMessagesRequest:
+      type: object
+      required:
+      - conversation_id
+      properties:
+        conversation_id:
+          type: string
+          description: Identifier of the conversation to fetch messages from
+        limit:
+          type: integer
+          description: Maximum number of messages to retrieve
+          maximum: 100
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars

@@ -1,0 +1,98 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Car Rentals Accommodations Constants API
+  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  version: '3.1'
+  contact:
+    name: Booking.com Developer Support
+    url: https://developers.booking.com/demand/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production Server
+security:
+- bearerAuth: []
+  affiliateId: []
+tags:
+- name: Constants
+  description: Endpoints for retrieving reference data such as accommodation types, facility types, room types, and other enumerated values.
+paths:
+  /accommodations/constants:
+    post:
+      operationId: getAccommodationConstants
+      summary: Get accommodation constants
+      description: Retrieves reference data constants including accommodation types, accommodation facilities, accommodation themes, bed types, charge types, facility types, review scores, room facilities, and room types.
+      tags:
+      - Constants
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                constants:
+                  type: array
+                  description: List of constant types to retrieve such as accommodation_types, accommodation_facilities, bed_types, room_types, etc.
+                  items:
+                    type: string
+                    enum:
+                    - accommodation_facilities
+                    - accommodation_themes
+                    - accommodation_types
+                    - bed_types
+                    - charge_types
+                    - facility_types
+                    - review_scores
+                    - room_facilities
+                    - room_types
+      responses:
+        '200':
+          description: Constants retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      description: Standard error response
+      properties:
+        errors:
+          type: array
+          description: List of errors
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+              message:
+                type: string
+                description: Human-readable error message
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Include your API key token in the Authorization header.
+    affiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: Your Booking.com Affiliate ID, required with every request.
+externalDocs:
+  description: Booking.com Car Rentals API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
