@@ -1,0 +1,69 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations Locations API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Locations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get countries",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/locations/countries",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves geographical location data for countries supported on Booking.com."
+        },
+        {
+          "info": {
+            "name": "Get cities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/locations/cities",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves geographical location data for cities, including city identifiers used in accommodation search queries."
+        },
+        {
+          "info": {
+            "name": "Get regions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/locations/regions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves geographical location data for regions, including region identifiers used in accommodation search queries."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

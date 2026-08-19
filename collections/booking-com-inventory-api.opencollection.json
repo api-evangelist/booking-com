@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations Inventory API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Inventory",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve inventory and rate details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/hotels/xml/roomrateavailability"
+          },
+          "docs": "Retrieves inventory information per property from Booking.com for all active room/rate (product) combinations. Returns current availability counts, rates, and restrictions that are set in the Booking.com system."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

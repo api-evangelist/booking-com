@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations OTA Availability API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "OTA Availability",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create or update availability (OTA format)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/hotels/ota/OTA_HotelAvailNotif"
+          },
+          "docs": "Updates availability and restrictions using the OTA OTA_HotelAvailNotif specification. An alternative to the B.XML availability endpoint that follows the OpenTravel Alliance format."
+        },
+        {
+          "info": {
+            "name": "Update rate amounts (OTA format)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/hotels/ota/OTA_HotelRateAmountNotif"
+          },
+          "docs": "Updates rate amounts and pricing using the OTA OTA_HotelRateAmountNotif specification. An alternative to the B.XML availability endpoint for rate-only updates."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

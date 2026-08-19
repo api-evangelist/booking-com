@@ -1,0 +1,66 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations Rates API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Rates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List rate plans",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://demandapi.booking.com/3.1/properties/:property_id/rates",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ]
+          },
+          "docs": "Retrieves all rate plans configured for a specific property."
+        },
+        {
+          "info": {
+            "name": "Create a rate plan",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/properties/:property_id/rates",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new rate plan for a property, defining pricing rules, cancellation policies, and meal plan inclusions."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

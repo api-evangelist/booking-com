@@ -1,0 +1,69 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations Messages API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Messages",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Send a message",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/messages/send",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sends a message within a conversation. The message body supports plain text and optionally allows attaching a file by referencing a previously uploaded attachment ID."
+        },
+        {
+          "info": {
+            "name": "Fetch latest messages",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/messages/latest",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves up to 100 of the most recent messages from a specified conversation, including messages from both property and guest, returned in reverse chronological order (newest first). Can be used to sync message threads or poll for updates."
+        },
+        {
+          "info": {
+            "name": "Confirm message receipt",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/messages/latest/confirm",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Confirms receipt of specified messages. This confirmation is required before receiving new messages from the POST /messages/latest endpoint."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

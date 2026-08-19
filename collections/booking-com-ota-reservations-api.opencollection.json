@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations OTA Reservations API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "OTA Reservations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Process reservation notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/hotels/ota/OTA_HotelResNotif"
+          },
+          "docs": "Processes reservation notifications following the OTA OTA_HotelResNotif specification. Used for receiving and confirming new reservations through the OpenTravel Alliance standard format."
+        },
+        {
+          "info": {
+            "name": "Process reservation modification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/hotels/ota/OTA_HotelResModifyNotif"
+          },
+          "docs": "Processes reservation modification notifications following the OTA OTA_HotelResModifyNotif specification. Used for receiving and confirming changes to existing reservations."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

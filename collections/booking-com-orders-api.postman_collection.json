@@ -1,0 +1,965 @@
+{
+  "item": [
+    {
+      "id": "503e28e5-5662-4676-8214-d2b5131f4662",
+      "name": "Orders",
+      "description": {
+        "content": "Endpoints to preview and create new orders, check order details, cancel or modify existing orders.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9c554df8-0512-465c-886a-f8cde769496d",
+          "name": "Preview an order",
+          "request": {
+            "name": "Preview an order",
+            "description": {
+              "content": "Generates a preview of an order before creation, allowing the traveler to review the booking details, pricing, and policies before committing.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                "preview"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"<string>\",\n    \"platform\": \"<string>\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": \"<integer>\",\n    \"number_of_rooms\": \"<integer>\",\n    \"children_ages\": [\n      \"<integer>\",\n      \"<integer>\"\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"product_id\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c53bb42f-b808-48d9-b82e-b59c4e1bb28d",
+              "name": "Order preview generated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      4,\n      16\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 3648\n    },\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 6043\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": {\n    \"total_price\": {\n      \"amount\": 7614.57675515053,\n      \"currency\": \"string\"\n    },\n    \"cancellation_policy\": \"string\",\n    \"products\": [\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 6999.127494294815,\n          \"currency\": \"string\"\n        }\n      },\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 9989.936689047685,\n          \"currency\": \"string\"\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b88230bb-456e-4cc4-874b-2c08add132e4",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      4,\n      16\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 3648\n    },\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 6043\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8cb01df0-e993-4afd-b7b0-099d8821cc96",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      4,\n      16\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 3648\n    },\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 6043\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c045f7e0-28d1-4ed3-ab81-80fbcda58aa2",
+          "name": "Create an order",
+          "request": {
+            "name": "Create an order",
+            "description": {
+              "content": "Creates a new booking order, allowing travelers to book and pay for travel services and products directly from the affiliate application. Manages bookings efficiently without redirecting users to Booking.com.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                "create"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"<string>\",\n    \"platform\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"email\": \"<email>\",\n    \"telephone\": \"<string>\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": \"<integer>\",\n    \"number_of_rooms\": \"<integer>\",\n    \"children_ages\": [\n      \"<integer>\",\n      \"<integer>\"\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"product_id\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"payment\": {\n    \"payment_type\": \"<string>\",\n    \"card_number\": \"<string>\",\n    \"expiry_date\": \"<string>\",\n    \"cvc\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e440c540-afd7-4ac7-a8ca-76d19a9bc063",
+              "name": "Order created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"email\": \"<email>\",\n    \"telephone\": \"<string>\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      2,\n      4\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 9196\n    },\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 1351\n    }\n  ],\n  \"payment\": {\n    \"payment_type\": \"string\",\n    \"card_number\": \"string\",\n    \"expiry_date\": \"string\",\n    \"cvc\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": {\n    \"order_id\": \"string\",\n    \"status\": \"confirmed\",\n    \"accommodation_id\": 3690,\n    \"checkin\": \"1973-03-18\",\n    \"checkout\": \"2025-06-20\",\n    \"total_price\": {\n      \"amount\": 8646.79505430418,\n      \"currency\": \"string\"\n    },\n    \"booker\": {\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"products\": [\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 3957.656132687508,\n          \"currency\": \"string\"\n        }\n      },\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 8640.540632524542,\n          \"currency\": \"string\"\n        }\n      }\n    ],\n    \"created_at\": \"2006-10-09T08:24:24.819Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6924f26a-7bef-4821-885f-23ee733c60f6",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"email\": \"<email>\",\n    \"telephone\": \"<string>\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      2,\n      4\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 9196\n    },\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 1351\n    }\n  ],\n  \"payment\": {\n    \"payment_type\": \"string\",\n    \"card_number\": \"string\",\n    \"expiry_date\": \"string\",\n    \"cvc\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f002b169-477e-4905-80a6-fc0824339497",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accommodation_id\": \"<integer>\",\n  \"booker\": {\n    \"country\": \"nl\",\n    \"platform\": \"desktop\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"email\": \"<email>\",\n    \"telephone\": \"<string>\"\n  },\n  \"checkin\": \"<date>\",\n  \"checkout\": \"<date>\",\n  \"guests\": {\n    \"number_of_adults\": 2,\n    \"number_of_rooms\": 1,\n    \"children_ages\": [\n      2,\n      4\n    ]\n  },\n  \"products\": [\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 9196\n    },\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 1351\n    }\n  ],\n  \"payment\": {\n    \"payment_type\": \"string\",\n    \"card_number\": \"string\",\n    \"expiry_date\": \"string\",\n    \"cvc\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "de7b5363-f5e7-49f6-a5a7-8dfd12f86f7b",
+          "name": "Get order details",
+          "request": {
+            "name": "Get order details",
+            "description": {
+              "content": "Retrieves relevant booking details for a specific order, including status, pricing, guest information, and accommodation details.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "76770cb0-0b39-4016-aca6-90b04920eb5a",
+              "name": "Order details retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": {\n    \"order_id\": \"string\",\n    \"status\": \"confirmed\",\n    \"accommodation_id\": 3690,\n    \"checkin\": \"1973-03-18\",\n    \"checkout\": \"2025-06-20\",\n    \"total_price\": {\n      \"amount\": 8646.79505430418,\n      \"currency\": \"string\"\n    },\n    \"booker\": {\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"products\": [\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 3957.656132687508,\n          \"currency\": \"string\"\n        }\n      },\n      {\n        \"product_id\": \"string\",\n        \"room_name\": \"string\",\n        \"meal_plan\": \"string\",\n        \"cancellation_type\": \"string\",\n        \"price\": {\n          \"amount\": 8640.540632524542,\n          \"currency\": \"string\"\n        }\n      }\n    ],\n    \"created_at\": \"2006-10-09T08:24:24.819Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "189fbcf7-8484-4fc7-9f48-c11599ea5303",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9c99a877-5b84-4d2a-8f1c-01e0eab0d1cb",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa9fd520-583d-4756-87c4-f30d3a290fcc",
+              "name": "Order not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ff58ad85-62ff-4d9c-b3bd-89c0d68846f2",
+          "name": "Cancel an order",
+          "request": {
+            "name": "Cancel an order",
+            "description": {
+              "content": "Processes the cancellation of an existing order. Cancellation policies and any applicable fees are determined by the property and rate plan.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "97ca0d84-8def-4940-904e-320b98d4cd79",
+              "name": "Order cancelled successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": {\n    \"order_id\": \"string\",\n    \"status\": \"cancelled\",\n    \"cancellation_fee\": {\n      \"amount\": 5095.889524668832,\n      \"currency\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7164a12a-1fb3-4cbd-b966-cbd0859032ec",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d8f87ddc-8ea6-43f1-86c5-7706f6038f0e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5ac0cd2-44ad-4065-9392-4223df4c9db6",
+              "name": "Order not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://demandapi.booking.com/3.1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "928bd6e6-bb0e-4cd0-86b8-c977cade0c6f",
+    "name": "Booking.com Car Rentals Accommodations Orders API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.\n\nContact Support:\n Name: Booking.com Developer Support",
+      "type": "text/plain"
+    }
+  }
+}

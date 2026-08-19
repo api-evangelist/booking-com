@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations OTA Legacy API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "OTA Legacy",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create or update property content",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/hotels/ota/OTA_HotelDescriptiveContentNotif"
+          },
+          "docs": "Creates or modifies the skeleton of a property including location details, policies, contact information, facilities, and other descriptive content. This endpoint follows the OTA 2003B specification. Note: This endpoint was deprecated in December 2024 and will be sunset on December 31, 2026. Transition to the modular Property Management APIs is recommended."
+        },
+        {
+          "info": {
+            "name": "Create or update room and rate products",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/hotels/ota/OTA_HotelProductNotif"
+          },
+          "docs": "Creates or updates room types, rate plans, and product configurations for a property. This endpoint allows connectivity partners to define room-rate combinations that will be available for booking."
+        },
+        {
+          "info": {
+            "name": "Update hotel inventory",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/hotels/ota/OTA_HotelInvNotif"
+          },
+          "docs": "Updates room inventory counts for a property, specifying the number of rooms available for specific dates and room types."
+        },
+        {
+          "info": {
+            "name": "Search properties",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/hotels/ota/OTA_HotelSearch"
+          },
+          "docs": "Searches for properties managed by the connectivity partner, returning property identifiers and basic information."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

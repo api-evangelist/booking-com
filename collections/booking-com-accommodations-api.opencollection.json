@@ -1,0 +1,129 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Accommodations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search accommodations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/accommodations/search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns the cheapest available product for each accommodation that matches the specified search criteria. When location filters such as country or region ID are applied, results are sorted by Booking.com popularity instead of price. Results include product availability, price, and charges by default."
+        },
+        {
+          "info": {
+            "name": "Get accommodation details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/accommodations/details",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns detailed information on all accommodation properties matching the given criteria including property descriptions, facilities, photos, location data, and policies."
+        },
+        {
+          "info": {
+            "name": "Check accommodation availability",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/accommodations/availability",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Checks availability for a specific accommodation, returning detailed product availability, pricing, and extra charges. The checkin date must be within 500 days and checkout must be between 1 and 90 days after checkin."
+        },
+        {
+          "info": {
+            "name": "Check multiple accommodation availability",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/accommodations/bulk-availability",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Checks availability for multiple accommodations at once. Accepts an array of accommodation IDs along with dates, guest information, and optional filters for meal plan and cancellation type."
+        },
+        {
+          "info": {
+            "name": "Get accommodation reviews",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/accommodations/reviews",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves traveler reviews for specified accommodations, providing feedback associated with particular properties. Reviews can be filtered by reviewer parameters and languages."
+        },
+        {
+          "info": {
+            "name": "Get accommodation review scores",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/accommodations/reviews/scores",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns score distribution and score breakdown for the specified accommodations. The scores information can be filtered by reviewer parameters and languages."
+        },
+        {
+          "info": {
+            "name": "Get accommodation chains",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/accommodations/chains",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves information about hotel chains and brand affiliations for accommodations listed on Booking.com."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,81 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations Property Management API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Property Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a property",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/properties",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new property on Booking.com with basic details including name, location, and property type. Part of the new modular Property Management APIs replacing the legacy OTA endpoints."
+        },
+        {
+          "info": {
+            "name": "Get property details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://demandapi.booking.com/3.1/properties/:property_id",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ]
+          },
+          "docs": "Retrieves the full details of a specific property including all configured content."
+        },
+        {
+          "info": {
+            "name": "Update property details",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://demandapi.booking.com/3.1/properties/:property_id",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing property's details including name, description, contact information, and settings."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,66 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations Photos API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Photos",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List property photos",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://demandapi.booking.com/3.1/properties/:property_id/photos",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ]
+          },
+          "docs": "Retrieves all photos associated with a property."
+        },
+        {
+          "info": {
+            "name": "Upload a property photo",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/properties/:property_id/photos",
+            "params": [
+              {
+                "name": "property_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the property on Booking.com"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Uploads a new photo for a property. Photos can be tagged with categories and assigned to specific rooms or the property overall."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

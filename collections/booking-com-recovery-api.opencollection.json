@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations Recovery API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Recovery",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve reservation summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/hotels/xml/reservationssummary"
+          },
+          "docs": "Retrieves reservation messages that were not picked up earlier. This endpoint is useful for retrieving all reservations that were made prior to the property being connected to the partner system, ensuring no bookings are missed during initial setup."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

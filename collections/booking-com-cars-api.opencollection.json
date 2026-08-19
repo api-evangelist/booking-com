@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations Cars API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cars",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search car rentals",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/cars/search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Allows travelers to search for car rentals and view the price and list of available vehicles for the route they are interested in. Results include vehicle types, pricing, and availability for the specified pickup and dropoff locations and dates."
+        },
+        {
+          "info": {
+            "name": "Get car rental details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/cars/details",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves detailed information about specific car rental offerings, including vehicle specifications, included equipment, insurance details, and rental terms."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations Depots API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Depots",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get car rental depots",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/cars/depots",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves information about car rental depot locations, including addresses, operating hours, and available services."
+        },
+        {
+          "info": {
+            "name": "Get depot review scores",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/cars/depots/reviews/scores",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves the score breakdown assigned to a depot based on customer ratings, including overall scores and category-specific breakdowns."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations Reservations API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reservations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve reservations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/hotels/xml/reservations"
+          },
+          "docs": "Retrieves new, modified, or cancelled property reservations using B.XML format. The response returns the same schema for new, modified, and cancelled reservations with updated information. This endpoint should be polled once per twenty seconds for timely data delivery. Higher frequencies are not recommended due to added server overhead."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

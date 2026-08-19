@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations Availability API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Availability",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create or update availability, rates, and restrictions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/hotels/xml/availability"
+          },
+          "docs": "Specifies a property's availability for specific rooms, rates, and dates, including the number of available rooms, prices depending on occupants, and restrictions on length of stay and check-in/check-out dates. This is the primary endpoint for keeping inventory and pricing synchronized with Booking.com."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

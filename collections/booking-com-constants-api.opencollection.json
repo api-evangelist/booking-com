@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Booking.com Car Rentals Accommodations Constants API",
+    "version": "3.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Constants",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get accommodation constants",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://demandapi.booking.com/3.1/accommodations/constants",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves reference data constants including accommodation types, accommodation facilities, accommodation themes, bed types, charge types, facility types, review scores, room facilities, and room types."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
