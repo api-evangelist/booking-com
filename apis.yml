@@ -278,6 +278,8 @@ apis:
   humanURL: https://developers.booking.com/demand/docs/getting-started/overview
   baseURL: https://demandapi.booking.com
   tags:
+  - Message
+  tags_raw:
   - Messages
   properties:
   - type: OpenAPI
@@ -303,6 +305,8 @@ apis:
   humanURL: https://developers.booking.com/demand/docs/getting-started/overview
   baseURL: https://demandapi.booking.com
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
