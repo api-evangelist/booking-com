@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Booking.com Car Rentals Accommodations Cars API
+  title: Booking.com Car Rentals Cars API
   description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
   version: '3.1'
   contact:
@@ -83,33 +83,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    Depot:
-      type: object
-      description: Car rental depot with full details
-      properties:
-        depot_id:
-          type: string
-          description: Unique depot identifier
-        name:
-          type: string
-          description: Depot name
-        address:
-          type: string
-          description: Street address
-        city:
-          type: string
-          description: City name
-        country:
-          type: string
-          description: Country code
-        location:
-          $ref: '#/components/schemas/GeoLocation'
-        opening_hours:
-          type: string
-          description: Operating hours
-        phone:
-          type: string
-          description: Contact phone number
     SupplierSummary:
       type: object
       description: Brief supplier information
@@ -120,6 +93,22 @@ components:
         name:
           type: string
           description: Supplier name
+    ErrorResponse:
+      type: object
+      description: Standard error response
+      properties:
+        errors:
+          type: array
+          description: List of errors
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+              message:
+                type: string
+                description: Human-readable error message
     Vehicle:
       type: object
       description: Vehicle information
@@ -158,53 +147,50 @@ components:
           type: string
           format: uri
           description: URL of the vehicle image
-    CarSearchResponse:
+    GeoLocation:
+      type: object
+      description: Geographic coordinates
+      properties:
+        latitude:
+          type: number
+          description: Latitude coordinate
+        longitude:
+          type: number
+          description: Longitude coordinate
+    CarDetailsRequest:
+      type: object
+      required:
+      - offer_id
+      properties:
+        offer_id:
+          type: string
+          description: Offer identifier from search results
+    CarOffer:
+      type: object
+      properties:
+        offer_id:
+          type: string
+          description: Unique offer identifier
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        supplier:
+          $ref: '#/components/schemas/SupplierSummary'
+        pickup_depot:
+          $ref: '#/components/schemas/DepotSummary'
+        dropoff_depot:
+          $ref: '#/components/schemas/DepotSummary'
+        price:
+          $ref: '#/components/schemas/Price'
+        included_extras:
+          type: array
+          description: Extras included in the rental price
+          items:
+            type: string
+    CarDetailsResponse:
       type: object
       properties:
         result:
-          type: array
-          description: List of available car rental offers
-          items:
-            $ref: '#/components/schemas/CarOffer'
-    DepotSummary:
-      type: object
-      description: Brief depot information
-      properties:
-        depot_id:
-          type: string
-          description: Unique depot identifier
-        name:
-          type: string
-          description: Depot name
-        address:
-          type: string
-          description: Street address
-    ErrorResponse:
-      type: object
-      description: Standard error response
-      properties:
-        errors:
-          type: array
-          description: List of errors
-          items:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-              message:
-                type: string
-                description: Human-readable error message
-    Price:
-      type: object
-      description: Price information
-      properties:
-        amount:
-          type: number
-          description: Price amount
-        currency:
-          type: string
-          description: ISO 4217 currency code
+          $ref: '#/components/schemas/CarDetail'
     CarDetail:
       type: object
       properties:
@@ -271,50 +257,64 @@ components:
         currency:
           type: string
           description: Preferred currency for pricing
-    CarDetailsResponse:
+    DepotSummary:
+      type: object
+      description: Brief depot information
+      properties:
+        depot_id:
+          type: string
+          description: Unique depot identifier
+        name:
+          type: string
+          description: Depot name
+        address:
+          type: string
+          description: Street address
+    Depot:
+      type: object
+      description: Car rental depot with full details
+      properties:
+        depot_id:
+          type: string
+          description: Unique depot identifier
+        name:
+          type: string
+          description: Depot name
+        address:
+          type: string
+          description: Street address
+        city:
+          type: string
+          description: City name
+        country:
+          type: string
+          description: Country code
+        location:
+          $ref: '#/components/schemas/GeoLocation'
+        opening_hours:
+          type: string
+          description: Operating hours
+        phone:
+          type: string
+          description: Contact phone number
+    Price:
+      type: object
+      description: Price information
+      properties:
+        amount:
+          type: number
+          description: Price amount
+        currency:
+          type: string
+          description: ISO 4217 currency code
+    CarSearchResponse:
       type: object
       properties:
         result:
-          $ref: '#/components/schemas/CarDetail'
-    CarDetailsRequest:
-      type: object
-      required:
-      - offer_id
-      properties:
-        offer_id:
-          type: string
-          description: Offer identifier from search results
-    CarOffer:
-      type: object
-      properties:
-        offer_id:
-          type: string
-          description: Unique offer identifier
-        vehicle:
-          $ref: '#/components/schemas/Vehicle'
-        supplier:
-          $ref: '#/components/schemas/SupplierSummary'
-        pickup_depot:
-          $ref: '#/components/schemas/DepotSummary'
-        dropoff_depot:
-          $ref: '#/components/schemas/DepotSummary'
-        price:
-          $ref: '#/components/schemas/Price'
-        included_extras:
           type: array
-          description: Extras included in the rental price
+          description: List of available car rental offers
           items:
-            type: string
-    GeoLocation:
-      type: object
-      description: Geographic coordinates
-      properties:
-        latitude:
-          type: number
-          description: Latitude coordinate
-        longitude:
-          type: number
-          description: Longitude coordinate
+            $ref: '#/components/schemas/CarOffer'
   securitySchemes:
     bearerAuth:
       type: http

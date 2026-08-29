@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Booking.com Car Rentals Accommodations Orders API
-  description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
+  title: Booking.com Demand Orders API
+  description: The Booking.com Demand API is a RESTful API that enables Affiliate Partners to access Booking.com's extensive travel inventory. It provides endpoints for searching accommodations such as hotels and apartments, checking availability, retrieving reviews, and getting detailed property information. The API uses JSON responses and requires HTTPS POST requests with Affiliate ID and Bearer token authentication. The latest version (V3.1) offers improved functionality and additional endpoints for building travel booking experiences including orders management, messaging, and payment information.
   version: '3.1'
   contact:
     name: Booking.com Developer Support
@@ -159,6 +159,113 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    Order:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: Unique order identifier
+        status:
+          type: string
+          description: Current order status
+          enum:
+          - confirmed
+          - cancelled
+          - pending
+        accommodation_id:
+          type: integer
+          description: Booked accommodation ID
+        checkin:
+          type: string
+          format: date
+          description: Check-in date
+        checkout:
+          type: string
+          format: date
+          description: Check-out date
+        total_price:
+          $ref: '#/components/schemas/Price'
+        booker:
+          type: object
+          description: Booker information
+          properties:
+            first_name:
+              type: string
+              description: Booker first name
+            last_name:
+              type: string
+              description: Booker last name
+            email:
+              type: string
+              description: Booker email
+        products:
+          type: array
+          description: Booked products
+          items:
+            $ref: '#/components/schemas/Product'
+        created_at:
+          type: string
+          format: date-time
+          description: Order creation timestamp
+    ProductSelection:
+      type: object
+      description: A product selected for booking
+      required:
+      - product_id
+      properties:
+        product_id:
+          type: string
+          description: Product identifier from availability results
+        quantity:
+          type: integer
+          description: Number of this product to book
+          minimum: 1
+    ErrorResponse:
+      type: object
+      description: Standard error response
+      properties:
+        errors:
+          type: array
+          description: List of errors
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+              message:
+                type: string
+                description: Human-readable error message
+    OrderPreviewRequest:
+      type: object
+      required:
+      - accommodation_id
+      - booker
+      - checkin
+      - checkout
+      - guests
+      - products
+      properties:
+        accommodation_id:
+          type: integer
+          description: Accommodation to book
+        booker:
+          $ref: '#/components/schemas/Booker'
+        checkin:
+          type: string
+          format: date
+          description: Check-in date
+        checkout:
+          type: string
+          format: date
+          description: Check-out date
+        guests:
+          $ref: '#/components/schemas/Guests'
+        products:
+          type: array
+          description: Products to include in the order
+          items:
+            $ref: '#/components/schemas/ProductSelection'
     OrderCreateRequest:
       type: object
       required:
@@ -208,6 +315,48 @@ components:
             $ref: '#/components/schemas/ProductSelection'
         payment:
           $ref: '#/components/schemas/PaymentInfo'
+    OrderResponse:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/Order'
+    OrderDetailsRequest:
+      type: object
+      required:
+      - order_id
+      properties:
+        order_id:
+          type: string
+          description: Unique identifier of the order to retrieve
+    OrderPreview:
+      type: object
+      properties:
+        total_price:
+          $ref: '#/components/schemas/Price'
+        cancellation_policy:
+          type: string
+          description: Cancellation policy details
+        products:
+          type: array
+          description: Products in the preview
+          items:
+            $ref: '#/components/schemas/Product'
+    OrderCancelResponse:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            order_id:
+              type: string
+              description: Cancelled order identifier
+            status:
+              type: string
+              description: New order status
+              enum:
+              - cancelled
+            cancellation_fee:
+              $ref: '#/components/schemas/Price'
     Guests:
       type: object
       description: Guest allocation for the search or booking
@@ -232,110 +381,6 @@ components:
             type: integer
             minimum: 0
             maximum: 17
-    OrderDetailsRequest:
-      type: object
-      required:
-      - order_id
-      properties:
-        order_id:
-          type: string
-          description: Unique identifier of the order to retrieve
-    Order:
-      type: object
-      properties:
-        order_id:
-          type: string
-          description: Unique order identifier
-        status:
-          type: string
-          description: Current order status
-          enum:
-          - confirmed
-          - cancelled
-          - pending
-        accommodation_id:
-          type: integer
-          description: Booked accommodation ID
-        checkin:
-          type: string
-          format: date
-          description: Check-in date
-        checkout:
-          type: string
-          format: date
-          description: Check-out date
-        total_price:
-          $ref: '#/components/schemas/Price'
-        booker:
-          type: object
-          description: Booker information
-          properties:
-            first_name:
-              type: string
-              description: Booker first name
-            last_name:
-              type: string
-              description: Booker last name
-            email:
-              type: string
-              description: Booker email
-        products:
-          type: array
-          description: Booked products
-          items:
-            $ref: '#/components/schemas/Product'
-        created_at:
-          type: string
-          format: date-time
-          description: Order creation timestamp
-    OrderPreviewRequest:
-      type: object
-      required:
-      - accommodation_id
-      - booker
-      - checkin
-      - checkout
-      - guests
-      - products
-      properties:
-        accommodation_id:
-          type: integer
-          description: Accommodation to book
-        booker:
-          $ref: '#/components/schemas/Booker'
-        checkin:
-          type: string
-          format: date
-          description: Check-in date
-        checkout:
-          type: string
-          format: date
-          description: Check-out date
-        guests:
-          $ref: '#/components/schemas/Guests'
-        products:
-          type: array
-          description: Products to include in the order
-          items:
-            $ref: '#/components/schemas/ProductSelection'
-    OrderPreviewResponse:
-      type: object
-      properties:
-        result:
-          $ref: '#/components/schemas/OrderPreview'
-    ProductSelection:
-      type: object
-      description: A product selected for booking
-      required:
-      - product_id
-      properties:
-        product_id:
-          type: string
-          description: Product identifier from availability results
-        quantity:
-          type: integer
-          description: Number of this product to book
-          minimum: 1
     Price:
       type: object
       description: Price information
@@ -346,22 +391,6 @@ components:
         currency:
           type: string
           description: ISO 4217 currency code
-    OrderCancelResponse:
-      type: object
-      properties:
-        result:
-          type: object
-          properties:
-            order_id:
-              type: string
-              description: Cancelled order identifier
-            status:
-              type: string
-              description: New order status
-              enum:
-              - cancelled
-            cancellation_fee:
-              $ref: '#/components/schemas/Price'
     PaymentInfo:
       type: object
       description: Payment details for order creation
@@ -378,35 +407,11 @@ components:
         cvc:
           type: string
           description: Card verification code
-    ErrorResponse:
-      type: object
-      description: Standard error response
-      properties:
-        errors:
-          type: array
-          description: List of errors
-          items:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-              message:
-                type: string
-                description: Human-readable error message
-    OrderCancelRequest:
-      type: object
-      required:
-      - order_id
-      properties:
-        order_id:
-          type: string
-          description: Unique identifier of the order to cancel
-    OrderResponse:
+    OrderPreviewResponse:
       type: object
       properties:
         result:
-          $ref: '#/components/schemas/Order'
+          $ref: '#/components/schemas/OrderPreview'
     Booker:
       type: object
       description: Information about the person making the booking
@@ -423,19 +428,14 @@ components:
           - mobile
           - tablet
           example: desktop
-    OrderPreview:
+    OrderCancelRequest:
       type: object
+      required:
+      - order_id
       properties:
-        total_price:
-          $ref: '#/components/schemas/Price'
-        cancellation_policy:
+        order_id:
           type: string
-          description: Cancellation policy details
-        products:
-          type: array
-          description: Products in the preview
-          items:
-            $ref: '#/components/schemas/Product'
+          description: Unique identifier of the order to cancel
     Product:
       type: object
       description: An available room or product at an accommodation
@@ -465,5 +465,5 @@ components:
       name: X-Affiliate-Id
       description: Your Booking.com Affiliate ID, required with every request.
 externalDocs:
-  description: Booking.com Car Rentals API Documentation
-  url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
+  description: Booking.com Demand API Documentation
+  url: https://developers.booking.com/demand/docs/open-api/demand-api

@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Booking.com Car Rentals Accommodations Depots API
+  title: Booking.com Car Rentals Depots API
   description: The Booking.com Car Rentals API is part of the Demand API and provides endpoints specific to the car rental segment of the connected trip experience. Developers can use it to search for available car rentals, retrieve car details, look up depots and suppliers, and access depot review scores. The API enables affiliate partners to integrate Booking.com's car rental inventory into their own platforms, offering users the ability to find and book vehicles as part of their travel planning workflow.
   version: '3.1'
   contact:
@@ -83,6 +83,40 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      description: Standard error response
+      properties:
+        errors:
+          type: array
+          description: List of errors
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+              message:
+                type: string
+                description: Human-readable error message
+    GeoLocation:
+      type: object
+      description: Geographic coordinates
+      properties:
+        latitude:
+          type: number
+          description: Latitude coordinate
+        longitude:
+          type: number
+          description: Longitude coordinate
+    DepotReviewScoresResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          description: Review score breakdowns per depot
+          items:
+            $ref: '#/components/schemas/DepotReviewScore'
     CarDepotsRequest:
       type: object
       properties:
@@ -121,22 +155,6 @@ components:
         phone:
           type: string
           description: Contact phone number
-    ErrorResponse:
-      type: object
-      description: Standard error response
-      properties:
-        errors:
-          type: array
-          description: List of errors
-          items:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Error code
-              message:
-                type: string
-                description: Human-readable error message
     CarDepotsResponse:
       type: object
       properties:
@@ -145,16 +163,6 @@ components:
           description: List of depots
           items:
             $ref: '#/components/schemas/Depot'
-    DepotReviewScoresRequest:
-      type: object
-      required:
-      - depot_ids
-      properties:
-        depot_ids:
-          type: array
-          description: Depot IDs to retrieve review scores for
-          items:
-            type: string
     DepotReviewScore:
       type: object
       description: Review score breakdown for a depot
@@ -184,24 +192,16 @@ components:
             pickup_process:
               type: number
               description: Pickup process efficiency score
-    DepotReviewScoresResponse:
+    DepotReviewScoresRequest:
       type: object
+      required:
+      - depot_ids
       properties:
-        result:
+        depot_ids:
           type: array
-          description: Review score breakdowns per depot
+          description: Depot IDs to retrieve review scores for
           items:
-            $ref: '#/components/schemas/DepotReviewScore'
-    GeoLocation:
-      type: object
-      description: Geographic coordinates
-      properties:
-        latitude:
-          type: number
-          description: Latitude coordinate
-        longitude:
-          type: number
-          description: Longitude coordinate
+            type: string
   securitySchemes:
     bearerAuth:
       type: http
