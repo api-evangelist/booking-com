@@ -26,6 +26,8 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
 url: https://raw.githubusercontent.com/api-evangelist/booking-com/refs/heads/main/apis.yml
+x-api-posture: partner-gated
+x-api-posture-basis: observed
 modified: '2026-05-19'
 apis:
 - aid: booking-com:booking-com-accommodations-api
