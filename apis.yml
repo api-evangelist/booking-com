@@ -641,6 +641,22 @@ apis:
   - type: Documentation
     url: https://developers.booking.com/connectivity/docs
 common:
+- type: Website
+  url: https://www.booking.com
+- type: DeveloperPortal
+  url: https://developers.booking.com/
+- type: Documentation
+  url: https://developers.booking.com/demand/docs/getting-started/overview
+- type: AffiliateProgram
+  url: https://www.booking.com/affiliate-program/v2/
+- type: ConnectivityPartners
+  url: https://developers.booking.com/connectivity/docs
+- type: About
+  url: https://www.booking.com/content/about.html
+- type: PrivacyPolicy
+  url: https://www.booking.com/content/privacy.html
+- type: TermsOfService
+  url: https://www.booking.com/content/terms.html
 - type: AgenticAccess
   url: agentic-access/booking-com-agentic-access.yml
 - type: VulnerabilityDisclosure
