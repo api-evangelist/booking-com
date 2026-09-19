@@ -1,4 +1,4 @@
-name: Booking Com
+name: Booking.com
 aid: booking-com
 deliveryModel:
   model: unknown
@@ -29,618 +29,354 @@ image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-co
 url: https://raw.githubusercontent.com/api-evangelist/booking-com/refs/heads/main/apis.yml
 x-api-posture: partner-gated
 x-api-posture-basis: observed
-modified: '2026-05-19'
+modified: '2026-09-17'
 apis:
-- aid: booking-com:booking-com-accommodations-api
-  name: booking-com Accommodations API
-  description: >-
-    Endpoints to search for stays such as hotels and apartments, check availability, retrieve reviews,
-    and get detailed property information.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+- aid: booking-com:booking-com-demand-api
+  name: Booking.com Demand API
+  description: 'The Demand API is Booking.com''s RESTful JSON API for affiliate partners: search and book accommodations,
+    car rentals, attractions and transfers, preview and create orders, manage cancellations and modifications, and
+    read reviews, locations, languages and payment constants. Version 3.2 is current; 3.1 remains published and
+    a 3.2-Beta track carries attractions, transfers, smart search and the messaging endpoints.'
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
   tags:
-  - Accommodations
+  - Travel
+  - Accommodation
+  - Car Rental
+  - Booking
+  - Order
+  - Search
+  tags_raw:
+  - Travel
+  - Accommodation
+  - Car Rental
+  - Booking
+  - Orders
+  - Search
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-accommodations-api-openapi.yml
+    url: openapi/booking-com-demand-api-3-2-openapi.yml
+  - type: OpenAPI
+    url: openapi/booking-com-demand-api-3-1-openapi.yml
+  - type: OpenAPI
+    url: openapi/booking-com-demand-api-3-2-beta-openapi.yml
   - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
     url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-availability-api
-  name: booking-com Availability API
-  description: >-
-    Endpoints for updating room availability, pricing, and booking restrictions using B.XML format.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Overlay
+    url: overlays/booking-com-demand-api-3-2-overlay.yaml
+  - type: Overlay
+    url: overlays/booking-com-demand-api-3-1-overlay.yaml
+  - type: Overlay
+    url: overlays/booking-com-demand-api-3-2-beta-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
+- aid: booking-com:booking-com-connect-api
+  name: Booking.com Connect API
+  description: The metasearch Connect API streams Booking.com property inventory and conversion reporting to metasearch
+    partners, and carries a Demand API v2 compatible surface for hotels, availability, reviews, review scores and
+    facility, theme and hotel type constants during migration.
+  humanURL: https://developers.booking.com/metasearch/connect-api/open-api
+  baseURL: https://metasearch-connect-api.booking.com
   tags:
-  - Availability
+  - Travel
+  - Metasearch
+  - Inventory
+  - Reporting
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-availability-api-openapi.yml
+    url: openapi/booking-com-connect-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-cars-api
-  name: booking-com Cars API
-  description: >-
-    Endpoints for searching available car rentals and retrieving vehicle details, pricing, and availability.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Overlay
+    url: overlays/booking-com-connect-api-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
+- aid: booking-com:booking-com-status-api
+  name: Booking.com Status API
+  description: The Status API reports the current operational status of monitored Demand API endpoints, grouped
+    by endpoint group, so partners can detect degradation and drive automated responses such as adjusting retry
+    behaviour or switching to a fallback.
+  humanURL: https://developers.booking.com/demand/docs/additional-services/status-api/about
+  baseURL: https://partnerships-status.booking.com
   tags:
-  - Cars
+  - Travel
+  - Status
+  - Monitoring
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-cars-api-openapi.yml
+    url: openapi/booking-com-status-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-constants-api
-  name: booking-com Constants API
-  description: >-
-    Endpoints for retrieving reference data such as accommodation types, facility types, room types, and
-    other enumerated values.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+    url: https://developers.booking.com/demand/docs/additional-services/status-api/about
+  - type: Overlay
+    url: overlays/booking-com-status-api-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
+- aid: booking-com:booking-com-charges-api
+  name: Booking.com Charges API
+  description: Create and update charges that apply at the property and room level for Connectivity partners, and
+    set up different charge configurations for different date ranges.
+  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  baseURL: https://supply-xml.booking.com
   tags:
-  - Constants
+  - Travel
+  - Connectivity
+  - Pricing
+  - Hospitality
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-constants-api-openapi.yml
+    url: openapi/booking-com-charges-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-conversations-api
-  name: booking-com Conversations API
-  description: >-
-    Endpoints to retrieve and manage messaging conversations, list conversations, fetch conversation details,
-    and track updates.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+    url: https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Overlay
+    url: overlays/booking-com-charges-api-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
+- aid: booking-com:booking-com-contacts-api
+  name: Booking.com Contacts API
+  description: The Connectivity Contacts endpoint manages the contact records attached to a property on Booking.com,
+    letting connectivity providers read and maintain property contact details programmatically instead of through
+    the extranet.
+  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/contacts-api/contacts-api-specification
+  baseURL: https://supply-xml.booking.com
   tags:
-  - Conversations
+  - Travel
+  - Connectivity
+  - Hospitality
+  - Contacts
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-conversations-api-openapi.yml
+    url: openapi/booking-com-contacts-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-depots-api
-  name: booking-com Depots API
-  description: >-
-    Endpoints for looking up car rental depots, including locations, reviews, and score breakdowns.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+    url: https://developers.booking.com/connectivity/docs/openapispecs/contacts-api/contacts-api-specification
+  - type: Overlay
+    url: overlays/booking-com-contacts-api-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
+- aid: booking-com:booking-com-contracting-api
+  name: Booking.com Contracting API
+  description: Use the Contracting API to invite a new partner to Booking.com, check whether a partner has signed
+    the contract, resend the invitation mail and retrieve the legal entity of the partner. Requests carry a JWT
+    in the Authorization header, with machine accounts managed in the Connectivity Portal.
+  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  baseURL: https://supply-xml.booking.com/contracts-api
   tags:
-  - Depots
+  - Travel
+  - Connectivity
+  - Onboarding
+  - Contracts
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-depots-api-openapi.yml
+    url: openapi/booking-com-contracting-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-derived-pricing-api
-  name: booking-com Derived Pricing API
-  description: >-
-    Endpoints for managing derived pricing rules that automatically calculate rates based on a parent
-    rate plan.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
-  tags:
-  - Derived Pricing
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-derived-pricing-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
+    url: https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Overlay
+    url: overlays/booking-com-contracting-api-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
 - aid: booking-com:booking-com-facilities-api
-  name: booking-com Facilities API
-  description: Endpoints for managing property-level and room-level facilities and amenities.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+  name: Booking.com Facilities API
+  description: Manage facilities at both property and room level on Booking.com, covering single-instance facilities
+    that toggle on or off, single-instance facilities carrying optional parameters, and multi-instance facilities
+    such as restaurants, swimming pools and parking. A separate remote-sync specification covers the pull-based
+    synchronisation surface.
+  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  baseURL: https://supply-xml.booking.com
   tags:
-  - Facilities
+  - Travel
+  - Connectivity
+  - Hospitality
+  - Content
   properties:
   - type: OpenAPI
     url: openapi/booking-com-facilities-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/booking-com-facilities-api-remote-sync-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
+    url: https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-inventory-api
-  name: booking-com Inventory API
-  description: >-
-    Endpoints for retrieving current inventory and rate details for active room/rate combinations.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+    url: https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Overlay
+    url: overlays/booking-com-facilities-api-overlay.yaml
+  - type: Overlay
+    url: overlays/booking-com-facilities-api-remote-sync-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
+- aid: booking-com:booking-com-historical-reservations-api
+  name: Booking.com Historical Reservations API
+  description: Retrieve a property's historical reservation details to initialise or reconcile reservation data
+    for revenue management. Room reservations are selected by creation timestamp and optionally by status, and responses
+    carry stay dates, available occupancy and guest and property price perspectives. Preview reference for version
+    1.0; access requires a connection authorised to read the property's reservation history.
+  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/historical-reservations-api/historical-reservations-api-specification
+  baseURL: https://supply-xml.booking.com
   tags:
-  - Inventory
+  - Travel
+  - Connectivity
+  - Reservations
+  - Revenue Management
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-inventory-api-openapi.yml
+    url: openapi/booking-com-historical-reservations-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-locations-api
-  name: booking-com Locations API
-  description: >-
-    Endpoints for retrieving geographical location data including countries, cities, regions, and airports.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
-  tags:
-  - Locations
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-locations-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-messages-api
-  name: booking-com Messages API
-  description: >-
-    Endpoints for two-way post-booking communication between guests and properties, allowing you to send
-    and retrieve messages, exchange images, and check conversation details.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
-  tags:
-  - Message
-  tags_raw:
-  - Messages
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-messages-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-orders-api
-  name: booking-com Orders API
-  description: >-
-    Endpoints to preview and create new orders, check order details, cancel or modify existing orders.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
-  tags:
-  - Order
-  tags_raw:
-  - Orders
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-orders-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-ota-availability-api
-  name: booking-com OTA Availability API
-  description: >-
-    OTA-based endpoints for availability and rate notifications following the OpenTravel Alliance specification.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
-  tags:
-  - OTA Availability
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-ota-availability-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-ota-legacy-api
-  name: booking-com OTA Legacy API
-  description: >-
-    Legacy OTA-based endpoints for property content management. These endpoints follow the OpenTravel
-    Alliance specification and are being deprecated in favor of modular APIs.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
-  tags:
-  - OTA Legacy
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-ota-legacy-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-ota-reservations-api
-  name: booking-com OTA Reservations API
-  description: >-
-    OTA-based endpoints for reservation notification and modification following the OpenTravel Alliance
-    specification.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
-  tags:
-  - OTA Reservations
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-ota-reservations-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
+    url: https://developers.booking.com/connectivity/docs/openapispecs/historical-reservations-api/historical-reservations-api-specification
+  - type: Overlay
+    url: overlays/booking-com-historical-reservations-api-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
 - aid: booking-com:booking-com-payments-api
-  name: booking-com Payments API
-  description: Generic payment-related endpoints, including supported currencies and payment types.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+  name: Booking.com Payments API
+  description: Retrieve payment and payout details for accommodation reservations, including partner payout information,
+    payout breakdowns, bank transfer details, virtual credit card payout details, VCCs to be charged and refundable
+    VCCs.
+  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  baseURL: https://payments-api.booking.com
   tags:
+  - Travel
+  - Connectivity
   - Payments
+  - Payouts
   properties:
   - type: OpenAPI
     url: openapi/booking-com-payments-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-photos-api
-  name: booking-com Photos API
-  description: Endpoints for adding, managing, and organizing property photos.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+    url: https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Overlay
+    url: overlays/booking-com-payments-api-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
+- aid: booking-com:booking-com-payments-by-booking-onboarding-api
+  name: Booking.com Payments by Booking Onboarding API
+  description: Manage Payments by Booking onboarding configurations, check property eligibility for the different
+    payout options, and monitor the processing status of configuration update requests. Accepted change requests
+    are tracked by an idempotency key returned as request_id.
+  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  baseURL: https://payments-api.booking.com
   tags:
-  - Photos
+  - Travel
+  - Connectivity
+  - Payments
+  - Onboarding
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-photos-api-openapi.yml
+    url: openapi/booking-com-payments-by-booking-onboarding-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-promotions-api
-  name: booking-com Promotions API
-  description: >-
-    Endpoints for creating, managing, and retrieving promotional offers for properties on Booking.com.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+    url: https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Overlay
+    url: overlays/booking-com-payments-by-booking-onboarding-api-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
+- aid: booking-com:booking-com-property-api
+  name: Booking.com Property API
+  description: Use the Property API to create or update a property and its settings, check and update property status,
+    and create or update the property description, replacing extranet work for connectivity providers managing properties
+    at scale.
+  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  baseURL: https://supply-xml.booking.com/property-api
   tags:
-  - Promotions
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-promotions-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-property-management-api
-  name: booking-com Property Management API
-  description: >-
-    Endpoints for creating and updating property information including name, location, contact details,
-    policies, and general settings.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
-  tags:
+  - Travel
+  - Connectivity
+  - Hospitality
   - Property Management
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-property-management-api-openapi.yml
+    url: openapi/booking-com-property-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-rates-api
-  name: booking-com Rates API
-  description: >-
-    Endpoints for creating and managing rate plans, including pricing rules and occupancy-based rates.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+    url: https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Overlay
+    url: overlays/booking-com-property-api-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
+- aid: booking-com:booking-com-property-health-api
+  name: Booking.com Property Health API
+  description: A read-only JSON API for connectivity providers that returns property health and status data, explaining
+    why properties are unbookable or at risk so providers can prioritise action across the properties they can access
+    or across explicit Booking.com property IDs.
+  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/property-health-api/property-health-api-specification
+  baseURL: https://supply-xml.booking.com/property-health-api
   tags:
-  - Rates
+  - Travel
+  - Connectivity
+  - Monitoring
+  - Property Management
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-rates-api-openapi.yml
+    url: openapi/booking-com-property-health-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-recovery-api
-  name: booking-com Recovery API
-  description: >-
-    Endpoints for recovering reservations that were not picked up earlier or made prior to the property
-    being connected to the system.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+    url: https://developers.booking.com/connectivity/docs/openapispecs/property-health-api/property-health-api-specification
+  - type: Overlay
+    url: overlays/booking-com-property-health-api-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
+- aid: booking-com:booking-com-reconciliation-api
+  name: Booking.com Reconciliation API
+  description: 'Generate and download financial reconciliation reports for properties: request payout reports for
+    a date range and set of properties, poll report generation status, and retrieve the available filter and configuration
+    options. Rate limiting is signalled with a 429 and a Retry-After header.'
+  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  baseURL: https://payments-api.booking.com
   tags:
-  - Recovery
+  - Travel
+  - Connectivity
+  - Finance
+  - Reporting
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-recovery-api-openapi.yml
+    url: openapi/booking-com-reconciliation-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-reservations-api
-  name: booking-com Reservations API
-  description: >-
-    Endpoints for retrieving new, modified, and cancelled property reservations using B.XML format.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
-  tags:
-  - Reservations
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-reservations-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
+    url: https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Overlay
+    url: overlays/booking-com-reconciliation-api-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
 - aid: booking-com:booking-com-rooms-api
-  name: booking-com Rooms API
-  description: >-
-    Endpoints for managing room types, room names, bed configurations, and room-level facilities.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+  name: Booking.com Rooms API
+  description: Create and manage room types on Booking.com, including the bulk surface and the generated-names variant.
+    Room definitions carry occupancy, extra beds configuration and rate-relevant attributes; the legacy max payable
+    child field is deprecated and sunset under the published deprecation policy.
+  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  baseURL: https://supply-xml.booking.com
   tags:
+  - Travel
+  - Connectivity
+  - Hospitality
   - Rooms
   properties:
   - type: OpenAPI
     url: openapi/booking-com-rooms-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/booking-com-rooms-api-bulk-openapi.yml
+  - type: OpenAPI
+    url: openapi/booking-com-rooms-api-generated-names-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
+    url: https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
+    url: https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
   - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
-- aid: booking-com:booking-com-suppliers-api
-  name: booking-com Suppliers API
-  description: Endpoints for retrieving information about car rental suppliers and their offerings.
-  humanURL: https://developers.booking.com/demand/docs/getting-started/overview
-  baseURL: https://demandapi.booking.com
+    url: https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Overlay
+    url: overlays/booking-com-rooms-api-overlay.yaml
+  - type: Overlay
+    url: overlays/booking-com-rooms-api-bulk-overlay.yaml
+  - type: Overlay
+    url: overlays/booking-com-rooms-api-generated-names-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
+- aid: booking-com:booking-com-valueadds-api
+  name: Booking.com Value Adds Catalog API
+  description: Returns the catalogue of value adds available for properties on Booking.com. Responses are JSON or
+    XML depending on the Accept header, and each value add carries dynamic attributes such as currency and amount.
+  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+  baseURL: https://supply-xml.booking.com
   tags:
-  - Suppliers
+  - Travel
+  - Connectivity
+  - Hospitality
+  - Catalog
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-suppliers-api-openapi.yml
+    url: openapi/booking-com-valueadds-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: GraphQL
-    url: graphql/booking-com-graphql.md
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/demand-api/cars
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/content
-  - type: Documentation
-    url: https://connect.booking.com/user_guide/site/en-US/res/
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/ari
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs
+    url: https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+  - type: Overlay
+    url: overlays/booking-com-valueadds-api-overlay.yaml
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
 common:
+- type: TrustCenter
+  url: security/booking-com-trust-center.yml
 - type: Website
   url: https://www.booking.com
 - type: DeveloperPortal
@@ -679,8 +415,7 @@ common:
   data:
   - 'Booking.com: API access via partner / B2B contracts only'
   - No public API pricing published — contact enterprise sales
-  - Booking.com Connectivity APIs require Hotel Manager/Connectivity Partner approval;
-    commission per booking.
+  - Booking.com Connectivity APIs require Hotel Manager/Connectivity Partner approval; commission per booking.
   sources:
   - https://connect.booking.com/
   updated: '2026-05-04'
@@ -688,4 +423,104 @@ common:
   url: https://developers.booking.com/llms.txt
 - url: https://news.booking.com/feed/
   type: Blog
-description: Seamlessly incorporate Booking.com inventory into your travel application.
+- type: WellKnown
+  url: well-known/booking-com-well-known.yml
+- type: SecurityTxt
+  url: well-known/booking-com-security.txt
+- type: AgentCard
+  url: a2a/booking-com-a2a.yml
+- type: MCPServer
+  url: mcp/booking-com-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/booking-com-tool-crosswalk.yml
+- type: LLMsTxt
+  url: llms/booking-com-llms.txt
+- type: Conventions
+  url: conventions/booking-com-conventions.yml
+- type: Packages
+  url: packages/booking-com-packages.yml
+- type: Lifecycle
+  url: lifecycle/booking-com-lifecycle.yml
+- type: Deprecation
+  url: https://developers.booking.com/connectivity/docs/deprecation-policy/deprecation-and-sunsetting
+- type: StatusPage
+  url: https://developers.booking.com/demand/docs/additional-services/status-api/about
+- type: Security
+  url: security/booking-com-vulnerability-disclosure.yml
+- type: Compliance
+  url: security/booking-com-trust-center.yml
+- type: Conformance
+  url: conformance/booking-com-conformance.yml
+- type: Webhooks
+  url: asyncapi/booking-com-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Sandbox
+  url: sandbox/booking-com-sandbox.yml
+- type: ChangeLog
+  url: changelog/booking-com-changelog.yml
+- type: Plans
+  url: plans/booking-com-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/booking-com-rate-limits.yml
+- type: ErrorCatalog
+  url: errors/booking-com-problem-types.yml
+- type: DeclineCodes
+  url: errors/booking-com-decline-codes.yml
+- type: DataModel
+  url: data-model/booking-com-data-model.yml
+- type: FinOps
+  url: finops/booking-com-finops.yml
+- type: Rules
+  url: rules/booking-com-jsonschema-spectral-rules.yml
+- type: APIReference
+  url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+- type: GettingStarted
+  url: https://developers.booking.com/demand/docs/getting-started/overview
+- type: Support
+  url: https://connectivity.booking.com/s/article/Contact-Us
+- type: SignUp
+  url: https://www.booking.com/affiliate-program/v2/index.html
+description: 'Booking.com is the world''s largest online travel agency, part of Booking Holdings, listing more than
+  28 million accommodation options plus car rentals, flights, attractions and airport transfers in over 60,000 destinations.
+  It runs two distinct API programmes. The Demand API serves affiliate partners who want to search, price and book
+  Booking.com inventory inside their own product; the Connectivity platform serves the supply side - channel managers,
+  property management systems and hotel groups keeping rooms, rates, availability, content, reservations and payouts
+  in sync. Twenty OpenAPI descriptions covering 210 operations are published through the developer portal, and the
+  Connectivity estate additionally speaks OpenTravel Alliance (OTA) and Booking.com''s own B.XML message formats.
+  Both programmes are credentialed: keys come from the Affiliate Partner Centre or from a machine account in the
+  Connectivity Portal, and no API host answers an anonymous request.'
+tags:
+- Travel
+- Hospitality
+- Accommodation
+- Booking
+- Car Rental
+- Payments
+- Connectivity
+- Marketplace
+- OTA
+- Attractions
+created: '2026-05-03'
+maintainers:
+- FN: API Evangelist
+  email: info@apievangelist.com
+x-enrichment:
+  date: '2026-09-17'
+  status: enriched
+  artifacts_added: 59
+  pass: local-v3
+x-coverage:
+  state: covered
+  reason: contract-discovery-succeeded
+  detail: Twenty provider-authored OpenAPI descriptions (210 operations) were retrieved from Booking.com's own documentation
+    MCP server at https://developers.booking.com/mcp, which is the only public channel that serves them - the same
+    files 404 when fetched directly and every API host answers 401 anonymously.
+  evidence:
+  - url: https://developers.booking.com/mcp
+    status: 200
+  - url: https://developers.booking.com/.well-known/agent-card.json
+    status: 200
+  - url: https://demandapi.booking.com/openapi.json
+    status: 401
+  checked: '2026-09-17'
