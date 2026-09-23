@@ -3,40 +3,46 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
 provider: Booking.com
 providerId: booking-com
+generated: '2026-09-17'
+method: searched
+source: https://www.booking.com/affiliate-program/v2/index.html
+docs:
+- https://www.booking.com/affiliate-program/v2/index.html
+- https://connect.booking.com/
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-reconciled: true
+modified: '2026-09-17'
+plan_count: 0
+description: >-
+  Booking.com publishes no API plans, no tiers, no quotas and no prices. Both programmes are
+  revenue-share rather than subscription, and the rates are contractual rather than published. The
+  affiliate programme (Demand API) is free to join through the CJ affiliate network and pays a
+  commission on qualified bookings, with the commission rate not stated on the public page. The
+  Connectivity programme (supply APIs) requires an approved property or channel-manager relationship and
+  is settled through Booking.com's commission on bookings. Neither page names a figure, so plan_count is
+  0 rather than a tier list.
+access_models:
+- name: Affiliate Partner programme (Demand API)
+  gate: registration through an affiliate network (CJ), free to join
+  commercial_model: commission on qualified bookings
+  published_rate: false
+  signup: https://www.booking.com/affiliate-program/v2/index.html
+  note: >-
+    Registration is self-serve and free; the page states "Join us - it's free and easy" and "Earn a
+    commission on qualified bookings made through your integrations" without naming a percentage.
+    API keys are generated afterwards in the Affiliate Partner Centre.
+- name: Connectivity Partner programme (supply APIs)
+  gate: approved connectivity provider / property manager relationship
+  commercial_model: Booking.com commission per booking on the properties connected
+  published_rate: false
+  signup: https://connect.booking.com/
+plans: []
+notes:
+- >-
+  This is an honest zero, not a gap in our search. The pricing surface exists and is public; it simply
+  contains no numbers. Recording an invented tier here would misrepresent a commission business as a
+  subscription one.
 tags:
-  - Travel / Hospitality
-  - Enterprise
-  - B2B
-description: Booking.com does not publish public API pricing. Access is via partner/B2B contracts negotiated
-  through the provider's enterprise sales team. Booking.com Connectivity APIs require Hotel Manager/Connectivity
-  Partner approval; commission per booking.
-sources:
-  - https://connect.booking.com/
-plans:
-  - id: booking-com-partner
-    name: Partner / B2B Contract
-    type: enterprise
-    description: Custom pricing through enterprise sales / partner program.
-    entries:
-      - label: Annual contract (custom)
-        name: annual
-        type: subscription
-        metric: year
-        limit: -1
-        timeFrame: year
-        geo: global
-        unit: 1
-        price: custom
-        userMultiplied: false
-    elements:
-      - name: Negotiated contracts
-      - name: Volume discounts
-      - name: Service-level agreements
-      - name: Dedicated account team
-      - name: 'Partner program: https://connect.booking.com/'
+- Travel
+- Hospitality
+- Affiliate
+- Enterprise

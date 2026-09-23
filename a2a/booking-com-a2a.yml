@@ -1,0 +1,70 @@
+generated: '2026-09-17'
+method: probed
+source: https://developers.booking.com/.well-known/agent-card.json
+name: Booking.com Developer Documentation agent card
+summary: >-
+  Booking.com serves a real A2A Agent Card from its developer portal host. The card advertises the
+  documentation agent and, through an MCP extension, the anonymous documentation MCP server at
+  https://developers.booking.com/mcp. No agent card is served on www.booking.com or on any API host
+  (demandapi.booking.com answers 401 on every path including /.well-known/*).
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: developers.booking.com
+card: a2a/booking-com-agent-card.json
+x-evidence:
+  fetched: '2026-09-17'
+  url: https://developers.booking.com/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+grade: conformant
+grade_basis: >-
+  A2A 1.0.0 hard checks all pass - capabilities is an object, protocolVersion is present ("0.3.0"),
+  and skills is an array. The optional fields preferredTransport, defaultInputModes and
+  defaultOutputModes are all present as well.
+card_facts:
+  name: Developer Documentation
+  url: https://developers.booking.com/a2a
+  documentationUrl: https://developers.booking.com/
+  version: 0.0.1
+  protocolVersion: 0.3.0
+  preferredTransport: HTTP+JSON
+  streaming: false
+  pushNotifications: false
+  skills_declared: 0
+  extensions:
+  - uri: https://modelcontextprotocol.io
+    params_url: https://developers.booking.com/mcp
+deviations:
+- id: empty-skills-array
+  detail: >-
+    skills is an empty array. The card is structurally conformant but advertises no skill, so an agent
+    reading only the card learns nothing it can invoke; the invocable surface is reached through the
+    MCP extension instead.
+- id: a2a-endpoint-not-served
+  detail: >-
+    The card's own url, https://developers.booking.com/a2a, returned HTTP 404 with an HTML body when
+    probed on 2026-09-17. The A2A transport the card names is not reachable; the MCP extension endpoint
+    is.
+  evidence:
+    url: https://developers.booking.com/a2a
+    http_status: 404
+- id: pre-release-version
+  detail: 'Card version is 0.0.1, self-marking as a first-cut publication.'
+probed_hosts:
+- host: developers.booking.com
+  path: /.well-known/agent-card.json
+  status: 200
+  result: real AgentCard object
+- host: developers.booking.com
+  path: /.well-known/agent.json
+  status: 404
+  result: HTML 404 shell
+- host: www.booking.com
+  path: /.well-known/agent-card.json
+  status: 404
+  result: HTML 404 shell
+- host: demandapi.booking.com
+  path: /.well-known/agent-card.json
+  status: 401
+  result: API host rejects every anonymous request

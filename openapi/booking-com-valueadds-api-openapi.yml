@@ -1,0 +1,256 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Value Adds Catalog API
+  description: 'This API provides a list of value adds available for properties. The response can be in JSON or XML format
+    depending on the `Accept` header.
+
+    The value adds include dynamic attributes such as currency, amount, and more.
+
+    '
+  contact:
+    name: ''
+    url: ''
+    email: ''
+servers:
+- url: https://supply-xml.booking.com
+  description: Test using live endpoint
+tags:
+- name: About Try it
+  description: "Learn how to effectively use the Try it feature in the Value Adds Catalog API documentation.\n\nUse the **Try\
+    \ it** feature to send sample requests to API endpoints directly from the developer portal. In the **Mock (schema only)**\
+    \ environment, Try it returns schema-driven mock responses or pre-built example responses. In the **Production** environment,\
+    \ it sends the request to the live API and returns dynamic responses from your selected test property.\n\n## Environment\n\
+    \nYou can select between two different environments (top right corner in the UI):\n\n**Mock (schema only)** (default):\n\
+    - Helps to understand the response data schema\n- Recommended for all write operations (POST, PUT, DELETE)\n- Environment\
+    \ for testing without affecting live/test data\n\n**Test live endpoint**:\n- Make sure to use only test properties.\n\
+    - Changes will affect your test property data\n- Requires valid credentials\n- Same API structure as production\n\n##\
+    \ Request\n\nYou can click on any unresolved placeholders to add a value or edit an existing placeholder value.\n\nThe\
+    \ portal loads the default request body. Where the specification supports multiple request body examples (for example:\
+    \ Rooms API POST endpoint), you can choose a different request body from the drop-down list.\n\nSome helpful pointers\
+    \ before running a request:\n\n- **Authentication** (when using live endpoint): Configure your authentication headers\n\
+    \  - API Key or OAuth token as required. Use the **Environments** tab.\n  - Make sure to manage separate machine accounts\
+    \ for test vs. properties in production.\n  - Ensure credentials match your selected environment.\n\n- **Parameters**:\
+    \ Fill in required parameters\n  - Path parameters (like `propertyId`)\n  - Query parameters (like `language_code`)\n\
+    \  - Request body for `POST/PUT` operations\n\n- **Execute**: Click **Send** to send the request\n  - The request is sent\
+    \ to the selected environment\n  - When sending requests to the live endpoint, real HTTP request is made to the API\n\n\
+    ## Response\n\nThe Try it feature provides comprehensive response information to the extent supported by the Open API\
+    \ specification:\n\n### Status code\n- **2xx**: Success responses (200)\n- **4xx**: Client errors (400 Bad Request, 401\
+    \ Unauthorized, 404 Not Found)\n- **5xx**: Server errors (500 Internal Server Error)\n\n### Response body\n- JSON formatted\
+    \ response data\n\nIf the returned response, by default, is unformatted, select the supported Response body format in\
+    \ the UI.\n\n### Response headers\n- Content-Type, Content-Length.\n\n## Environments\n\nThe **Environments** tab allows\
+    \ you to create variables specific to the environment. For example, you can add a variable to hold the value of the `property-id`\
+    \ placeholder. The portal inserts the respective value depending on the environment at the time of sending the request.\n\
+    \n### Variables\n\nMost of the endpoints (especially POST/PUT/DELETE) require you to add a path or query parameter before\
+    \ sending the request. The Open API specification marks these parameters with placeholder tags. For example, {{`property_id`}}.\
+    \ You can use the **Environments** tab to manage the values for these placeholders as variables.\n\n#### Path parameters\n\
+    - **Required**: Must be provided to make the request\n- **Type validation**: Ensures correct data types (integer, string,\
+    \ etc.)\n- **Example**: No path parameters for this API\n\n#### Query parameters\n- **Optional**: Usually have default\
+    \ values\n- **Example**: No query parameters for this API\n\n#### Request body\n- **Schema validation**: Follows OpenAPI\
+    \ schema definitions\n- **Example data**: Prepopulated with sample values\n\n## Best practices\n\nThis section provides\
+    \ some basic practice guidelines.\n\n### Authentication\n\n- Always use separate machine accounts for test properties\
+    \ vs. properties in production.\n- When testing with production endpoint, make sure to use only test properties.\n\n###\
+    \ For Read operations (GET)\n- Safe to test in any environment\n- Use valid IDs that exist in your system\n- Check response\
+    \ structure for integration planning\n\n### For Write operations (POST, PUT)\n- **Always use Mock (schema only) environment\
+    \ first**\n- Verify request payload structure\n- Check response for success confirmation\n- Test error scenarios with\
+    \ invalid data\n\n### For Delete operations (DELETE)\n- **Preferable to use Mock (schema only) environment only**\n- Understand\
+    \ the operation is irreversible\n- Have backup data when testing using test properties\n\n## Troubleshooting\n\n### Common\
+    \ issues\n\n**401 Unauthorized**\n- Check authentication credentials\n- Verify API key is valid and not expired\n- Ensure\
+    \ credentials match the selected environment\n\n**400 Bad Request**\n- Validate request payload against schema\n- Check\
+    \ required fields are provided\n- Verify data types match specification\n\n**404 Not Found**\n- Confirm the resource ID\
+    \ exists\n- Check the endpoint URL is correct\n- Verify you have access to the resource\n\n### Getting help\n\nIf you\
+    \ encounter issues:\n1. Check the response error message for details\n2. Verify your request matches the API specification\n\
+    3. Contact the Connectivity Team for support\n\n---\n\n*This documentation applies to all endpoints in the Value Adds\
+    \ Catalog API. The Try it feature provides a consistent testing experience across all operations.*"
+- name: Value Adds
+  description: Retrieve catalog of value adds available for properties with dynamic attributes
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Value Adds
+- name: Documentation
+  tags:
+  - About Try it
+paths:
+  /valueadds/properties/catalog:
+    get:
+      tags:
+      - Value Adds
+      summary: Retrieve catalog of value adds for properties
+      description: 'This endpoint returns a list of value adds, including dynamic attributes, in either JSON or XML format.
+        The response format is determined by the `Accept` header.
+
+        '
+      operationId: getValueAddsCatalog
+      parameters:
+      - name: Accept
+        in: header
+        description: 'Specifies the response format. If omitted, JSON is returned by default.
+
+          '
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/xml
+      responses:
+        '200':
+          description: Successful response with a list of value adds.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValueAdd'
+              examples:
+                default:
+                  value:
+                  - id: 2001
+                    category: Food and Beverage (F&B)
+                    type: Credit or discount
+                    name: Daily Credit Per adult - No Daily Accrual
+                    attributes:
+                    - name: CurrencyCode
+                      dataType: string
+                      description: Specifies the currency code for the selected amount.
+                      required: false
+                    - name: Amount
+                      dataType: double
+                      description: Specifies an estimated worth of the value add included in the rate.
+                      required: true
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  valueAdds:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ValueAddXML'
+              examples:
+                default:
+                  value:
+                    valueAdds:
+                    - valueAdd:
+                        id: 2001
+                        category: Food and Beverage (F&B)
+                        type: Credit or discount
+                        name: Daily Credit Per adult - No Daily Accrual
+                        attributes:
+                        - attribute:
+                            name: CurrencyCode
+                            dataType: string
+                            description: Specifies the currency code for the selected amount.
+                            required: false
+                        - attribute:
+                            name: Amount
+                            dataType: double
+                            description: Specifies an estimated worth of the value add included in the rate. The `Amount`
+                              attribute is used only for display purposes and to show the perceived worth of the specific
+                              value-added service or product.
+                            required: true
+        '406':
+          description: Unsupported media type. The server only supports JSON and XML responses.
+          content:
+            application/json:
+              examples:
+                default:
+                  value:
+                    message: Unsupported media type. Accept header must be 'application/json' or 'application/xml'.
+            application/xml:
+              examples:
+                default:
+                  value:
+                    error: Unsupported media type. Accept header must be 'application/json' or 'application/xml'.
+        '500':
+          description: Internal Server Error
+      servers:
+      - url: https://supply-xml.booking.com
+        description: Production server
+components:
+  schemas:
+    ValueAdd:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the value add.
+          example: 2001
+        category:
+          type: string
+          description: Category of the value add (e.g., Food and Beverage, Spa).
+          example: Food and Beverage (F&B)
+        type:
+          type: string
+          description: Type of value add, such as Credit or Discount.
+          example: Credit or discount
+        name:
+          type: string
+          description: Name of the value add.
+          example: Daily Credit Per adult - No Daily Accrual
+        attributes:
+          type: array
+          description: List of dynamic attributes for the value add.
+          items:
+            $ref: '#/components/schemas/Attribute'
+    Attribute:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the attribute.
+          example: CurrencyCode
+        dataType:
+          type: string
+          description: Data type of the attribute (e.g., string, double).
+          example: string
+        description:
+          type: string
+          description: Detailed description of the attribute.
+          example: Specifies the currency code for the selected amount.
+        required:
+          type: boolean
+          description: Indicates if the attribute is required.
+          example: false
+    ValueAddXML:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the value add.
+          example: 2001
+        category:
+          type: string
+          description: Category of the value add (e.g., Food and Beverage, Spa).
+          example: Food and Beverage (F&B)
+        type:
+          type: string
+          description: Type of value add, such as Credit or Discount.
+          example: Credit or discount
+        name:
+          type: string
+          description: Name of the value add.
+          example: Daily Credit Per adult - No Daily Accrual
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeXML'
+    AttributeXML:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the attribute.
+          example: CurrencyCode
+        dataType:
+          type: string
+          description: Data type of the attribute (e.g., string, double).
+          example: string
+        description:
+          type: string
+          description: Detailed description of the attribute.
+          example: Specifies the currency code for the selected amount.
+        required:
+          type: string
+          description: Indicates if the attribute is required (true/false).
+          example: false

@@ -1,0 +1,139 @@
+generated: '2026-09-17'
+method: derived
+source: >-
+  Derived from the 20 OpenAPI descriptions in openapi/ and searched against
+  https://developers.booking.com/connectivity/docs, https://trust.booking.com/ and the Demand API
+  payments and error-handling guides.
+name: Booking.com standards conformance
+summary: >-
+  Booking.com's cross-cutting web-API conformance is thin - no OAuth 2.0, no OIDC, no RFC 9457, no RFC
+  8594 headers, no RFC 9331 rate-limit headers. Its DOMAIN conformance is the opposite: the Connectivity
+  platform is built on the OpenTravel Alliance (OTA) message set and carries OTA code mappings inside its
+  JSON contracts, which is exactly the signature that lets a channel manager already speaking OTA connect
+  without a bespoke Booking.com connector.
+conformance:
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No oauth2 securityScheme in any of the 20 specs; /.well-known/oauth-authorization-server returns 404
+    ({"error":"not_found"}) on developers.booking.com and 404 on booking.com. Both programmes use
+    portal-issued bearer tokens instead.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on booking.com, www.booking.com and developers.booking.com.
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    No application/problem+json media type anywhere in the 20 specs. The Demand API uses a
+    {request_id, errors[{id,message}]} envelope; Connectivity JSON APIs use meta/data/errors/warnings.
+- id: rfc8594
+  conforms: partial
+  evidence: >-
+    Booking.com's published deprecation policy states that a deprecated endpoint returns a warning in the
+    response HEADER and a partially deprecated endpoint returns it in the body warnings array, and that a
+    sunset endpoint returns 400. The behaviour is RFC 8594 in intent, but neither the Sunset nor the
+    Deprecation header is named in the policy or declared in any spec, so a generic client will not see
+    it. Source https://developers.booking.com/connectivity/docs/deprecation-policy/deprecation-and-sunsetting
+- id: rfc9331-ratelimit-headers
+  conforms: false
+  evidence: >-
+    No RateLimit-* or X-RateLimit-* header is documented or declared. Only Retry-After appears, on the
+    Reconciliation API 429 response.
+- id: rfc9116-security-txt
+  conforms: partial
+  evidence: >-
+    https://www.booking.com/.well-known/security.txt returns 200 with Contact and Preferred-Languages,
+    but Expires is 2025-12-31T23:00:00.000Z - in the past at probe time (2026-09-17), which RFC 9116
+    treats as a stale file.
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No client-supplied idempotency key on any write. See conventions/booking-com-conventions.yml
+    idempotency.coverage = none.
+- id: pagination
+  conforms: partial
+  evidence: >-
+    A `rows` page-size parameter plus opaque page tokens (invalid_token / expired_token /
+    token_endpoint_mismatch error ids) on Demand API list endpoints. No standard pagination profile.
+- id: json-schema
+  conforms: true
+  evidence: >-
+    Four of the twenty specs are OpenAPI 3.1.0 (JSON Schema 2020-12 aligned): demand 3.1, demand 3.2,
+    demand 3.2-Beta, facilities-remote-sync, property-health, rooms-bulk, status. The remaining thirteen
+    are OpenAPI 3.0.1/3.0.3.
+domain_standards:
+- id: opentravel-alliance-ota
+  name: OpenTravel Alliance (OTA) message specification, 2003B schema family
+  conforms: true
+  role: primary domain standard for hotel connectivity
+  evidence:
+  - kind: contract-declared code mappings
+    detail: >-
+      property-api.json declares PropertyCategoryMetaEntry.code_ota ("If applicable, the OTA code for
+      this Booking.com category") and PropertyCategoryMetaEntry.additional_ota_mappings ("additional OTA
+      codes that will remap to this category"), plus an ApiErrorOTA schema.
+    location: openapi/booking-com-property-api-openapi.yml#/components/schemas/PropertyCategoryMetaEntry
+  - kind: contract-declared code mappings
+    detail: >-
+      facilities-api declares PropertyFacilityMetaSummary.ota_hotel_amenity_type ("OTA HAC
+      (HotelAmenityCode)") and RoomFacilityMetaSummary.ota_room_amenity_type ("OTA RMA (Room Amenity Type
+      Code)"). The remote-sync variant carries the same fields.
+    location: openapi/booking-com-facilities-api-openapi.yml#/components/schemas/PropertyFacilityMetaSummary
+  - kind: contract-declared code mappings
+    detail: >-
+      charges-api declares ChargeTypeMetaEntry.ota_fee_tax_types ("Legacy OTA Fee Tax Type Codes (FTT)").
+    location: openapi/booking-com-charges-api-openapi.yml#/components/schemas/ChargeTypeMetaEntry
+  - kind: OTA message endpoints
+    detail: >-
+      The XML side of the Connectivity platform speaks OTA message pairs directly -
+      OTA_HotelResNotifRQ/RS, OTA_HotelResModifyNotifRQ/RS, OTA_HotelProductNotifRQ/RS,
+      OTA_HotelRatePlanNotifRQ/RS, OTA_HotelAvailNotif, OTA_HotelInvNotif,
+      OTA_HotelDescriptiveContentNotif, OTA_HotelDescriptiveInfo, OTA_HotelSummaryNotif - alongside
+      Booking.com's own B.XML schema. Twenty-one distinct OTA_* message names appear in
+      https://developers.booking.com/llms.txt.
+    location: https://developers.booking.com/connectivity/docs
+  note: >-
+    This is the reward-case the domain_standard_conformance check exists for: a channel manager or PMS
+    that already emits OTA_HotelResNotifRQ can integrate Booking.com reservations without a bespoke
+    connector, and Booking.com's newer JSON contracts keep carrying the OTA code space forward rather
+    than abandoning it.
+- id: bxml
+  name: Booking.com B.XML
+  conforms: true
+  role: vendor schema sitting alongside OTA
+  evidence: >-
+    B.XML is Booking.com's own XML schema for availability, rates, reservations, content and reporting;
+    the Connectivity docs pair every B.XML endpoint with its OTA equivalent. Vendor-specific, recorded
+    here for completeness rather than as an industry standard.
+- id: psd2-sca
+  name: PSD2 Strong Customer Authentication
+  conforms: true
+  evidence: >-
+    The Demand API returns payment_refused_sca_required when SCA data is missing, invalid or expired, and
+    documents a 3-D Secure SCA token flow at
+    https://developers.booking.com/demand/docs/payments/models/booking-collects#credit-card--sca-token-3d-secure.
+    See errors/booking-com-decline-codes.yml.
+- id: pci-dss
+  name: PCI DSS
+  conforms: true
+  evidence: >-
+    The Connectivity Reservations API is documented as operating over a PCI-compliant secure endpoint,
+    and https://trust.booking.com/ names PCI DSS. See security/booking-com-trust-center.yml.
+- id: gdpr
+  name: GDPR
+  conforms: true
+  evidence: https://trust.booking.com/ and https://www.booking.com/content/privacy.html
+- id: iso8601
+  conforms: true
+  evidence: Date-time fields across the Demand API declare format date-time with ISO 8601 examples.
+not_applicable:
+- fhir
+- fapi
+- scim
+- odata
+- hl7v2
+- x12
+- iso20022
+- openrtb
+- activitypub
+- oai-pmh

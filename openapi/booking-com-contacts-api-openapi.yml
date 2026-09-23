@@ -1,0 +1,418 @@
+openapi: 3.0.1
+info:
+  title: Contacts endpoint
+  description: Contains Contacts endpoint specification.
+  contact: {}
+  license: {}
+  version: '1.0'
+servers:
+- url: https://supply-xml.booking.com/
+  description: Test using live endpoint
+tags:
+- name: About Try it
+  description: "Learn how to effectively use the Try it feature in the Contacts API documentation.\n\nUse the **Try it** feature\
+    \ to send sample requests to API endpoints directly from the developer portal. In the **Mock (schema only)** environment,\
+    \ Try it returns schema-driven mock responses or pre-built example responses. In the **Production** environment, it sends\
+    \ the request to the live API and returns dynamic responses from your selected test property.\n\n## Environment\n\nYou\
+    \ can select between two different environments (top right corner in the UI):\n\n**Mock (schema only)** (default):\n-\
+    \ Helps to understand the response data schema\n- Recommended for all write operations (POST, PUT, DELETE)\n- Environment\
+    \ for testing without affecting live/test data\n\n**Test live endpoint**:\n- Make sure to use only test properties.\n\
+    - Changes will affect your test property data\n- Requires valid credentials\n- Same API structure as production\n\n##\
+    \ Request\n\nYou can click on any unresolved placeholders to add a value or edit an existing placeholder value.\n\nThe\
+    \ portal loads the default request body. Where the specification supports multiple request body examples (for example:\
+    \ Rooms API POST endpoint), you can choose a different request body from the drop-down list.\n\nSome helpful pointers\
+    \ before running a request:\n\n- **Authentication** (when using live endpoint): Configure your authentication headers\n\
+    \  - API Key or OAuth token as required. Use the **Environments** tab.\n  - Make sure to manage separate machine accounts\
+    \ for test vs. properties in production.\n  - Ensure credentials match your selected environment.\n\n- **Parameters**:\
+    \ Fill in required parameters\n  - Path parameters (like `propertyId`)\n  - Query parameters (like `language_code`)\n\
+    \  - Request body for `POST/PUT` operations\n\n- **Execute**: Click **Send** to send the request\n  - The request is sent\
+    \ to the selected environment\n  - When sending requests to the live endpoint, real HTTP request is made to the API\n\n\
+    ## Response\n\nThe Try it feature provides comprehensive response information to the extent supported by the Open API\
+    \ specification:\n\n### Status code\n- **2xx**: Success responses (200)\n- **4xx**: Client errors (400 Bad Request, 401\
+    \ Unauthorized, 404 Not Found)\n- **5xx**: Server errors (500 Internal Server Error)\n\n### Response body\n- JSON formatted\
+    \ response data\n\nIf the returned response, by default, is unformatted, select the supported Response body format in\
+    \ the UI.\n\n### Response headers\n- Content-Type, Content-Length.\n\n## Environments\n\nThe **Environments** tab allows\
+    \ you to create variables specific to the environment. For example, you can add a variable to hold the value of the `property-id`\
+    \ placeholder. The portal inserts the respective value depending on the environment at the time of sending the request.\n\
+    \n### Variables\n\nMost of the endpoints (especially POST/PUT/DELETE) require you to add a path or query parameter before\
+    \ sending the request. The Open API specification marks these parameters with placeholder tags. For example, {{`property_id`}}.\
+    \ You can use the **Environments** tab to manage the values for these placeholders as variables.\n\n#### Path parameters\n\
+    - **Required**: Must be provided to make the request\n- **Type validation**: Ensures correct data types (integer, string,\
+    \ etc.)\n- **Example**: `propertyId` in `/properties/{propertyId}/contacts`\n\n#### Query parameters\n- **Optional**:\
+    \ Usually have default values\n- **Example**: `language_code` with `en-us` as the default value\n\n#### Request body\n\
+    - **Schema validation**: Follows OpenAPI schema definitions\n- **Example data**: Prepopulated with sample values\n\n##\
+    \ Best practices\n\nThis section provides some basic practice guidelines.\n\n### Authentication\n\n- Always use separate\
+    \ machine accounts for test properties vs. properties in production.\n- When testing with production endpoint, make sure\
+    \ to use only test properties.\n\n### For Read operations (GET)\n- Safe to test in any environment\n- Use valid IDs that\
+    \ exist in your system\n- Check response structure for integration planning\n\n### For Write operations (POST, PUT)\n\
+    - **Always use Mock (schema only) environment first**\n- Verify request payload structure\n- Check response for success\
+    \ confirmation\n- Test error scenarios with invalid data\n\n### For Delete operations (DELETE)\n- **Preferable to use\
+    \ Mock (schema only) environment only**\n- Understand the operation is irreversible\n- Have backup data when testing using\
+    \ test properties\n\n## Troubleshooting\n\n### Common issues\n\n**401 Unauthorized**\n- Check authentication credentials\n\
+    - Verify API key is valid and not expired\n- Ensure credentials match the selected environment\n\n**400 Bad Request**\n\
+    - Validate request payload against schema\n- Check required fields are provided\n- Verify data types match specification\n\
+    \n**404 Not Found**\n- Confirm the resource ID exists\n- Check the endpoint URL is correct\n- Verify you have access to\
+    \ the resource\n\n### Getting help\n\nIf you encounter issues:\n1. Check the response error message for details\n2. Verify\
+    \ your request matches the API specification\n3. Contact the Connectivity Team for support\n\n---\n\n*This documentation\
+    \ applies to all endpoints in the Contacts API. The Try it feature provides a consistent testing experience across all\
+    \ operations.*"
+- name: Contacts
+  description: Manage contact information for properties including contact persons, addresses, phone numbers, and email addresses.
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Contacts
+- name: Documentation
+  tags:
+  - About Try it
+paths:
+  /properties/{propertyId}/contacts:
+    get:
+      tags:
+      - Contacts
+      summary: Read all Contact(s) for a Property
+      operationId: getAllContacts
+      parameters:
+      - name: Accept-Version
+        in: header
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        description: The Property ID of which you wish to retrieve the data
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: no_language_fallback
+        in: query
+        description: Controls language fallback for GET contacts response. If omitted or set to `0` (default), the API falls
+          back to `en-gb` when preferred language is not set. If set to `1`, fallback is skipped and can return `null` for
+          the `language_code`.
+        required: false
+        schema:
+          type: string
+          default: '0'
+          enum:
+          - '0'
+          - '1'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactInfoResponse'
+    put:
+      tags:
+      - Contacts
+      summary: Overlay multiple Contacts for a Property
+      description: Contacts not sent will be reset/deleted.
+      operationId: overwriteContacts
+      parameters:
+      - name: Accept-Version
+        in: header
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        description: The Property ID of which you wish to update the data
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactInfo'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+components:
+  schemas:
+    ApiError:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          $ref: '#/components/schemas/ObjectNode'
+    Contact:
+      required:
+      - contact_person
+      - contact_profiles
+      - email
+      - phones
+      type: object
+      properties:
+        contact_profiles:
+          type: array
+          description: 'Type of Contact Profiles. Each value corresponds with a similarly named heading on the Contacts page.
+
+            Validation: Must be one of provided values.
+
+            [Current Documentation](/connectivity/docs/api-reference/contactinfo/#contactprofiletype)
+
+            DataMapping: ContactInfo/ContactProfileType'
+          items:
+            $ref: '#/components/schemas/ContactProfile'
+        address:
+          $ref: '#/components/schemas/ContactAddress'
+        contact_person:
+          $ref: '#/components/schemas/ContactPerson'
+        phones:
+          type: array
+          description: 'Validation: Cannot be null/empty
+
+            PhoneTechType 1 can have at most 3 entries.
+
+            PhoneTechType 3 and 5 can have at most 1 entry.
+
+            Extension can only be provided for PhoneTechType 1
+
+            DataMapping: ContactInfo/Phones'
+          items:
+            $ref: '#/components/schemas/ContactPhone'
+        email:
+          type: string
+          description: 'Email address for a contact person/point.
+
+            Validation: Email must be of a standard format.
+
+            [Current Documentation](/connectivity/docs/api-reference/email/)
+
+            DataMapping: ContactInfo/Emails/Email'
+      description: One Single Contact Object
+    ContactAddress:
+      required:
+      - country_code
+      - language_code
+      type: object
+      properties:
+        city_name:
+          type: string
+          description: 'The name of the city, town, or village.
+
+            Validation: We do not allow CJK Unified Ideographs
+
+            [Current Documentation: CityName](/connectivity/docs/api-reference/address/)
+
+            DataMapping: ContactInfo/Addresses/CityName'
+        country_code:
+          type: string
+          description: 'The country code of the contact address.
+
+            Validation: One of [Two-letter country code](/connectivity/docs/b_xml-countries/).
+
+            Country codes follow ISO 3166
+
+            [Current Documentation: CountryName](/connectivity/docs/api-reference/address)
+
+            DataMapping: ContactInfo/Addresses/CountryName'
+        postal_code:
+          type: string
+          description: 'Postal/zip code.
+
+            Validation: We validate against country specific post code formats.
+
+            [Current Documentation: PostalCode](/connectivity/docs/api-reference/address)
+
+            DataMapping: ContactInfo/Addresses/PostalCode'
+        address_line:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: 'The full street name and number.
+
+            Should not contain abbreviations (such as "Rd." for "Road") and should not exceed 255 characters.
+
+            Validations: Minimum 1 at most 255 characters. We also do not allow CJK Unified Ideographs.
+
+            [Current Documentation: AddressLine](/connectivity/docs/api-reference/address)
+
+            DataMapping: ContactInfo/Addresses/AddressLine'
+        language_code:
+          type: string
+          description: 'The language code for the address details.
+
+            Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            Default: en
+
+            [Current Documentation: Language](/connectivity/docs/api-reference/address)
+
+            DataMapping: ContactInfo/Addresses/Language'
+    ContactInfo:
+      required:
+      - contacts
+      type: object
+      properties:
+        contacts:
+          type: array
+          description: 'General contact type is mandatory for setting up the property.
+
+            Validation: ContactProfileType entries cannot be repeated within the same array.
+
+            General contact can have only 1 entry in total.
+
+            [Current Documentation: ContactInfo Root Object](/connectivity/docs/api-reference/contactinfo)'
+          items:
+            $ref: '#/components/schemas/Contact'
+      description: List of all contacts
+    ContactInfoResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ContactInfo'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ContactPerson:
+      required:
+      - language_code
+      - name
+      type: object
+      properties:
+        gender:
+          pattern: male|female
+          type: string
+          description: 'Contact person''s gender.
+
+            Validation: One of valid value.
+
+            [Current Documentation: Gender](/connectivity/docs/api-reference/name)
+
+            DataMapping: ContactInfo/Names/Gender'
+          enum:
+          - male, female
+        name:
+          type: string
+          description: 'Contact person''s given name/full name.
+
+            Validation: Cannot be empty or null.
+
+            [Current Documentation: GivenName](/connectivity/docs/api-reference/name)
+
+            DataMapping: ContactInfo/Names/GivenName'
+        job_title:
+          type: string
+          description: 'The contact''s Job Title.
+
+            Validation: One of valid [Booking.com Job Title Code](/connectivity/docs/codes-bcjt/).
+
+            Default: Unknown
+
+            [Current Documentation: JobTitle](/connectivity/docs/api-reference/name)
+
+            DataMapping: ContactInfo/Names/JobTitle'
+        language_code:
+          type: string
+          description: 'The contact''s spoken language.
+
+            Validation: One of valid language codes provided [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            [Current Documentation: Language](/connectivity/docs/api-reference/name)
+
+            DataMapping: ContactInfo/Names/Language'
+      description: 'Name details for a contact person.
+
+        [Current Documentation](/connectivity/docs/api-reference/name)
+
+        '
+    ContactPhone:
+      required:
+      - phone_number
+      - phone_tech_type
+      type: object
+      properties:
+        phone_number:
+          type: string
+          description: 'The international phone number.
+
+            Validation: We validate for country specific formats for the number against the address provided.
+
+            [Current Documentation: PhoneNumber](/connectivity/docs/api-reference/phone/)
+
+            DataMapping: ContactInfo/Phones/PhoneNumber'
+        phone_tech_type:
+          type: integer
+          description: 'The type of phone line/device.
+
+            Validations: One of a valid value.
+
+            [Current Documentation: PhoneTechType](/connectivity/docs/api-reference/phone)
+
+            DataMapping: ContactInfo/Phones/PhoneTechType'
+          format: int32
+          enum:
+          - 1
+          - 3
+          - 5
+        extension:
+          type: string
+          description: 'The extension number that must be dialled in addition to the @PhoneNumber.
+
+            Validation: Only accepted when @PhoneTechType= "1".
+
+            [Current Documentation: Extension](/connectivity/docs/api-reference/phone/)
+
+            DataMapping: ContactInfo/Phones/Extension'
+      description: 'Phone number details for a contact person/point. Can be more than 1.
+
+        [Current Documentation](/connectivity/docs/api-reference/phone)'
+    ContactProfile:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Type of Contact Profile. Each value corresponds with a similarly named heading on the Contacts page.
+
+            [Current Documentation](/connectivity/docs/api-reference/contactinfo/#contactprofiletype)
+
+            DataMapping: ContactInfo/ContactProfileType'
+          enum:
+          - general
+          - reservations
+          - invoices
+          - availability
+          - site_content
+          - parity
+          - requests
+          - central_reservations
+      description: One Single Contact Profile Object
+    ObjectNode:
+      type: object
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+    ApiResponse:
+      type: object
+      properties:
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'

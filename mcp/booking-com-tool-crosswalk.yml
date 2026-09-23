@@ -1,0 +1,78 @@
+generated: '2026-09-17'
+method: derived
+source: >-
+  MCP tools/list at https://developers.booking.com/mcp (probed 2026-09-17) bound against the 20 OpenAPI
+  descriptions in openapi/ retrieved from the same server.
+name: Booking.com MCP to REST crosswalk
+summary: >-
+  Booking.com's MCP server is a documentation server, not a product server. Not one MCP tool binds to a
+  Demand, Connectivity, metasearch or payments operation: the tools read the API catalogue ABOUT those
+  operations. The crosswalk is therefore almost entirely rest_only - 210 published operations with no
+  agent-callable tool in front of them - and that gap is the finding.
+surfaces:
+  openapi:
+    count: 20
+    location: openapi/
+    gated: true
+    note: >-
+      Every server URL requires partner credentials. demandapi.booking.com answers 401 to every
+      anonymous request; supply-xml.booking.com and payments-api.booking.com are Connectivity-partner
+      surfaces.
+  mcp:
+    url: https://developers.booking.com/mcp
+    gated: false
+    note: Anonymous. Read-only documentation tools.
+  graphql:
+    url:
+    note: >-
+      No first-party GraphQL endpoint found. graphql/booking-com-schema.graphql in this repo is a
+      locally authored artifact, not a Booking.com publication, and is not treated as a surface here.
+crosswalk: []
+mcp_only:
+- tool: execute
+  reason: >-
+    Runs JavaScript against the docs sandbox. It has no REST counterpart - there is no public Booking.com
+    operation that evaluates code or returns documentation objects.
+- tool: describe-tools
+  reason: >-
+    Returns TypeScript signatures for the sandbox tools. Protocol introspection; no REST counterpart.
+- tool: 'sandbox: listApis'
+  reason: Reads the developer portal's API catalogue. No published REST operation exposes it.
+- tool: 'sandbox: getEndpoints'
+  reason: Reads endpoint lists out of the portal's stored OpenAPI files. No published REST operation.
+- tool: 'sandbox: getEndpointInfo'
+  reason: Reads one endpoint's full detail from the portal's stored OpenAPI files. No published REST operation.
+- tool: 'sandbox: getSecuritySchemes'
+  reason: Reads securitySchemes from the portal's stored OpenAPI files. No published REST operation.
+- tool: 'sandbox: getFullApiDescription'
+  reason: >-
+    Returns a complete OpenAPI document. This is the portal's spec-distribution channel, not a product
+    operation - and the only way the specs are publicly retrievable.
+- tool: 'sandbox: search'
+  reason: Full-text search across the documentation. No published REST operation.
+rest_only:
+  count: 210
+  note: >-
+    All 210 published operations across the 20 specs are rest_only. The highest-value unserved flows are
+    the Demand API booking path (/accommodations/search, /accommodations/availability, /orders/preview,
+    /orders/create, /orders/modify, /orders/cancel) and the Connectivity supply path (rooms, rates,
+    facilities, property, payments, reconciliation).
+  sample_operations:
+  - api: Booking.com Demand API 3.2
+    operations: ['/accommodations/search', '/accommodations/availability', '/accommodations/details',
+      '/orders/preview', '/orders/create', '/orders/modify', '/orders/cancel', '/cars/search', '/cars/details']
+  - api: Booking.com Connect API
+    operations: [streamProperties, getConversions, getHotels, getHotelAvailability, getBlockAvailability]
+  - api: Booking.com Payments API
+    operations: 7 payout and VCC operations on payments-api.booking.com
+coverage:
+  mcp_tools: 2
+  sandbox_tools: 6
+  rest_operations: 210
+  bound: 0
+  mcp_only: 8
+  rest_only: 210
+  bound_percentage: 0.0
+confidence_note: >-
+  Binding confidence is not applicable: there is nothing to bind. The MCP schemas were read live and
+  unauthenticated, so this is a complete, not a partial, reading of the tool surface.

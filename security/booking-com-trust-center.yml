@@ -1,0 +1,15 @@
+generated: '2026-09-17'
+method: searched
+probe: true
+source: https://trust.booking.com/
+url: https://trust.booking.com/
+certifications:
+- PCI DSS
+- GDPR
+evidence:
+- source: https://trust.booking.com/
+  keywords:
+  - pci dss
+  - pci-dss
+  - trust center
+  - gdpr

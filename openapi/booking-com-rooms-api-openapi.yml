@@ -1,136 +1,1220 @@
-openapi: 3.2.0
+openapi: 3.0.1
 info:
-  title: Booking.com Connectivity Content Rooms API
-  description: The Booking.com Connectivity Content API enables Connectivity Partners to register properties and modify their content directly without using the Booking.com extranet. Partners can manage facilities, rates, rooms, photos, and other property details programmatically. This API uses XML request and response formats following the OpenTravel Alliance (OTA 2003B) specification and Booking.com's B.XML schema. It is designed for property management systems, channel managers, and other connectivity solutions that need to create and maintain property listings on Booking.com at scale. Booking.com is transitioning to modular REST APIs for property management.
-  version: '2.0'
+  title: Rooms API
+  description: Contains Rooms API specification
   contact:
-    name: Booking.com Connectivity Support
-    url: https://developers.booking.com/connectivity/docs
-  termsOfService: https://www.booking.com/content/terms.html
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.2'
 servers:
-- url: https://supply-xml.booking.com
-  description: Production Server (Non-PCI)
-security:
-- basicAuth: []
+- url: https://supply-xml.booking.com/
+  description: Test using live endpoint
 tags:
-- name: Rooms
-  description: Endpoints for managing room types, room names, bed configurations, and room-level facilities.
+- name: About Try it
+  description: "Learn how to effectively use the Try it feature in the Rooms API documentation.\n\nUse the **Try it** feature\
+    \ to send sample requests to API endpoints directly from the developer portal. In the **Mock (schema only)** environment,\
+    \ Try it returns schema-driven mock responses or pre-built example responses. In the **Production** environment, it sends\
+    \ the request to the live API and returns dynamic responses from your selected test property.\n\n## Environment\n\nYou\
+    \ can select between two different environments (top right corner in the UI):\n\n**Mock (schema only)** (default):\n-\
+    \ Helps to understand the response data schema\n- Recommended for all write operations (POST, PUT, DELETE)\n- Environment\
+    \ for testing without affecting live/test data\n\n**Test live endpoint**:\n- Make sure to use only test properties.\n\
+    - Changes will affect your test property data\n- Requires valid credentials\n- Same API structure as production\n\n##\
+    \ Request\n\nYou can click on any unresolved placeholders to add a value or edit an existing placeholder value.\n\nThe\
+    \ portal loads the default request body. Where the specification supports multiple request body examples (for example:\
+    \ Rooms API POST endpoint), you can choose a different request body from the drop-down list.\n\nSome helpful pointers\
+    \ before running a request:\n\n- **Authentication** (when using live endpoint): Configure your authentication headers\n\
+    \  - API Key or OAuth token as required. Use the **Environments** tab.\n  - Make sure to manage separate machine accounts\
+    \ for test vs. properties in production.\n  - Ensure credentials match your selected environment.\n\n- **Parameters**:\
+    \ Fill in required parameters\n  - Path parameters (like `propertyId`)\n  - Query parameters (like `language_code`)\n\
+    \  - Request body for `POST/PUT` operations\n\n- **Execute**: Click **Send** to send the request\n  - The request is sent\
+    \ to the selected environment\n  - When sending requests to the live endpoint, real HTTP request is made to the API\n\n\
+    ## Response\n\nThe Try it feature provides comprehensive response information to the extent supported by the Open API\
+    \ specification:\n\n### Status code\n- **2xx**: Success responses (200)\n- **4xx**: Client errors (400 Bad Request, 401\
+    \ Unauthorized, 404 Not Found)\n- **5xx**: Server errors (500 Internal Server Error)\n\n### Response body\n- JSON formatted\
+    \ response data\n\nIf the returned response, by default, is unformatted, select the supported Response body format in\
+    \ the UI.\n\n### Response headers\n- Content-Type, Content-Length.\n\n## Environments\n\nThe **Environments** tab allows\
+    \ you to create variables specific to the environment. For example, you can add a variable to hold the value of the `property-id`\
+    \ placeholder. The portal inserts the respective value depending on the environment at the time of sending the request.\n\
+    \n### Variables\n\nMost of the endpoints (especially POST/PUT/DELETE) require you to add a path or query parameter before\
+    \ sending the request. The Open API specification marks these parameters with placeholder tags. For example, {{`property_id`}}.\
+    \ You can use the **Environments** tab to manage the values for these placeholders as variables.\n\n#### Path parameters\n\
+    - **Required**: Must be provided to make the request\n- **Type validation**: Ensures correct data types (integer, string,\
+    \ etc.)\n- **Example**: `property-id` in `/rooms-api/properties/{property-id}/units`\n\n#### Query parameters\n- **Optional**:\
+    \ Usually have default values\n- **Example**: `debug_info` with boolean values\n\n#### Request body\n- **Schema validation**:\
+    \ Follows OpenAPI schema definitions\n- **Example data**: Prepopulated with sample values\n\n## Best practices\n\nThis\
+    \ section provides some basic practice guidelines.\n\n### Authentication\n\n- Always use separate machine accounts for\
+    \ test properties vs. properties in production.\n- When testing with production endpoint, make sure to use only test properties.\n\
+    \n### For Read operations (GET)\n- Safe to test in any environment\n- Use valid IDs that exist in your system\n- Check\
+    \ response structure for integration planning\n\n### For Write operations (POST, PUT)\n- **Always use Mock (schema only)\
+    \ environment first**\n- Verify request payload structure\n- Check response for success confirmation\n- Test error scenarios\
+    \ with invalid data\n\n### For Delete operations (DELETE)\n- **Preferable to use Mock (schema only) environment only**\n\
+    - Understand the operation is irreversible\n- Have backup data when testing using test properties\n\n## Troubleshooting\n\
+    \n### Common issues\n\n**401 Unauthorized**\n- Check authentication credentials\n- Verify API key is valid and not expired\n\
+    - Ensure credentials match the selected environment\n\n**400 Bad Request**\n- Validate request payload against schema\n\
+    - Check required fields are provided\n- Verify data types match specification\n\n**404 Not Found**\n- Confirm the resource\
+    \ ID exists\n- Check the endpoint URL is correct\n- Verify you have access to the resource\n\n### Getting help\n\nIf you\
+    \ encounter issues:\n1. Check the response error message for details\n2. Verify your request matches the API specification\n\
+    3. Contact the Connectivity Team for support\n\n---\n\n*This documentation applies to all endpoints in the Rooms API.\
+    \ The Try it feature provides a consistent testing experience across all operations.*"
+- name: rooms-api
+  description: Create, update, retrieve and delete property units
+- name: meta
+  description: Retrieve units meta data and translations
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - rooms-api
+  - meta
+- name: Documentation
+  tags:
+  - About Try it
 paths:
-  /properties/{property_id}/rooms:
-    post:
-      operationId: createRoom
-      summary: Create a room type
-      description: Creates a new room type for a property, including room name, bed configuration, maximum occupancy, and room-level facilities.
+  /rooms-api/properties/{property-id}/units:
+    get:
       tags:
-      - Rooms
+      - rooms-api
+      summary: Get units
+      description: Get all active units for a property
+      operationId: getUnits
       parameters:
-      - $ref: '#/components/parameters/PropertyId'
-      requestBody:
+      - name: property-id
+        in: path
         required: true
+        schema:
+          type: integer
+          format: int32
+      - name: debug_info
+        in: query
+        description: Enable debug to return <code>$.unit_name_fallback</code> field in response
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseListUnit'
+    post:
+      tags:
+      - rooms-api
+      summary: Create unit
+      description: Create new unit for a property
+      operationId: createUnit
+      parameters:
+      - name: property-id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RoomCreateRequest'
+              $ref: '#/components/schemas/UnitCreate'
+            examples:
+              MULTI_ROOM_UNIT_W_MANY_ROOMS:
+                description: Create a Villa with 2 bedrooms and a living room with sofa
+                value:
+                  configuration:
+                    unit_type_id: 31
+                    rooms:
+                    - type: BEDROOM_SUBROOM
+                      bed_configurations:
+                      - beds:
+                        - bed_type_id: 6
+                          bed_count: 1
+                        - bed_type_id: 1
+                          bed_count: 1
+                        is_default_configuration: true
+                    - type: BEDROOM_SUBROOM
+                      bed_configurations:
+                      - beds:
+                        - bed_type_id: 1
+                          bed_count: 3
+                        is_default_configuration: true
+                    - type: LIVING_ROOM_SUBROOM
+                      bed_configurations:
+                      - beds:
+                        - bed_type_id: 5
+                          bed_count: 1
+                        is_default_configuration: true
+                    - type: LIVING_ROOM_SUBROOM
+                  unit_name_id: 4180
+                  number_of_units: 5
+                  smoking_policy: SMOKING_AND_NONSMOKING
+                  size:
+                    value: 155
+                    unit: SQM
+                  partner_reference_name: Example two-bedroom villa
+                  floor_numbers_located_on:
+                  - 2
+                  occupancy_details:
+                    max_guests: 5
+                    max_adults: 5
+                    max_children: 4
+                    max_infants: 4
+                    max_infants_on_top: 0
+                  max_children_that_pay_children_rate: 2
+                  extra_beds_configuration:
+                    extra_beds: 1
+                    cribs: 0
+                    is_crib_and_extra_bed_allowed: false
+              MULTI_ROOM_UNIT_W_BEDROOM_ONLY:
+                description: Create a one-bedroom Apartment with a living room
+                value:
+                  configuration:
+                    unit_type_id: 1
+                    rooms:
+                    - type: BEDROOM_SUBROOM
+                      bed_configurations:
+                      - beds:
+                        - bed_type_id: 3
+                          bed_count: 1
+                        is_default_configuration: true
+                    - type: LIVING_ROOM_SUBROOM
+                  unit_name_id: 865
+                  number_of_units: 5
+                  smoking_policy: SMOKING
+                  size:
+                    value: 155
+                    unit: SQM
+                  partner_reference_name: Example single-bedroom apartment
+                  floor_numbers_located_on:
+                  - 2
+                  occupancy_details:
+                    max_guests: 3
+                    max_adults: 3
+                    max_children: 2
+                    max_infants: 0
+                    max_infants_on_top: 2
+                  max_children_that_pay_children_rate: 1
+                  extra_beds_configuration:
+                    extra_beds: 1
+                    cribs: 1
+                    is_crib_and_extra_bed_allowed: true
+              MULTI_ROOM_UNIT_W_MINIMAL_REQUIRED_FIELDS:
+                description: Create a one-bedroom Suite with minimum required fields
+                value:
+                  configuration:
+                    unit_type_id: 5
+                    rooms:
+                    - type: BEDROOM_SUBROOM
+                      bed_configurations:
+                      - beds:
+                        - bed_type_id: 3
+                          bed_count: 1
+                        is_default_configuration: true
+                  unit_name_id: 746
+              SINGLE_ROOM_UNIT_W_MULTIPLE_BED_CONFIGS:
+                description: Create a Double with multiple bed configurations
+                value:
+                  configuration:
+                    unit_type_id: 9
+                    rooms:
+                    - type: GUEST_ROOM
+                      bed_configurations:
+                      - beds:
+                        - bed_type_id: 3
+                          bed_count: 1
+                        is_default_configuration: true
+                      - beds:
+                        - bed_type_id: 1
+                          bed_count: 2
+                        is_default_configuration: false
+                  unit_name_id: 255
+                  number_of_units: 20
+                  smoking_policy: NONSMOKING
+                  size:
+                    value: 24
+                    unit: SQM
+                  partner_reference_name: Example double with multiple bed configurations
+                  floor_numbers_located_on:
+                  - 1
+                  - 2
+                  - 3
+                  - 4
+                  - 5
+                  occupancy_details:
+                    max_guests: 2
+                    max_adults: 2
+                    max_children: 1
+                    max_infants: 1
+                    max_infants_on_top: 0
+                  max_children_that_pay_children_rate: 1
+                  extra_beds_configuration:
+                    extra_beds: 0
+                    cribs: 1
+                    is_crib_and_extra_bed_allowed: false
+              SINGLE_ROOM_UNIT_W_SINGLE_BED_CONFIG:
+                description: Create a Studio with a single bed configuration
+                value:
+                  configuration:
+                    unit_type_id: 12
+                    rooms:
+                    - type: GUEST_ROOM
+                      bed_configurations:
+                      - beds:
+                        - bed_type_id: 3
+                          bed_count: 1
+                        is_default_configuration: true
+                  unit_name_id: 1147
+                  number_of_units: 20
+                  smoking_policy: NONSMOKING
+                  size:
+                    value: 24
+                    unit: SQM
+                  partner_reference_name: Example studio with a single bed configuration
+                  occupancy_details:
+                    max_guests: 2
+                    max_adults: 2
+                    max_children: 1
+                    max_infants: 1
+                    max_infants_on_top: 0
+                  max_children_that_pay_children_rate: 1
+                  extra_beds_configuration:
+                    extra_beds: 0
+                    cribs: 1
+                    is_crib_and_extra_bed_allowed: false
+              SINGLE_ROOM_UNIT_W_MINIMUM_REQUIRED_FIELDS:
+                description: Create a Single with minimum required fields
+                value:
+                  configuration:
+                    unit_type_id: 10
+                    rooms:
+                    - type: GUEST_ROOM
+                      bed_configurations:
+                      - beds:
+                        - bed_type_id: 1
+                          bed_count: 1
+                        is_default_configuration: true
+                  unit_name_id: 69
+        required: true
       responses:
         '200':
-          description: Room type created successfully
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RoomResponse'
-        '400':
-          description: Bad request
-        '401':
-          description: Authentication failed
-    get:
-      operationId: listRooms
-      summary: List room types
-      description: Retrieves all room types configured for a specific property.
+                $ref: '#/components/schemas/ApiResponseUnit'
+  /rooms-api/properties/{property-id}/units/{unit-id}:
+    delete:
       tags:
-      - Rooms
+      - rooms-api
+      summary: Delete unit
+      description: Delete existing unit for a property
+      operationId: deleteUnit
       parameters:
-      - $ref: '#/components/parameters/PropertyId'
+      - name: property-id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: unit-id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
       responses:
         '200':
-          description: Room types retrieved successfully
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RoomListResponse'
-        '401':
-          description: Authentication failed
-        '404':
-          description: Property not found
+                $ref: '#/components/schemas/ApiResponseObject'
+    patch:
+      tags:
+      - rooms-api
+      summary: Update unit
+      description: Update existing unit for a property
+      operationId: updateUnit
+      parameters:
+      - name: property-id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: unit-id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnitRequest'
+            examples:
+              MULTI_ROOM_ADD_BED:
+                description: Add additional single bed to bedroom for multi-room unit
+                value:
+                  configuration:
+                    unit_type_id: 1
+                    rooms:
+                    - type: BEDROOM_SUBROOM
+                      bed_configurations:
+                      - beds:
+                        - bed_type_id: 3
+                          bed_count: 1
+                        - bed_type_id: 1
+                          bed_count: 1
+                        is_default_configuration: true
+                    - type: LIVING_ROOM_SUBROOM
+                      bed_configurations:
+                      - beds:
+                        - bed_type_id: 5
+                          bed_count: 1
+                        is_default_configuration: true
+              MULTI_ROOM_REMOVE_BED:
+                description: Remove beds from a living room for multi-room unit
+                value:
+                  configuration:
+                    unit_type_id: 1
+                    rooms:
+                    - type: BEDROOM_SUBROOM
+                      bed_configurations:
+                      - beds:
+                        - bed_type_id: 3
+                          bed_count: 1
+                        - bed_type_id: 1
+                          bed_count: 1
+                        is_default_configuration: true
+                    - type: LIVING_ROOM_SUBROOM
+              SINGLE_ROOM_BED_CONFIG:
+                description: Add additional bed configuration for mono-room unit
+                value:
+                  configuration:
+                    unit_type_id: 9
+                    rooms:
+                    - type: GUEST_ROOM
+                      bed_configurations:
+                      - beds:
+                        - bed_type_id: 3
+                          bed_count: 1
+                        is_default_configuration: true
+                      - beds:
+                        - bed_type_id: 1
+                          bed_count: 2
+                        is_default_configuration: false
+              OBJECT_TYPE_FIELDS:
+                description: Update size, occupancy and extra beds configuration for any unit type
+                value:
+                  size:
+                    value: 99
+                    unit: SQM
+                  occupancy_details:
+                    max_guests: 5
+                    max_adults: 5
+                    max_children: 4
+                    max_infants: 4
+                    max_infants_on_top: 0
+                  extra_beds_configuration:
+                    extra_beds: 2
+                    cribs: 1
+                    is_crib_and_extra_bed_allowed: true
+              SIMPLE_FIELDS:
+                description: Update unit name, number of units, smoking policy and partner reference name for any unit type
+                value:
+                  unit_name_id: 2273
+                  number_of_units: 3
+                  smoking_policy: SMOKING
+                  partner_reference_name: Example reference name
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+  /rooms-api/properties/{property-id}/deleted-units:
+    get:
+      tags:
+      - rooms-api
+      summary: Get deleted units (read only)
+      description: Get all deleted units for a property (read only)
+      operationId: getDeletedUnits
+      parameters:
+      - name: property-id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: debug_info
+        in: query
+        description: Enable debug to return <code>$.unit_name_fallback</code> field in response
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseListUnit'
+  /rooms-api/meta:
+    get:
+      tags:
+      - meta
+      summary: Get meta data for units
+      description: "Retrieve meta data required for unit creation and update for any supported <code>language_code</code>\n\
+        \    <ul>\n    <li>Retrieve the list of all unit type IDs allowed for creation/update. For each <code>$.unit_types[*]</code>\
+        \ record you will find:</li>\n        <ul>\n        <li><code>unit_type_id</code>: the unit type ID you must provide\
+        \ with each create and update request</li>\n        <li><code>unit_type_name</code>: string representation of unit\
+        \ type ID (translatable)</li>\n        <li><code>is_multi_room</code>: attribute that defines what type of room types\
+        \ you can use add in your unit</li>\n        <li><code>is_active</code>: attribute that defines if a unit type is\
+        \ available for creation/update, inactive room types are available for read only</li>\n        <li><code>valid_property_categories</code>:\
+        \ list of property categories that allow creation of this unit type</li>\n        <li><code>suggested_unit_names</code>:\
+        \ list of unit names that we recommend to use in combination with this unit type</li>\n        </ul>\n    <li>Retrieve\
+        \ the list of all room name IDs allowed during unit creation/update. For each <code>$.unit_names[*]</code> record\
+        \ you will find:</li>\n        <ul>\n        <li><code>unit_name_id</code>: the unit name ID you must provide with\
+        \ each create request</li>\n        <li><code>unit_name</code>: string representation of unit name ID (translatable)</li>\n\
+        \        </ul>\n    <li>Retrieve the list of all bed type IDs allowed during unit creation/update. For each <code>$.bed_types[*]</code>\
+        \ record you will find:</li>\n        <ul>\n        <li><code>bed_type_id</code>: the bed type ID you must provide\
+        \ when configuring rooms</li>\n        <li><code>bed_type_name</code>: string representation of bed type (translatable)</li>\n\
+        \        <li><code>bed_type_description</code>: description of bed type size using metric units (translatable)</li>\n\
+        \        <li><code>bed_type_description_imperial</code>: description of bed type size using imperial units (translatable)</li>\n\
+        \        <li><code>is_active</code>: attribute that defines if a bed type is available for creation/update, inactive\
+        \ bed types are available for read only</li>\n        </ul>\n    <li>Retrieve the list of all property categories\
+        \ for which you can create a unit. For each property type you will find its name and category ID, as well as an OTA\
+        \ or a Booking.com extended code</li>\n    </ul>\n"
+      operationId: getRoomMeta
+      parameters:
+      - name: language_code
+        in: query
+        description: Language code for localization. Defaults to <code>EN_GB</code>.
+        required: false
+        schema:
+          type: string
+          enum:
+          - EN_GB
+          - EN_US
+          - DE
+          - NL
+          - FR
+          - ES
+          - ES_AR
+          - ES_MX
+          - CA
+          - IT
+          - PT_PT
+          - PT_BR
+          - 'NO'
+          - FI
+          - SV
+          - DA
+          - CS
+          - HU
+          - RO
+          - JA
+          - ZH_CN
+          - ZH_TW
+          - PL
+          - EL
+          - RU
+          - TR
+          - BG
+          - AR
+          - KA
+          - KO
+          - HE
+          - LV
+          - UK
+          - ID
+          - MS
+          - TH
+          - ET
+          - HR
+          - LT
+          - SK
+          - SR
+          - SL
+          - VI
+          - TL
+          - IS
+          - HI
+          - SQ
+      - name: show_inactive
+        in: query
+        description: Show/hide inactive unit and bed types
+        required: false
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnitMeta'
 components:
   schemas:
-    RoomResponse:
+    Bed:
+      required:
+      - bed_count
+      - bed_type_id
       type: object
       properties:
-        room_id:
+        bed_type_id:
           type: integer
-          description: Unique room type identifier
-        name:
-          type: string
-          description: Room type name
-        max_occupancy:
+          format: int32
+        bed_count:
           type: integer
-          description: Maximum number of guests
-        status:
-          type: string
-          description: Room type status
-    RoomListResponse:
+          format: int32
+    BedConfiguration:
+      required:
+      - beds
+      - is_default_configuration
       type: object
       properties:
+        beds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bed'
+        is_default_configuration:
+          type: boolean
+          description: Exactly one default bed configuration is mandatory for each room provided
+      description: '<ul>
+
+        <li>For multi-room unit you must add exactly one bed configuration</li>
+
+        <li>For single-room unit you must add at least one bed configuration, others are optional</li>
+
+        <li>Bed type ID provided must exist and be active in meta (see <code>$.bed_types[*].is_active</code>)</li>
+
+        <li>Same bed type ID must be repeated within a single bed configuration</li>
+
+        </ul>
+
+        '
+    Configuration:
+      required:
+      - rooms
+      - unit_type_id
+      type: object
+      properties:
+        unit_type_id:
+          type: integer
+          description: '<ul>
+
+            <li>Must exist and be active in meta (see <code>$.unit_type[*].id</code> and <code>$.unit_type[*].is_active</code>)
+            for unit creation/update</li>
+
+            <li>Must be valid for property''s category in meta (see <code>$.unit_type[*].valid_property_categories</code>)</li>
+
+            </ul>
+
+            '
+          format: int32
         rooms:
           type: array
-          description: List of room types
           items:
-            $ref: '#/components/schemas/RoomResponse'
-    RoomCreateRequest:
+            $ref: '#/components/schemas/Room'
+    ExtraBedsConfigurationCreate:
       type: object
-      required:
-      - name
-      - max_occupancy
       properties:
-        name:
-          type: string
-          description: Room type name
-        max_occupancy:
+        extra_beds:
+          maximum: 100
+          minimum: 0
+          type: integer
+          description: Number of extra beds you can provide
+          format: int32
+          default: 0
+        cribs:
+          maximum: 100
+          minimum: 0
+          type: integer
+          description: Number of cribs you can provide
+          format: int32
+          default: 0
+        is_crib_and_extra_bed_allowed:
+          type: boolean
+          description: Both extra beds and cribs can be provided (<code>true</code>) or only one of the options (<code>false</code>)?
+          default: false
+      description: Extra bed & crib options
+    OccupancyCreate:
+      type: object
+      properties:
+        max_guests:
+          maximum: 50
+          minimum: 1
           type: integer
           description: Maximum number of guests
-        room_size:
-          type: number
-          description: Room size in square meters
+          format: int32
+          default: 1
+        max_adults:
+          maximum: 50
+          minimum: 1
+          type: integer
+          description: Maximum number of adults
+          format: int32
+          default: 1
+        max_children:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: Maximum number of children (0-17 years old)
+          format: int32
+          default: 0
+      deprecated: true
+    OccupancyDetailsCreate:
+      type: object
+      properties:
+        max_guests:
+          maximum: 50
+          minimum: 1
+          type: integer
+          description: Maximum number of guests
+          format: int32
+          default: 1
+        max_adults:
+          maximum: 50
+          minimum: 1
+          type: integer
+          description: Maximum number of adults
+          format: int32
+          default: 1
+        max_children:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: Maximum number of children (3-17 years old)
+          format: int32
+          default: 0
+        max_infants:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: Maximum number of infants (0-2 years old)
+          format: int32
+          default: 0
+        max_infants_on_top:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: Maximum number of infants (0-2 years old) on top of maximum number of guests
+          format: int32
+          default: 0
+    Room:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: '<ul>
+
+            <li>For multi-room units you must add one or more <code>BEDROOM_SUBROOM</code> or <code>LIVING_ROOM_SUBROOM</code>,
+            at least one of the rooms must have beds</li>
+
+            <li>For single-room units you must add exactly one <code>GUEST_ROOM</code></li>
+
+            </ul>
+
+            '
+          enum:
+          - BEDROOM_SUBROOM
+          - LIVING_ROOM_SUBROOM
+          - GUEST_ROOM
         bed_configurations:
           type: array
-          description: Available bed configurations
           items:
-            type: object
-            properties:
-              bed_type:
-                type: string
-                description: Type of bed
-              quantity:
-                type: integer
-                description: Number of beds of this type
-        facilities:
+            $ref: '#/components/schemas/BedConfiguration'
+    Size:
+      required:
+      - unit
+      - value
+      type: object
+      properties:
+        value:
+          type: number
+          description: Must be a value between 1 and 9999.99
+          format: double
+        unit:
+          type: string
+          description: SQM (square meters) or SQFT (square feet)
+          enum:
+          - SQM
+          - SQFT
+    UnitCreate:
+      required:
+      - configuration
+      - unit_name_id
+      type: object
+      properties:
+        configuration:
+          $ref: '#/components/schemas/Configuration'
+        unit_name_id:
+          type: integer
+          description: '<ul>
+
+            <li>The list of available unit names can be found in meta (see <code>$.unit_names</code>)</li>
+
+            </ul>
+
+            '
+          format: int32
+        number_of_units:
+          type: integer
+          description: Number of units must be between 0 and 32000
+          format: int32
+          default: 1
+        smoking_policy:
+          type: string
+          default: SMOKING_AND_NONSMOKING
+          enum:
+          - SMOKING
+          - NONSMOKING
+          - SMOKING_AND_NONSMOKING
+        size:
+          $ref: '#/components/schemas/Size'
+        partner_reference_name:
+          type: string
+          description: Internal room name, visible only in API and Extranet
+        floor_numbers_located_on:
           type: array
-          description: Room-level facilities
+          description: One or more floors where the unit is located; 0 is a ground floor
           items:
-            type: string
-  parameters:
-    PropertyId:
-      name: property_id
-      in: path
-      required: true
-      description: Unique identifier of the property on Booking.com
-      schema:
-        type: integer
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
-      description: HTTP Basic authentication using your Connectivity partner username and password.
-externalDocs:
-  description: Booking.com Connectivity Content API Documentation
-  url: https://developers.booking.com/connectivity/docs/content
+            type: integer
+            description: One or more floors where the unit is located; 0 is a ground floor
+            format: int32
+        occupancy:
+          $ref: '#/components/schemas/OccupancyCreate'
+        occupancy_details:
+          $ref: '#/components/schemas/OccupancyDetailsCreate'
+        extra_beds_configuration:
+          $ref: '#/components/schemas/ExtraBedsConfigurationCreate'
+        max_children_that_pay_children_rate:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: This field will be deprecated on 29 June 2026 and sunset on 7 July 2026. Booking.com will ignore this
+            field after the sunset date. For more details, see [Deprecating legacy max payable child field.](/connectivity/docs/deprecation-policy/deprecation-and-sunsetting#deprecating-legacy-max-payable-child-field).
+            Maximum number of children eligible for the children rate (the rest are charged as adults), must be less than
+            or equal to number of children. If not specified, defaults to <code>max_children</code>.
+          format: int32
+          deprecated: true
+      description: Unit creation schema; use meta endpoint for fetching relevant meta data
+    ApiError:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          type: object
+    ApiResponseUnit:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Unit'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ExtraBedsConfiguration:
+      required:
+      - cribs
+      - extra_beds
+      - is_crib_and_extra_bed_allowed
+      type: object
+      properties:
+        extra_beds:
+          maximum: 100
+          minimum: 0
+          type: integer
+          description: Number of extra beds you can provide
+          format: int32
+        cribs:
+          maximum: 100
+          minimum: 0
+          type: integer
+          description: Number of cribs you can provide
+          format: int32
+        is_crib_and_extra_bed_allowed:
+          type: boolean
+          description: Both extra beds and cribs can be provided (<code>true</code>) or only one of the options (<code>false</code>)?
+      description: Extra bed & crib options
+    Occupancy:
+      required:
+      - max_adults
+      - max_children
+      - max_guests
+      type: object
+      properties:
+        max_guests:
+          maximum: 50
+          minimum: 1
+          type: integer
+          description: Maximum number of guests
+          format: int32
+        max_adults:
+          maximum: 50
+          minimum: 1
+          type: integer
+          description: Maximum number of adults
+          format: int32
+        max_children:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: Maximum number of children (0-17 years old)
+          format: int32
+      deprecated: true
+    OccupancyDetails:
+      required:
+      - max_adults
+      - max_children
+      - max_guests
+      - max_infants
+      - max_infants_on_top
+      type: object
+      properties:
+        max_guests:
+          maximum: 50
+          minimum: 1
+          type: integer
+          description: Maximum number of guests
+          format: int32
+        max_adults:
+          maximum: 50
+          minimum: 1
+          type: integer
+          description: Maximum number of adults
+          format: int32
+        max_children:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: Maximum number of children (3-17 years old)
+          format: int32
+        max_infants:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: Maximum number of infants (0-2 years old)
+          format: int32
+        max_infants_on_top:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: Maximum number of infants (0-2 years old) on top of maximum number of guests
+          format: int32
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+    Unit:
+      type: object
+      properties:
+        unit_id:
+          type: integer
+          format: int64
+        configuration:
+          $ref: '#/components/schemas/Configuration'
+        unit_name_id:
+          type: integer
+          description: '<ul>
+
+            <li>The list of available unit names can be found in meta (see <code>$.unit_names</code>)</li>
+
+            </ul>
+
+            '
+          format: int32
+        number_of_units:
+          type: integer
+          description: Number of units must be between 0 and 32000
+          format: int32
+        smoking_policy:
+          type: string
+          description: Room smoking policy
+          enum:
+          - SMOKING
+          - NONSMOKING
+          - SMOKING_AND_NONSMOKING
+        size:
+          $ref: '#/components/schemas/Size'
+        partner_reference_name:
+          type: string
+          description: Internal room name, visible only in API and Extranet
+        floor_numbers_located_on:
+          type: array
+          description: One or more floors where the unit is located; 0 is a ground floor
+          items:
+            type: integer
+            description: One or more floors where the unit is located; 0 is a ground floor
+            format: int32
+        occupancy:
+          $ref: '#/components/schemas/Occupancy'
+        occupancy_details:
+          $ref: '#/components/schemas/OccupancyDetails'
+        extra_beds_configuration:
+          $ref: '#/components/schemas/ExtraBedsConfiguration'
+        max_children_that_pay_children_rate:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: This field will be deprecated on 29 June 2026 and sunset on 7 July 2026. For more details, see [Deprecating
+            legacy max payable child field.](/connectivity/docs/deprecation-policy/deprecation-and-sunsetting#deprecating-legacy-max-payable-child-field).
+            Maximum number of children eligible for the children rate (the rest are charged as adults), must be less than
+            or equal to number of children.
+          format: int32
+          deprecated: true
+        unit_name_fallback:
+          type: string
+          description: Contains unit name (<code>EN_GB</code> locale) for any unit name ID, including those missing in meta
+            (for debug purposes only; read only)
+      description: Unit schema; use meta endpoint for fetching relevant meta data
+    UnitRequest:
+      type: object
+      properties:
+        configuration:
+          $ref: '#/components/schemas/Configuration'
+        unit_name_id:
+          type: integer
+          description: '<ul>
+
+            <li>The list of available unit names can be found in meta (see <code>$.unit_names</code>)</li>
+
+            </ul>
+
+            '
+          format: int32
+        number_of_units:
+          type: integer
+          description: Number of units must be between 0 and 32000
+          format: int32
+        smoking_policy:
+          type: string
+          description: Room smoking policy
+          enum:
+          - SMOKING
+          - NONSMOKING
+          - SMOKING_AND_NONSMOKING
+        size:
+          $ref: '#/components/schemas/Size'
+        partner_reference_name:
+          type: string
+          description: Internal room name, visible only in API and Extranet
+        floor_numbers_located_on:
+          type: array
+          description: One or more floors where the unit is located; 0 is a ground floor
+          items:
+            type: integer
+            description: One or more floors where the unit is located; 0 is a ground floor
+            format: int32
+        occupancy:
+          $ref: '#/components/schemas/Occupancy'
+        occupancy_details:
+          $ref: '#/components/schemas/OccupancyDetails'
+        extra_beds_configuration:
+          $ref: '#/components/schemas/ExtraBedsConfiguration'
+        max_children_that_pay_children_rate:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: This field will be deprecated on 29 June 2026 and sunset on 7 July 2026. For more details, see [Deprecating
+            legacy max payable child field.](/connectivity/docs/deprecation-policy/deprecation-and-sunsetting#deprecating-legacy-max-payable-child-field).
+            Maximum number of children eligible for the children rate (the rest are charged as adults), must be less than
+            or equal to number of children.
+          format: int32
+          deprecated: true
+        unit_name_fallback:
+          type: string
+          description: Contains unit name (<code>EN_GB</code> locale) for any unit name ID, including those missing in meta
+            (for debug purposes only; read only)
+      description: Unit schema; use meta endpoint for fetching relevant meta data
+    ApiResponseObject:
+      type: object
+      properties:
+        data:
+          type: object
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ApiResponseListUnit:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Unit'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ApiResponseUnitMeta:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UnitMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    BedType:
+      type: object
+      properties:
+        bed_type_id:
+          type: integer
+          format: int32
+        bed_type_name:
+          type: string
+        bed_type_description:
+          type: string
+        bed_type_description_imperial:
+          type: string
+        is_active:
+          type: boolean
+    PropertyCategory:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        name:
+          type: string
+        code_ota:
+          type: integer
+          format: int32
+        code_booking_extended:
+          type: integer
+          format: int32
+    UnitMeta:
+      type: object
+      properties:
+        language_code:
+          type: string
+          enum:
+          - EN_GB
+          - EN_US
+          - DE
+          - NL
+          - FR
+          - ES
+          - ES_AR
+          - ES_MX
+          - CA
+          - IT
+          - PT_PT
+          - PT_BR
+          - 'NO'
+          - FI
+          - SV
+          - DA
+          - CS
+          - HU
+          - RO
+          - JA
+          - ZH_CN
+          - ZH_TW
+          - PL
+          - EL
+          - RU
+          - TR
+          - BG
+          - AR
+          - KA
+          - KO
+          - HE
+          - LV
+          - UK
+          - ID
+          - MS
+          - TH
+          - ET
+          - HR
+          - LT
+          - SK
+          - SR
+          - SL
+          - VI
+          - TL
+          - IS
+          - HI
+          - SQ
+        unit_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitType'
+        unit_names:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitName'
+        bed_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/BedType'
+        property_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyCategory'
+    UnitName:
+      type: object
+      properties:
+        unit_name_id:
+          type: integer
+          format: int32
+        unit_name:
+          type: string
+    UnitType:
+      type: object
+      properties:
+        unit_type_id:
+          type: integer
+          format: int32
+        unit_type_name:
+          type: string
+        is_multi_room:
+          type: boolean
+        is_active:
+          type: boolean
+        valid_property_categories:
+          type: array
+          items:
+            type: integer
+            format: int32
+        suggested_unit_names:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitName'

@@ -1,0 +1,772 @@
+openapi: 3.0.1
+info:
+  title: Reconciliation API
+  description: Generate and download financial reconciliation reports for your properties. Use the Reconciliation API to request
+    payout reports for a specified date range and set of properties, check the report generation status, and retrieve the
+    available filter and configuration options.
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://payments-api.booking.com/
+  description: Test using live endpoint
+tags:
+- name: About Try it
+  description: "Learn how to effectively use the Try it feature in the API documentation.\n\nUse the **Try it** feature to\
+    \ send sample requests to API endpoints directly from the developer portal. In the **Mock (schema only)** environment,\
+    \ Try it returns schema-driven mock responses or pre-built example responses. In the **Production** environment, it sends\
+    \ the request to the live API and returns dynamic responses from your selected test property. \n\n## Environment\n\nYou\
+    \ can select between two different environments (top right corner in the UI):\n\n**Mock (schema only) (default)**:\n-\
+    \ Helps to understand the response data schema\n- Recommended for all write operations (POST, PUT, PATCH, DELETE)\n- Environment\
+    \ for testing without affecting live/test data\n\n**Production**:\n- Make sure to use only test properties as the requests\
+    \ hit the production endpoint.\n- Changes will affect your test property data\n- Requires valid credentials\n\n## Request\n\
+    \nClick on any unresolved placeholders to add a value or edit an existing placeholder value.\n\nThe portal loads the default\
+    \ request body. Where the specification supports multiple request body examples (for example: Rooms API POST endpoint),\
+    \ you can choose a different request body from the drop-down list.\n\nSome helpful pointers before running a request:\n\
+    \n- **Authentication** (when using production endpoint): Configure your authentication headers\n  - Bearer token (JWT)\
+    \ as required. Use the **Environments** tab.\n  - Make sure to manage separate machine accounts for test vs. properties\
+    \ in production.\n  - Ensure credentials match your selected environment.\n\n- **Parameters**: Fill in required parameters\n\
+    \  - Path parameters (like `propertyId`)\n  - Query parameters (like `language_code`)\n  - Request body for `POST/PUT`\
+    \ operations\n\n- **Execute**: Click **Send** to send the request\n  - The request is sent to the selected environment\n\
+    \  - When sending requests to the production endpoint, a real HTTP request is made to the API\n\n## Response\n\nThe Try\
+    \ it feature provides comprehensive response information to the extent supported by the OpenAPI specification:\n\n###\
+    \ Status code\n- **2xx**: Success responses (200)\n- **4xx**: Client errors (400 Bad Request, 401 Unauthorized, 404 Not\
+    \ Found)\n- **5xx**: Server errors (500 Internal Server Error)\n\n### Response body\n- JSON formatted response data\n\n\
+    If the returned response, by default, is unformatted, select the supported Response body format in the UI.\n\n### Response\
+    \ headers\n- Content-Type, Content-Length.\n\n## Environments\n\nThe **Environments** tab allows you to create variables\
+    \ specific to the environment. For example, you can add a variable to hold the value of the `propertyId` placeholder.\
+    \ The portal inserts the respective value depending on the environment at the time of sending the request.\n\n### Variables\n\
+    \nMost of the endpoints (especially POST/PUT/PATCH/DELETE) require you to add a path or query parameter before sending\
+    \ the request. Path parameters use single braces in the OpenAPI specification (e.g., `{propertyId}`). The portal's Environments\
+    \ tab lets you store values for these parameters as reusable variables.\n\n#### Path parameters\n- **Required**: Must\
+    \ be provided to make the request\n- **Type validation**: Ensures correct data types (integer, string, etc.)\n- **Example**:\
+    \ `propertyId` in `/properties/{propertyId}/resource`\n\n#### Query parameters\n- **Optional**: Usually have default values\n\
+    - **Example**: `language_code` with `en-us` as the default value\n\n#### Request body\n- **Schema validation**: Follows\
+    \ OpenAPI schema definitions\n- **Example data**: Prepopulated with sample values\n\n## Best practices\n\nThis section\
+    \ provides some basic practice guidelines.\n\n### Authentication\n\n- Always use separate machine accounts for test properties\
+    \ vs. properties in production.\n- When testing with the production endpoint, make sure to use only test properties.\n\
+    \n### For Read operations (GET)\n- GET requests are non-mutating, but use authorised test properties when testing against\
+    \ the production endpoint.\n- Use valid IDs that exist in your system\n- Check response structure for integration planning\n\
+    \n### For Write operations (POST, PUT, PATCH)\n- **Always use Mock (schema only) environment first**\n- Verify request\
+    \ payload structure\n- Check response for success confirmation\n- Test error scenarios with invalid data\n\n### For Delete\
+    \ operations (DELETE)\n- **Preferable to use Mock (schema only) environment only**\n- Understand the operation is irreversible\n\
+    - Have backup data when testing using test properties\n\n## Troubleshooting\n\n### Common issues\n\n**401 Unauthorized**\n\
+    - Check authentication credentials\n- Verify token is valid and not expired\n- Ensure credentials match the selected environment\n\
+    \n**400 Bad Request**\n- Validate request payload against schema\n- Check required fields are provided\n- Verify data\
+    \ types match specification\n\n**404 Not Found**\n- Confirm the resource ID exists\n- Check the endpoint URL is correct\n\
+    - Verify you have access to the resource\n\n### Getting help\n\nIf you encounter issues:\n1. Check the response error\
+    \ message for details\n2. Verify your request matches the API specification\n3. Contact the Connectivity Team for support\n\
+    \n---\n\n*This documentation applies to all endpoints in the API. The Try it feature provides a consistent testing experience\
+    \ across all operations.*\n"
+- name: Reconciliation reports
+  description: Generate financial reconciliation reports for one or more properties.
+- name: Report status
+  description: Check the processing status of a reconciliation report generation request and retrieve the download URL when
+    the report is ready.
+- name: Report filters
+  description: Retrieve the available filter and configuration options for reconciliation report generation.
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Reconciliation reports
+  - Report status
+  - Report filters
+- name: Documentation
+  tags:
+  - About Try it
+paths:
+  /connectivity-payments/recon-reports:
+    post:
+      tags:
+      - Reconciliation reports
+      summary: Generate a reconciliation report
+      description: 'Initiates the asynchronous generation of a financial reconciliation report for one or more properties
+        within a specified date range.
+
+
+        The report is generated asynchronously. The response returns a `request_id` that you use to poll the [report status
+        endpoint](#tag/Report-status) until the `status` is `READY`, `EMPTY`, or `ERROR`. When ready, a pre-signed `download_url`
+        and `filename` are returned for downloading the report. The `download_url` is valid for approximately 15 minutes (see
+        `download_url_expires_at`). To obtain a new download URL after expiry, call this endpoint again to generate a new
+        report. If `status` is `EMPTY` or `ERROR`, stop polling; no report is available for download.
+
+
+        Use the [report filters endpoint](#tag/Report-filters) to retrieve the available `report_configurations` and `report_filters`
+        values before generating a report.
+
+
+        **Connection type**: Reservations connection type is required to access this endpoint.
+
+
+        This endpoint is rate-limited to 10 requests per minute.'
+      operationId: generateReconReport
+      parameters:
+      - name: Authorization
+        in: header
+        description: Bearer token for authentication.
+        required: true
+        schema:
+          type: string
+        example: Bearer <your_token>
+      - name: accept-version
+        in: header
+        description: API version to use.
+        required: false
+        schema:
+          type: string
+          default: '1.0'
+        example: '1.0'
+      requestBody:
+        description: Parameters for the reconciliation report to generate, including target properties, date range, output
+          format, and optional filters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReconReportRequest'
+        required: true
+      responses:
+        '202':
+          description: Report generation request accepted. Use the returned `request_id` with the report status endpoint to
+            check progress and retrieve the download URL.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconReportGenerationResponse'
+        '400':
+          description: Invalid request payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidTokenResponse'
+        '403':
+          description: Access Denied!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequestResponse'
+        '429':
+          description: Too many requests. Rate limiting is enforced.
+          headers:
+            Retry-After:
+              description: Number of seconds to wait before retrying.
+              schema:
+                type: integer
+                format: int32
+                minimum: 0
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitErrorResponse'
+        '500':
+          description: The request failed with an internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+  /connectivity-payments/recon-reports/{request-id}:
+    get:
+      tags:
+      - Report status
+      summary: Retrieve report status
+      description: 'Retrieves the current processing status of a reconciliation report generation request.
+
+
+        Poll this endpoint after calling the [generate report endpoint](#tag/Reconciliation-reports) until `status` is `READY`,
+        `EMPTY`, or `ERROR`. When the report is ready, the response includes a pre-signed `download_url` and a `filename`.
+        The download URL is valid until `download_url_expires_at` (approximately 15 minutes after generation). Download the
+        report before it expires — to get a new download URL after expiry, call the [generate report endpoint](#tag/Reconciliation-reports)
+        again. If `status` is `ERROR` or `EMPTY`, stop polling and submit a new report generation request if needed.
+
+
+        **Connection type**: Reservations connection type is required to access this endpoint.
+
+
+        This endpoint is rate-limited to 10 requests per minute.'
+      operationId: getReconReportStatus
+      parameters:
+      - name: Authorization
+        in: header
+        description: Bearer token for authentication.
+        required: true
+        schema:
+          type: string
+        example: Bearer <your_token>
+      - name: accept-version
+        in: header
+        description: API version to use.
+        required: false
+        schema:
+          type: string
+          default: '1.0'
+        example: '1.0'
+      - name: request-id
+        in: path
+        description: The unique identifier of the reconciliation report generation request, returned by the generate report
+          endpoint.
+        required: true
+        schema:
+          type: string
+        example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      responses:
+        '200':
+          description: Report status retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconReportStatusResponse'
+        '400':
+          description: Invalid request payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidTokenResponse'
+        '403':
+          description: Access Denied!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequestResponse'
+        '404':
+          description: The requested report was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+        '429':
+          description: Too many requests. Rate limiting is enforced.
+          headers:
+            Retry-After:
+              description: Number of seconds to wait before retrying.
+              schema:
+                type: integer
+                format: int32
+                minimum: 0
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitErrorResponse'
+        '500':
+          description: The request failed with an internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+  /connectivity-payments/recon-reports/filters:
+    get:
+      tags:
+      - Report filters
+      summary: Retrieve report filters and configurations
+      description: 'Retrieves the available filter and configuration options for generating reconciliation reports for a given
+        legal entity. Use the returned values to populate `report_configurations` and `report_filters` in the [generate report
+        request](#tag/Reconciliation-reports).
+
+
+        The response also includes `data_available_from_date`, which indicates the earliest date for which report data is
+        available.
+
+
+        **Connection type**: Reservations connection type is required to access this endpoint.
+
+
+        This endpoint is rate-limited to 50 requests per minute.'
+      operationId: getReconReportFilters
+      parameters:
+      - name: Authorization
+        in: header
+        description: Bearer token for authentication.
+        required: true
+        schema:
+          type: string
+        example: Bearer <your_token>
+      - name: accept-version
+        in: header
+        description: API version to use.
+        required: false
+        schema:
+          type: string
+          default: '1.0'
+        example: '1.0'
+      - name: legal-entity-ids
+        in: query
+        description: One or more legal entity IDs to retrieve filter options for.
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+        style: form
+        explode: false
+        example:
+        - 1234567
+      responses:
+        '200':
+          description: Available report filters and configurations retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconReportFiltersResponse'
+        '400':
+          description: Invalid request payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidTokenResponse'
+        '403':
+          description: Access Denied!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequestResponse'
+        '429':
+          description: Too many requests. Rate limiting is enforced.
+          headers:
+            Retry-After:
+              description: Number of seconds to wait before retrying.
+              schema:
+                type: integer
+                format: int32
+                minimum: 0
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitErrorResponse'
+        '500':
+          description: The request failed with an internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+components:
+  schemas:
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type: string
+          description: Detailed debug message for the error
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    PropertySelection:
+      type: object
+      description: A legal entity and its associated property IDs to include in the reconciliation report.
+      required:
+      - legal_entity_id
+      - property_ids
+      properties:
+        legal_entity_id:
+          type: string
+          description: The legal entity identifier.
+          example: '1234567'
+        property_ids:
+          type: array
+          description: List of property IDs belonging to the legal entity to include in the report.
+          items:
+            type: string
+          example:
+          - '123456'
+    ReportConfigurationInput:
+      type: object
+      description: A single report configuration key-value pair. Use the [report filters endpoint](#tag/Report-filters) to
+        retrieve available `config_key` and `config_value` options.
+      required:
+      - config_key
+      - config_value
+      properties:
+        config_key:
+          type: string
+          description: 'The configuration key. Possible values: `format_type`, `locale`.'
+          example: format_type
+        config_value:
+          type: string
+          description: The selected configuration value for the given `config_key`. For example, `CSV`, `XLS`, or `JSON` for
+            `format_type`.
+          example: CSV
+    ReportFilterInput:
+      type: object
+      description: A single report filter with one or more selected values. Use the [report filters endpoint](#tag/Report-filters)
+        to retrieve available `filter_key` and `filter_values` options.
+      required:
+      - filter_key
+      - filter_values
+      properties:
+        filter_key:
+          type: string
+          description: 'The filter key. Possible values: `bank_accounts`, `payout_type`, `statement_descriptor`.'
+          example: bank_accounts
+        filter_values:
+          type: array
+          description: The selected filter values for the given `filter_key`.
+          items:
+            type: string
+          example:
+          - DE123456789
+    ReconReportRequest:
+      type: object
+      description: Request body for generating a reconciliation report.
+      required:
+      - properties
+      - from_date
+      - to_date
+      properties:
+        properties:
+          type: array
+          description: List of legal entities and their associated property IDs to include in the report.
+          items:
+            $ref: '#/components/schemas/PropertySelection'
+        from_date:
+          type: string
+          format: date
+          description: Start date of the reporting period (inclusive), in `YYYY-MM-DD` format.
+          example: '2025-04-01'
+        to_date:
+          type: string
+          format: date
+          description: End date of the reporting period (inclusive), in `YYYY-MM-DD` format.
+          example: '2025-08-01'
+        report_configurations:
+          type: array
+          description: Optional list of report configuration options, such as output format and locale. Use the [report filters
+            endpoint](#tag/Report-filters) to retrieve available options.
+          items:
+            $ref: '#/components/schemas/ReportConfigurationInput'
+        report_filters:
+          type: array
+          description: Optional list of filters to narrow down the report data, such as specific bank accounts or payout types.
+            Use the [report filters endpoint](#tag/Report-filters) to retrieve available options.
+          items:
+            $ref: '#/components/schemas/ReportFilterInput'
+    ReconReportGenerationData:
+      type: object
+      description: Data returned when a reconciliation report generation request is accepted.
+      properties:
+        request_id:
+          type: string
+          description: Unique identifier for the report generation request. Use this value to poll the report status endpoint.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        report_status:
+          type: string
+          description: 'Current status of the report generation. Possible values: `GENERATING`.'
+          example: GENERATING
+    ReconReportGenerationResponse:
+      type: object
+      description: Response returned when a reconciliation report generation request is accepted.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          allOf:
+          - $ref: '#/components/schemas/ReconReportGenerationData'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    ReconReportStatusData:
+      type: object
+      description: Status and download details for a reconciliation report generation request.
+      properties:
+        request_id:
+          type: string
+          description: Unique identifier of the report generation request.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        status:
+          type: string
+          description: 'Current status of the report. Possible values: `GENERATING`, `READY`, `EMPTY`, `ERROR`.'
+          example: READY
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp of the most recent status update, in ISO 8601 format.
+          example: '2026-06-10T08:50:48Z'
+        download_url_expires_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Timestamp at which the `download_url` expires, in ISO 8601 format. Only present when `status` is `READY`.
+            Download the report before this time.
+          example: '2026-06-11T08:50:48Z'
+        filename:
+          type: string
+          nullable: true
+          description: Name of the generated report file. Only present when `status` is `READY`.
+          example: reconciliation-report.csv
+        download_url:
+          type: string
+          format: uri
+          nullable: true
+          description: Pre-signed URL for downloading the generated report. Only present when `status` is `READY`. This URL
+            is valid for approximately 15 minutes and expires at `download_url_expires_at`. To obtain a new download URL after
+            expiry, call the generate report endpoint again.
+          example: https://example.com/path
+    ReconReportStatusResponse:
+      type: object
+      description: Response containing the current status of a reconciliation report generation request.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          allOf:
+          - $ref: '#/components/schemas/ReconReportStatusData'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    ReportConfigurationOption:
+      type: object
+      description: An available report configuration option with all supported values and the default.
+      properties:
+        config_key:
+          type: string
+          description: 'The configuration key. Possible values: `format_type`, `locale`.'
+          example: format_type
+        config_values:
+          type: array
+          description: All supported values for this configuration key.
+          items:
+            type: string
+          example:
+          - XLS
+          - CSV
+          - JSON
+        default_value:
+          type: string
+          description: The default value applied when this configuration key is not specified in the report generation request.
+          example: CSV
+    ReportFilterOption:
+      type: object
+      description: An available report filter with all supported values.
+      properties:
+        filter_key:
+          type: string
+          description: 'The filter key. Possible values: `bank_accounts`, `payout_type`, `statement_descriptor`.'
+          example: bank_accounts
+        filter_values:
+          type: array
+          description: All supported filter values for this filter key. An empty array indicates the filter is available but
+            has no pre-defined values.
+          items:
+            type: string
+    ReconReportFiltersData:
+      type: object
+      description: Available filter and configuration options for reconciliation report generation.
+      properties:
+        data_available_from_date:
+          type: string
+          format: date
+          description: The earliest date for which reconciliation report data is available, in `YYYY-MM-DD` format.
+          example: '2019-01-01'
+        report_configurations:
+          type: array
+          description: Available report configuration options, such as output format and locale.
+          items:
+            $ref: '#/components/schemas/ReportConfigurationOption'
+        report_filters:
+          type: array
+          description: Available report filters, such as bank accounts and payout types.
+          items:
+            $ref: '#/components/schemas/ReportFilterOption'
+    ReconReportFiltersResponse:
+      type: object
+      description: Response containing available filter and configuration options for reconciliation report generation.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          allOf:
+          - $ref: '#/components/schemas/ReconReportFiltersData'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    RateLimitErrorResponse:
+      type: object
+      description: Response when the rate limit has been exceeded
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    BadRequestErrorResponse:
+      type: object
+      description: Response when the request doesn't have valid parameters
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    InvalidTokenResponse:
+      type: object
+      description: Response when the authentication token is missing, invalid, or expired.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          maxItems: 0
+          items: {}
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              code:
+                type: string
+                description: Error code
+              details:
+                type: string
+                nullable: true
+                description: Additional error details
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    NotFoundErrorResponse:
+      type: object
+      description: Response when the requested resource is not found
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token for authentication. Use your API credentials to obtain a token.

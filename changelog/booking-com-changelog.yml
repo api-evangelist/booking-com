@@ -1,0 +1,101 @@
+generated: '2026-09-17'
+method: searched
+source: https://developers.booking.com/connectivity/docs/changelog/changelog
+docs:
+- https://developers.booking.com/connectivity/docs/changelog/changelog
+- https://developers.booking.com/connectivity/docs/changelog/changelog-archive
+- https://developers.booking.com/demand/docs/whats-new/changelog
+- https://developers.booking.com/demand/docs/whats-new/archive
+name: Booking.com change log
+summary: >-
+  Two dated changelogs, on two different cadences. Connectivity publishes a fortnightly, date-headed log
+  structured as What is new / What is going to change / What has changed / What was fixed, with internal
+  ticket references (ACI-xxxx) and links into the affected documentation. Demand publishes a
+  month-headed release note split by version track (v3.2 and Beta). Both run public archives.
+schemes:
+  connectivity:
+    cadence: fortnightly
+    heading: ISO-style date (e.g. "16 September 2026")
+    sections:
+    - 'What is new?'
+    - 'What is going to change?'
+    - 'What has changed?'
+    - 'What was fixed?'
+    archive: https://developers.booking.com/connectivity/docs/changelog/changelog-archive
+    carries_ticket_ids: true
+  demand:
+    cadence: monthly
+    heading: Month and year (e.g. "August 2026")
+    grouped_by: version track (v3.2, Beta) then product area
+    archives:
+    - https://developers.booking.com/demand/docs/whats-new/archive
+    - https://developers.booking.com/demand/docs/whats-new/archive-2025
+    - https://developers.booking.com/demand/docs/whats-new/archive-2024
+current_versions:
+  demand_api: '3.2'
+  demand_api_beta: 3.2-Beta
+  rooms_api: '1.3'
+  messaging_api: '1.3'
+  connect_api: 1.2.2
+entries:
+- date: '2026-09-16'
+  programme: connectivity
+  type: changed
+  breaking: false
+  highlights:
+  - >-
+    Reporting API documentation clarified: each request must contain either `report` or `stay_change`,
+    `price` is required in every `stay_change` and may be a non-negative decimal, and guest misconduct
+    reports require `misconduct_details` with a non-empty `details_text` of at most 240 characters.
+    Documentation correction only - validation behaviour unchanged.
+- date: '2026-09-15'
+  programme: connectivity
+  type: fixed
+  breaking: false
+  highlights:
+  - Reservations API now correctly returns cancellation messages again (ACI-4695).
+- date: '2026-09-01'
+  programme: connectivity
+  type: mixed
+  breaking: false
+  highlights:
+  - 'New: Photo API accepts 360-degree panoramic photo uploads.'
+  - >-
+    New: Messaging API 1.3 adds `is_redacted` to every message's attributes object. Phishing-flagged
+    messages are returned with content replaced by "This message was deleted" and attachments removed;
+    redaction can happen AFTER a message was retrieved, so integrators should watch the
+    ACCSEC_PARTNER_PHISHING notification.
+  - 'New: developer portal search returns more relevant results across all API documentation.'
+  - 'Changed: suggested copy for 2020-era sustainability facility types updated.'
+  - 'Fixed: Reservations API confirmation XML events not generated (ACI-4670, ACI-4700).'
+- date: '2026-08-18'
+  programme: connectivity
+  type: mixed
+  breaking: false
+- date: '2026-08-04'
+  programme: connectivity
+  type: mixed
+  breaking: false
+- date: '2026-08'
+  programme: demand
+  type: additions
+  breaking: false
+  highlights:
+  - 'Beta / Car rentals: `estimated_commission` object added to /cars/availability responses for eligible
+    partners - a predictive estimate produced at search time, omitted when no reliable estimate exists.'
+  - 'Beta / Car rentals: insurance details now include a `documents` array.'
+  - 'Beta / Orders: eligible `pay_at_pickup` car rental orders can be created without credit card details.'
+  - 'v3.2 / Orders: accommodation order details now support the `third_party_inventory` object.'
+- date: '2026-07-21'
+  programme: connectivity
+  type: mixed
+  breaking: false
+- date: '2026-07-07'
+  programme: connectivity
+  type: mixed
+  breaking: false
+breaking_change_policy:
+  detail: >-
+    Breaking changes are not announced in the changelog alone; they run through the separate deprecation
+    and sunsetting table, which carries the dates and the migration guide. See
+    lifecycle/booking-com-lifecycle.yml.

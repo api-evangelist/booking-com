@@ -1,0 +1,79 @@
+openapi: 3.2.0
+info:
+  title: Booking.com Connectivity Rates and Availability OTA…
+  description: The Booking.com Connectivity Rates and Availability API allows Connectivity Partners to set room availability, pricing, and restrictions for properties on Booking.com.
+  version: '2.0'
+  contact:
+    name: Booking.com Connectivity Support
+    url: https://developers.booking.com/connectivity/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://supply-xml.booking.com
+  description: Production Server (Non-PCI)
+security:
+- basicAuth: []
+tags:
+- name: OTA Availability
+  description: OTA-based endpoints for availability and rate notifications following the OpenTravel Alliance specification.
+paths:
+  /hotels/ota/OTA_HotelAvailNotif:
+    post:
+      operationId: notifyHotelAvailability
+      summary: Create or update availability (OTA format)
+      description: Updates availability and restrictions using the OTA OTA_HotelAvailNotif specification. An alternative to the B.XML availability endpoint that follows the OpenTravel Alliance format.
+      tags:
+      - OTA Availability
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: OTA_HotelAvailNotifRQ XML document containing availability updates.
+      responses:
+        '200':
+          description: Availability notification processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelAvailNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+  /hotels/ota/OTA_HotelRateAmountNotif:
+    post:
+      operationId: notifyHotelRateAmount
+      summary: Update rate amounts (OTA format)
+      description: Updates rate amounts and pricing using the OTA OTA_HotelRateAmountNotif specification. An alternative to the B.XML availability endpoint for rate-only updates.
+      tags:
+      - OTA Availability
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: OTA_HotelRateAmountNotifRQ XML document containing rate amount updates.
+      responses:
+        '200':
+          description: Rate amount notification processed successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OTA_HotelRateAmountNotifRS XML response
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic authentication using your Connectivity partner username and password.
+externalDocs:
+  description: Booking.com Connectivity Rates and Availability API Documentation
+  url: https://developers.booking.com/connectivity/docs/ari

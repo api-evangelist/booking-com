@@ -1,0 +1,2128 @@
+openapi: 3.0.1
+info:
+  title: Property API
+  description: Use the Property API to create or update a property and its settings; check and update property status; as
+    well as create or update property description.
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://supply-xml.booking.com/property-api/
+  description: Test using live endpoint
+  x-display-name: Test using live endpoint
+tags:
+- name: About Try it
+  description: "Learn how to effectively use the Try it feature in the Property API documentation.\n\nUse the **Try it** feature\
+    \ to send sample requests to API endpoints directly from the developer portal. In the **Mock (schema only)** environment,\
+    \ Try it returns schema-driven mock responses or pre-built example responses. In the **Production** environment, it sends\
+    \ the request to the live API and returns dynamic responses from your selected test property.\n\n## Environment\n\nYou\
+    \ can select between two different environments (top right corner in the UI):\n\n**Mock (schema only)** (default):\n-\
+    \ Helps to understand the response data schema\n- Recommended for all write operations (POST, PUT, DELETE)\n- Environment\
+    \ for testing without affecting live/test data\n\n**Test live endpoint**:\n- Make sure to use only test properties.\n\
+    - Changes will affect your test property data\n- Requires valid credentials\n- Same API structure as production\n\n##\
+    \ Request\n\nYou can click on any unresolved placeholders to add a value or edit an existing placeholder value.\n\nThe\
+    \ portal loads the default request body. Where the specification supports multiple request body examples (for example:\
+    \ Rooms API POST endpoint), you can choose a different request body from the drop-down list.\n\nSome helpful pointers\
+    \ before running a request:\n\n- **Authentication** (when using live endpoint): Configure your authentication headers\n\
+    \  - API Key or OAuth token as required. Use the **Environments** tab.\n  - Make sure to manage separate machine accounts\
+    \ for test vs. properties in production.\n  - Ensure credentials match your selected environment.\n\n- **Parameters**:\
+    \ Fill in required parameters\n  - Path parameters (like `propertyId`)\n  - Query parameters (like `language_code`)\n\
+    \  - Request body for `POST/PUT` operations\n\n- **Execute**: Click **Send** to send the request\n  - The request is sent\
+    \ to the selected environment\n  - When sending requests to the live endpoint, real HTTP request is made to the API\n\n\
+    ## Response\n\nThe Try it feature provides comprehensive response information to the extent supported by the Open API\
+    \ specification:\n\n### Status code\n- **2xx**: Success responses (200)\n- **4xx**: Client errors (400 Bad Request, 401\
+    \ Unauthorized, 404 Not Found)\n- **5xx**: Server errors (500 Internal Server Error)\n\n### Response body\n- JSON formatted\
+    \ response data\n\nIf the returned response, by default, is unformatted, select the supported Response body format in\
+    \ the UI.\n\n### Response headers\n- Content-Type, Content-Length.\n\n## Environments\n\nThe **Environments** tab allows\
+    \ you to create variables specific to the environment. For example, you can add a variable to hold the value of the `property-id`\
+    \ placeholder. The portal inserts the respective value depending on the environment at the time of sending the request.\n\
+    \n### Variables\n\nMost of the endpoints (especially POST/PUT/DELETE) require you to add a path or query parameter before\
+    \ sending the request. The Open API specification marks these parameters with placeholder tags. For example, {{`property_id`}}.\
+    \ You can use the **Environments** tab to manage the values for these placeholders as variables.\n\n#### Path parameters\n\
+    - **Required**: Must be provided to make the request\n- **Type validation**: Ensures correct data types (integer, string,\
+    \ etc.)\n- **Example**: `propertyId` in `/property-api/properties/{propertyId}`\n\n#### Query parameters\n- **Optional**:\
+    \ Usually have default values\n- **Example**: `language_code` with `en-us` as the default value\n\n#### Request body\n\
+    - **Schema validation**: Follows OpenAPI schema definitions\n- **Example data**: Prepopulated with sample values\n\n##\
+    \ Best practices\n\nThis section provides some basic practice guidelines.\n\n### Authentication\n\n- Always use separate\
+    \ machine accounts for test properties vs. properties in production.\n- When testing with production endpoint, make sure\
+    \ to use only test properties.\n\n### For Read operations (GET)\n- Safe to test in any environment\n- Use valid IDs that\
+    \ exist in your system\n- Check response structure for integration planning\n\n### For Write operations (POST, PUT)\n\
+    - **Always use Mock (schema only) environment first**\n- Verify request payload structure\n- Check response for success\
+    \ confirmation\n- Test error scenarios with invalid data\n\n### For Delete operations (DELETE)\n- **Preferable to use\
+    \ Mock (schema only) environment only**\n- Understand the operation is irreversible\n- Have backup data when testing using\
+    \ test properties\n\n## Troubleshooting\n\n### Common issues\n\n**401 Unauthorized**\n- Check authentication credentials\n\
+    - Verify API key is valid and not expired\n- Ensure credentials match the selected environment\n\n**400 Bad Request**\n\
+    - Validate request payload against schema\n- Check required fields are provided\n- Verify data types match specification\n\
+    \n**404 Not Found**\n- Confirm the resource ID exists\n- Check the endpoint URL is correct\n- Verify you have access to\
+    \ the resource\n\n### Getting help\n\nIf you encounter issues:\n1. Check the response error message for details\n2. Verify\
+    \ your request matches the API specification\n3. Contact the Connectivity Team for support\n\n---\n\n*This documentation\
+    \ applies to all endpoints in the Property API. The Try it feature provides a consistent testing experience across all\
+    \ operations.*"
+- name: Property Details API
+  description: Create, update and retrieve property details
+- name: Property Settings API
+  description: Add, update or retrieve property settings
+- name: Property Status API
+  description: Check if a property is ready to open; open or close a property
+- name: Property Description API
+  description: Create, update and retrieve property description
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Property Details API
+  - Property Settings API
+  - Property Status API
+  - Property Description API
+- name: Documentation
+  tags:
+  - About Try it
+paths:
+  /properties/{propertyId}/description:
+    get:
+      tags:
+      - Property Description API
+      summary: Get existing property description
+      operationId: get
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponsePropertyDescription'
+    put:
+      tags:
+      - Property Description API
+      summary: Create or update property description
+      operationId: create
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyDescription'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+    delete:
+      tags:
+      - Property Description API
+      summary: Delete existing property description
+      operationId: delete
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /properties:
+    post:
+      tags:
+      - Property Details API
+      summary: Create property
+      operationId: createPropertyInfo
+      parameters:
+      - name: Accept-Version
+        in: header
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyInfoCreate'
+        required: true
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponsePropertyId'
+  /properties/{propertyId}:
+    get:
+      tags:
+      - Property Details API
+      summary: Read property
+      operationId: readPropertyInfo
+      parameters:
+      - name: Accept-Version
+        in: header
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponsePropertyInfoRead'
+    patch:
+      tags:
+      - Property Details API
+      summary: Partial update property info
+      operationId: patchPropertyInfo
+      parameters:
+      - name: Accept-Version
+        in: header
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyInfoUpdate'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponsePropertyId'
+  /meta:
+    get:
+      tags:
+      - Property Details API
+      summary: Read property
+      operationId: readPropertyInfoMeta
+      parameters:
+      - name: Accept-Version
+        in: header
+        schema:
+          type: string
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseMetaContainer'
+  /properties/{propertyId}/settings:
+    get:
+      tags:
+      - Property Settings API
+      summary: Read property settings
+      operationId: readPropertySettings
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponsePropertySettingsReadOutputData'
+    post:
+      tags:
+      - Property Settings API
+      summary: Create property settings
+      operationId: createPropertySettings
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertySettingsCreateInput'
+      responses:
+        '200':
+          description: Property settings created or updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseMapStringPropertySettingsCreateOutputData'
+              example:
+                data:
+                  property_settings:
+                    success: true
+                  pets:
+                    success: true
+                  damage_policy:
+                    success: true
+                  standard_phrases:
+                    success: true
+                  quiet_hours:
+                    success: true
+                  renovation:
+                    success: true
+                  bed_linen_policy:
+                    success: true
+                  accepted_payment_types:
+                    success: true
+                  french_tax_details:
+                    success: true
+                  cancellation_exceptions:
+                    success: true
+                  age_buckets:
+                    success: true
+                  child_policies:
+                    success: true
+                  booking_model:
+                    success: true
+                  invoice_settings:
+                    success: true
+                  land_registration_numbers:
+                    success: true
+                warnings: []
+                errors: []
+                meta:
+                  ruid: 4a713cab-61c6-43f0-bd39-f87ba830b5ed
+        '400':
+          description: Bad request. The request body contains an unknown or invalid field.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+              example:
+                warnings: []
+                errors:
+                - message: Invalid item
+                  code: 394
+                  details:
+                    fields:
+                    - require_booker_phone
+                  description: There was one or more unknown fields in the request payload.
+                meta:
+                  ruid: 672fe3f0-e595-40be-9c0c-735f9887f321
+  /legal/damage-programme/terms:
+    get:
+      tags:
+      - Property Settings API
+      summary: Get Damage Programme Terms
+      operationId: getDamageProgrammeTerms
+      parameters:
+      - name: language_code
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 'Accepts Booking Language Code: https://developers.booking.com/connectivity/docs/codes-bcl/'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseDamageProgrammeTerms'
+  /properties/{propertyId}/status:
+    post:
+      tags:
+      - Property Status API
+      summary: Check property status
+      operationId: checkPropertyStatus
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyStatusInput'
+        required: true
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponsePropertyStatusOutput'
+components:
+  schemas:
+    ApiErrorResponse:
+      type: object
+      properties:
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ApiErrorOTA:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32
+        details:
+          $ref: '#/components/schemas/ObjectNode'
+        description:
+          type: string
+    ApiResponse:
+      type: object
+      properties:
+        data:
+          type: object
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ObjectNode:
+      type: object
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+    PropertyDescription:
+      required:
+      - text
+      type: object
+      properties:
+        text:
+          type: string
+        language_code:
+          maxLength: 5
+          minLength: 2
+          type: string
+        last_update:
+          type: string
+    ApiResponsePropertyDescription:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PropertyDescription'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ApiResponsePropertyId:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PropertyId'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    PropertyId:
+      type: object
+      properties:
+        property_id:
+          type: integer
+          description: 'The Booking.com property ID, returned on creation of the property.
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            Data Mapping: HotelCode
+
+            '
+          format: int32
+    Address:
+      required:
+      - address_line
+      - city_name
+      - country_code
+      type: object
+      properties:
+        city_name:
+          type: string
+          description: 'The name of the city, town, or village.
+
+            Validation: We do not allow CJK Unified Ideographs
+
+            [Current Documentation: CityName](/connectivity/docs/api-reference/address/)
+
+            DataMapping: ContactInfo/Addresses/CityName
+
+            '
+        country_code:
+          type: string
+          description: '[Two-letter country code](/connectivity/docs/b_xml-countries/).
+
+            Validation: One of [Two-letter country code](/connectivity/docs/b_xml-countries/)
+
+            Country codes follow ISO 3166
+
+            [Current Documentation: CountryName](/connectivity/docs/api-reference/address/)
+
+            DataMapping: ContactInfo/Addresses/CountryName
+
+            '
+        postal_code:
+          type: string
+          description: 'Postal/zip code.
+
+            Validation: We validate against country specific post code formats.
+
+            [Current Documentation: PostalCode](/connectivity/docs/api-reference/address/)
+
+            DataMapping: ContactInfo/Addresses/PostalCode
+
+            '
+        address_line:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: 'The full street name and number.
+
+            Validations: Minimum 1 at most 255 characters. We also do not allow CJK Unified Ideographs.
+
+            Should not contain abbreviations (such as "Rd." for "Road") and should not exceed 255 characters.
+
+            [Current Documentation: AddressLine](/connectivity/docs/api-reference/address/)
+
+            DataMapping: ContactInfo/Addresses/AddressLine
+
+            '
+        display_address:
+          type: boolean
+          description: 'Specifies whether to hide the address details. Defaults to true.
+
+            [Current Documentation: HiddenAddress](/connectivity/docs/api-reference/hidden-address/)
+
+            DataMapping: ContactInfo/HiddenAddress/ShouldHideAddress
+
+            '
+    Position:
+      required:
+      - latitude
+      - longitude
+      type: object
+      properties:
+        latitude:
+          maximum: 90
+          minimum: -90
+          type: number
+          description: 'Property''s latitude.
+
+            Validation: Must be between -90 and 90
+
+            '
+          format: double
+        longitude:
+          maximum: 180
+          minimum: -180
+          type: number
+          description: 'Property''s longitude.
+
+            Validation: Must be between -180 and 180
+
+            '
+          format: double
+      description: '[Current Documentation](/connectivity/docs/api-reference/position/)
+
+        Data Mapping: Position
+
+        '
+    PropertyInfoCreate:
+      required:
+      - check_in
+      - legal_entity_id
+      - physical_address
+      - position
+      - property_name
+      - room_count
+      - target
+      type: object
+      properties:
+        translations:
+          type: array
+          description: 'Non-English translations of the physical address
+
+            [Current Documentation](/connectivity/docs/api-reference/addresses/)
+
+            DataMapping: Addresses
+
+            '
+          items:
+            $ref: '#/components/schemas/Translation'
+        position:
+          $ref: '#/components/schemas/Position'
+        check_in:
+          $ref: '#/components/schemas/TimeRange'
+        check_out:
+          $ref: '#/components/schemas/TimeRange'
+        property_name:
+          maxLength: 255
+          minLength: 3
+          type: string
+          description: 'Specifies the name of the property on Booking.com.
+
+            Validation: We do not allow CJK Unified Ideographs. Should be shorter than 255 characters. Must have at
+
+            least 3 letters, one of which must be lower case. Must not have more than 5 numbers.
+
+            Can''t include punctuation, asterisks or symbols.
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            DataMapping: HotelName
+
+            '
+        property_category:
+          type: integer
+          description: 'The Property Class Type Code for the property.
+
+            Validation: One of [(PCT) Property Class Type Codes (OTA 2014B)](/connectivity/docs/codes-pct/).
+
+            During creation, either property_category or booking_property_category are required.
+
+            [Current Documentation](/connectivity/docs/api-reference/hotelcategory/)
+
+            DataMapping: HotelCategory/Code
+
+            '
+          format: int32
+        booking_property_category:
+          type: integer
+          description: 'The Booking.com code for property_category. Utilize the meta endpoint for valid values and their OTA
+            mappings.
+
+            Validation: During creation, either property_category or booking_property_category are required.
+
+            '
+          format: int32
+        primary_language:
+          type: string
+          description: 'Specifies the language in which the property wants their Booking.com extranet content and communication
+
+            (emails, notifications, ...) etc.
+
+            Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            Default: en-gb
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            DataMapping: LanguageCode
+
+            '
+        languages_spoken:
+          type: array
+          description: 'The languages spoken by staff.
+
+            Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            DataMapping: HotelInfo->Languages
+
+            '
+          items:
+            type: string
+            description: 'The languages spoken by staff.
+
+              Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+              DataMapping: HotelInfo->Languages
+
+              '
+        room_count:
+          minimum: 0
+          type: integer
+          description: 'The number of sellable units the property offers.
+
+            DataMapping: GuestRoomInfo->Quantity
+
+            '
+          format: int32
+        floor_count:
+          maximum: 200
+          minimum: 0
+          type: integer
+          description: 'Total number of floors the building has (excl. underground floors).
+
+            Validation: Max value of 200
+
+            DataMapping: TotalNumberOfFloors->Number
+
+            '
+          format: int32
+        provider_property_id:
+          maxLength: 16
+          minLength: 0
+          type: string
+          description: 'An external id to be associated with the property (e.g. the providers internal id)
+
+            Validation: Maximum length of 16 characters
+
+            DataMapping: HotelInfo-ID
+
+            '
+        currency_code:
+          maxLength: 3
+          minLength: 0
+          type: string
+          description: "Booking.com defines the currency for each property. In most cases this should not be passed as only\
+            \ one currency\n is allowed per country. Retrieve a list of all currency codes with /xml/currencies\nValidation:\
+            \ Must be allowed for property's country\n[Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)\n\
+            Data Mapping: currencyCode\n"
+        stars:
+          pattern: ^0(\.0)?|[1-4](\.[05])?|5(\.0)?$
+          type: string
+          description: 'The number of stars a property has.
+
+            Validation: String with values 0 through 5, optionally may include half stars for values 1 or greater
+
+            (i.e. 0, 1, 1.5, 2, 2.5 ... 4, 4.5, 5)
+
+            Default: 0
+
+            DataMapping: AffiliationInfo->Awards->Award
+
+            '
+        target:
+          type: string
+          description: 'Specifies whether the request is to create a test property or a real property.
+
+            Validation: String value of production or test
+
+            DataMapping: Target
+
+            '
+          enum:
+          - test
+          - production
+        physical_address:
+          $ref: '#/components/schemas/Address'
+        legal_entity_id:
+          type: integer
+          description: 'The leid for the property.
+
+            [Current Documentation](/connectivity/docs/api-reference/companyname/)
+
+            DataMapping: HotelInfo/OwnershipManagementInfos/OwnershipManagementInfo/CompanyName/Code
+
+            '
+          format: int64
+    TimeRange:
+      type: object
+      properties:
+        from:
+          pattern: ^(?:[01]\d|2[0-3]):[03]0$
+          type: string
+          description: 'Validation: Specified via the format HH:MM, where HH can be 00 to 24 and MM can be 00 or 30
+
+            Required for check-in, optional for check-out
+
+            24-hour check-in/check-out can be specified using 00:00 as both from and to
+
+            '
+        until:
+          pattern: ^(?:[01]\d|2[0-3]):[03]0$
+          type: string
+          description: 'Validation: Specified via the format HH:MM, where HH can be 00 to 24 and MM can be 00 or 30
+
+            Optional for check-in. If check-out passed, required.
+
+            24-hour check-in/check-out can be specified using 00:00 as both from and to
+
+            '
+      description: '[Current Documentation](/connectivity/docs/api-reference/policyinfo/)
+
+        Data Mapping: PolicyInfo/CheckInTime/CheckOutTime
+
+        '
+    Translation:
+      required:
+      - address_line
+      - city_name
+      - language_code
+      - property_name
+      type: object
+      properties:
+        city_name:
+          type: string
+          description: 'The name of the city, town, or village.
+
+            [Current Documentation: CityName](/connectivity/docs/api-reference/address/)
+
+            DataMapping: ContactInfo/Addresses/CityName
+
+            '
+        address_line:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: 'The full street name and number.
+
+            Should not contain abbreviations (such as "Rd." for "Road") and should not exceed 255 characters.
+
+            [Current Documentation: AddressLine](/connectivity/docs/api-reference/address/)
+
+            DataMapping: ContactInfo/Addresses/AddressLine
+
+            '
+        language_code:
+          type: string
+          description: 'Specifies the language of this set of address details. Used for non-English translations
+
+            As defined by BCL table in docs
+
+            [Current Documentation](/connectivity/docs/api-reference/address/)
+
+            DataMapping: Language
+
+            '
+        property_name:
+          type: string
+          description: 'Non-english name
+
+            [Current Documentation](/connectivity/docs/api-reference/address/)
+
+            DataMapping: Language
+
+            '
+      description: 'Non-English translations of the physical address
+
+        [Current Documentation](/connectivity/docs/api-reference/addresses/)
+
+        DataMapping: Addresses
+
+        '
+    PropertyInfoUpdate:
+      required:
+      - check_in
+      - physical_address
+      - position
+      - property_name
+      - room_count
+      type: object
+      properties:
+        translations:
+          type: array
+          description: 'Non-English translations of the physical address
+
+            [Current Documentation](/connectivity/docs/api-reference/addresses/)
+
+            DataMapping: Addresses
+
+            '
+          items:
+            $ref: '#/components/schemas/Translation'
+        position:
+          $ref: '#/components/schemas/Position'
+        check_in:
+          $ref: '#/components/schemas/TimeRange'
+        check_out:
+          $ref: '#/components/schemas/TimeRange'
+        property_name:
+          maxLength: 255
+          minLength: 3
+          type: string
+          description: 'Specifies the name of the property on Booking.com.
+
+            Validation: We do not allow CJK Unified Ideographs. Should be shorter than 255 characters. Must have at
+
+            least 3 letters, one of which must be lower case. Must not have more than 5 numbers.
+
+            Can''t include punctuation, asterisks or symbols.
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            DataMapping: HotelName
+
+            '
+        property_category:
+          type: integer
+          description: 'The Property Class Type Code for the property.
+
+            Validation: One of [(PCT) Property Class Type Codes (OTA 2014B)](/connectivity/docs/codes-pct/).
+
+            [Current Documentation](/connectivity/docs/api-reference/hotelcategory/)
+
+            DataMapping: HotelCategory/Code
+
+            '
+          format: int32
+        booking_property_category:
+          type: integer
+          description: 'The Booking.com code for property_category. Utilize the meta endpoint for valid values and their OTA
+            mappings.
+
+            '
+          format: int32
+        primary_language:
+          type: string
+          description: 'Specifies the language in which the property wants their Booking.com extranet content and communication
+
+            (emails, notifications, ...) etc.
+
+            Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            Default: en-gb
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            DataMapping: LanguageCode
+
+            '
+        languages_spoken:
+          type: array
+          description: 'The languages spoken by staff.
+
+            Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            DataMapping: HotelInfo->Languages
+
+            '
+          items:
+            type: string
+            description: 'The languages spoken by staff.
+
+              Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+              DataMapping: HotelInfo->Languages
+
+              '
+        room_count:
+          minimum: 0
+          type: integer
+          description: 'The number of sellable units the property offers.
+
+            DataMapping: GuestRoomInfo->Quantity
+
+            '
+          format: int32
+        floor_count:
+          maximum: 200
+          minimum: 0
+          type: integer
+          description: 'Total number of floors the building has (excl. underground floors).
+
+            Validation: Max value of 200
+
+            DataMapping: TotalNumberOfFloors->Number
+
+            '
+          format: int32
+        provider_property_id:
+          maxLength: 16
+          minLength: 0
+          type: string
+          description: 'An external id to be associated with the property (e.g. the providers internal id)
+
+            Validation: Maximum length of 16 characters
+
+            DataMapping: HotelInfo-ID
+
+            '
+        currency_code:
+          maxLength: 3
+          minLength: 0
+          type: string
+          description: "Booking.com defines the currency for each property. In most cases this should not be passed as only\
+            \ one currency\n is allowed per country. Retrieve a list of all currency codes with /xml/currencies\nValidation:\
+            \ Must be allowed for property's country\n[Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)\n\
+            Data Mapping: currencyCode\n"
+        stars:
+          pattern: ^0(\.0)?|[1-4](\.[05])?|5(\.0)?$
+          type: string
+          description: 'The number of stars a property has.
+
+            Validation: String with values 0 through 5, optionally may include half stars for values 1 or greater
+
+            (i.e. 0, 1, 1.5, 2, 2.5 ... 4, 4.5, 5)
+
+            Default: 0
+
+            DataMapping: AffiliationInfo->Awards->Award
+
+            '
+        physical_address:
+          $ref: '#/components/schemas/Address'
+    ApiResponsePropertyInfoRead:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PropertyInfoRead'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    PropertyInfoRead:
+      required:
+      - check_in
+      - legal_entity_id
+      - physical_address
+      - position
+      - property_name
+      - room_count
+      - target
+      type: object
+      properties:
+        translations:
+          type: array
+          description: 'Non-English translations of the physical address
+
+            [Current Documentation](/connectivity/docs/api-reference/addresses/)
+
+            DataMapping: Addresses
+
+            '
+          items:
+            $ref: '#/components/schemas/Translation'
+        position:
+          $ref: '#/components/schemas/Position'
+        check_in:
+          $ref: '#/components/schemas/TimeRange'
+        check_out:
+          $ref: '#/components/schemas/TimeRange'
+        property_name:
+          maxLength: 255
+          minLength: 3
+          type: string
+          description: 'Specifies the name of the property on Booking.com.
+
+            Validation: We do not allow CJK Unified Ideographs. Should be shorter than 255 characters. Must have at
+
+            least 3 letters, one of which must be lower case. Must not have more than 5 numbers.
+
+            Can''t include punctuation, asterisks or symbols.
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            DataMapping: HotelName
+
+            '
+        property_category:
+          type: integer
+          description: 'The Property Class Type Code for the property.
+
+            Validation: One of [(PCT) Property Class Type Codes (OTA 2014B)](/connectivity/docs/codes-pct/).
+
+            During creation, either property_category or booking_property_category are required.
+
+            [Current Documentation](/connectivity/docs/api-reference/hotelcategory/)
+
+            DataMapping: HotelCategory/Code
+
+            '
+          format: int32
+        booking_property_category:
+          type: integer
+          description: 'The Booking.com code for property_category. Utilize the meta endpoint for valid values and their OTA
+            mappings.
+
+            Validation: During creation, either property_category or booking_property_category are required.
+
+            '
+          format: int32
+        primary_language:
+          type: string
+          description: 'Specifies the language in which the property wants their Booking.com extranet content and communication
+
+            (emails, notifications, ...) etc.
+
+            Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            Default: en-gb
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            DataMapping: LanguageCode
+
+            '
+        languages_spoken:
+          type: array
+          description: 'The languages spoken by staff.
+
+            Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            DataMapping: HotelInfo->Languages
+
+            '
+          items:
+            type: string
+            description: 'The languages spoken by staff.
+
+              Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+              DataMapping: HotelInfo->Languages
+
+              '
+        room_count:
+          minimum: 0
+          type: integer
+          description: 'The number of sellable units the property offers.
+
+            DataMapping: GuestRoomInfo->Quantity
+
+            '
+          format: int32
+        floor_count:
+          maximum: 200
+          minimum: 0
+          type: integer
+          description: 'Total number of floors the building has (excl. underground floors).
+
+            Validation: Max value of 200
+
+            DataMapping: TotalNumberOfFloors->Number
+
+            '
+          format: int32
+        provider_property_id:
+          maxLength: 16
+          minLength: 0
+          type: string
+          description: 'An external id to be associated with the property (e.g. the providers internal id)
+
+            Validation: Maximum length of 16 characters
+
+            DataMapping: HotelInfo-ID
+
+            '
+        currency_code:
+          maxLength: 3
+          minLength: 0
+          type: string
+          description: "Booking.com defines the currency for each property. In most cases this should not be passed as only\
+            \ one currency\n is allowed per country. Retrieve a list of all currency codes with /xml/currencies\nValidation:\
+            \ Must be allowed for property's country\n[Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)\n\
+            Data Mapping: currencyCode\n"
+        stars:
+          pattern: ^0(\.0)?|[1-4](\.[05])?|5(\.0)?$
+          type: string
+          description: 'The number of stars a property has.
+
+            Validation: String with values 0 through 5, optionally may include half stars for values 1 or greater
+
+            (i.e. 0, 1, 1.5, 2, 2.5 ... 4, 4.5, 5)
+
+            Default: 0
+
+            DataMapping: AffiliationInfo->Awards->Award
+
+            '
+        target:
+          type: string
+          description: 'Specifies whether the request is to create a test property or a real property.
+
+            Validation: String value of production or test
+
+            DataMapping: Target
+
+            '
+          enum:
+          - test
+          - production
+        property_id:
+          type: integer
+          description: 'The Booking.com property ID, returned on creation of the property.
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            Data Mapping: HotelCode
+
+            '
+          format: int32
+        status:
+          type: string
+          description: 'The current status of the property.
+
+            [Current Documentation](/connectivity/docs/property-statuses/#property-statuses)
+
+            Data Mapping: hoteldescriptivecontent->Status
+
+            '
+        url:
+          type: string
+          description: 'The booking URL of the property (if available).
+
+            [Current Documentation](/connectivity/docs/tsk-retrieve-property/#response-body-parameters)
+
+            Data Mapping: HotelInfo->Descriptions->MultimediaDescriptions->...->TextItem->URL
+
+            '
+        physical_address:
+          $ref: '#/components/schemas/Address'
+        legal_entity_id:
+          type: integer
+          description: 'The leid for the property.
+
+            [Current Documentation](/connectivity/docs/api-reference/companyname/)
+
+            DataMapping: HotelInfo/OwnershipManagementInfos/OwnershipManagementInfo/CompanyName/Code
+
+            '
+          format: int64
+    ApiResponseMetaContainer:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/MetaContainer'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    MetaContainer:
+      type: object
+      properties:
+        property_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyCategoryMetaEntry'
+    PropertyCategoryMetaEntry:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: The Booking.com property category code
+          format: int32
+        name:
+          type: string
+          description: Name of the property category
+        code_ota:
+          type: integer
+          description: If applicable, the OTA code for this Booking.com category
+          format: int32
+        code_booking_extended:
+          type: integer
+          description: If applicable, the legacy Booking Extended code for this Booking.com category
+          format: int32
+        additional_ota_mappings:
+          type: array
+          description: In the case that we have defined additional OTA codes that will remap to this category, this will be
+            the list of those mappings
+          items:
+            $ref: '#/components/schemas/PropertyCategoryMetaEntry'
+    ApiResponseMapStringPropertySettingsCreateOutputData:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PropertySettingsCreateOutputData'
+          example:
+            property_setting_1:
+              success: true
+            property_setting_2:
+              success: true
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    PropertySettingsCreateOutputData:
+      type: object
+      properties:
+        success:
+          type: boolean
+    AgeBucketData:
+      required:
+      - max_age
+      - min_age
+      type: object
+      properties:
+        min_age:
+          maximum: 17
+          minimum: 0
+          type: integer
+          format: int32
+        max_age:
+          maximum: 17
+          minimum: 0
+          type: integer
+          format: int32
+      description: An age bucket is a category for children prices that specifies the age range to which the eventual price
+        applies to. You must at least create one, but can create up to three age buckets per property. Each age bucket exists
+        of a minimum and maximum age, where the maximum age is inclusive.
+    PropertySettingsCreateInput:
+      type: object
+      properties:
+        property_settings:
+          $ref: '#/components/schemas/property_settings'
+        pets:
+          $ref: '#/components/schemas/pets'
+        damage_policy:
+          $ref: '#/components/schemas/damage_policy'
+        standard_phrases:
+          type: array
+          items:
+            $ref: '#/components/schemas/StandardPhraseData'
+        quiet_hours:
+          $ref: '#/components/schemas/quiet_hours'
+        renovation:
+          $ref: '#/components/schemas/renovation'
+        bed_linen_policy:
+          $ref: '#/components/schemas/hotel_chain_bed_linen'
+        accepted_payment_types:
+          $ref: '#/components/schemas/accepted_payment_types'
+        french_tax_details:
+          $ref: '#/components/schemas/french_tax_details'
+        cancellation_exceptions:
+          $ref: '#/components/schemas/cancellation_exceptions'
+        age_buckets:
+          type: array
+          description: An age bucket is a category for children prices that specifies the age range to which the eventual
+            price applies to. You must at least create one, but can create up to three age buckets per property. Each age
+            bucket exists of a minimum and maximum age, where the maximum age is inclusive.
+          items:
+            $ref: '#/components/schemas/AgeBucketData'
+        children_policies:
+          $ref: '#/components/schemas/children_policies'
+        booking_model:
+          $ref: '#/components/schemas/booking_model'
+        invoice_settings:
+          $ref: '#/components/schemas/invoice_settings'
+        land_registration_numbers:
+          type: array
+          items:
+            type: string
+    StandardPhraseData:
+      required:
+      - enabled
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          enum:
+          - GuestIdentification
+          - InformArrivalTime
+          - PayBeforeStay
+          - TattooRestriction
+          - AccomodationTax
+          - AccommodationTax
+          - IsraeliCitizensVat
+          - RequireInvoice
+          - EarlyDeparture
+          - PedestrianZoneOnly
+          - LimitedParking
+          - AccessByUnpavedRoad
+          - OnsiteFunctions
+          - NoHenStagParty
+          - ResidentialArea
+          - BusyArea
+          - HalfBoardNoDrinks
+          - NoPublicTransport
+          - WaterCrisis
+          - RussiaAntiHostelRegulations
+          - Covid19BodyTempCheck
+          - Covid19RestrictionOfGuests
+          - Covid19NoSelfQuarantine
+          - Covid19ExtraCleaning
+          - Covid19ReducedFoodServices
+          - Covid19OnlyEssentialTravellers
+          - Covid19ShuttleSuspended
+          - Covid19ReducedServices
+          - Covid19ReducedHoursOfService
+          - Covid19ExtraDocumentation
+          - Covid19ReducedFacilities
+          - Covid19PhysicalDistance
+          - Covid19LocalGuidelinesFollowed
+          - Covid19FaceMaskMandatory
+          - Covid19QuarantineNotAllowed
+          - Covid19NoChargePCRTest
+          - Covid19NoCostExtension
+          - Covid19MedicalMonitoring
+          - Covid19NegativeRequired
+          - Covid19AtChargePCRTest
+          - Covid19InsurancePCRTest
+          - Covid19VaccinationNegativeTestCheckIn
+          - Covid19VaccinationNegativeTestRecoveryCheckIn
+          - Covid19VaccinationRecoveryCheckIn
+          - Covid19NegativeTestRecoveryCheckIn
+          - Covid19VaccinationCheckIn
+          - Covid19RecoveryCheckIn
+          - Covid19ProofRequired
+          - LongStayDisclaimerJapan
+          - GuestRentalAgreement
+          - GuestUnder18
+        enabled:
+          type: boolean
+    accepted_payment_types:
+      type: object
+      properties:
+        codes:
+          type: array
+          items:
+            type: integer
+            format: int32
+      description: List of payment methods. For more information, see the [full list of payment codes.](/connectivity/docs/codes-bcpt)
+    advance_cancellation:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Specifies whether properties have advance cancellation enabled
+        before_check_in:
+          type: string
+          description: Amount of weeks before check-in when free cancellation is available
+          enum:
+          - WEEKS_4
+          - WEEKS_8
+          - WEEKS_12
+    age_restriction:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        min:
+          type: integer
+          format: int32
+        max:
+          type: integer
+          format: int32
+    booking_model:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - IB
+          - RTB
+      description: 'Specify if properties have request to book option enabled. Currently available only for: fr, au, us, it,
+        de, gb, es'
+    brazil_tax_details:
+      required:
+      - city_hall_id
+      - email
+      - tax_payer_number
+      - tax_payer_number_type
+      type: object
+      properties:
+        tax_payer_number_type:
+          type: string
+          description: Specifies whether the identifying number belongs to a company or a private individual.
+          enum:
+          - CNPJ
+          - CPF
+        tax_payer_number:
+          type: string
+          description: The identifying number. CNPJ = 14 digits. CPF = 11 digits.
+        city_hall_id:
+          type: string
+          description: The 8-digit ID for the city hall which issued the CNPJ or CPF number
+        email:
+          type: string
+    cancellation_exceptions:
+      type: object
+      properties:
+        grace_period:
+          $ref: '#/components/schemas/grace_period'
+        advance_cancellation:
+          $ref: '#/components/schemas/advance_cancellation'
+    children_policies:
+      type: object
+      properties:
+        allow_children:
+          type: boolean
+          description: Specifies whether the property admits adults and children, or only adults.
+        min_age:
+          type: integer
+          description: Specifies the minimum age that children are allowed (in case allow_children = true).
+          format: int32
+        policy_rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/policy_rules'
+      description: 'You can indicate whether a property accepts children and specify: price, occupancy and what age children
+        are welcome'
+    curfew:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        start:
+          type: string
+        end:
+          type: string
+    damage_policy:
+      required:
+      - policy_type
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Amount for Damages
+          format: double
+        currency:
+          type: string
+          description: Currency used for Damages. We will use the property's default currency if not provided
+        policy_type:
+          type: string
+          description: Policy Type for Damages
+          enum:
+          - NONE
+          - HANDLED_BY_PROPERTY
+          - HANDLED_BY_BOOKING_COM
+        damage_programme_terms_agreed:
+          type: boolean
+          description: Specifies if the partner agrees to the terms (applicable for damage programme)
+        collection_mode:
+          type: string
+          description: Specifies how you wish to collect the deposit (applicable for damage deposit)
+          enum:
+          - CASH
+          - CREDIT_CARD
+          - PAYPAL
+          - BANK_TRANSFER
+          - OTHER
+        collection_when:
+          type: string
+          description: Specifies when you would collect the deposit (applicable for damage deposit)
+          enum:
+          - ON_ARRIVAL
+          - SEVEN_DAYS_BEFORE_ARRIVAL
+          - FOURTEEN_DAYS_BEFORE_ARRIVAL
+        return_mode:
+          type: string
+          description: Specifies how you would return the deposit (applicable for damage deposit)
+          enum:
+          - CASH
+          - CREDIT_CARD
+          - PAYPAL
+          - BANK_TRANSFER
+          - OTHER
+        return_when:
+          type: string
+          description: Specifies how you would return the deposit (applicable for damage deposit)
+          enum:
+          - ON_CHECKOUT
+          - WITHIN_7_DAYS
+          - WITHIN_14_DAYS
+    french_tax_details:
+      required:
+      - declare_revenue
+      - has_vat
+      - registered_in_rcs
+      type: object
+      properties:
+        category_id:
+          type: string
+          description: Contains a number - city tax category ID. You can retrieve available categories using the /xml/citytaxcategory
+            call.
+        nature_id:
+          type: string
+          description: Contains a number - nature category ID. You can retrieve available categories using /xml/citytaxcategory
+            call.
+        declare_revenue:
+          type: boolean
+          description: Do you declare revenues as professional for direct tax purposes
+        has_vat:
+          type: boolean
+          description: Do you have a VAT registered for this activity?
+        registered_in_rcs:
+          type: boolean
+          description: Are you registered as a professional at the trade commercial register (Registre du Commerce et des
+            Sociétés)?
+    grace_period:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Specifies whether properties have grace period enabled
+        after_booking:
+          type: string
+          description: Grace period - amount of hours after booking when free cancellation is available.
+          enum:
+          - HOURS_1
+          - HOURS_4
+          - HOURS_24
+    hotel_chain_bed_linen:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        amount:
+          type: number
+          format: double
+    invoice_settings:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        contact_person:
+          type: string
+        address:
+          maxLength: 255
+          minLength: 1
+          type: string
+        country_code:
+          type: string
+        city:
+          type: string
+        postal_code:
+          type: string
+        state:
+          maxLength: 2
+          minLength: 2
+          type: string
+        notification_channel:
+          type: string
+          description: The channel how company should be notified invoice related mails.
+          enum:
+          - POSTAL_MAIL
+          - EMAIL
+        brazil_tax_details:
+          $ref: '#/components/schemas/brazil_tax_details'
+    long_stay:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        max_length_of_stay:
+          type: integer
+          format: int32
+    pets:
+      required:
+      - pets_allowed
+      type: object
+      properties:
+        pets_allowed:
+          type: string
+          description: Specifies pets allowed option for the properties.
+          enum:
+          - PETS_NOT_ALLOWED
+          - PETS_ALLOWED
+          - PETS_ALLOWED_ON_REQUEST
+        pets_price_type:
+          type: string
+          description: Specifies pets price type option for the properties.
+          enum:
+          - FREE
+          - CHARGES_MAY_APPLY
+      description: Contains settings related to the pets allowance
+    policy_rules:
+      required:
+      - price_mode
+      - price_type
+      - rule_type
+      type: object
+      properties:
+        rule_type:
+          type: string
+          enum:
+          - EXISTING_BED
+          - EXTRA_BED
+          - CRIB
+          - EXTRA_BED_FOR_ADULT
+        from_age:
+          type: integer
+          format: int64
+        to_age:
+          type: integer
+          format: int64
+        price_type:
+          type: string
+          enum:
+          - FIXED
+          - FREE
+          - ADULT_PERCENTAGE
+        price_mode:
+          type: string
+          enum:
+          - PER_STAY
+          - PER_NIGHT
+        price:
+          type: number
+          format: double
+    property_settings:
+      type: object
+      properties:
+        require_cvc:
+          type: boolean
+          description: Specify whether guest needs to provide CVC for booking.
+        curfew:
+          $ref: '#/components/schemas/curfew'
+        require_booker_address:
+          type: boolean
+          description: Specifies whether guests must provide an address.
+        require_booker_phone_number:
+          type: boolean
+          description: Specifies whether guests must provide a contact telephone number.
+        age_restriction:
+          $ref: '#/components/schemas/age_restriction'
+        auto_replenish:
+          type: boolean
+          description: Specify if property enabled to auto-replenish hotel's inventory after cancellations
+        replenish_closed_rooms:
+          type: boolean
+          description: Reopen closed rooms after a cancellation with the rooms to.
+        long_stay:
+          $ref: '#/components/schemas/long_stay'
+        pricing_type:
+          type: string
+          description: Specifies the pricing type for the product.
+          default: Standard
+          enum:
+          - STANDARD
+          - LOS
+          - OBP
+        allow_smoking:
+          type: boolean
+          description: Specifies whether properties allow smoking option.
+        view_cc_details:
+          type: boolean
+          description: Specify whether trusted properties can view the guest's credit card details
+      description: Contains multiple various settings related to the property
+    quiet_hours:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Specifies whether properties have quiet hours enabled
+        start:
+          pattern: ^(?:[01]\d|2[0-3]):[03]0$
+          type: string
+          description: Time when quiet hours start.
+          format: HH:MM
+        end:
+          pattern: ^(?:[01]\d|2[0-3]):[03]0$
+          type: string
+          description: Time when quiet hours ends.
+          format: HH:MM
+    renovation:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Specifies whether renovation dates are enabled
+        start:
+          pattern: ^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
+          type: string
+          description: Date when renovation start
+          format: yyyy-mm-dd
+        end:
+          pattern: ^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
+          type: string
+          description: Date when renovation until.
+          format: yyyy-mm-dd
+    ApiResponseDamageProgrammeTerms:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DamageProgrammeTerms'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    DamageProgrammeTerms:
+      type: object
+      properties:
+        raw_full_text:
+          type: string
+    AcceptedPaymentTypes:
+      type: object
+      properties:
+        codes:
+          type: array
+          items:
+            type: integer
+            format: int32
+    AdvanceCancellation:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        before_check_in:
+          type: string
+          enum:
+          - WEEKS_4
+          - WEEKS_8
+          - WEEKS_12
+    AgeBucket:
+      type: object
+      properties:
+        min_age:
+          type: integer
+          format: int32
+        max_age:
+          type: integer
+          format: int32
+    ApiResponsePropertySettingsReadOutputData:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PropertySettingsReadOutputData'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    BookingModel:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - IB
+          - RTB
+        rtb_eligible:
+          type: boolean
+    BrazilTaxDetails:
+      type: object
+      properties:
+        tax_payer_number_type:
+          type: string
+        tax_payer_number:
+          type: string
+        city_hall_id:
+          type: string
+        email:
+          type: string
+    CancellationExceptions:
+      type: object
+      properties:
+        grace_period:
+          $ref: '#/components/schemas/GracePeriod'
+        advance_cancellation:
+          $ref: '#/components/schemas/AdvanceCancellation'
+    ChildAndBedPolicyRuleData:
+      type: object
+      properties:
+        rule_type:
+          type: string
+          enum:
+          - EXISTING_BED
+          - EXTRA_BED
+          - CRIB
+          - EXTRA_BED_FOR_ADULT
+          - UNRECOGNIZED
+        from_age:
+          type: integer
+          format: int32
+        to_age:
+          type: integer
+          format: int32
+        price_type:
+          type: string
+          enum:
+          - FREE
+          - PERCENTAGE
+          - FIXED
+          - DETAILED
+          - ADULT_PERCENTAGE
+          - UNRECOGNIZED
+        price_mode:
+          type: string
+          enum:
+          - PER_STAY
+          - PER_NIGHT
+          - UNRECOGNIZED
+        price:
+          type: number
+          format: double
+    ChildPolicies:
+      type: object
+      properties:
+        allow_children:
+          type: boolean
+        min_age:
+          type: integer
+          format: int32
+        policy_rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChildAndBedPolicyRuleData'
+    FrenchTaxDetails:
+      type: object
+      properties:
+        category_id:
+          type: integer
+          format: int32
+        nature_id:
+          type: integer
+          format: int32
+        declare_revenue:
+          type: boolean
+        has_vat:
+          type: boolean
+        registered_in_rcs:
+          type: boolean
+    GracePeriod:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        after_booking:
+          type: string
+          enum:
+          - HOURS_1
+          - HOURS_4
+          - HOURS_24
+    HotelChainBedLinen:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        amount:
+          type: number
+          format: double
+    InvoiceSettings:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        contact_person:
+          type: string
+        address:
+          type: string
+        state:
+          type: string
+        notification_channel:
+          type: string
+        country_code:
+          type: string
+        city:
+          type: string
+        postal_code:
+          type: string
+        brazil_tax_details:
+          $ref: '#/components/schemas/BrazilTaxDetails'
+    Pets:
+      type: object
+      properties:
+        pets_allowed:
+          type: string
+          enum:
+          - PETS_NOT_ALLOWED
+          - PETS_ALLOWED
+          - PETS_ALLOWED_ON_REQUEST
+        pets_price_type:
+          type: string
+          enum:
+          - FREE
+          - CHARGES_MAY_APPLY
+    PropertySettings:
+      type: object
+      properties:
+        require_cvc:
+          type: boolean
+        curfew:
+          $ref: '#/components/schemas/curfew'
+        require_booker_address:
+          type: boolean
+        require_booker_phone_number:
+          type: boolean
+        age_restriction:
+          $ref: '#/components/schemas/age_restriction'
+        auto_replenish:
+          type: boolean
+        replenish_closed_rooms:
+          type: boolean
+        long_stay:
+          $ref: '#/components/schemas/long_stay'
+        pricing_type:
+          type: string
+          enum:
+          - Standard
+          - OBP
+          - LOS
+        allow_smoking:
+          type: boolean
+        view_cc_details:
+          type: boolean
+    PropertySettingsReadOutputData:
+      type: object
+      properties:
+        property_settings:
+          $ref: '#/components/schemas/PropertySettings'
+        pets:
+          $ref: '#/components/schemas/Pets'
+        damage_policy:
+          $ref: '#/components/schemas/damage_policy'
+        standard_phrases:
+          type: array
+          items:
+            $ref: '#/components/schemas/StandardPhraseData'
+        quiet_hours:
+          $ref: '#/components/schemas/QuietHours'
+        renovation:
+          $ref: '#/components/schemas/Renovation'
+        bed_linen_policy:
+          $ref: '#/components/schemas/HotelChainBedLinen'
+        accepted_payment_types:
+          $ref: '#/components/schemas/AcceptedPaymentTypes'
+        french_tax_details:
+          $ref: '#/components/schemas/FrenchTaxDetails'
+        cancellation_exceptions:
+          $ref: '#/components/schemas/CancellationExceptions'
+        age_buckets:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgeBucket'
+        children_policies:
+          $ref: '#/components/schemas/ChildPolicies'
+        invoice_settings:
+          $ref: '#/components/schemas/InvoiceSettings'
+        booking_model:
+          $ref: '#/components/schemas/BookingModel'
+        land_registration_numbers:
+          type: array
+          items:
+            type: string
+    QuietHours:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        start:
+          type: string
+        end:
+          type: string
+    Renovation:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        start:
+          type: string
+        end:
+          type: string
+    ApiResponsePropertyStatusOutput:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PropertyStatusOutput'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    PropertyStatusOutput:
+      type: object
+      properties:
+        status:
+          type: string
+    PropertyStatusInput:
+      required:
+      - operation
+      type: object
+      properties:
+        operation:
+          type: string
+          enum:
+          - CHECK
+          - OPEN
+          - CLOSE
+        reason:
+          $ref: '#/components/schemas/Reason'
+    Reason:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - OTHER
+          - SEASON
+          - RENOVATION
+          - PROPERTY_NOT_AVAILABLE
+          - FULLY_BOOKED
+          - ISSUES_GUESTS
+          - ISSUES_BOOKING
+          - STRATEGY
+        description:
+          type: string

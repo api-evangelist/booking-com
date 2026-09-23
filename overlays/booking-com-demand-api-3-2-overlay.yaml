@@ -1,0 +1,55 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Booking.com Demand API
+  version: 1.0.0
+extends: openapi/booking-com-demand-api-3-2-openapi.yml
+x-generated: '2026-09-17'
+x-method: generated
+x-source: Enhancements authored by API Evangelist against the provider-published contract; the original in openapi/
+  is never mutated.
+actions:
+- target: $
+  description: Attach the provider documentation page this contract is published on.
+  update:
+    externalDocs:
+      description: Booking.com Demand API 3.2 reference
+      url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+- target: $.info
+  description: Attach the support contact Booking.com publishes for this programme.
+  update:
+    contact:
+      name: Booking.com Developer Support
+      url: https://developers.booking.com
+- target: $.info
+  description: Attach the terms of service the API is offered under.
+  update:
+    termsOfService: https://www.booking.com/content/terms.html
+- target: $.components.securitySchemes
+  description: Declare the X-Affiliate-Id header. Booking.com requires it on every Demand API request (https://developers.booking.com/demand/docs/development-guide/authentication)
+    but does not declare it as a security scheme, so a client generated from the unmodified contract always receives
+    401.
+  update:
+    AffiliateId:
+      type: apiKey
+      in: header
+      name: X-Affiliate-Id
+      description: The affiliate ID of the API user. REQUIRED alongside the bearer token on every request, in production
+        and sandbox alike.
+- target: $
+  description: Record the sandbox host alongside production so a client can switch environments.
+  update:
+    x-environments:
+      production: https://demandapi.booking.com
+      sandbox: https://demandapi-sandbox.booking.com
+      note: Same credentials in both. Sandbox is capped at 50 requests per minute and car rentals are not available
+        in it.
+- target: $
+  description: Record the absence of a client-supplied idempotency mechanism on the order write path.
+  update:
+    x-idempotency:
+      coverage: none
+      affected:
+      - /orders/create
+      - /orders/modify
+      - /orders/cancel
+      guidance: Re-read /orders/details after a timeout rather than retrying a write.

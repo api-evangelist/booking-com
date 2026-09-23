@@ -1,0 +1,570 @@
+openapi: 3.1.0
+info:
+  title: Property Health API
+  description: Read-only JSON API for connectivity providers to retrieve property health and status data. Use it to understand
+    why properties are unbookable or at risk and to prioritize action across provider-accessible properties or explicit Booking.com
+    property IDs.
+  contact:
+    name: Connectivity Support
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  license:
+    name: Copyright Booking.com. All rights reserved.
+    url: https://www.booking.com
+  version: '0.1'
+  summary: Retrieve property health for provider-context and property-ID lookups.
+externalDocs:
+  description: Find out more about Connectivity APIs
+  url: https://connect.booking.com/
+servers:
+- url: https://supply-xml.booking.com/property-health-api
+  description: Production Environment
+security:
+- BearerAuth: []
+tags:
+- name: Property Health
+  description: Endpoints for retrieving property health and status data.
+- name: About Try it
+  description: 'Learn how to use the Try it feature in the Property Health API documentation.
+
+
+    Use Try it to send test requests directly from the developer portal. When using a live endpoint, use only test properties
+    and valid JWT credentials for a machine account that has access to those properties.
+
+
+    ## Environment
+
+
+    Use a test setup first. The Property Health API is read-only, but live endpoint requests still use real authorization
+    context and return real property health data for properties available to the selected machine account.
+
+
+    ## Authentication
+
+
+    Property Health API requests use token-based authentication. Add an `Authorization` header with a Bearer JWT. Make sure
+    the JWT belongs to a machine account that is configured for the Property Health API and has access to the test properties
+    you use.
+
+
+    Do not use Try it with live JWTs on shared computers or in browsers with extensions that can inspect or monitor network
+    traffic. Treat JWTs as credentials, and remove them from the browser environment after testing.
+
+
+    ## Request
+
+
+    Use `POST /properties/health` to retrieve property health for the authenticated provider context. Send an empty JSON object
+    for an unfiltered lookup, or include `filterBy` to narrow the returned properties.
+
+
+    Use `POST /properties/health/by-type/property-ids` to retrieve property health for specific Booking.com property IDs.
+    Provide `propertyIds` with up to 2,000 IDs. You can also include `filterBy` in this request to narrow the health records
+    returned for those property IDs. The response only includes properties that can be returned for your machine account and
+    have available health data.
+
+
+    ## Filters
+
+
+    Add `filterBy` to either request type to narrow the result set. Each filter contains `field`, `operator`, and `value`.
+    Multiple filters are combined with AND semantics. The `value` is always sent as a string and must match the selected field
+    format, for example `Open`, `NO_RISK`, `2026-12-31`, or `2026-01-01T00:00:00Z`.
+
+
+    ## Response
+
+
+    Successful responses include `properties` and `meta`. Each property can include status, property information, availability,
+    and `dataAsOf`. Some fields may be missing when that data is not available for a property.
+
+
+    `notFoundIds` is included only for `POST /properties/health/by-type/property-ids`. It contains requested property IDs
+    that could not be returned or are not linked to the machine account ID.
+
+
+    Include `meta.ruid` when contacting Booking.com support.
+
+
+    ## Troubleshooting
+
+
+    If a request fails, check that the JWT is valid, the selected machine account is configured for the Property Health API,
+    the property IDs belong to the expected authorization context, and the request body matches the schema. For filter errors,
+    check that the field is supported, the operator is valid for that field type, and the value uses the documented format.
+
+    '
+paths:
+  /properties/health:
+    post:
+      tags:
+      - Property Health
+      summary: Retrieve property health for the provider context
+      description: Returns property health records for properties available in the authenticated provider context. The provider-context
+        lookup returns up to 2,000 eligible properties selected by backend priority rules, prioritizing actionable health
+        and status signals before applying deterministic property ID ordering. The `filterBy` field narrows results using
+        supported field enum values.
+      operationId: getPropertyHealth
+      requestBody:
+        description: Provider-context property health request. Use an empty JSON object for an unfiltered lookup.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyHealthRequest'
+            examples:
+              NoFilters:
+                summary: Provider-context lookup
+                description: NoFilters
+                value: {}
+        required: true
+      responses:
+        '200':
+          description: Successful response containing property health records.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyHealthResponse'
+        '400':
+          description: Invalid request payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Missing or invalid authentication credentials.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Caller is authenticated but not authorized for the requested provider context.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: No property health data found for the provider context.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '429':
+          description: Too many requests. Rate limiting is enforced by the API gateway or proxy.
+          headers:
+            Retry-After:
+              description: Optional number of seconds to wait before retrying the request.
+              style: simple
+              schema:
+                type: integer
+                format: int32
+                minimum: 0
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Unexpected internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /properties/health/by-type/property-ids:
+    post:
+      tags:
+      - Property Health
+      summary: Retrieve property health by property IDs
+      description: Returns property health records for the Booking.com property IDs in `propertyIds`. A request can include
+        up to 2,000 IDs. `notFoundIds` contains requested property IDs that could not be returned or are not linked to the
+        machine account ID. The `filterBy` field narrows results using supported field enum values.
+      operationId: getPropertyHealthByPropertyIds
+      requestBody:
+        description: Property-ID lookup request containing `propertyIds`.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyHealthByPropertyIdsRequest'
+            examples:
+              PropertyIds:
+                summary: Lookup by property IDs
+                description: PropertyIds
+                value:
+                  propertyIds:
+                  - 1000123
+                  - 1000456
+              PropertyIdsWithFilters:
+                summary: Lookup by property IDs with filters
+                description: PropertyIdsWithFilters
+                value:
+                  propertyIds:
+                  - 1000123
+                  - 1000456
+                  filterBy:
+                  - field: STATUS_CURRENT_STATUS
+                    operator: EQUALS
+                    value: Open
+                  - field: AVAILABILITY_RISK
+                    operator: EQUALS
+                    value: NO_RISK
+        required: true
+      responses:
+        '200':
+          description: Successful response containing property health records for found and authorized property IDs. If some
+            requested IDs could not be returned or are not linked to the machine account ID, they are returned in `notFoundIds`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyHealthByPropertyIdsResponse'
+        '400':
+          description: Invalid property-ID request payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Missing or invalid authentication credentials for the property-ID lookup.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Caller is authenticated but not allowed to use this endpoint or lacks the required authorization context.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: None of the requested property IDs can be returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '429':
+          description: Too many requests. Rate limiting is enforced by the API gateway or proxy.
+          headers:
+            Retry-After:
+              description: Optional number of seconds to wait before retrying the request.
+              style: simple
+              schema:
+                type: integer
+                format: int32
+                minimum: 0
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Unexpected internal server error during property-ID lookup.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  schemas:
+    PropertyHealthFilter:
+      type: object
+      description: Filter criteria for property health data.
+      example:
+        field: STATUS_CURRENT_STATUS
+        operator: EQUALS
+        value: Open
+      properties:
+        field:
+          type: string
+          description: Supported property health field enum to filter on, for example `STATUS_CURRENT_STATUS`, `PROPERTY_INFO_CURRENCY_CODE`,
+            `AVAILABILITY_RISK`, `AVAILABILITY_BOOKABLE_UNTIL_DATE`, `PROPERTY_ID`, or `DATA_AS_OF`.
+          enum:
+          - PROPERTY_ID
+          - PROPERTY_INFO_PROPERTY_NAME
+          - PROPERTY_INFO_CURRENCY_CODE
+          - STATUS_CURRENT_STATUS
+          - STATUS_STATUS_CHANGED_AT
+          - STATUS_STATUS_DESCRIPTION
+          - STATUS_TIME_IN_STATUS_DAYS
+          - AVAILABILITY_RISK
+          - AVAILABILITY_BOOKABLE_UNTIL_DATE
+          - AVAILABILITY_BOOKABLE_PERIOD
+          - DATA_AS_OF
+          example: STATUS_CURRENT_STATUS
+        operator:
+          type: string
+          description: Comparison operators for filtering.
+          enum:
+          - EQUALS
+          - NOT_EQUALS
+          - GREATER_THAN
+          - GREATER_THAN_OR_EQUALS
+          - LESS_THAN
+          - LESS_THAN_OR_EQUALS
+          example: EQUALS
+        value:
+          type: string
+          description: 'Value to compare against, encoded as a string. Use the selected field''s response value format: integer
+            for `PROPERTY_ID`, ISO-8601 date for `AVAILABILITY_BOOKABLE_UNTIL_DATE`, ISO-8601 offset date-time for `STATUS_STATUS_CHANGED_AT`
+            and `DATA_AS_OF`, enum names such as `NO_RISK`, integer day counts for fields such as `STATUS_TIME_IN_STATUS_DAYS`,
+            or regular string values such as `EUR`.'
+          example: Open
+          maxLength: 256
+          minLength: 0
+      required:
+      - field
+      - operator
+      - value
+    PropertyHealthRequest:
+      type: object
+      description: Request payload for retrieving property health for the provider context.
+      properties:
+        filterBy:
+          type: array
+          description: 'Optional filters for narrowing property health results. `field` must be one of the supported enum
+            values, for example `STATUS_CURRENT_STATUS`. Multiple filters are combined with AND semantics. Supported fields:
+            `PROPERTY_ID`, `PROPERTY_INFO_PROPERTY_NAME`, `PROPERTY_INFO_CURRENCY_CODE`, `STATUS_CURRENT_STATUS`, `STATUS_STATUS_CHANGED_AT`,
+            `STATUS_STATUS_DESCRIPTION`, `STATUS_TIME_IN_STATUS_DAYS`, `AVAILABILITY_RISK`, `AVAILABILITY_BOOKABLE_UNTIL_DATE`,
+            `AVAILABILITY_BOOKABLE_PERIOD`, `DATA_AS_OF`. String and enum fields support `EQUALS` and `NOT_EQUALS`. Numeric,
+            date, and date-time fields also support `GREATER_THAN`, `GREATER_THAN_OR_EQUALS`, `LESS_THAN`, and `LESS_THAN_OR_EQUALS`.
+            Values are strings and must match the field type, for example `1000123`, `30`, `Open`, `NO_RISK`, `2026-12-31`,
+            or `2026-01-01T00:00:00Z`. Day-count fields such as `STATUS_TIME_IN_STATUS_DAYS` and `AVAILABILITY_BOOKABLE_PERIOD`
+            are represented as integer day counts.'
+          example:
+          - field: STATUS_CURRENT_STATUS
+            operator: EQUALS
+            value: Open
+          - field: PROPERTY_INFO_CURRENCY_CODE
+            operator: EQUALS
+            value: EUR
+          - field: AVAILABILITY_BOOKABLE_UNTIL_DATE
+            operator: GREATER_THAN_OR_EQUALS
+            value: '2026-12-31'
+          items:
+            $ref: '#/components/schemas/PropertyHealthFilter'
+          maxItems: 10
+          minItems: 0
+    ApiResponseMeta:
+      type: object
+      description: Response metadata.
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier.
+          example: ruid-1
+      required:
+      - ruid
+    Availability:
+      type: object
+      description: Availability-related health signals for the property.
+      properties:
+        risk:
+          type: string
+          description: Availability risk categories based on the property's bookable-until window.
+          enum:
+          - HIGH_RISK
+          - MEDIUM_RISK
+          - LOW_RISK
+          - NO_RISK
+          example: NO_RISK
+        bookableUntilDate:
+          type: string
+          format: date
+          description: Last date currently available for booking.
+          example: '2026-12-31'
+        bookablePeriod:
+          type: integer
+          format: int64
+          description: Number of days until the property becomes unavailable.
+          example: 317
+        reason:
+          type: string
+          description: 'Explains how the property''s future bookable period maps to the availability risk. The value is derived
+            from `risk`: `HIGH_RISK` means the property is bookable for 7 days or less, `MEDIUM_RISK` for 30 days or less,
+            `LOW_RISK` for 60 days or less, and `NO_RISK` for more than 60 days.'
+          example: Availability is open well into the future. No action is needed if your property is open.
+      required:
+      - bookablePeriod
+      - bookableUntilDate
+      - reason
+      - risk
+    PropertyHealthData:
+      type: object
+      description: Health snapshot for a single property.
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        availability:
+          anyOf:
+          - $ref: '#/components/schemas/Availability'
+          - type: 'null'
+        propertyId:
+          type: integer
+          format: int64
+          description: Booking.com property identifier.
+          example: 1000123
+        propertyInfo:
+          $ref: '#/components/schemas/PropertyInfo'
+        dataAsOf:
+          type: string
+          format: date-time
+          description: Timestamp indicating when this snapshot was generated.
+          example: '2026-02-17T06:45:00Z'
+      required:
+      - dataAsOf
+      - propertyId
+      - propertyInfo
+      - status
+    PropertyHealthResponse:
+      type: object
+      description: Response payload containing property health records.
+      properties:
+        properties:
+          type: array
+          description: List of property health records matching the request.
+          items:
+            $ref: '#/components/schemas/PropertyHealthData'
+        meta:
+          $ref: '#/components/schemas/ApiResponseMeta'
+      required:
+      - meta
+      - properties
+    PropertyInfo:
+      type: object
+      description: Basic property information.
+      properties:
+        propertyName:
+          type: string
+          description: Property name.
+          example: Canal View Hotel
+        currencyCode:
+          type: string
+          description: Currency code.
+          example: EUR
+      required:
+      - currencyCode
+      - propertyName
+    Status:
+      type: object
+      description: Current status details for a property.
+      properties:
+        currentStatus:
+          anyOf:
+          - type: string
+            description: Current property status. Possible values include `Open`, `New - Pending Opening`, `Ready to Open`,
+              `Closed - By Your Request`, `Auto-Closed - No Availability`, `Registration - Action Required`, and other property
+              statuses.
+            example: Open
+          - type: 'null'
+        statusChangedAt:
+          anyOf:
+          - type: string
+            format: date-time
+            description: Timestamp when the current status started.
+            example: '2026-02-10T09:00:00Z'
+          - type: 'null'
+        statusDescription:
+          anyOf:
+          - type: string
+            description: Status description.
+            example: Your property is live and accepting bookings.
+          - type: 'null'
+        timeInStatusDays:
+          anyOf:
+          - type: integer
+            format: int64
+            description: Number of days the property has been in the current status.
+            example: 30
+          - type: 'null'
+    ApiError:
+      type: object
+      description: Standard error payload returned for non-success API responses.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code.
+          example: VALIDATION_ERROR
+        message:
+          type: string
+          description: Human-readable error message.
+          example: Request validation failed.
+        details:
+          type: string
+          description: Optional sanitized, non-sensitive detailed error information for troubleshooting.
+          example: 'propertyIds: size must be between 1 and 2000.'
+        meta:
+          $ref: '#/components/schemas/ApiResponseMeta'
+      required:
+      - code
+      - message
+    PropertyHealthByPropertyIdsRequest:
+      type: object
+      description: Request payload for retrieving property health by Booking.com property IDs.
+      properties:
+        propertyIds:
+          type: array
+          description: Booking.com property IDs to retrieve. Maximum 2,000 IDs per request.
+          example:
+          - 1000123
+          - 1000456
+          items:
+            type: integer
+            format: int64
+          maxItems: 2000
+          minItems: 1
+        filterBy:
+          type: array
+          description: 'Optional filters for narrowing property health results. `field` must be one of the supported enum
+            values, for example `STATUS_CURRENT_STATUS`. Multiple filters are combined with AND semantics. Supported fields:
+            `PROPERTY_ID`, `PROPERTY_INFO_PROPERTY_NAME`, `PROPERTY_INFO_CURRENCY_CODE`, `STATUS_CURRENT_STATUS`, `STATUS_STATUS_CHANGED_AT`,
+            `STATUS_STATUS_DESCRIPTION`, `STATUS_TIME_IN_STATUS_DAYS`, `AVAILABILITY_RISK`, `AVAILABILITY_BOOKABLE_UNTIL_DATE`,
+            `AVAILABILITY_BOOKABLE_PERIOD`, `DATA_AS_OF`. String and enum fields support `EQUALS` and `NOT_EQUALS`. Numeric,
+            date, and date-time fields also support `GREATER_THAN`, `GREATER_THAN_OR_EQUALS`, `LESS_THAN`, and `LESS_THAN_OR_EQUALS`.
+            Values are strings and must match the field type, for example `1000123`, `30`, `Open`, `NO_RISK`, `2026-12-31`,
+            or `2026-01-01T00:00:00Z`. Day-count fields such as `STATUS_TIME_IN_STATUS_DAYS` and `AVAILABILITY_BOOKABLE_PERIOD`
+            are represented as integer day counts.'
+          example:
+          - field: STATUS_CURRENT_STATUS
+            operator: EQUALS
+            value: Open
+          - field: PROPERTY_INFO_CURRENCY_CODE
+            operator: EQUALS
+            value: EUR
+          - field: AVAILABILITY_BOOKABLE_UNTIL_DATE
+            operator: GREATER_THAN_OR_EQUALS
+            value: '2026-12-31'
+          items:
+            $ref: '#/components/schemas/PropertyHealthFilter'
+          maxItems: 10
+          minItems: 0
+      required:
+      - propertyIds
+    PropertyHealthByPropertyIdsResponse:
+      type: object
+      description: Response payload for property-ID property health lookups.
+      properties:
+        properties:
+          type: array
+          description: List of property health records matching the request.
+          items:
+            $ref: '#/components/schemas/PropertyHealthData'
+        meta:
+          $ref: '#/components/schemas/ApiResponseMeta'
+        notFoundIds:
+          type: array
+          description: Contains requested property IDs that could not be returned or are not linked to the machine account
+            ID.
+          example:
+          - 999999
+          items:
+            type: integer
+            format: int64
+      required:
+      - meta
+      - properties
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Property Health
+- name: Documentation
+  tags:
+  - About Try it

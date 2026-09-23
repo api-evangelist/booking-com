@@ -1,0 +1,142 @@
+generated: '2026-09-17'
+method: searched
+source: >-
+  https://developers.booking.com/demand/docs/support/error-handling/about-errors and
+  .../error-codes, cross-checked against the 4xx/5xx responses declared in openapi/.
+docs:
+- https://developers.booking.com/demand/docs/support/error-handling/about-errors
+- https://developers.booking.com/demand/docs/support/error-handling/error-codes
+- https://developers.booking.com/demand/docs/support/error-handling/http-4xx-scenarios
+- https://developers.booking.com/demand/docs/support/error-handling/payment-errors
+- https://developers.booking.com/metasearch/connect-api/development-guide/error-handling
+name: Booking.com error catalog
+format: custom
+rfc9457: false
+envelope:
+  demand:
+    request_id: A ULID-shaped correlation id present on every error response.
+    errors:
+    - id: Machine-readable error code, e.g. missing_parameter. Replaces the deprecated V2 error.code / error.name.
+      message: Human-readable explanation plus suggested solution.
+  connectivity:
+    meta: object
+    data: object
+    errors: array
+    warnings: array
+note: >-
+  No application/problem+json media type appears in any of the 20 published specs, so this is a stable
+  vendor envelope rather than RFC 9457. The machine-readable `errors[].id` is the field to branch on;
+  `message` is prose and should not be matched against.
+http_statuses:
+- status: 400
+  title: Bad request
+  meaning: Request is malformed or contains invalid data.
+  causes: [missing required parameter, invalid value or format, conflicting parameters, invalid or expired
+      pagination token, missing request body, unsupported query parameters]
+  remediation: Correct the request parameters, formats and structure against the API reference.
+- status: 401
+  title: Unauthorised
+  meaning: Authentication failed.
+  causes: [missing or incorrect Authorization header, missing or incorrect X-Affiliate-Id header, revoked
+      or expired access token]
+  remediation: Verify credentials and header names; regenerate the API key if necessary.
+- status: 403
+  title: Forbidden
+  meaning: Access denied, or the endpoint is not available in the selected environment.
+  causes: [invalid affiliate ID, insufficient permissions for the endpoint, endpoint blocked in sandbox]
+  remediation: Correct the affiliate ID or request permission from Booking.com; switch to production where
+    the endpoint is sandbox_blocked.
+- status: 404
+  title: Not found
+  meaning: Endpoint does not exist or cannot be used in the selected environment.
+  causes: [incorrect or deprecated URL]
+  remediation: Verify and update the endpoint URL, or change environment.
+- status: 405
+  title: Method not allowed
+  meaning: Unsupported HTTP method.
+  causes: [using a method other than POST on the Demand API]
+  remediation: Use POST. Every Demand API operation is a POST, reads included.
+- status: 406
+  title: Not acceptable
+  meaning: Client did not indicate it accepts application/json.
+  remediation: 'Set Accept: application/json.'
+- status: 409
+  title: Conflict
+  meaning: Order-related conflict.
+  causes: [cancelling an order that is not booked, cancelling a travel service that is already cancelled
+      or no longer cancellable]
+  remediation: Re-read the order state before retrying; a 409 on /orders/cancel is terminal for that
+    travel service.
+- status: 415
+  title: Unsupported media type
+  meaning: Unsupported request format.
+  remediation: 'Set Content-Type: application/json.'
+- status: 422
+  title: Unprocessable content
+  meaning: Payment failure.
+  causes: [expired card, invalid payment method, lost card, SCA incomplete]
+  remediation: Branch on the payment_refused_* code. See errors/booking-com-decline-codes.yml.
+- status: 429
+  title: Too many requests
+  meaning: Rate limit exceeded.
+  remediation: Exponential backoff with a retry cap. See rate-limits/booking-com-rate-limits.yml.
+- status: '5xx'
+  title: Server error
+  meaning: Internal or temporary service failure.
+  causes: [backend processing issue, timeout, system outage]
+  remediation: Retry with exponential backoff; escalate to the Account Manager if persistent.
+problem_types:
+- id: missing_parameter
+  status: 400
+  title: A required parameter is absent
+  example_message: "Parameter 'checkin' is missing."
+- id: invalid_parameter
+  status: 400
+  title: A parameter is present but invalid
+  example_message: "Parameter 'guests.children' is invalid. Expected: array. Actual: integer."
+- id: unknown_parameter
+  status: 400
+  title: A parameter that does not exist was supplied
+  example_message: "Parameter 'dummy' does not exist."
+- id: conflicting_parameters
+  status: 400
+  title: Two parameters cannot be used together, or contradict each other
+  example_message: "Parameters 'checkin' and 'checkout' have conflicting values. The checkout date must be after the checkin date."
+- id: malformed_request
+  status: 400
+  title: The request body is not parseable JSON
+  example_message: "Unexpected character ('\"' (code 34)): was expecting comma to separate Object entries."
+- id: invalid_request
+  status: 400
+  title: The request shape is not accepted by this endpoint
+  example_message: Query string provided but none expected.
+- id: invalid_token
+  status: 400
+  title: A pagination token is invalid or not usable on this endpoint
+  example_message: "Token 'page' is invalid."
+- id: expired_token
+  status: 400
+  title: A pagination token has expired
+  example_message: "Token 'page' has expired."
+- id: token_endpoint_mismatch
+  status: 400
+  title: A pagination token was issued by a different endpoint
+  example_message: "Token 'page' cannot be used in this endpoint."
+- id: sandbox_blocked
+  status: 403
+  title: The endpoint is not available in the sandbox environment
+  example_message: The /orders/cancel endpoint for cars is not available in the sandbox. Use the production
+    environment instead.
+  declared_in: openapi/booking-com-demand-api-3-2-openapi.yml
+- id: payment_refused
+  status: 422
+  title: Payment was refused
+  see: errors/booking-com-decline-codes.yml
+connectivity_notes:
+- >-
+  Connectivity JSON APIs return errors[] and warnings[] arrays inside the meta/data envelope; several
+  specs (reconciliation, property health) additionally declare typed schemas such as
+  RateLimitErrorResponse and InternalServerErrorResponse.
+- >-
+  B.XML and OTA endpoints return XML fault documents rather than this JSON envelope; they are documented
+  per endpoint rather than in a single catalogue.

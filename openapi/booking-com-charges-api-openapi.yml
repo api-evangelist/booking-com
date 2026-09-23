@@ -1,0 +1,798 @@
+openapi: 3.0.1
+info:
+  title: Charges API
+  description: Create and update charges that apply at the property and room level, and setup up different configurations
+    for different dates.
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://supply-xml.booking.com/
+  description: Test using live endpoint
+tags:
+- name: About Try it
+  description: "Learn how to effectively use the Try it feature in the Charges API documentation.\n\nUse the **Try it** feature\
+    \ to send sample requests to API endpoints directly from the developer portal. In the **Mock (schema only)** environment,\
+    \ Try it returns schema-driven mock responses or pre-built example responses. In the **Production** environment, it sends\
+    \ the request to the live API and returns dynamic responses from your selected test property.\n\n## Environment\n\nYou\
+    \ can select between two different environments (top right corner in the UI):\n\n**Mock (schema only)** (default):\n-\
+    \ Helps to understand the response data schema\n- Recommended for all write operations (POST, PUT, DELETE)\n- Environment\
+    \ for testing without affecting live/test data\n\n**Test live endpoint**:\n- Make sure to use only test properties.\n\
+    - Changes will affect your test property data\n- Requires valid credentials\n- Same API structure as production\n\n##\
+    \ Request\n\nYou can click on any unresolved placeholders to add a value or edit an existing placeholder value.\n\nThe\
+    \ portal loads the default request body. Where the specification supports multiple request body examples (for example:\
+    \ Rooms API POST endpoint), you can choose a different request body from the drop-down list.\n\nSome helpful pointers\
+    \ before running a request:\n\n- **Authentication** (when using live endpoint): Configure your authentication headers\n\
+    \  - API Key or OAuth token as required. Use the **Environments** tab.\n  - Make sure to manage separate machine accounts\
+    \ for test vs. properties in production.\n  - Ensure credentials match your selected environment.\n\n- **Parameters**:\
+    \ Fill in required parameters\n  - Path parameters (like `propertyId`)\n  - Query parameters (like `language_code`)\n\
+    \  - Request body for `POST/PUT` operations\n\n- **Execute**: Click **Send** to send the request\n  - The request is sent\
+    \ to the selected environment\n  - When sending requests to the live endpoint, real HTTP request is made to the API\n\n\
+    ## Response\n\nThe Try it feature provides comprehensive response information to the extent supported by the Open API\
+    \ specification:\n\n### Status code\n- **2xx**: Success responses (200)\n- **4xx**: Client errors (400 Bad Request, 401\
+    \ Unauthorized, 404 Not Found)\n- **5xx**: Server errors (500 Internal Server Error)\n\n### Response body\n- JSON formatted\
+    \ response data\n\nIf the returned response, by default, is unformatted, select the supported Response body format in\
+    \ the UI.\n\n### Response headers\n- Content-Type, Content-Length.\n\n## Environments\n\nThe **Environments** tab allows\
+    \ you to create variables specific to the environment. For example, you can add a variable to hold the value of the `property-id`\
+    \ placeholder. The portal inserts the respective value depending on the environment at the time of sending the request.\n\
+    \n### Variables\n\nMost of the endpoints (especially POST/PUT/DELETE) require you to add a path or query parameter before\
+    \ sending the request. The Open API specification marks these parameters with placeholder tags. For example, {{`property_id`}}.\
+    \ You can use the **Environments** tab to manage the values for these placeholders as variables.\n\n#### Path parameters\n\
+    - **Required**: Must be provided to make the request\n- **Type validation**: Ensures correct data types (integer, string,\
+    \ etc.)\n- **Example**: `propertyId` in `/charges-api/properties/{propertyId}/charges`\n\n#### Query parameters\n- **Optional**:\
+    \ Usually have default values\n- **Example**: `language_code` with `en-us` as the default value\n\n#### Request body\n\
+    - **Schema validation**: Follows OpenAPI schema definitions\n- **Example data**: Prepopulated with sample values\n\n##\
+    \ Best practices\n\nThis section provides some basic practice guidelines.\n\n### Authentication\n\n- Always use separate\
+    \ machine accounts for test properties vs. properties in production.\n- When testing with production endpoint, make sure\
+    \ to use only test properties.\n\n### For Read operations (GET)\n- Safe to test in any environment\n- Use valid IDs that\
+    \ exist in your system\n- Check response structure for integration planning\n\n### For Write operations (POST, PUT)\n\
+    - **Always use Mock (schema only) environment first**\n- Verify request payload structure\n- Check response for success\
+    \ confirmation\n- Test error scenarios with invalid data\n\n### For Delete operations (DELETE)\n- **Preferable to use\
+    \ Mock (schema only) environment only**\n- Understand the operation is irreversible\n- Have backup data when testing using\
+    \ test properties\n\n## Troubleshooting\n\n### Common issues\n\n**401 Unauthorized**\n- Check authentication credentials\n\
+    - Verify API key is valid and not expired\n- Ensure credentials match the selected environment\n\n**400 Bad Request**\n\
+    - Validate request payload against schema\n- Check required fields are provided\n- Verify data types match specification\n\
+    \n**404 Not Found**\n- Confirm the resource ID exists\n- Check the endpoint URL is correct\n- Verify you have access to\
+    \ the resource\n\n### Getting help\n\nIf you encounter issues:\n1. Check the response error message for details\n2. Verify\
+    \ your request matches the API specification\n3. Contact the Connectivity Team for support\n\n---\n\n*This documentation\
+    \ applies to all endpoints in the Charges API. The Try it feature provides a consistent testing experience across all\
+    \ operations.*"
+- name: Charges endpoint
+  description: Lists the details of the Charges endpoints to set and retrieve taxes and fees at the property and room level.
+- name: Charges meta endpoint
+  description: Lists the details of the Charges meta endpoint to retrieve a full list of charge types supported by the Charges
+    API.
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Charges endpoint
+  - Charges meta endpoint
+- name: Documentation
+  tags:
+  - About Try it
+paths:
+  /charges-api/properties/{propertyId}/charges:
+    get:
+      tags:
+      - Charges endpoint
+      summary: Get property and room charges
+      description: Retrieve the current charges for a property in format consistent with the creation/update payload.
+      operationId: getChargesForProperty
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseCharges'
+    post:
+      tags:
+      - Charges endpoint
+      summary: Create, update, and delete property and room charges
+      description: Add or update taxes and fees at the property or room-level.
+      operationId: updateChargesForProperty
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Charges'
+            example:
+              property_charges:
+              - charge_key:
+                  type: CLEANINGFEE
+                  guest_origin: ANY
+                  travel_purpose: ANY
+                charge_periods:
+                - applicable:
+                    from: '2025-11-30'
+                  configuration:
+                    amount:
+                      value: 20
+                      base: []
+                      mode: PER_STAY
+                    excluded: true
+              room_charges: []
+        required: true
+      responses:
+        '200':
+          description: Charges created, updated, or deleted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+              example:
+                warnings: []
+                errors: []
+                meta:
+                  ruid: ed4af6d4-605c-433c-8971-b33a1f95aabb
+        '400':
+          description: Bad request. The request body contains an unknown or invalid field.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+              example:
+                warnings: []
+                errors:
+                - message: Required field missing
+                  code: 321
+                  details:
+                    fields:
+                    - $.property_charges[0].charge_periods[0].configuration.child_ages[0].lte
+                  description: must not be null
+                meta:
+                  ruid: 59dd3156-d175-412d-834f-bce976502bf3
+  /charges-api/meta:
+    get:
+      tags:
+      - Charges meta endpoint
+      summary: Retrieve Charges meta information
+      description: 'Retrieve a full list of charge types supported by the Charges API. The API returns: <ul><li>Charge type
+        names translated in the specified language</li><li>Their corresponding OTA codes </li><li>The charge category each
+        type belongs to</li></ul>'
+      operationId: meta
+      parameters:
+      - name: language_code
+        in: query
+        description: Language code for localization. Defaults to <code>EN_GB</code>.
+        required: false
+        schema:
+          type: string
+          enum:
+          - EN_GB
+          - EN_US
+          - DE
+          - NL
+          - FR
+          - ES
+          - ES_AR
+          - ES_MX
+          - CA
+          - IT
+          - PT_PT
+          - PT_BR
+          - 'NO'
+          - FI
+          - SV
+          - DA
+          - CS
+          - HU
+          - RO
+          - JA
+          - ZH_CN
+          - ZH_TW
+          - PL
+          - EL
+          - RU
+          - TR
+          - BG
+          - AR
+          - KA
+          - KO
+          - HE
+          - LV
+          - UK
+          - ID
+          - MS
+          - TH
+          - ET
+          - HR
+          - LT
+          - SK
+          - SR
+          - SL
+          - VI
+          - TL
+          - IS
+          - HI
+          - SQ
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseListChargeTypeMetaEntry'
+components:
+  schemas:
+    AgeMultiplier:
+      required:
+      - lte
+      - multiplier
+      type: object
+      properties:
+        multiplier:
+          type: number
+          description: 'Multiplier to be applied to the amount of the charge if age condition matches.
+
+
+            Required when including an age configuration.
+
+
+            HDCN:N/A
+
+            '
+        lte:
+          type: integer
+          description: 'Upper bound of the age range. Inclusive. Abbreviation for less than or equal to.
+
+
+            HDCN:N/A
+
+            '
+          format: int32
+      description: 'Contains modifiers for the charge amount based on children ages.
+
+
+        If multiple modifiers are configured, only the most specific age multiplier that matches the child''s age is applied.
+        For example, if a .50 multiplier is configured for children under 8 years old, and a .80 multiplier is configured
+        for children under 12 years old, a 7 year old child would get a .50 discount.
+
+        '
+    Amount:
+      required:
+      - mode
+      type: object
+      properties:
+        value:
+          type: number
+          description: 'Value of the charge.
+
+
+            Required unless mode is `INCALCULABLE`, in which case any value passed is ignored.
+
+
+            Interpreted as an absolute value or percentage depending on mode. Absolute values are in the property''s configured
+            currency.
+
+
+            HDCN:FeePolicy->Amount AND FeePolicy->Percent
+
+            '
+        base:
+          type: array
+          description: 'Specifies what value the percentage applies to. For example, 10% of NET_ROOM_PRICE + PROPERTY_CHARGES.
+
+
+            Required when mode is PERCENTAGE (otherwise rejected).
+
+
+            To know what charge types fall into each base category please use the meta endpoint.
+
+
+            Currently we only accept the following combinations:
+
+            - ["NET_ROOM_PRICE"]
+
+            - ["NET_ROOM_PRICE", "PROPERTY_CHARGES"]
+
+            - ["NET_ROOM_PRICE", "LOCALITY_CHARGES"]
+
+            - ["NET_ROOM_PRICE", "LOCALITY_CHARGES", "PROPERTY_CHARGES"]
+
+
+            HDCN: N/A
+
+            '
+          items:
+            type: string
+            description: 'Specifies what value the percentage applies to. For example, 10% of NET_ROOM_PRICE + PROPERTY_CHARGES.
+
+
+              Required when mode is PERCENTAGE (otherwise rejected).
+
+
+              To know what charge types fall into each base category please use the meta endpoint.
+
+
+              Currently we only accept the following combinations:
+
+              - ["NET_ROOM_PRICE"]
+
+              - ["NET_ROOM_PRICE", "PROPERTY_CHARGES"]
+
+              - ["NET_ROOM_PRICE", "LOCALITY_CHARGES"]
+
+              - ["NET_ROOM_PRICE", "LOCALITY_CHARGES", "PROPERTY_CHARGES"]
+
+
+              HDCN: N/A
+
+              '
+            enum:
+            - NET_ROOM_PRICE
+            - TAXES
+            - LOCALITY_CHARGES
+            - PROPERTY_CHARGES
+            - FACILITY_CHARGES
+        mode:
+          type: string
+          description: 'The mode used for this charge.
+
+
+            Reference the meta endpoint to understand which charge modes are supported for the charge type.
+
+
+            HDCN:FeePolicy->ChargeFrequency AND FeePolicy->Percent in the case of `PERCENTAGE`
+
+            '
+          enum:
+          - PER_NIGHT
+          - PER_STAY
+          - PER_PERSON_PER_NIGHT
+          - PER_PERSON_PER_STAY
+          - PERCENTAGE
+          - INCALCULABLE
+      description: Contains details about the charge price.
+    ApplicableWindow:
+      required:
+      - from
+      type: object
+      properties:
+        from:
+          type: string
+          description: 'The start date for this charge period. The date is relative to the timezone of the property. If you
+            are modifying an existing active charge, this date may be in the past if it matches the active charge''s date.
+
+
+            Format: ISO 8601 date (YYYY-MM-DD)
+
+
+            Charge periods with a start date more than 10 years in the future will be ignored, effectively making the charge
+            extend indefinitely.
+
+
+            HDCN: N/A
+
+            '
+        to:
+          type: string
+          description: 'The end date for this charge period (inclusive). The date is relative to the timezone of the property.
+            If null or undefined the current charge period extends forever.
+
+
+            Format: ISO 8601 date (YYYY-MM-DD)
+
+
+            Charge periods with an end date more than 10 years in the future will be created without an end date, effectively
+            making the charge extend indefinitely.
+
+
+            HDCN: N/A
+
+            '
+      description: The date range for this charge period. Dates are inclusive and must not overlap.
+    Charge:
+      required:
+      - charge_key
+      - charge_periods
+      type: object
+      properties:
+        charge_key:
+          $ref: '#/components/schemas/ChargeKey'
+        charge_periods:
+          type: array
+          description: Contains the timeline of various configurations for the charge through time.
+          items:
+            $ref: '#/components/schemas/ChargePeriod'
+      description: List of charges for the room.
+    ChargeConfiguration:
+      required:
+      - amount
+      - excluded
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        child_ages:
+          type: array
+          description: 'Contains modifiers for the charge amount based on children ages.
+
+
+            If multiple modifiers are configured, only the most specific age multiplier that matches the child''s age is applied.
+            For example, if a .50 multiplier is configured for children under 8 years old, and a .80 multiplier is configured
+            for children under 12 years old, a 7 year old child would get a .50 discount.
+
+            '
+          items:
+            $ref: '#/components/schemas/AgeMultiplier'
+        excluded:
+          type: boolean
+          description: 'Specifies if the charge is included or excluded from the calendar rate.
+
+
+            For example, let''s assume the calendar rate is set to 100 euros. If there is a 10 euro excluded charge the net
+            price would be 110 euros and our price breakdown would show 100 + 10. If the 10 euro charge is not excluded the
+            net price would be 100 and our price breakdown would show 90 + 10.
+
+
+            This corresponds to the similarly named field in extranet, but is separate from the included/excluded within Reservations
+            API.
+
+
+            HDCN: FeePolicy->Type
+
+            '
+      description: 'The charge configuration for this period.
+
+
+        If specified as `null` it clears the charge for the specific period. This field cannot be omitted.'
+    ChargeKey:
+      required:
+      - guest_origin
+      - travel_purpose
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'The type of charge. For a mapping between OTA/legacy and the new codes please use the meta endpoint.
+
+
+            HDCN: FeePolicy->Code
+
+            '
+          enum:
+          - SERVICECHARGE_ASIA
+          - SERVICECHARGE
+          - RESORTFEE
+          - CLEANINGFEE
+          - TOWELFEE
+          - ELECTRICITYFEE
+          - BEDLINEN
+          - GASFEE
+          - OILFEE
+          - WOODFEE
+          - WATERFEE
+          - TRANSFERFEE
+          - LINENPACKAGEFEE
+          - HEATINGFEE
+          - AIRCONDITIONINGFEE
+          - KITCHENLINNENFEE
+          - HOUSEKEEPINGFEE
+          - AIRPORTSHUTTLEFEE
+          - SHUTTLEBOATFEE
+          - GALADINNERFEE
+          - SEAPLANEFEE
+          - SKIPASS
+          - FINALCLEANINGFEE
+          - WRISTBANDFEE
+          - VISASUPPORTFEE
+          - WATERPARKFEE
+          - CLUBCARDFEE
+          - CONSERVATIONFEE
+          - CREDITCARDFEE
+          - PETFEE
+          - INTERNETFEE
+          - PARKINGFEE
+          - VAT
+          - TAX
+          - GOODSSERVICESTAX
+          - GOODSSERVICESFLOODTAX
+          - GOVERNMENTCHARGE
+          - DAMAGEDEPOSIT
+          - DESTINATIONFEE
+          - ENVIRONMENTFEE
+          - SPATAX
+          - CITYTAX
+          - HOTSPRINGTAX
+          - MUNICIPALITYFEE
+          - TOURISMFEE
+          - RESIDENTIALTAX
+          - CITYTICKET
+          - HERITAGECHARGE
+          - FITNESSTAX
+          - GOVERNMENTTAX
+          - LOCALCOUNCILTAX
+          - SUSTAINABILITYFEE
+          - LOCALITYCONSERVATIONFEE
+          - SPA
+          - HOTSPRINGBATH
+          - POOL
+          - LOUNGE
+          - DESTINATIONCHARGE
+          - DESTINATIONTAX
+          - INSURANCEFEE
+        guest_origin:
+          type: string
+          description: 'The guest origin as specified when they make the booking.
+
+
+            When determining which charges to apply at checkout, the narrowest/most specific charge key is used. For example
+            if an INTERNATIONAL guest books at a property that has both an INTERNATIONAL and ANY charge key (with the same
+            charge type), only the INTERNATIONAL charge is applied.
+
+
+            HDCN: N/A
+
+            '
+          enum:
+          - ANY
+          - DOMESTIC
+          - INTERNATIONAL
+        travel_purpose:
+          type: string
+          description: 'The travel purpose as specified by the guest when they make the booking.
+
+
+            When determining which charge to use at checkout, the narrowest/most specific charge key is used. For example
+            if an LEISURE guest books at a property that has both an LEISURE and ANY charge key (with the same charge type),
+            only the LEISURE charge is applied.
+
+
+            HDCN: N/A
+
+            '
+          enum:
+          - ANY
+          - LEISURE
+          - BUSINESS
+      description: 'Contains the attributes that uniquely identify a charge.
+
+
+        If you change an attribute in the charge key, you are modifying a different charge with its own charge periods.'
+    ChargePeriod:
+      required:
+      - applicable
+      type: object
+      properties:
+        applicable:
+          $ref: '#/components/schemas/ApplicableWindow'
+        configuration:
+          $ref: '#/components/schemas/ChargeConfiguration'
+      description: Contains the timeline of various configurations for the charge through time.
+    Charges:
+      type: object
+      properties:
+        property_charges:
+          type: array
+          description: Charges that apply across the property. Update requests must contain at least one charge between property
+            and room arrays.
+          items:
+            $ref: '#/components/schemas/Charge'
+        room_charges:
+          type: array
+          description: Room specific charges. Will override the same charge specified at the property level. Update requests
+            must contain at least one charge between property and room arrays.
+          items:
+            $ref: '#/components/schemas/RoomCharges'
+    RoomCharges:
+      required:
+      - charges
+      - room_id
+      type: object
+      properties:
+        room_id:
+          maximum: 4294967295
+          type: integer
+          description: 'The Room ID the charges apply to.
+
+
+            HDCN: FeePolicy->InvCode
+
+            '
+          format: int64
+        charges:
+          type: array
+          description: List of charges for the room.
+          items:
+            $ref: '#/components/schemas/Charge'
+      description: Room specific charges. Will override the same charge specified at the property level. Update requests must
+        contain at least one charge between property and room arrays.
+    ApiError:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+        details:
+          type: object
+        description:
+          type: string
+    ApiResponseObject:
+      type: object
+      properties:
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+    ApiResponseCharges:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Charges'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ApiResponseListChargeTypeMetaEntry:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChargeTypeMetaEntry'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ChargeTypeMetaEntry:
+      type: object
+      properties:
+        charge_type_id:
+          type: string
+          description: Booking.com Charge Type ID
+          enum:
+          - SERVICECHARGE_ASIA
+          - SERVICECHARGE
+          - RESORTFEE
+          - CLEANINGFEE
+          - TOWELFEE
+          - ELECTRICITYFEE
+          - BEDLINEN
+          - GASFEE
+          - OILFEE
+          - WOODFEE
+          - WATERFEE
+          - DESTINATIONFEE
+          - ENVIRONMENTFEE
+          - SPATAX
+          - TRANSFERFEE
+          - VAT
+          - CITYTAX
+          - TAX
+          - DAMAGEDEPOSIT
+          - LINENPACKAGEFEE
+          - HEATINGFEE
+          - AIRCONDITIONINGFEE
+          - KITCHENLINNENFEE
+          - HOUSEKEEPINGFEE
+          - CLUBCARDFEE
+          - PETFEE
+          - INTERNETFEE
+          - PARKINGFEE
+          - HOTSPRINGTAX
+          - MUNICIPALITYFEE
+          - TOURISMFEE
+          - RESIDENTIALTAX
+          - GOODSSERVICESTAX
+          - HERITAGECHARGE
+          - GOVERNMENTTAX
+          - LOCALCOUNCILTAX
+          - GOVERNMENTCHARGE
+          - LOCALITYCONSERVATIONFEE
+          - INSURANCEFEE
+          - AIRPORTSHUTTLEFEE
+          - SHUTTLEBOATFEE
+          - GALADINNERFEE
+          - SEAPLANEFEE
+          - SKIPASS
+          - FINALCLEANINGFEE
+          - WRISTBANDFEE
+          - VISASUPPORTFEE
+          - WATERPARKFEE
+          - CONSERVATIONFEE
+          - CREDITCARDFEE
+          - CITYTICKET
+          - FITNESSTAX
+          - GOODSSERVICESFLOODTAX
+          - SUSTAINABILITYFEE
+          - SPA
+          - HOTSPRINGBATH
+          - POOL
+          - LOUNGE
+          - DESTINATIONCHARGE
+          - DESTINATIONTAX
+        charge_type_name:
+          type: string
+          description: Booking.com Charge Type name
+        ota_fee_tax_types:
+          type: array
+          description: Legacy OTA Fee Tax Type Codes (FTT). In rare cases there are two historical type codes for one modern
+            type.
+          items:
+            type: integer
+            description: Legacy OTA Fee Tax Type Codes (FTT). In rare cases there are two historical type codes for one modern
+              type.
+            format: int32
+        booking_extended_legacy_code:
+          type: array
+          description: Legacy Booking.com Extended Fee Tax Type Codes (FTT).
+          items:
+            type: integer
+            description: Legacy Booking.com Extended Fee Tax Type Codes (FTT).
+            format: int32
+        charge_category:
+          type: string
+          description: Charge category as used in the charge configuration base
+          enum:
+          - NET_ROOM_PRICE
+          - TAXES
+          - LOCALITY_CHARGES
+          - PROPERTY_CHARGES
+          - FACILITY_CHARGES
+        discontinuation_notice:
+          type: string
+          description: 'In the case that a charge type is discontinued, this will provide information about what to use instead
+            or why it was discontinued.
+
+            '
+        allowed_charge_modes:
+          type: array
+          description: 'Lists the modes that this charge type supports.
+
+            '
+          items:
+            type: string
+            description: 'Lists the modes that this charge type supports.
+
+              '
+            enum:
+            - PER_NIGHT
+            - PER_STAY
+            - PER_PERSON_PER_NIGHT
+            - PER_PERSON_PER_STAY
+            - PERCENTAGE
+            - INCALCULABLE
+        discontinued:
+          type: boolean

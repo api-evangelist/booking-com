@@ -1,0 +1,20 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Rooms API
+  version: 1.0.0
+extends: openapi/booking-com-rooms-api-bulk-openapi.yml
+x-generated: '2026-09-17'
+x-method: generated
+x-source: Enhancements authored by API Evangelist against the provider-published contract; the original in openapi/
+  is never mutated.
+actions:
+- target: $
+  description: Attach the provider documentation page this contract is published on.
+  update:
+    externalDocs:
+      description: Rooms API bulk reference
+      url: https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+- target: $.info
+  description: Attach the terms of service the API is offered under.
+  update:
+    termsOfService: https://www.booking.com/content/terms.html

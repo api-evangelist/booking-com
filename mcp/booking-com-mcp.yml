@@ -1,0 +1,81 @@
+generated: '2026-09-17'
+method: probed
+source: https://developers.booking.com/mcp
+name: Booking.com Docs MCP server
+status: published
+summary: >-
+  Booking.com runs a first-party, anonymous, remote MCP server on its developer portal host. It is a
+  DOCUMENTATION server rather than a booking server: it exposes the portal's own API catalogue,
+  endpoint detail, security schemes, full OpenAPI descriptions and full-text search, through a
+  two-tool code-execution facade. It is discoverable from the A2A agent card at
+  /.well-known/agent-card.json (capabilities.extensions[0].params.url).
+deployment:
+  mode: remote
+  endpoint: https://developers.booking.com/mcp
+  install:
+  package:
+  auth: none
+  verified: probed
+x-evidence:
+  fetched: '2026-09-17'
+  initialize:
+    url: https://developers.booking.com/mcp
+    http_status: 200
+    content_type: text/event-stream
+    server_name: Docs MCP server
+    server_version: '2026-09-17'
+    protocol_version: '2025-06-18'
+  tools_list:
+    http_status: 200
+    tool_count: 2
+  get_not_allowed:
+    http_status: 405
+    body_hint: >-
+      "In order to use this MCP server, you need to register it in your MCP Client (VS Code, Cursor,
+      Claude Code, etc.) using this URL: http://developers.booking.com/mcp"
+server_capabilities:
+  logging: true
+  tools:
+    listChanged: true
+tools:
+- name: execute
+  description: >-
+    Run JavaScript in a sandbox against the documentation tools on the global `tools` object. No fetch,
+    console, setTimeout, require or Node API - all I/O goes through `tools`.
+  readOnlyHint: true
+  inputSchema_fields: [code, description]
+- name: describe-tools
+  description: >-
+    Return the exact TypeScript signatures of the sandbox tools available to `execute`.
+  inputSchema_fields: [tools]
+sandbox_tools:
+- name: listApis
+  description: Lists available APIs with their context and purpose.
+- name: getEndpoints
+  description: Get all endpoints for a specific API.
+- name: getEndpointInfo
+  description: Get comprehensive information about a specific endpoint.
+- name: getSecuritySchemes
+  description: Get the security schemes for a specific API.
+- name: getFullApiDescription
+  description: Get the complete OpenAPI description.
+- name: search
+  description: Search across the documentation to fetch relevant content.
+notes:
+- >-
+  The MCP server is the only public distribution channel for Booking.com's OpenAPI descriptions. The
+  same specification files 404 when requested directly over HTTPS at the filePath the server reports
+  (for example https://developers.booking.com/demand/docs/open-api/3.2/demand-api.yaml returns a 404
+  HTML shell), and every API host answers 401 to anonymous requests. Every OpenAPI in openapi/ in this
+  repo was retrieved from this server on 2026-09-17.
+- >-
+  The tool surface is documentation only. It cannot search inventory, price a stay or create an order;
+  those remain behind the partner-gated Demand and Connectivity APIs.
+- >-
+  No OAuth discovery document is served alongside it: /.well-known/oauth-authorization-server returns
+  404 with {"error":"not_found"} and /.well-known/oauth-protected-resource returns a 404 HTML shell.
+  The server is genuinely unauthenticated.
+- >-
+  The npm packages matching "booking" that ship MCP servers (@hasdata/booking-mcp, hotelzero,
+  @striderlabs/mcp-booking, drtrips-hotel-mcp) are third-party scrapers and wrappers, not Booking.com
+  publications. None is recorded here.

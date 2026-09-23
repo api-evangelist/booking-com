@@ -1,37 +1,89 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/booking-com-car-rentals-api-openapi.yml, openapi/booking-com-connectivity-content-api-openapi.yml,
-  openapi/booking-com-connectivity-promotions-api-openapi.yml, openapi/booking-com-connectivity-rates-availability-api-openapi.yml,
-  openapi/booking-com-connectivity-reservations-api-openapi.yml, openapi/booking-com-demand-api-openapi.yml
+generated: '2026-09-17'
+method: searched
+source: >-
+  https://developers.booking.com/demand/docs/development-guide/authentication and
+  https://developers.booking.com/connectivity/docs/authentication, reconciled against the
+  securitySchemes declared in the 20 OpenAPI descriptions in openapi/.
+docs:
+- https://developers.booking.com/demand/docs/development-guide/authentication
+- https://developers.booking.com/connectivity/docs/authentication
+- https://developers.booking.com/connectivity/docs/token-based-authentication
 summary:
   types:
-  - apiKey
   - http
-  api_key_in:
-  - header
+  styles:
+  - bearer token + affiliate header (Demand API)
+  - JWT from machine-account credentials (Connectivity APIs)
+  oauth2: false
+  openid_connect: false
+  mutual_tls: false
+  note: >-
+    No OAuth 2.0 or OpenID Connect anywhere. Both programmes are bearer-token schemes issued through a
+    partner portal, so there is no scope model to record and no authorization-server metadata to fetch.
 schemes:
-- name: bearerAuth
+- name: BearerAuth
   type: http
   scheme: bearer
-  description: Bearer token authentication. Include your API key token in the Authorization
-    header.
+  bearerFormat: string
+  applies_to:
+  - Booking.com Demand API (3.1, 3.2, 3.2-Beta)
+  - Booking.com Connect API
+  - Historical Reservations API
+  - Payments API
+  - Payments by Booking Onboarding API
+  - Property Health API
+  - Reconciliation API
   sources:
-  - openapi/booking-com-car-rentals-api-openapi.yml
-  - openapi/booking-com-demand-api-openapi.yml
-- name: affiliateId
-  type: apiKey
-  in: header
-  parameter: X-Affiliate-Id
-  description: Your Booking.com Affiliate ID, required with every request.
-  sources:
-  - openapi/booking-com-car-rentals-api-openapi.yml
-  - openapi/booking-com-demand-api-openapi.yml
-- name: basicAuth
-  type: http
-  scheme: basic
-  description: HTTP Basic authentication using your Connectivity partner username and password.
-  sources:
-  - openapi/booking-com-connectivity-content-api-openapi.yml
-  - openapi/booking-com-connectivity-promotions-api-openapi.yml
-  - openapi/booking-com-connectivity-rates-availability-api-openapi.yml
-  - openapi/booking-com-connectivity-reservations-api-openapi.yml
+  - openapi/booking-com-demand-api-3-2-openapi.yml
+  - openapi/booking-com-demand-api-3-1-openapi.yml
+  - openapi/booking-com-demand-api-3-2-beta-openapi.yml
+  - openapi/booking-com-connect-api-openapi.yml
+  - openapi/booking-com-historical-reservations-api-openapi.yml
+  - openapi/booking-com-payments-api-openapi.yml
+  - openapi/booking-com-payments-by-booking-onboarding-api-openapi.yml
+  - openapi/booking-com-property-health-api-openapi.yml
+  - openapi/booking-com-reconciliation-api-openapi.yml
+programmes:
+- name: Demand API (affiliate partners)
+  credential_pair: true
+  headers:
+  - name: Authorization
+    value: 'Bearer <key>'
+    note: The API key token generated for the API user.
+  - name: X-Affiliate-Id
+    value: '<aid>'
+    note: >-
+      REQUIRED alongside the bearer token on every request, production and sandbox alike. An API user is
+      the pair (partner ID, affiliate ID); the spec's single BearerAuth scheme understates this - the
+      affiliate header is not modelled as a securityScheme.
+  key_issuance: Affiliate Partner Centre (partner login), self-service key generation
+  key_rotation: Booking.com recommends generating a new API key every 12 months; keys can be replaced or revoked earlier.
+  transport: HTTPS only; requests over HTTP are rejected.
+  sandbox_credentials: same as production - no sandbox-specific keys
+  docs: https://developers.booking.com/demand/docs/development-guide/authentication
+- name: Connectivity APIs (supply / channel-manager partners)
+  credential_pair: false
+  scheme: JSON Web Token in the Authorization header
+  token_lifetime: 1 hour; a new token is generated from machine-account credentials each hour
+  token_revocable: true
+  issuance: Machine accounts created in the Connectivity Portal (https://connect.booking.com), scoped at property level
+  superseded_scheme:
+    name: Credential-based authentication
+    deprecated: '2025-06-30'
+    sunset: '2025-12-31'
+    note: >-
+      The older per-request machine-account credential scheme was sunset on 31 December 2025 under
+      Booking.com's published deprecation policy. Token-based authentication is now the only supported
+      Connectivity scheme.
+  docs: https://developers.booking.com/connectivity/docs/token-based-authentication
+gaps:
+- id: affiliate-header-not-in-spec
+  detail: >-
+    X-Affiliate-Id is mandatory per the docs but is absent from the Demand API securitySchemes. An agent
+    reading only the OpenAPI would build a request that always 401s.
+- id: specs-without-security
+  detail: >-
+    Nine of the twenty published specs (charges, contacts, contracting, facilities x2, property, rooms x3,
+    valueadds, status) declare no securitySchemes and no security requirement at all, even though the
+    Connectivity docs state every request carries a JWT. The contracting-api description states the JWT
+    requirement in prose inside info.description rather than declaring it.

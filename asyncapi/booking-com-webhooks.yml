@@ -1,0 +1,88 @@
+generated: '2026-09-17'
+method: searched
+source: https://developers.booking.com/connectivity/docs/notification-service/managing-notifications
+docs:
+- https://developers.booking.com/connectivity/docs/notification-service/managing-notifications
+name: Booking.com Connectivity Notifications Service (CNS)
+type: Webhooks
+asyncapi_published: false
+asyncapi_note: >-
+  Booking.com publishes no AsyncAPI document. The event surface is real and documented in prose with
+  typed payload tables, but there is no machine-readable event contract, and none of the 20 published
+  OpenAPI documents declares a webhooks object. An integrator must hand-write the consumer from the
+  documentation tables.
+summary: >-
+  The Connectivity Notifications Service pushes eight event types to connectivity partners. Six carry
+  payments and payout state and require a Reservations connection; two carry messaging state and require
+  a Messaging connection. Every notification shares a metadata envelope with a UUID, the type enum and a
+  payloadVersion (currently 1.0).
+subscription_model:
+  gate: connection type
+  detail: >-
+    A partner receives a notification type only if it holds the matching connection type. There is no
+    self-serve subscription endpoint documented; the connection is provisioned as part of the
+    connectivity relationship.
+  connection_types:
+    Reservations: [VCC_BALANCE, VIRTUAL_CREDIT_CARD_UPDATE, PAYOUT_UPDATE, BANK_TRANSFER_UPDATE, PAYOUT_METHOD_UPDATE, VCC_FEES_PAYOUT]
+    Messaging: [ACCSEC_PARTNER_PHISHING, MESSAGING_API_NEW_MESSAGE]
+envelope:
+  metadata:
+    uuid: Notification's unique identifier; quoted when contacting Connectivity Support.
+    type: Enumerated message type.
+    payloadVersion: '1.0'
+events:
+- name: PAYOUT_UPDATE
+  category: payments
+  connection: Reservations
+  description: >-
+    Pushed when payout details change - total payout, commission and charges. Carries property and
+    reservation identifiers.
+  follow_up: Query Get payout details on the Payments API with those identifiers.
+- name: PAYOUT_METHOD_UPDATE
+  category: payments
+  connection: Reservations
+  description: Pushed when the payout method configured for a property changes.
+- name: VIRTUAL_CREDIT_CARD_UPDATE
+  category: payments
+  connection: Reservations
+  description: Pushed when virtual credit card details for a reservation change.
+- name: BANK_TRANSFER_UPDATE
+  category: payments
+  connection: Reservations
+  description: Pushed when bank transfer payout details change.
+- name: VCC_BALANCE
+  category: payments
+  connection: Reservations
+  description: Pushed when the balance on a virtual credit card changes.
+- name: VCC_FEES_PAYOUT
+  category: payments
+  connection: Reservations
+  description: Pushed when VCC fee amounts on a payout change.
+- name: ACCSEC_PARTNER_PHISHING
+  category: security
+  connection: Messaging
+  description: >-
+    Pushed when Booking.com detects phishing content in a guest message and redacts it. This is the only
+    way to learn that a message already retrieved and stored has since been redacted.
+  related: Messaging API 1.3 is_redacted attribute.
+- name: MESSAGING_API_NEW_MESSAGE
+  category: messaging
+  connection: Messaging
+  description: Pushed when a new guest-partner message is created.
+missed_notifications:
+  recovery_documented: true
+  detail: >-
+    The documentation includes a "Recovering missed notifications" procedure, so the service is not
+    fire-and-forget. The recovery path is to re-query the owning API (payments, messaging) rather than to
+    replay the notification stream.
+gaps:
+- id: no-asyncapi
+  detail: No AsyncAPI document, no webhooks object in any OpenAPI, no published JSON Schema for any payload.
+- id: no-signature-documented
+  detail: >-
+    No webhook signing secret, HMAC header or verification procedure is documented on this page. A
+    consumer is not told how to authenticate an inbound notification.
+- id: demand-side-has-no-events
+  detail: >-
+    The Demand API has no event surface at all. Affiliate partners poll /orders/details and, on 3.2-Beta,
+    /messages/latest; there is no push channel on the demand side.

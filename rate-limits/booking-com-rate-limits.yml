@@ -3,26 +3,66 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: Booking.com
 providerId: booking-com
+generated: '2026-09-17'
+method: searched
+source: https://developers.booking.com/demand/docs/development-guide/rate-limiting
+docs: https://developers.booking.com/demand/docs/development-guide/rate-limiting
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-reconciled: true
-tags:
-  - Rate Limiting
-  - Travel / Hospitality
-  - Enterprise
-description: Booking.com API rate limits are negotiated per contract; no public defaults published.
-sources:
-  - https://connect.booking.com/
+modified: '2026-09-17'
+description: >-
+  Booking.com publishes rate limiting as prose in the Demand API development guide. Two limits are stated
+  as concrete numbers - sandbox 50 requests per minute, and cars/search 3000 requests per minute - while
+  the production per-account limit is deliberately unpublished and set per partner by an Account Manager.
+  Only the Reconciliation API declares a runtime signal in its contract: a Retry-After header on 429.
+limit_count: 3
+limits:
+- name: Sandbox environment
+  scope: per-account
+  window: 1 minute
+  limit: 50
+  unit: requests
+  configurable: false
+  applies_to: https://demandapi-sandbox.booking.com
+  source: https://developers.booking.com/demand/docs/development-guide/sandbox
+- name: Car rentals search
+  scope: per-endpoint
+  window: 1 minute
+  limit: 3000
+  unit: requests
+  applies_to: POST /cars/search on https://demandapi.booking.com
+  note: >-
+    Booking.com states partners consistently approaching this limit should contact their Account Manager
+    to discuss adjusting it.
+- name: Production per-partner-account
+  scope: per-account
+  window: 1 minute
+  limit: null
+  unit: requests
+  note: >-
+    Published as "contact your Account Manager for details on your partner account's specific rate limit".
+    A real limit exists and is enforced, but the number is not published, so an integrator cannot size a
+    workload from the documentation.
 headers:
+  published: false
+  request_quota_headers: []
   retryAfter: Retry-After
+  retryAfter_scope: >-
+    Declared only in openapi/booking-com-reconciliation-api-openapi.yml, on the 429 response of the
+    reconciliation report operations, as an int32 number of seconds to wait. The Demand API documents no
+    rate-limit response headers at all.
+  note: >-
+    No X-RateLimit-* or RFC 9331 RateLimit-* header is documented or declared anywhere in the 20 published
+    specs. An agent cannot read its remaining budget at runtime; it can only observe a 429 after the fact.
 responseCodes:
   throttled: 429
-limits:
-  - name: Per-contract
-    scope: account
-    metric: varies
-    limit: negotiated
-    notes: Contact provider sales for quota details.
+  throttled_label: Too many requests
+recovery:
+  reset_window: >-
+    Access is restricted for a brief period, typically 1 minute, after which the request counter resets.
+  guidance: >-
+    Booking.com documents exponential backoff (1s, 2s, 4s, 8s) with a capped retry count, plus caching,
+    filters, the extras field and the rows pagination parameter as the way to stay under the limit.
+tags:
+- Rate Limiting
+- Travel
+- Hospitality

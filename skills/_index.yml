@@ -1,0 +1,36 @@
+generated: '2026-09-17'
+method: generated
+source: >-
+  Authored from the operationIds in openapi/booking-com-demand-api-3-2-openapi.yml,
+  openapi/booking-com-payments-api-openapi.yml and openapi/booking-com-reconciliation-api-openapi.yml,
+  plus the Booking.com development guides. Booking.com publishes no AGENTS.md or skills of its own -
+  probed 2026-09-17.
+name: Booking.com Agent Skills
+provider_published: false
+skills:
+- name: booking-com-search-and-book-accommodation
+  file: skills/booking-com-search-and-book-accommodation.md
+  api: Booking.com Demand API 3.2
+  operations: ['/accommodations/search', '/accommodations/details', '/accommodations/availability',
+    '/orders/preview', '/orders/create', '/orders/details']
+- name: booking-com-cancel-or-modify-order
+  file: skills/booking-com-cancel-or-modify-order.md
+  api: Booking.com Demand API 3.2
+  operations: ['/orders/details', '/orders/details/accommodations', '/orders/details/cars', '/orders/modify',
+    '/orders/cancel']
+- name: booking-com-search-car-rentals
+  file: skills/booking-com-search-car-rentals.md
+  api: Booking.com Demand API 3.2
+  operations: ['/cars/search', '/cars/details', '/cars/depots', '/cars/depots/reviews/scores', '/cars/suppliers',
+    '/cars/constants']
+- name: booking-com-reconcile-connectivity-payouts
+  file: skills/booking-com-reconcile-connectivity-payouts.md
+  api: Booking.com Payments API / Reconciliation API
+  operations: [getPayoutDetails, getPriceBreakdown, getBTDetails, getVCCDetailsPerReservation, getVCCtoChargeForProperty,
+    getVCCRefundablesForProperty, getReservationStatusResponse, generateReconReport, getReconReportStatus,
+    getReconReportFilters]
+grounding_note: >-
+  Every operationId and path above was read out of a published Booking.com OpenAPI in openapi/. No
+  operation is invented. The warnings each skill carries - no idempotency key on writes, cars absent
+  from sandbox, asynchronous car cancellation, 409 as terminal on cancel - are all read from the
+  contracts and the development guides, not assumed.

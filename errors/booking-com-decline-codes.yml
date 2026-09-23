@@ -1,0 +1,75 @@
+generated: '2026-09-17'
+method: searched
+source: https://developers.booking.com/demand/docs/support/error-handling/payment-errors
+docs: https://developers.booking.com/demand/docs/support/error-handling/payment-errors
+name: Booking.com Demand API payment decline codes
+summary: >-
+  Booking.com's Demand API takes card payment inside /orders/create when the partner uses the
+  "Booking collects" model, so it returns PSP decline reasons to the integrator. Declines arrive as HTTP
+  422 with a payment_refused family code in errors[].id. Booking.com does not expose the raw PSP decline
+  code - these are Booking.com's own normalised names over it.
+envelope_field: errors[].id
+http_status: 422
+masked_to_buyer:
+  detail: >-
+    Booking.com does not publish a masking policy. The names are deliberately coarse (for example
+    book_process_failed covers PSP fraud rejection and an email blocklist hit without distinguishing
+    them), which is the usual anti-enumeration posture; treat every code as safe to log but not
+    necessarily safe to show a traveller verbatim.
+decline_codes:
+- code: payment_refused
+  meaning: Generic refusal returned when no more specific reason is surfaced.
+  action: Ask the traveller for a different payment method; do not auto-retry the same card.
+- code: payment_refused_book_process_failed
+  meaning: >-
+    The booking process failed during payment processing - usually the PSP declining on internal
+    validation or fraud detection. Also returned when the booker email is on the fraud blocklist
+    (email_blocklist).
+  action: >-
+    Contact the PSP to identify the fraud trigger. If details were mistyped repeatedly, wait before
+    retrying /orders/create. If the email may be blocklisted, retry with a different booker email.
+- code: payment_refused_insufficient_funds
+  meaning: The card does not have sufficient funds for the transaction.
+  action: Retry with a different payment method.
+- code: payment_refused_budget_overflow
+  meaning: The transaction exceeds the budget or credit limit associated with the card.
+  action: Confirm the card's spending limit and retry with a valid payment method.
+- code: payment_refused_card_is_expired
+  meaning: The credit card has expired.
+  action: Retry using a card with a valid expiry date.
+- code: payment_refused_card_lost
+  meaning: The card has been reported lost.
+  action: Use a different card; do not retry the same one.
+- code: payment_refused_invalid_card_number
+  meaning: The card number supplied is not valid.
+  action: Correct the card number and retry.
+- code: payment_refused_invalid_amount
+  meaning: The amount submitted is not valid for this transaction.
+  action: Re-price the order and resubmit with the correct amount.
+- code: payment_refused_invalid_payment_method
+  meaning: The selected payment method is not valid or not supported for this offer.
+  action: Select a payment method supported by the offer.
+- code: payment_refused_issuer_cvc_check_failed
+  meaning: The CVC provided is invalid and the issuer rejected the transaction.
+  action: Verify the CVC matches the card and retry.
+- code: payment_refused_withdrawal_amount_exceeded
+  meaning: The payment amount exceeds the limit allowed by the card.
+  action: Retry with an adjusted amount or a different card.
+- code: payment_refused_withdrawal_count_exceeded
+  meaning: The card has exceeded the allowable number of transactions or withdrawals in the period.
+  action: Use a different card, or have the traveller contact the issuing bank.
+- code: payment_refused_psp_card_is_blocked
+  meaning: The Payment Service Provider has blocked the card.
+  action: The traveller must contact the PSP or issuing bank; retrying will not clear it.
+- code: payment_refused_sca_required
+  meaning: >-
+    Strong Customer Authentication is required and the authentication supplied is missing, invalid or
+    expired. It does not necessarily mean SCA was omitted - expired SCA tokens produce the same code.
+  action: >-
+    Re-run the 3-D Secure flow and supply fresh SCA data on the order; if it persists, escalate to the
+    PSP.
+  regulatory: PSD2 / SCA
+note: >-
+  This catalogue complements errors/booking-com-problem-types.yml; it does not replace it. Only the
+  Demand API returns these; the Connectivity Payments API deals in payouts and VCCs rather than
+  card authorisation and has no decline-code vocabulary.

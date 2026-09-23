@@ -1,0 +1,115 @@
+generated: '2026-09-17'
+method: searched
+source: https://developers.booking.com/demand/docs/getting-started/sandbox
+docs: https://developers.booking.com/demand/docs/getting-started/sandbox
+name: Booking.com Demand API sandbox
+summary: >-
+  Booking.com runs a real, fully documented sandbox for the Demand API with published test inventory. It
+  is not a key-separated test mode: the sandbox uses the SAME credentials as production and is separated
+  only by host and by the set of test property IDs, so there is no test-vs-live key prefix an agent can
+  inspect to tell which environment a call will hit.
+environments:
+- name: Sandbox
+  base_url: https://demandapi-sandbox.booking.com/3.2
+  note: >-
+    The version segment must match the version being integrated against; the sandbox mirrors the
+    behaviour of the corresponding API version.
+- name: Production
+  base_url: https://demandapi.booking.com/3.2
+key_modes:
+  separate_test_keys: false
+  key_prefix_test: null
+  key_prefix_live: null
+  detail: >-
+    "No sandbox-specific API keys are required. Use your standard API Key token and Affiliate id for your
+    requests." The only environment signal is the hostname.
+supported_flows:
+- flow: Search, look and book (search, availability, reservation, modification, cancellation)
+  services: [Accommodations]
+- flow: Search, look and redirect
+  services: [Attractions (Beta)]
+not_supported:
+- service: Car rentals
+  detail: The cars API collection is not available in the sandbox; Booking.com directs partners to production for it.
+test_fixtures:
+  accommodations:
+  - id: '10507360'
+    name: Demand API Sandbox Hotel Orion
+    location: Amsterdam, Netherlands
+    cancellation: Free cancellation until a deadline; variable fees after
+    scenario: Multiple rate plans, meal options, per-person extra charges, differing prepayment requirements
+  - id: '12337'
+    name: Apartment in Cefalu
+    location: Cefalu, Italy
+    cancellation: Free cancellation / non-refundable
+    scenario: Meal plan and cancellation testing, multiple extra charge types, prepayment vs pay at property
+  - id: '42709'
+    name: Test Otel Istanbul
+    location: Istanbul, Turkey
+    cancellation: Non-refundable
+    scenario: Pricing breakdowns with multiple tax types, differing cancellation windows, meal plan inclusion
+  - id: '3427703'
+    name: Ray's Lyon Property
+    location: Lyon, France
+    cancellation: Free cancellation
+    scenario: Low-availability behaviour, mixed refundable and non-refundable policies, multiple occupancies
+  - id: '4462291'
+    name: Demand API Test Hotel
+    location: Leiden, Netherlands
+    cancellation: Free cancellation
+    scenario: Multi-room bookings with varying occupancies and cancellation options
+  - id: '5476508'
+    name: '"Home" Apartment'
+    location: Vincennes, France
+    cancellation: Non-refundable
+    scenario: Minimum stay restrictions, longer booking lead times, extra charges, varying maximum occupancies
+  - id: '2098153'
+    name: Panda Hotel
+    location: Shanghai, China
+    cancellation: Free cancellation until a deadline; variable fees after
+    scenario: International bookings, multi-currency, pay-at-property payment tests
+  attractions:
+    recommended_search:
+      sort: most-popular
+      start_date: '2026-04-15'
+      end_date: '2026-04-30'
+    fixtures:
+    - id: PRGrwINoiRZl
+      name: Reviews
+      scenario: Review data retrieval and display logic
+    - id: PRKKhInhUx5G
+      name: The gallery
+      scenario: General attraction search with photos and display testing
+    - id: PRLL7RsJ1haQ
+      name: Availability - fluctuating prices, single offer
+      scenario: Dynamic pricing behaviour and single-offer availability flows
+    - id: PRWWmXE65cUx
+      name: 'Custom fields: transfer modes'
+      scenario: Handling of custom fields such as transport or transfer options
+    - id: PRYLA1RKfQU5
+      name: '[Test] E2E integration test'
+      scenario: End-to-end testing across search, availability and booking flows
+  test_cards: []
+  test_bank_accounts: []
+time_simulation:
+  test_clocks: false
+  detail: No time-travel or clock-advance facility is documented.
+triggers_and_fixtures_tooling:
+  detail: >-
+    Behaviour is selected by choosing a test property rather than by firing a trigger. There is no
+    fixture or event-trigger API.
+rate_limits:
+  requests_per_minute: 50
+  note: Non-configurable sandbox limit; exceeding it returns 429.
+try_it_console:
+  available: true
+  detail: >-
+    The developer portal has a "Try out" console; the sandbox environment must be selected in it before
+    sending a request.
+constraints:
+- Sandbox IDs used against production return an error or empty results.
+- Sandbox is for testing and discovery only.
+connectivity_note: >-
+  This sandbox covers the Demand API only. The Connectivity (supply) APIs have no equivalent public
+  sandbox; their specifications carry "About Try it" sections tied to the portal console and a machine
+  account.

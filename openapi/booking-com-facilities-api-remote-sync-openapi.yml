@@ -1,0 +1,1484 @@
+openapi: 3.1.0
+info:
+  title: Facilities API
+  description: 'Manage facilities at both the property- and room-level.<br>
+
+    Booking.com supports adding or assigning a variety of different facilities at the property- or room-level.
+
+    Specify the facility ID along with any required parameters to assign a facility.<br><br>Facilities are of the following
+    types:
+
+    <ul><li>Single-instance facilities: You can assign these facilities only once to a property or a room.
+
+    An example of a single-instance facility is: room service. There are two types of single-instance facilities:
+
+    <ul><li>Single-instance facilities that can be toggled on or off.</li><li>Single-instance facilities supporting optional
+    parameters:
+
+    Allows you to specify more details about the facility</li></ul><li>Multi-instance facilities:
+
+    You can assign multiple facilities of this type to a property.
+
+    When adding multi-instance facilities you must provide additional details to add to a property or a room.
+
+    Examples of multi-instance facilities are: Restaurant, Swimming pool and Parking.</li></ul>
+
+    '
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://supply-xml.booking.com/facilities-api/
+tags:
+- name: Manage property facilities
+  description: 'Use the GET and the PUT endpoints to:
+
+    <ul><li>Retrieve property-level facilities details</li>
+
+    <li>Add, modify or delete property-level facilities details<ul><li>Add single-instance facilities</li>
+
+    <li>Add multi-instance facilities</li></ul></li></ul>
+
+    '
+- name: Manage room facilities
+  description: 'Use the GET and the PUT endpoints to:
+
+    <ul><li>Retrieve room facilities set for a property.</li><li>Add, modify or delete room facilities.</li></ul>
+
+    '
+- name: Meta data endpoint
+  description: '<p>Retrieve the latest facility definitions.</p>
+
+    <ul>
+
+    <li>Get the list of all supported facilities<ul>
+
+    <li>To get the details of a property-level facility: Look for a matching name under the facility_name in the response.
+
+    To add this facility, you must specify the facility_id.
+
+    Property-level facilities are listed under the property_facility_metas in the meta endpoint response.</li>
+
+    <li>To get the details of the room-level facility: Look for a matching name under the room_facility_name in the response.
+
+    To add the facility, you must specify the room_facility_id.
+
+    Room-level facilities are listed under the room_facility_metas in the meta endpoint response.</li>
+
+    </ul>
+
+    </li>
+
+    <li>Details of the facilities such as ID, OTA code and any optional parameters.</li>
+
+    </ul>
+
+    '
+paths:
+  /properties/{propertyId}:
+    get:
+      tags:
+      - Manage property facilities
+      summary: Retrieve property-level facilities
+      description: Retrieve facility instance IDs along with the facility details for all the facility instances added to
+        the property.
+      operationId: getFacilities
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: debugInfo
+        in: query
+        required: false
+        schema:
+          type: string
+          default: 'false'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseListPropertyFacility'
+    put:
+      tags:
+      - Manage property facilities
+      summary: Add, update or remove property-level facilities
+      description: 'Add or update single or multi-instances facilities using this endpoint. Try any of the three request examples
+        in the specification.
+
+
+
+        To delete a facility or all instances of a multi-instance facility (for example: all parking facility), you can change
+        the facility state to `MISSING`.
+
+        '
+      operationId: setFacilities
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PropertyFacility'
+            examples:
+              Add single-instance facilities:
+                description: Add/update single-instance facilities
+                value:
+                - facility_id: 418
+                  state: PRESENT
+                - facility_id: 419
+                  state: MISSING
+              Add single-instance facilities with additional details:
+                description: Add/update multiple single-instance facilities with surcharge details
+                value:
+                - facility_id: 70
+                  instances:
+                  - on_site_details:
+                      onsite_type: OFFSITE
+                    surcharge_details:
+                      surcharge_type: FREE
+                  state: PRESENT
+              Add multi-instance facilities:
+                description: Add/update facility with multiple parking details
+                value:
+                - facility_id: 2
+                  instances:
+                  - parking_details:
+                      name: Diamond Parking
+                      parking_location: NEARBY
+                      parking_access: ONLY_GUESTS
+                      parking_reservation: NEEDED
+                    payment_details:
+                      charge_mode: FREE
+                  - parking_details:
+                      name: Q-Park
+                      parking_location: ON_SITE
+                      parking_access: GENERAL_PUBLIC
+                      parking_reservation: NOT_NEEDED
+                    payment_details:
+                      charge_mode: FREE
+                  state: PRESENT
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseSuccessObject'
+  /properties/{propertyId}/rooms/{roomId}:
+    get:
+      tags:
+      - Manage room facilities
+      summary: Retrieve room facilities set for a property.
+      description: Retrieve the facility details for all the facility instances added to the rooms
+      operationId: getRoomFacilities
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: roomId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: debugInfo
+        in: query
+        required: false
+        schema:
+          type: string
+          default: 'false'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseListRoomFacility'
+    put:
+      tags:
+      - Manage room facilities
+      summary: Manage room-level facilities
+      description: Add, modify or delete room-level facilities details for a property
+      operationId: setRoomFacilities
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: roomId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/RoomFacility'
+            examples:
+              Room Facilities without additional details:
+                description: Room Facilities without additional details
+                value:
+                - room_facility_id: 1
+                  state: PRESENT
+                - room_facility_id: 3
+                  state: MISSING
+              Room Facilities with additional details:
+                description: Room Facilities with additional details
+                value:
+                - room_facility_id: 175
+                  state: PRESENT
+                  room_facility_instances:
+                  - crib_details:
+                      is_foldable: true
+                      is_standalone: false
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseSuccessObject'
+  /properties/{propertyId}/rooms/{roomId}/bathrooms:
+    get:
+      tags:
+      - Manage bathrooms
+      summary: Retrieve room bathroom configuration
+      description: Retrieve room bathroom configuration. Bathroom attached to rooms.
+      operationId: getBathroomDetails
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: roomId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseBathroomDetails'
+    put:
+      tags:
+      - Manage bathrooms
+      summary: Manage bathrooms
+      description: Add, modify or delete room-level bathroom information
+      operationId: setBathroomDetails
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: roomId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BathroomDetails'
+            examples:
+              Enable hotel group bathrooms:
+                description: Enable hotel group bathrooms
+                value:
+                  hotel_bathroom_details:
+                    shared_bathroom_state: PRESENT
+                    private_bathroom_state: PRESENT
+                    number_of_bathrooms: 3
+              Add hotel group bathroom details:
+                description: Add hotel group bathroom details
+                value:
+                  hotel_bathroom_details:
+                    shared_bathroom_state: MISSING
+                    private_bathroom_state: PRESENT
+                    private_bathroom_details:
+                      type: EXTERNAL_BATHROOM
+                      location_type: OTHER
+                      location_other: outside of the room
+                    number_of_bathrooms: 2
+              Add homes group bathroom details:
+                description: Add homes group bathroom details
+                value:
+                  property_bathroom_details:
+                    bathrooms:
+                    - bathroom_type: PRIVATE
+                    - bathroom_type: SHARED
+              Add homes group bathroom details with location:
+                description: Add homes group bathroom details with location
+                value:
+                  property_bathroom_details:
+                    bathrooms:
+                    - bathroom_type: PRIVATE
+                      bathroom_location: ENSUITE
+                    - bathroom_type: SHARED
+                      bathroom_location: OPPOSITE_THE_ROOM
+              Add hostel bathroom details:
+                description: Add hostel bathroom details
+                value:
+                  property_bathroom_details:
+                    bathrooms:
+                    - bathroom_type: PRIVATE
+                      bathroom_location: DOWN_THE_HALL
+                      hostel_bathroom_details:
+                        bathroom_facilities:
+                        - type: SHOWER
+                          count: 98
+                        - type: TOILET
+                          count: 21
+                        - type: SINK
+                          count: 68
+                        - type: BATH
+                          count: 16
+                        - type: TOILET_PAPER
+                        - type: HAIR_DRYER
+                        - type: SLIPPERS
+                          is_paid: true
+                        - type: BIDET
+                        - type: TOOTHBRUSH
+                          is_paid: true
+                        - type: SHAMPOO
+                          is_paid: false
+                        - type: CONDITIONER
+                          is_paid: false
+                        - type: BODY_SOAP
+                          is_paid: true
+                        - type: TOWEL
+                          is_paid: false
+                        - type: HOT_WATER
+                    - bathroom_type: SHARED
+                      bathroom_location: DOWN_THE_HALL
+                      hostel_bathroom_details:
+                        gender: MIXED
+                        num_guests_with_access_type: NUMBER_LESS_THAN_5
+                        bathroom_facilities:
+                        - type: SHOWER
+                          count: 98
+                        - type: TOILET
+                          count: 21
+                        - type: SINK
+                          count: 68
+                        - type: BATH
+                          count: 16
+                        - type: TOILET_PAPER
+                        - type: HAIR_DRYER
+                        - type: SLIPPERS
+                          is_paid: true
+                        - type: BIDET
+                        - type: TOOTHBRUSH
+                          is_paid: true
+                        - type: SHAMPOO
+                          is_paid: false
+                        - type: CONDITIONER
+                          is_paid: false
+                        - type: BODY_SOAP
+                          is_paid: true
+                        - type: TOWEL
+                          is_paid: true
+                        - type: HOT_WATER
+              Disable hotel group bathroom details:
+                description: Disable hotel group bathroom details
+                value:
+                  hotel_bathroom_details:
+                    shared_bathroom_state: MISSING
+                    private_bathroom_state: MISSING
+                    number_of_bathrooms: 0
+              Remove bathroom details for homes and hostel group:
+                description: Remove bathroom details for homes and hostel group
+                value:
+                  property_bathroom_details:
+                    bathrooms: []
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseSuccessObject'
+  /meta:
+    get:
+      tags:
+      - Meta data endpoint
+      summary: Retrieving facilities metadata
+      description: Explore available facilities, facility IDs and applicable details.
+      operationId: meta
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseFacilityMeta'
+components:
+  schemas:
+    AgeLimitDetails:
+      properties:
+        age_limit:
+          type: string
+          description: Minimum age allowed
+          enum:
+          - AGE_1
+          - AGE_2
+          - AGE_3
+          - AGE_4
+          - AGE_5
+          - AGE_6
+          - AGE_7
+          - AGE_8
+          - AGE_9
+          - AGE_10
+          - AGE_11
+          - AGE_12
+          - NO_RESTRICTION
+    ChargeDetails:
+      description: Charge details
+      properties:
+        price:
+          type: number
+          format: double
+          description: Price, in property's currency
+        frequency:
+          type: string
+          description: Charging frequency
+          enum:
+          - UNKNOWN_FREQUENCY
+          - PER_STAY
+          - PER_MINUTE
+          - PER_HALF_HOUR
+          - PER_HOUR
+          - PER_DAY
+          - PER_WEEK
+    Daytime:
+      description: Definition of a time in the day
+      properties:
+        hours:
+          type: integer
+          format: int32
+          description: Hours, in 24h format
+          maximum: 23
+          minimum: 0
+        minutes:
+          type: integer
+          format: int32
+          description: Minutes
+          maximum: 59
+          minimum: 0
+    Instance:
+      description: Property Facility Instance
+      properties:
+        restaurant_details:
+          $ref: '#/components/schemas/RestaurantDetails'
+        parking_details:
+          $ref: '#/components/schemas/ParkingDetails'
+        payment_details:
+          $ref: '#/components/schemas/PaymentDetails'
+        swimming_pool_details:
+          $ref: '#/components/schemas/SwimmingPoolDetails'
+        internet_details:
+          $ref: '#/components/schemas/InternetDetails'
+        kids_pool_details:
+          $ref: '#/components/schemas/KidsPoolDetails'
+        on_site_details:
+          $ref: '#/components/schemas/OnSiteDetails'
+        age_limit_details:
+          $ref: '#/components/schemas/AgeLimitDetails'
+        schedule_details:
+          $ref: '#/components/schemas/ScheduleDetails'
+        temporarily_closed_details:
+          $ref: '#/components/schemas/TemporarilyClosedDetails'
+        surcharge_details:
+          $ref: '#/components/schemas/SurchargeDetails'
+        meal_details:
+          $ref: '#/components/schemas/MealDetails'
+    InternetDetails:
+      description: Defines details of the Internet connection
+      properties:
+        area:
+          type: string
+          default: PUBLIC_AREAS
+          description: Connection location
+          enum:
+          - UNKNOWN_COVERAGE
+          - ALL_ROOMS
+          - SOME_ROOMS
+          - PUBLIC_AREAS
+          - BUSINESS_CENTER
+          - ENTIRE_PROPERTY
+        type:
+          type: string
+          default: WIFI
+          description: Connection type
+          enum:
+          - NONE
+          - WIRED
+          - WIFI
+        wifi_info:
+          $ref: '#/components/schemas/WifiInfo'
+      required:
+      - area
+      - type
+    KidsPoolDetails:
+      properties:
+        swimming_pool_dimensions:
+          $ref: '#/components/schemas/SwimmingPoolDimensions'
+        has_shallow_end:
+          type: boolean
+          default: false
+          description: Is there a shallow end?
+    MealDetails:
+      properties:
+        breakfast_types:
+          type: array
+          items:
+            type: string
+            enum:
+            - CONTINENTAL
+            - ITALIAN
+            - FULL_ENGLISH
+            - VEGETARIAN
+            - VEGAN
+            - HALAL
+            - GLUTEN_FREE
+            - KOSHER
+            - ASIAN
+            - AMERICAN
+            - BUFFET
+            - A_LA_CARTE
+            - BREAKFAST_TO_GO
+        breakfast_food_item_types:
+          type: array
+          items:
+            type: string
+            enum:
+            - BREAD
+            - PASTRIES
+            - PANCAKES
+            - BUTTER
+            - CHEESE
+            - COLD_MEAT
+            - EGGS
+            - YOGURT
+            - FRUITS
+            - COFFEE
+            - TEA
+            - HOT_CHOCOLATE
+            - CHAMPAGNE
+            - A_LA_CARTE
+            - LOCAL_SPECIALITY
+            - COOKED_MEAL
+            - JUICE
+            - JAM
+            - CEREAL
+        price:
+          type: number
+          maximum: 99999999999999.98
+          minimum: 0.1
+      required:
+      - price
+    OnSiteDetails:
+      description: Facility location details
+      properties:
+        onsite_type:
+          type: string
+          description: Facility location
+          enum:
+          - DEFAULT
+          - ONSITE
+          - OFFSITE
+    ParkingDetails:
+      description: Parking Details
+      properties:
+        name:
+          type: string
+          description: Name
+        parking_type:
+          type: string
+          default: UNKNOWN_PARKING_TYPE
+          description: 'Type of parking. Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingType'
+          enum:
+          - UNKNOWN_PARKING_TYPE
+          - PARKING_GARAGE
+          - PARKING_LOT
+          - STREET_PARKING
+        parking_location:
+          type: string
+          description: Where is this parking located?
+          enum:
+          - ON_SITE
+          - NEARBY
+        parking_access:
+          type: string
+          description: 'Who can park here? Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingProperty'
+          enum:
+          - ONLY_GUESTS
+          - GENERAL_PUBLIC
+        parking_reservation:
+          type: string
+          description: Is reservation possible/required?
+          enum:
+          - NEEDED
+          - NOT_NEEDED
+          - NOT_POSSIBLE
+        max_height_m:
+          type: number
+          format: double
+          description: 'Height limit for cars. Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingReservation'
+          maximum: 200
+          minimum: 0
+        has_valet_service:
+          type: string
+          default: NOT_SPECIFIED
+          description: Valet service available
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_onsite_staff:
+          type: string
+          default: NOT_SPECIFIED
+          description: Staff at the parking area
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_gated_parking:
+          type: string
+          default: NOT_SPECIFIED
+          description: Gate at the entrance / exit
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_security_cameras:
+          type: string
+          default: NOT_SPECIFIED
+          description: Security camera
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_ev_charging_station:
+          type: string
+          default: NOT_SPECIFIED
+          description: Electric vehicle charging station
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_accessible_parking_spots:
+          type: string
+          default: NOT_SPECIFIED
+          description: Accessible parking
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+      required:
+      - name
+      - parking_access
+      - parking_location
+      - parking_reservation
+    PaymentDetails:
+      description: Payment Details
+      properties:
+        charge_mode:
+          type: string
+          description: Charge mode
+          enum:
+          - UNKNOWN_CHARGE_MODE
+          - FREE
+          - PAID
+          - CHARGES_MAY_APPLY
+        charge_details:
+          $ref: '#/components/schemas/ChargeDetails'
+      required:
+      - charge_mode
+    PropertyFacility:
+      description: Property Facility object
+      properties:
+        facility_id:
+          type: integer
+          format: int32
+          description: Property Facility ID
+        instances:
+          type: array
+          description: Array of instances
+          items:
+            $ref: '#/components/schemas/Instance'
+        state:
+          type: string
+          description: Is facility Present/Missing?
+          enum:
+          - MISSING
+          - PRESENT
+        property_facility_meta:
+          $ref: '#/components/schemas/PropertyFacilityMeta'
+        facilityMetaType:
+          $ref: '#/components/schemas/PropertyFacilityMeta'
+      required:
+      - facility_id
+      - state
+    PropertyFacilityMeta:
+      description: DEBUG ONLY. Contains Property Facility meta
+      properties:
+        facility_id:
+          type: integer
+          format: int32
+          description: Booking.com Facility ID
+        ota_hotel_amenity_type:
+          type: integer
+          format: int32
+          description: OTA HAC (HotelAmenityCode)
+        booking_extended_legacy_code:
+          type: integer
+          format: int32
+          description: '[Legacy] Booking.com Extended HAC Facility Code'
+        facility_name:
+          type: string
+          description: Name
+        allowed_details_list:
+          type: array
+          description: List of applicable Details objects
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/AgeLimitDetails'
+            - $ref: '#/components/schemas/ChargeDetails'
+            - $ref: '#/components/schemas/InternetDetails'
+            - $ref: '#/components/schemas/KidsPoolDetails'
+            - $ref: '#/components/schemas/OnSiteDetails'
+            - $ref: '#/components/schemas/ParkingDetails'
+            - $ref: '#/components/schemas/PaymentDetails'
+            - $ref: '#/components/schemas/RestaurantDetails'
+            - $ref: '#/components/schemas/ScheduleDetails'
+            - $ref: '#/components/schemas/SurchargeDetails'
+            - $ref: '#/components/schemas/SwimmingPoolDetails'
+            - $ref: '#/components/schemas/TemporarilyClosedDetails'
+            description: List of applicable Details objects
+        required_details_list:
+          type: array
+          description: List of required Details objects
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ParkingDetails'
+            - $ref: '#/components/schemas/PaymentDetails'
+            - $ref: '#/components/schemas/RestaurantDetails'
+            - $ref: '#/components/schemas/SwimmingPoolDetails'
+            description: List of required Details objects
+    RestaurantDetails:
+      properties:
+        name:
+          type: string
+          description: Name
+        guests_only:
+          type: boolean
+          description: Open only to guests staying at the property
+        accept_reservations:
+          type: boolean
+          description: Reservations welcomed
+        outdoor_seating:
+          type: boolean
+          description: Outdoor seating
+        meal_types_list:
+          type: string
+          description: 'Dietary options. Corresponding legacy object in HDCN: Restaurant/TPA_Extensions/@DietaryOption'
+          enum:
+          - UNKNOWN_MEAL_TYPE
+          - HALAL
+          - KOSHER
+          - VEGETARIAN
+          - VEGAN
+          - GLUTEN_FREE
+          - DAIRY_FREE
+        ambiances_list:
+          type: string
+          description: 'Ambiance types. Corresponding legacy object in HDCN: Restaurant/TPA_Extensions/@Ambiance'
+          enum:
+          - UNKNOWN_AMBIANCE
+          - FAMILY_KIDS_FRIENDLY
+          - TRADITIONAL
+          - MODERN
+          - ROMANTIC
+        open_for_meals_list:
+          type: string
+          description: 'Open for which meals? Corresponding legacy object in HDCN: Restaurant/ @OfferBreakfast,  @OfferBrunch,
+            @OfferLunch, @OfferDinner'
+          enum:
+          - UNKNOWN_OPEN_FOR_MEALS
+          - BREAKFAST
+          - BRUNCH
+          - LUNCH
+          - DINNER
+          - HIGH_TEA
+          - COCKTAIL_HOUR
+        cuisines_list:
+          type: string
+          description: 'Cuisine. Corresponding legacy object in HDCN: Restaurant/CuisineCodes'
+          enum:
+          - UNKNOWN_CUISINE
+          - AFRICAN
+          - AMERICAN
+          - ARGENTINIAN
+          - BELGIAN
+          - BRAZILIAN
+          - CAJUN_CREOLE
+          - CAMBODIAN
+          - CANTONESE
+          - CARIBBEAN
+          - CATALAN
+          - CHINESE
+          - DUTCH
+          - BRITISH
+          - ETHIOPIAN
+          - FRENCH
+          - GREEK
+          - INDIAN
+          - INDONESIAN
+          - IRISH
+          - ITALIAN
+          - JAPANESE
+          - KOREAN
+          - MALAYSIAN
+          - MEDITERRANEAN
+          - MEXICAN
+          - MIDDLE_EASTERN
+          - MOROCCAN
+          - NEPALESE
+          - PERUVIAN
+          - PIZZA
+          - POLISH
+          - PORTUGUESE
+          - SCOTTISH
+          - SEAFOOD
+          - SICHUAN
+          - SINGAPOREAN
+          - SPANISH
+          - STEAKHOUSE
+          - SUSHI
+          - TEXMEX
+          - THAI
+          - TURKISH
+          - VIETNAMESE
+          - AUSTRIAN
+          - AUSTRALIAN
+          - GERMAN
+          - RUSSIAN
+          - LOCAL
+          - ASIAN
+          - INTERNATIONAL
+          - LATIN_AMERICAN
+          - EUROPEAN
+          - CROATIAN
+          - HUNGARIAN
+          - GRILL_BBQ
+          - SOUTH_AFRICAN
+        is_buffet:
+          type: boolean
+          description: Buffet menu
+        is_alacarte:
+          type: boolean
+          description: A la carte menu
+      required:
+      - name
+    ScheduleDetails:
+      description: 'Defines a schedule for a Facility. Corresponding legacy object in HDCN: OperationTimes'
+      properties:
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeekTimeEntry'
+    SurchargeDetails:
+      description: Surcharge Details
+      properties:
+        surcharge_type:
+          type: string
+          description: Surcharge type (free/paid)
+          enum:
+          - DEFAULT
+          - FREE
+          - PAID
+    SwimmingPoolDetails:
+      properties:
+        name:
+          type: string
+        swimming_pool_type:
+          type: string
+          default: UNKNOWN_AVAILABILITY
+          description: Swimming Pool Type
+          enum:
+          - UNKNOWN_POOL_TYPE
+          - INDOOR
+          - OUTDOOR
+          - INDOOR_AND_OUTDOOR
+        availability_type:
+          type: string
+          default: UNKNOWN_AVAILABILITY
+          description: Availability
+          enum:
+          - UNKNOWN_AVAILABILITY
+          - ALL_SEASON
+          - SEASONABLE
+        allowed_age_type:
+          type: string
+          default: UNKNOWN_AGE_TYPE
+          description: Age restrictions
+          enum:
+          - UNKNOWN_AGE_TYPE
+          - ALL_AGES
+          - KIDS_ONLY
+          - ADULTS_ONLY
+        has_loungers:
+          type: boolean
+          description: Loungers available
+        has_water_slide:
+          type: boolean
+          description: Water slide
+        has_pool_bar:
+          type: boolean
+          description: Pool bar
+        has_pool_cover:
+          type: boolean
+          description: Pool cover
+        has_free_towels:
+          type: boolean
+          description: Free towels
+        has_pool_toys:
+          type: boolean
+          description: Pool toys
+        has_sun_umbrellas:
+          type: boolean
+          description: Sun umbrellas
+        has_fence_around_pool:
+          type: boolean
+          description: Safety fence
+        has_snake_trap:
+          type: boolean
+          description: Has a snake trap
+        is_shared:
+          type: boolean
+          description: Is the swimming pool shared?
+        is_rooftop:
+          type: boolean
+          description: Is a rooftop pool?
+        is_shallow_end:
+          type: boolean
+          description: Is there a shallow end?
+        is_infinity:
+          type: boolean
+          description: Is an infinity pool?
+        is_heated:
+          type: boolean
+          description: Is a heated pool?
+        is_salt_water:
+          type: boolean
+          description: Is a salt water pool?
+        is_pool_with_view:
+          type: boolean
+          description: Scenic view
+        is_plunge_pool:
+          type: boolean
+          description: Is a plunge pool?
+      required:
+      - name
+      - swimming_pool_type
+    SwimmingPoolDimensions:
+      properties:
+        length:
+          type: number
+          format: double
+          description: Pool length
+        width:
+          type: number
+          format: double
+          description: Pool width
+        depth_min:
+          type: number
+          format: double
+          description: Pool minimal depth
+        depth_max:
+          type: number
+          format: double
+          description: Pool maximal depth
+        unit:
+          type: string
+          description: Measurement unit
+          enum:
+          - METER
+    TemporarilyClosedDetails:
+      description: Temporarily Closed Facility Details
+      properties:
+        closed:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemporarilyClosedEntry'
+    TemporarilyClosedEntry:
+      description: A range of dates
+      properties:
+        start_date:
+          $ref: '#/components/schemas/Timestamp'
+        end_date:
+          $ref: '#/components/schemas/Timestamp'
+    Timestamp:
+      description: End date when facility are temporarily closed hotel timezone
+      properties:
+        epoch_seconds:
+          type: integer
+          format: int64
+          description: Unix timestamp in seconds since epoch
+    WeekTimeEntry:
+      description: Describes opening times on a certain day of week
+      properties:
+        from:
+          $ref: '#/components/schemas/Daytime'
+        to:
+          $ref: '#/components/schemas/Daytime'
+        day_of_week:
+          type: string
+          description: 'Day of the week. Corresponding legacy object in HDCN: OperationTimes/OperationTime/'
+          enum:
+          - UNKNOWN_DAY
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          - SATURDAY
+          - SUNDAY
+      required:
+      - day_of_week
+      - from
+      - to
+    WifiInfo:
+      description: Provides information about Wi-Fi connection
+      properties:
+        network_name:
+          type: string
+          description: Wi-fi network name (SSID)
+        speed_download:
+          type: number
+          format: double
+          description: Download speed, mbps
+        speed_upload:
+          type: number
+          format: double
+          description: Upload speed, mbps
+    ApiError:
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          type: object
+    ApiResponseSuccessObject:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          $ref: '#/components/schemas/SuccessObject'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ResponseMeta:
+      properties:
+        ruid:
+          type: string
+    SuccessObject:
+      properties:
+        success:
+          type: boolean
+    CribDetails:
+      description: Crib Details
+      properties:
+        is_foldable:
+          type: boolean
+          default: false
+          description: Foldable
+        is_standalone:
+          type: boolean
+          default: false
+          description: Standalone
+    LinenDetails:
+      description: Linen Details
+      properties:
+        has_crib_linen:
+          type: boolean
+          default: false
+          description: Crib (cot) linen
+        has_fitted_sheet:
+          type: boolean
+          default: false
+          description: Fitted sheet
+        has_top_sheet:
+          type: boolean
+          default: false
+          description: Top sheet
+        has_blanket:
+          type: boolean
+          default: false
+          description: Blanket
+        has_extra_blankets:
+          type: boolean
+          default: false
+          description: Extra blankets
+        has_pillow:
+          type: boolean
+          default: false
+          description: Pillow
+        has_mattress_protector:
+          type: boolean
+          default: false
+          description: Mattress protector
+    RoomFacility:
+      properties:
+        room_facility_id:
+          type: integer
+          format: int32
+          description: Room Facility ID
+        state:
+          type: string
+          description: Is facility Present/Missing?
+          enum:
+          - MISSING
+          - PRESENT
+        room_facility_instances:
+          type: array
+          description: List of Room Facility Instances
+          items:
+            $ref: '#/components/schemas/RoomFacilityInstance'
+        room_facility_meta:
+          $ref: '#/components/schemas/RoomFacilityMeta'
+        facilityMetaType:
+          $ref: '#/components/schemas/RoomFacilityMeta'
+      required:
+      - room_facility_id
+      - state
+    RoomFacilityInstance:
+      description: List of Room Facility Instances
+      properties:
+        linen_details:
+          $ref: '#/components/schemas/LinenDetails'
+        crib_details:
+          $ref: '#/components/schemas/CribDetails'
+    RoomFacilityMeta:
+      description: DEBUG ONLY. Contains Room Facility meta
+      properties:
+        room_facility_id:
+          type: integer
+          format: int32
+          description: Booking.com Room Facility ID
+        ota_room_amenity_type:
+          type: integer
+          format: int32
+          description: OTA RMA (Room Amenity Type Code)
+        booking_extended_legacy_code:
+          type: integer
+          format: int32
+          description: '[Legacy] Booking.com Extended RMA Room Facility Code'
+        room_facility_name:
+          type: string
+          description: Name
+        allowed_details_list:
+          type: array
+          description: List of applicable Details Objects
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/CribDetails'
+            - $ref: '#/components/schemas/LinenDetails'
+            description: List of applicable Details Objects
+    Bathroom:
+      properties:
+        id:
+          type: integer
+          format: int32
+        bathroom_type:
+          type: string
+          enum:
+          - PRIVATE
+          - SHARED
+        bathroom_location:
+          type: string
+          enum:
+          - ENSUITE
+          - NEXT_DOOR
+          - DOWN_THE_HALL
+          - OPPOSITE_THE_ROOM
+          - IN_THE_HALLWAY
+          - OTHER
+          - INSIDE_THE_UNIT
+        hostel_bathroom_details:
+          $ref: '#/components/schemas/HostelBathroomDetails'
+      required:
+      - bathroom_type
+    BathroomDetails:
+      properties:
+        property_bathroom_details:
+          $ref: '#/components/schemas/PropertyBathroomDetails'
+        hotel_bathroom_details:
+          $ref: '#/components/schemas/HotelBathroomDetails'
+    HostelBathroomDetails:
+      properties:
+        gender:
+          type: string
+          enum:
+          - FEMALE
+          - MALE
+          - MIXED
+        num_guests_with_access_type:
+          type: string
+          enum:
+          - NUMBER_LESS_THAN_5
+          - NUMBER_5_TO_10
+          - NUMBER_11_TO_20
+          - NUMBER_21_TO_30
+          - NUMBER_31_TO_40
+          - NUMBER_41_TO_50
+          - NUMBER_MORE_THAN_50
+        bathroom_facilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/HostelBathroomFacility'
+          minItems: 1
+      required:
+      - bathroom_facilities
+    HostelBathroomFacility:
+      properties:
+        type:
+          type: string
+          enum:
+          - SHOWER
+          - TOILET
+          - SINK
+          - BATH
+          - TOILET_PAPER
+          - HAIR_DRYER
+          - SLIPPERS
+          - BIDET
+          - TOOTHBRUSH
+          - SHAMPOO
+          - CONDITIONER
+          - BODY_SOAP
+          - TOWEL
+          - HOT_WATER
+        count:
+          type: integer
+          format: int32
+          maximum: 100
+          minimum: 1
+        is_paid:
+          type: boolean
+      required:
+      - type
+    HotelBathroomDetails:
+      properties:
+        private_bathroom_state:
+          type: string
+          enum:
+          - MISSING
+          - PRESENT
+        shared_bathroom_state:
+          type: string
+          enum:
+          - MISSING
+          - PRESENT
+        private_bathroom_details:
+          $ref: '#/components/schemas/PrivateBathroomDetails'
+        number_of_bathrooms:
+          type: integer
+          format: int32
+          maximum: 20
+          minimum: 0
+      required:
+      - number_of_bathrooms
+      - private_bathroom_state
+      - shared_bathroom_state
+    PrivateBathroomDetails:
+      properties:
+        type:
+          type: string
+          enum:
+          - DEFAULT
+          - EXTERNAL_BATHROOM
+          - ATTACHED_BATHROOM
+        location_type:
+          type: string
+          enum:
+          - DEFAULT
+          - NEXT_DOOR
+          - DOWN_THE_HALL
+          - ACROSS_FROM_THE_ROOM
+          - IN_THE_LOBBY
+          - OTHER
+        location_other:
+          type: string
+    PropertyBathroomDetails:
+      properties:
+        bathrooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bathroom'
+          maxItems: 20
+          minItems: 0
+      required:
+      - bathrooms
+    ApiResponseListPropertyFacility:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyFacility'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ApiResponseListRoomFacility:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomFacility'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ApiResponseBathroomDetails:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          $ref: '#/components/schemas/BathroomDetails'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ApiResponseFacilityMeta:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          $ref: '#/components/schemas/FacilityMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    BathroomConfiguration:
+      properties:
+        unit_type_id:
+          type: integer
+          format: int32
+        unit_type_name:
+          type: string
+        allowed_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/BathroomOptions'
+    BathroomOptions:
+      properties:
+        bathroom_type:
+          type: string
+          enum:
+          - PRIVATE
+          - SHARED
+        bathroom_locations:
+          type: array
+          items:
+            type: string
+            enum:
+            - ENSUITE
+            - NEXT_DOOR
+            - DOWN_THE_HALL
+            - OPPOSITE_THE_ROOM
+            - IN_THE_HALLWAY
+            - OTHER
+            - INSIDE_THE_UNIT
+    FacilityMeta:
+      description: Contains meta data about property & room facilities
+      properties:
+        property_facility_metas:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyFacilityMeta'
+        room_facility_metas:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomFacilityMeta'
+        bathroom_configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/BathroomConfiguration'

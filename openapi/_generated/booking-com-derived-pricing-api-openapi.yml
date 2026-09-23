@@ -1,0 +1,53 @@
+openapi: 3.2.0
+info:
+  title: Booking.com Connectivity Rates and Availability Derived…
+  description: The Booking.com Connectivity Rates and Availability API allows Connectivity Partners to set room availability, pricing, and restrictions for properties on Booking.com.
+  version: '2.0'
+  contact:
+    name: Booking.com Connectivity Support
+    url: https://developers.booking.com/connectivity/docs
+  termsOfService: https://www.booking.com/content/terms.html
+servers:
+- url: https://supply-xml.booking.com
+  description: Production Server (Non-PCI)
+security:
+- basicAuth: []
+tags:
+- name: Derived Pricing
+  description: Endpoints for managing derived pricing rules that automatically calculate rates based on a parent rate plan.
+paths:
+  /hotels/xml/derivedprices:
+    post:
+      operationId: updateDerivedPrices
+      summary: Update derived pricing rules
+      description: Creates or updates derived pricing rules that automatically calculate rates based on a parent rate plan. Derived prices allow partners to set percentage or fixed amount adjustments relative to a base rate.
+      tags:
+      - Derived Pricing
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: B.XML request document specifying derived pricing rules including parent rate references and adjustment values.
+      responses:
+        '200':
+          description: Derived pricing rules updated successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: B.XML response indicating success or failure of the derived pricing update.
+        '400':
+          description: Invalid XML request
+        '401':
+          description: Authentication failed
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic authentication using your Connectivity partner username and password.
+externalDocs:
+  description: Booking.com Connectivity Rates and Availability API Documentation
+  url: https://developers.booking.com/connectivity/docs/ari

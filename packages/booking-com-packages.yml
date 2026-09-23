@@ -1,0 +1,75 @@
+generated: '2026-09-17'
+method: searched
+source: >-
+  npm registry search (registry.npmjs.org), the GitHub organisation https://github.com/bookingcom (91
+  public repositories enumerated 2026-09-17), and the Demand and Connectivity developer documentation.
+name: Booking.com client packages
+summary: >-
+  Booking.com publishes NO first-party API client library, in any language, on any registry. This is not
+  a search gap: the developer documentation offers curl examples and an in-portal "Try out" console and
+  never links a client library; the bookingcom GitHub organisation's 91 public repositories are
+  engineering infrastructure (Bazel rules, Graphite tooling, Kubernetes operators, ML datasets, Perl
+  packaging) with no API SDK among them; and every npm package matching "booking.com" is third-party.
+official_count: 0
+packages: []
+third_party_observed:
+- name: '@hasdata/booking-mcp'
+  registry: npm
+  version: 1.0.6
+  published: '2026-09-09'
+  official: false
+  note: MCP server calling HasData's hosted scraping API, not a Booking.com API client.
+- name: hotelzero
+  registry: npm
+  version: 1.15.2
+  published: '2026-02-16'
+  official: false
+  note: Third-party MCP server for searching hotels on Booking.com.
+- name: '@striderlabs/mcp-booking'
+  registry: npm
+  version: 0.2.1
+  published: '2026-06-21'
+  official: false
+- name: drtrips-hotel-mcp
+  registry: npm
+  version: 1.0.1
+  published: '2025-10-17'
+  official: false
+- name: '@browserkit-dev/adapter-booking'
+  registry: npm
+  version: 0.1.3
+  published: '2026-04-07'
+  official: false
+  note: Browser-automation adapter reading a signed-in user's trips - not an API client.
+third_party_note: >-
+  Recorded only to show what the absence of a first-party SDK has produced. None of these is published,
+  endorsed or documented by Booking.com, none carries official:true, and none should be counted toward
+  sdk_count.
+registries_checked:
+- registry: npm
+  endpoint: https://registry.npmjs.org/-/v1/search?text=booking.com
+  first_party_hits: 0
+- registry: GitHub (bookingcom organisation)
+  endpoint: https://api.github.com/orgs/bookingcom/repos
+  repositories: 91
+  first_party_api_clients: 0
+- registry: developer documentation
+  endpoint: https://developers.booking.com/
+  detail: No SDK, client library or CLI page exists in either the Demand or Connectivity documentation trees.
+distribution_channels_that_do_exist:
+- kind: Postman collection
+  detail: >-
+    The Connectivity docs publish Postman collection walkthroughs for token-based authentication and for
+    room-type and rate-plan management. These are tutorial collections inside the docs, not a published
+    public workspace, so no Postman pointer is wired.
+  urls:
+  - https://developers.booking.com/connectivity/docs/token-based-authentication-postman-collection-tryout
+  - https://developers.booking.com/connectivity/docs/room-type-and-rate-plan-management/postman-collection-tryout
+- kind: In-portal Try out console
+  detail: >-
+    Every published specification carries an "About Try it" section and an in-browser request console on
+    developers.booking.com.
+finding: >-
+  For a company shipping 210 published operations across 20 contracts, zero first-party SDKs is the
+  single largest developer-experience gap in this profile. Every integrator hand-rolls an HTTP client,
+  and the decay signal an SDK release date would give a buyer does not exist here at all.

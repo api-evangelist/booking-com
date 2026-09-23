@@ -1,0 +1,221 @@
+generated: '2026-09-17'
+method: derived
+source: >-
+  Derived from openapi/booking-com-demand-api-3-2-openapi.yml (398 component schemas) and the
+  Connectivity supply contracts in openapi/, with entity naming checked against
+  https://developers.booking.com/demand/docs.
+name: Booking.com entity model
+summary: >-
+  Two disjoint object graphs share one identifier space. The DEMAND graph is read-then-transact -
+  accommodation, product, availability, order - and hangs everything off the accommodation id and the
+  order id. The SUPPLY graph is the same physical property seen from the other side - property, room,
+  rate plan, reservation, payout - keyed on the Booking.com property id. The accommodation id in the
+  Demand API and the property id in the Connectivity API denote the same hotel, which is the single most
+  useful fact in this model and is not stated anywhere in the docs.
+id_conventions:
+  accommodation_id:
+    type: signed integer
+    example: 10004
+    note: Also called property id on the supply side.
+  attraction_id:
+    type: opaque string, 12 characters
+    example: PRGrwINoiRZl
+    note: A "PR" prefix is observed on every published sandbox attraction id.
+  request_id:
+    type: ULID-shaped string
+    example: 01kjan7r7yvff5yg95gxy1cjhy
+    note: Correlation id on every Demand API response envelope, not an entity key.
+  location_ids:
+    type: signed integer
+    note: >-
+      Cities, countries, regions, districts, landmarks and airports each carry their own integer id
+      space, resolved through the /common/locations/* endpoints. City ids can be negative (e.g. -2140479).
+entities:
+- name: accommodation
+  domain: demand
+  key: id
+  description: A bookable property - hotel, apartment, home. The root of the demand graph.
+  operations: ['/accommodations/search', '/accommodations/details', '/accommodations/availability', '/accommodations/details/changes']
+- name: product
+  domain: demand
+  key: id
+  description: A sellable room-plus-policy combination inside an accommodation, priced for a stay.
+- name: availability
+  domain: demand
+  key: id
+  description: A priced, date-bounded offer for a product, carrying the cancellation policy schedule.
+- name: cancellation_policy
+  domain: demand
+  key: null
+  description: >-
+    An ordered fee schedule, each entry carrying `from` (ISO 8601 date-time or the literal "now") and the
+    fee that applies from that moment. The machine-readable reversal window.
+- name: order
+  domain: demand
+  key: id
+  description: A booking envelope containing one or more travel services.
+  operations: ['/orders/preview', '/orders/create', '/orders/details', '/orders/modify', '/orders/cancel']
+- name: reservation
+  domain: both
+  key: reservation_id
+  description: >-
+    One accommodation or car travel service inside an order. Visible to the supply side as a reservation
+    on the property.
+- name: car
+  domain: demand
+  key: id
+  description: A rentable vehicle offer, sourced from a supplier and collected at a depot.
+- name: depot
+  domain: demand
+  key: id
+  description: A car rental pick-up/drop-off location, with its own review scores.
+- name: supplier
+  domain: demand
+  key: id
+  description: The car rental company behind a car offer.
+- name: attraction
+  domain: demand (beta)
+  key: id
+  description: A bookable experience; search-look-redirect rather than search-look-book.
+- name: review
+  domain: demand
+  key: null
+  description: Guest review text and score attached to an accommodation or depot.
+- name: message
+  domain: demand (beta) and connectivity
+  key: id
+  description: A guest-partner message inside a conversation; may be redacted for phishing (is_redacted, Messaging API 1.3).
+- name: property
+  domain: connectivity
+  key: property_id
+  description: The supply-side view of an accommodation - settings, status, description, health.
+  operations: [Property API, Property Health API]
+- name: room
+  domain: connectivity
+  key: room_id
+  description: A room type on a property, carrying occupancy, extra beds configuration and facilities.
+- name: rate_plan
+  domain: connectivity
+  key: null
+  description: A pricing and restriction plan attached to rooms; derived plans reference a parent plan.
+- name: facility
+  domain: connectivity
+  key: id
+  description: >-
+    A property- or room-level amenity. Single-instance (toggle or parameterised) or multi-instance.
+    Carries OTA HAC / RMA code mappings.
+- name: charge
+  domain: connectivity
+  key: null
+  description: A fee applying at property or room level for a date range; carries legacy OTA FTT codes.
+- name: value_add
+  domain: connectivity
+  key: null
+  description: A catalogue entry of extras available to a property, with currency and amount attributes.
+- name: payout
+  domain: connectivity
+  key: null
+  description: Money owed to the partner for reservations, broken down per reservation.
+- name: virtual_credit_card
+  domain: connectivity
+  key: null
+  description: A VCC issued for a reservation, with balance, fees and refundability.
+- name: reconciliation_report
+  domain: connectivity
+  key: null
+  description: An asynchronously generated payout report over a date range and property set.
+- name: contract
+  domain: connectivity
+  key: null
+  description: A partner contract and its legal entity, created by invitation through the Contracting API.
+relationships:
+- from: accommodation
+  to: product
+  type: has_many
+- from: product
+  to: availability
+  type: has_many
+- from: availability
+  to: cancellation_policy
+  type: has_one
+  via: cancellation policy schedule
+- from: order
+  to: reservation
+  type: has_many
+  via: travel services
+- from: reservation
+  to: accommodation
+  type: belongs_to
+  via: accommodation id
+- from: reservation
+  to: car
+  type: belongs_to
+  via: car offer id
+- from: car
+  to: depot
+  type: belongs_to
+  via: depot id
+- from: car
+  to: supplier
+  type: belongs_to
+  via: supplier id
+- from: depot
+  to: review
+  type: has_many
+  via: depot review scores
+- from: accommodation
+  to: review
+  type: has_many
+- from: accommodation
+  to: city
+  type: belongs_to
+  via: location ids resolved through /common/locations/cities
+- from: property
+  to: room
+  type: has_many
+  via: property_id
+- from: room
+  to: facility
+  type: has_many
+  via: room facility assignment
+- from: property
+  to: facility
+  type: has_many
+  via: property facility assignment
+- from: room
+  to: rate_plan
+  type: has_many
+- from: rate_plan
+  to: rate_plan
+  type: belongs_to
+  via: parent rate plan (derived pricing)
+- from: property
+  to: charge
+  type: has_many
+- from: property
+  to: value_add
+  type: has_many
+- from: reservation
+  to: payout
+  type: has_one
+- from: payout
+  to: virtual_credit_card
+  type: has_one
+- from: reconciliation_report
+  to: property
+  type: has_many
+  via: report filter property set
+- from: accommodation
+  to: property
+  type: has_one
+  via: same Booking.com identifier, seen from the demand and supply sides
+  note: >-
+    Inferred from the identifier space, not stated in the documentation. Treat as high-confidence but
+    undeclared.
+notes:
+- >-
+  There is no customer or booker entity with its own identifier. The booker travels inside the order
+  payload (platform, country, email) and is not addressable afterwards.
+- >-
+  No metadata field exists on any entity, so an integrator cannot attach its own keys to a Booking.com
+  object and must keep its own mapping table.

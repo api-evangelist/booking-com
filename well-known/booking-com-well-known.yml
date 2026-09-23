@@ -1,0 +1,190 @@
+generated: '2026-09-17'
+method: probed
+source: Direct anonymous HTTPS probes of 7 /.well-known/ paths across 10 Booking.com hosts, 2026-09-17.
+name: Booking.com /.well-known/ probe
+summary: Two real documents are served. booking.com and www.booking.com serve a security.txt naming the
+  HackerOne programme - but its Expires field is 2025-12-31, so it is EXPIRED under RFC 9116 as of this
+  probe. developers.booking.com serves a conformant A2A agent card that points at a live anonymous MCP
+  server. No openid-configuration, oauth-authorization-server, api-catalog or ai-plugin.json is served
+  on any host. Every API host (demandapi, demandapi-sandbox, partnerships-status) answers 401 to anonymous
+  requests, so their /.well-known/ space could not be read rather than being known-absent.
+hosts:
+- host: booking.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: booking-com-security.txt
+    content_type: text/plain
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 0
+- host: www.booking.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: booking-com-security.txt
+    content_type: text/plain
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+- host: developers.booking.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: a2a/booking-com-agent-card.json
+    content_type: application/json
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+- host: connect.booking.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+- host: demandapi.booking.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 401
+  - path: /.well-known/openid-configuration
+    status: 401
+  - path: /.well-known/oauth-authorization-server
+    status: 401
+  - path: /.well-known/api-catalog
+    status: 401
+  - path: /.well-known/ai-plugin.json
+    status: 401
+  - path: /.well-known/agent-card.json
+    status: 401
+  - path: /.well-known/oauth-protected-resource
+    status: 401
+- host: demandapi-sandbox.booking.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 401
+  - path: /.well-known/openid-configuration
+    status: 401
+  - path: /.well-known/oauth-authorization-server
+    status: 401
+  - path: /.well-known/api-catalog
+    status: 401
+  - path: /.well-known/ai-plugin.json
+    status: 401
+  - path: /.well-known/agent-card.json
+    status: 401
+  - path: /.well-known/oauth-protected-resource
+    status: 401
+- host: supply-xml.booking.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+- host: payments-api.booking.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+- host: metasearch-connect-api.booking.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+- host: partnerships-status.booking.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 401
+  - path: /.well-known/openid-configuration
+    status: 401
+  - path: /.well-known/oauth-authorization-server
+    status: 401
+  - path: /.well-known/api-catalog
+    status: 401
+  - path: /.well-known/ai-plugin.json
+    status: 401
+  - path: /.well-known/agent-card.json
+    status: 401
+  - path: /.well-known/oauth-protected-resource
+    status: 401
+findings:
+- id: security-txt-expired
+  detail: 'https://www.booking.com/.well-known/security.txt returns 200 text/plain with Contact: https://hackerone.com/bookingcom,
+    Contact: mailto:appsecurity@booking.com, Preferred-Languages: en, and Expires: 2025-12-31T23:00:00.000Z.
+    RFC 9116 requires the Expires value to be in the future; it is over eight months past at probe time,
+    so the file is formally stale.'
+- id: api-hosts-401-not-404
+  detail: demandapi.booking.com, demandapi-sandbox.booking.com and partnerships-status.booking.com return
+    401 with an empty body on every /.well-known/ path. This is a gate, not an absence - we cannot say
+    whether those hosts serve discovery documents behind it.
+- id: no-api-catalog
+  detail: No host serves /.well-known/api-catalog, although developers.booking.com does maintain a machine-readable
+    API catalogue behind its MCP server.

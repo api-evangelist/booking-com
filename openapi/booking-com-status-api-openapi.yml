@@ -1,0 +1,293 @@
+openapi: 3.1.0
+info:
+  title: Booking.com Status API
+  description: "> The Status API provides the current operational status of monitored\nDemand API endpoints.\n\n- Use the\
+    \ API to detect service degradation and support automated operational\nresponses, such as adjusting retry behaviour or\
+    \ switching to a fallback.\n\n- Status information is organised into endpoint groups. \n- Each group includes its overall\
+    \ status and the status of its monitored endpoints."
+  version: '1.0'
+  summary: Check the operational status of Demand API endpoints.
+servers:
+- url: https://partnerships-status.booking.com
+  description: Production
+paths:
+  /api/1.0/status:
+    get:
+      summary: Get API status
+      description: 'Returns the current operational status of monitored Demand API endpoint
+
+        groups and their individual endpoints.
+
+
+        - Use the response to identify endpoints affected by degradation or an
+
+        outage before deciding whether to retry, apply backoff, or use a
+
+        fallback.
+
+
+        - The `updated_at` value indicates when each status was last evaluated.
+
+        - When a status is not `up`, `since` indicates when the current issue
+
+        began and `reason` provides additional context when available.'
+      operationId: getApiStatus
+      parameters:
+      - name: x-partner-id
+        in: header
+        description: Your Booking.com partner identifier. This identifier is used to verify that your integration has access
+          to the Status API.
+        required: true
+        schema:
+          type: string
+        example: 1523684
+      responses:
+        '200':
+          description: The operational status was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status_response'
+              examples:
+                operational:
+                  summary: All endpoints operational
+                  value:
+                    data:
+                    - group: Reservations
+                      status: up
+                      updated_at: '2026-04-20T14:32:00Z'
+                      endpoints:
+                      - endpoint: /orders/create
+                        status: up
+                        updated_at: '2026-04-20T14:32:00Z'
+                minor_outage:
+                  summary: Endpoint experiencing a minor outage
+                  value:
+                    data:
+                    - group: Reservations
+                      status: minor_outage
+                      updated_at: '2026-04-20T14:32:00Z'
+                      since: '2026-04-20T14:30:15Z'
+                      reason: Elevated error rates
+                      endpoints:
+                      - endpoint: /orders/create
+                        status: minor_outage
+                        updated_at: '2026-04-20T14:32:00Z'
+                        since: '2026-04-20T14:30:15Z'
+                        reason: Upstream provider issue
+        '401':
+          description: The partner identifier is missing or invalid. Refer to the [Error handling section](/demand/docs/support/error-handling/about-errors)
+            for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                unauthorized:
+                  summary: Missing or invalid partner identifier
+                  value:
+                    request_id: 01kjan7r7yvff5yg95gxy1cjhy
+                    errors:
+                    - id: unauthorized
+                      message: A valid partner identifier is required.
+        '403':
+          description: Your partner account is not authorised to access the Status API. Refer to the [Error handling section](/demand/docs/support/error-handling/about-errors)
+            for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                forbidden:
+                  summary: Status API access not permitted
+                  value:
+                    request_id: 01kjan7r7yvff5yg95gxy1cjhy
+                    errors:
+                    - id: forbidden
+                      message: Your partner account is not authorised to access the Status API.
+        '429':
+          description: Too many requests. Try again later. Refer to the [Error handling section](/demand/docs/support/error-handling/about-errors)
+            for more details.
+          headers:
+            Retry-After:
+              description: Number of seconds to wait before making another request.
+              style: simple
+              schema:
+                type: integer
+                minimum: 0
+              example: 60
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                rate_limit_exceeded:
+                  summary: Rate limit exceeded
+                  value:
+                    request_id: 01kjan7r7yvff5yg95gxy1cjhy
+                    errors:
+                    - id: rate_limit_exceeded
+                      message: Too many requests. Try again later.
+        '500':
+          description: Internal server error. Try again later or contact support.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                internal_error:
+                  summary: Generic server error
+                  value:
+                    request_id: 01kjan66dedrpbwv4m1966dzw3
+                    errors:
+                    - id: '500'
+                      message: Internal server error. Try again later or contact support.
+components:
+  schemas:
+    endpoint_status:
+      type: object
+      description: The current operational status of a monitored Demand API endpoint.
+      properties:
+        endpoint:
+          type: string
+          description: The monitored Demand API endpoint path.
+          example: /orders/create
+        status:
+          $ref: '#/components/schemas/operational_status'
+        updated_at:
+          type: string
+          format: date-time
+          description: The UTC timestamp when the endpoint status was last evaluated.
+          example: '2026-04-20T14:32:00Z'
+        since:
+          type: string
+          format: date-time
+          description: 'The UTC timestamp when the current issue began.
+
+
+            Returned when `status` is `minor_outage` or `major_outage`.'
+          example: '2026-04-20T14:30:15Z'
+        reason:
+          type: string
+          description: 'Human-readable information about the current issue.
+
+
+            May be returned when `status` is `minor_outage` or `major_outage`.
+
+            Do not use this value to implement programmatic behaviour.'
+          example: Upstream provider issue
+      required:
+      - endpoint
+      - status
+      - updated_at
+    group_status:
+      type: object
+      description: The current operational status of a group of related Demand API endpoints.
+      properties:
+        group:
+          type: string
+          description: The name of the endpoint group.
+          example: Reservations
+        status:
+          $ref: '#/components/schemas/operational_status'
+        updated_at:
+          type: string
+          format: date-time
+          description: The UTC timestamp when the group status was last evaluated.
+          example: '2026-04-08T10:31:00Z'
+        since:
+          type: string
+          format: date-time
+          description: 'The UTC timestamp when the current issue affecting the group began.
+
+
+            Returned when `status` is `minor_outage` or `major_outage`.'
+          example: '2026-04-08T10:12:00Z'
+        reason:
+          type: string
+          description: 'Human-readable information about the issue affecting the group.
+
+
+            May be returned when `status` is `minor_outage` or `major_outage`.
+
+            Do not use this value to implement programmatic behaviour.'
+          example: Elevated error rates under investigation
+        endpoints:
+          type: array
+          description: The operational status of each monitored endpoint in the group.
+          items:
+            $ref: '#/components/schemas/endpoint_status'
+      required:
+      - endpoints
+      - group
+      - status
+      - updated_at
+    operational_status:
+      type: string
+      description: 'The current operational status of a monitored Demand API endpoint or
+
+        endpoint group.'
+      enum:
+      - up
+      - minor_outage
+      - major_outage
+      example: up
+      x-enumDescriptions:
+        major_outage: Experiencing significant disruption or unavailability.
+        minor_outage: Experiencing degraded operation or partial disruption.
+        up: Operating normally.
+    status_response:
+      type: object
+      description: The current operational status of the monitored Demand API endpoint groups.
+      properties:
+        data:
+          type: array
+          description: The operational status of each monitored endpoint group.
+          items:
+            $ref: '#/components/schemas/group_status'
+      required:
+      - data
+    error:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Machine-readable identifier for the error.
+          example: invalid_request
+        message:
+          type: string
+          description: Human-readable description of the error.
+          example: Invalid request parameters.
+      required:
+      - id
+      - message
+    error_response:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Identifier for the request. Provide this value when contacting support.
+          example: 01kjan7r7yvff5yg95gxy1cjhy
+        errors:
+          type: array
+          description: Errors that occurred while processing the request.
+          items:
+            $ref: '#/components/schemas/error'
+          minItems: 1
+      required:
+      - errors
+      - request_id
+  parameters:
+    partner_id:
+      name: x-partner-id
+      in: header
+      description: 'Your Booking.com partner identifier.
+
+
+        This identifier is used to verify that your integration has access to
+
+        the Status API.'
+      required: true
+      schema:
+        type: string
+      example: '1523684'

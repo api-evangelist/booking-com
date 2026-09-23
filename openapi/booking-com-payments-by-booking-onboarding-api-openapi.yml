@@ -1,0 +1,1514 @@
+openapi: 3.0.1
+info:
+  title: Payments by Booking Onboarding API
+  description: Manage Payments by Booking onboarding configurations, check property eligibility for different payout options,
+    and monitor the processing status of configuration update requests.
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://payments-by-booking-onboarding-api.wiremockapi.cloud/
+  description: Mock (stateful simulator)
+- url: https://payments-api.booking.com/
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: About Try it
+  description: "Learn how to effectively use the Try it feature in the Payments by Booking Onboarding API documentation.\n\
+    \nUse the **Try it** feature to send sample requests to API endpoints directly from the developer portal. In the **Mock\
+    \ (schema only)** environment, Try it returns schema-driven mock responses or pre-built example responses. In the **Production**\
+    \ environment, it sends the request to the live API and returns dynamic responses from your selected test property.\n\
+    ## Environment\nYou can select between three different environments (top right corner in the UI):\n\n**Mock (schema only)**\
+    \ (default):\n - Helps to understand the response data schema\n- Recommended for all write operations (POST)\n- Environment\
+    \ for testing without affecting live/test data\n\n**Mock (stateful simulator)**:\n- Get realistic, stateful response data\
+    \ from a mock API\n- Recommended for all write operations (POST)\n- Environment for testing without affecting live/test\
+    \ data\n\n**Production**:\n- Make sure to use only test properties.\n- Changes will affect your test property data\n-\
+    \ Requires valid credentials\n- Same API structure as production\n\n## Request\n\nYou can click on any unresolved placeholders\
+    \ to add a value or edit an existing placeholder value.\n\nThe portal loads the default request and response body. Where\
+    \ the specification supports multiple request and response body examples, you can choose a different request or response\
+    \ body from the drop-down list.\n\nSome helpful pointers before running a request:\n\n- **Authentication** (when using\
+    \ Production): Configure your authentication headers\n  - OAuth Bearer token as required. Use the **Environments** tab.\n\
+    \  - Make sure to manage separate machine accounts for test vs. properties in production.\n  - Ensure credentials match\
+    \ your selected environment.\n\n- **Request body**: Fill in required fields\n  - Property IDs (like `property_ids`)\n\
+    \  - Legal entity IDs or request IDs where applicable\n\n- **Execute**: Click **Send** to send the request\n  - The request\
+    \ is sent to the selected environment\n  - When sending requests to Production, the response will be a real response from\
+    \ the API.\n\n## Response\n\nAfter executing a request, you will see:\n\n- **Status code**: HTTP response status\n- **Response\
+    \ body**: JSON response data\n- **Headers**: Response headers\n\n## Simulating error responses\n\nWhen using the **Mock\
+    \ (stateful simulator)** environment, you can simulate authentication and server error responses by setting specific values\
+    \ in the `Authorization` header:\n\n| Error | Authorization header value | Description |\n|-------|---------------------------|-------------|\n\
+    | 403 Forbidden | `Bearer invalid-scope-token` | Simulates a token without the required scope/permissions |\n| 500 Internal\
+    \ Server Error | `Bearer trigger-500-test` | Simulates an internal server error |\n\nTo set the Authorization header:\n\
+    1. Select the request example for the error you want to trigger (e.g., \"Trigger 403\" or \"Trigger 500\")\n2. In the\
+    \ **Authorization** section, set the header value as shown above\n3. Click **Send** to execute the request\n\n## Common\
+    \ issues\n\n- **401 Unauthorized**: Check your credentials\n- **403 Forbidden**: Verify access permissions\n- **404 Not\
+    \ Found**: Confirm the request ID exists (status endpoint only)\n- **429 Too Many Requests**: Rate limit exceeded (max\
+    \ 30 requests per minute)"
+- name: Payments eligibility details for partners
+  description: Retrieve payments eligibility details for partners.
+- name: Payments by Booking configurations
+  description: Update Payments by Booking payout configurations for properties.
+- name: Payments by Booking configurations status
+  description: Check the processing status of Payments by Booking configuration update requests.
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Payments eligibility details for partners
+  - Payments by Booking configurations
+  - Payments by Booking configurations status
+- name: Documentation
+  tags:
+  - About Try it
+paths:
+  /connectivity-payments/pbb/eligibility:
+    post:
+      tags:
+      - Payments eligibility details for partners
+      summary: Check payments eligibility
+      description: Performs a bulk eligibility evaluation for a list of properties (property_ids) by returning their current
+        payout configurations along with all available payout options, including eligibility metadata and any associated costs
+        or restrictions.
+      operationId: checkPaymentsEligibility
+      parameters:
+      - name: accept-version
+        in: header
+        required: false
+        schema:
+          type: string
+          default: '1.0'
+        example: '1.0'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentsEligibilityRequest'
+            examples:
+              multipleProperties:
+                summary: Eligibility check for multiple properties
+                value:
+                  property_ids:
+                  - 84729163
+                  - 55318472
+                  - 63947281
+              singleProperty:
+                summary: Eligibility check for single property
+                value:
+                  property_ids:
+                  - 38274916
+              tooManyProperties:
+                summary: Too many properties
+                value:
+                  property_ids:
+                  - 84729163
+                  - 55318472
+                  - 63947281
+                  - 72615839
+                  - 91483620
+                  - 47382916
+                  - 29164738
+                  - 61827394
+                  - 83741629
+                  - 54829163
+                  - 70193846
+              duplicateProperties:
+                summary: Duplicate properties
+                value:
+                  property_ids:
+                  - 84729163
+                  - 55318472
+                  - 84729163
+                  - 72615839
+              triggerForbidden:
+                summary: 'Trigger 403 - Set Authorization header to: Bearer invalid-scope-token'
+                value:
+                  property_ids:
+                  - 84729163
+              triggerServerError:
+                summary: 'Trigger 500 - Set Authorization header to: Bearer trigger-500-test'
+                value:
+                  property_ids:
+                  - 84729163
+        required: true
+      responses:
+        '200':
+          description: Request for eligibility accepted.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentsEligibilityResponse'
+              examples:
+                mixedEligibility:
+                  summary: Multiple properties with mixed eligibility
+                  value:
+                    meta:
+                      ruid: UQ-a8f3c291-4b7e-9d2f-e6a1-3c8b5d0f7e2a
+                    data:
+                      payout_configurations:
+                      - property_id: '84729163'
+                        legal_entity_id: '7293851'
+                        current_payout_configuration:
+                          payin_collection_strategy: PARTIAL
+                          payout_method: VCC
+                          payout_frequency: DAILY
+                          payout_netting: GROSS
+                        payout_configuration_options:
+                        - is_eligible: true
+                          payin_collection_strategy: PARTIAL
+                          payout_method: VCC
+                          payout_frequency: []
+                          payout_netting:
+                          - GROSS
+                          additional_requirements: []
+                        - is_eligible: true
+                          payin_collection_strategy: ALL
+                          payout_method: BT
+                          payout_frequency:
+                          - DAILY
+                          - WEEKLY
+                          - MONTHLY
+                          payout_netting:
+                          - GROSS
+                          - NET
+                          additional_requirements: []
+                        - is_eligible: false
+                          payin_collection_strategy: ALL
+                          payout_method: STRIPE
+                          payout_frequency: []
+                          payout_netting:
+                          - GROSS
+                          additional_requirements: []
+                        vcc_activation_policy_code: '1'
+                        bt_payout_cost_information:
+                          value: '140'
+                          type: PERCENTAGE
+                          decimals: 2
+                        is_config_update_supported_by_api: true
+                      - property_id: '55318472'
+                        legal_entity_id: '1847293'
+                        current_payout_configuration:
+                          payin_collection_strategy: ALL
+                          payout_method: BT
+                          payout_frequency: MONTHLY
+                          payout_netting: NET
+                        payout_configuration_options:
+                        - is_eligible: true
+                          payin_collection_strategy: PARTIAL
+                          payout_method: VCC
+                          payout_frequency: []
+                          payout_netting:
+                          - GROSS
+                          additional_requirements: []
+                        - is_eligible: true
+                          payin_collection_strategy: ALL
+                          payout_method: BT
+                          payout_frequency:
+                          - DAILY
+                          - WEEKLY
+                          - MONTHLY
+                          payout_netting:
+                          - GROSS
+                          - NET
+                          additional_requirements: []
+                        - is_eligible: false
+                          payin_collection_strategy: ALL
+                          payout_method: STRIPE
+                          payout_frequency: []
+                          payout_netting:
+                          - GROSS
+                          additional_requirements: []
+                        vcc_activation_policy_code: '2'
+                        bt_payout_cost_information:
+                          value: '150'
+                          type: PERCENTAGE
+                          decimals: 2
+                        is_config_update_supported_by_api: true
+                      - property_id: '63947281'
+                        legal_entity_id: '9374621'
+                        current_payout_configuration:
+                          payin_collection_strategy: PARTIAL
+                          payout_method: VCC
+                          payout_frequency: null
+                          payout_netting: GROSS
+                        payout_configuration_options:
+                        - is_eligible: true
+                          payin_collection_strategy: PARTIAL
+                          payout_method: VCC
+                          payout_frequency: []
+                          payout_netting:
+                          - GROSS
+                          additional_requirements: []
+                        - is_eligible: false
+                          payin_collection_strategy: ALL
+                          payout_method: BT
+                          payout_frequency:
+                          - DAILY
+                          - WEEKLY
+                          - MONTHLY
+                          payout_netting:
+                          - GROSS
+                          - NET
+                          additional_requirements: []
+                        - is_eligible: false
+                          payin_collection_strategy: ALL
+                          payout_method: STRIPE
+                          payout_frequency: []
+                          payout_netting:
+                          - GROSS
+                          additional_requirements: []
+                        vcc_activation_policy_code: '1'
+                        bt_payout_cost_information: null
+                        is_config_update_supported_by_api: false
+                    errors: []
+                    warnings: []
+                singlePropertyVcc:
+                  summary: Single property VCC eligible
+                  value:
+                    meta:
+                      ruid: UQ-c5d2e847-9a1f-4b73-8e6d-1f4c9a2b7e3d
+                    data:
+                      payout_configurations:
+                      - property_id: '38274916'
+                        legal_entity_id: '4829163'
+                        current_payout_configuration:
+                          payin_collection_strategy: PARTIAL
+                          payout_method: VCC
+                          payout_frequency: null
+                          payout_netting: GROSS
+                        payout_configuration_options:
+                        - is_eligible: true
+                          payin_collection_strategy: PARTIAL
+                          payout_method: VCC
+                          payout_frequency: []
+                          payout_netting:
+                          - GROSS
+                          additional_requirements: []
+                        - is_eligible: false
+                          payin_collection_strategy: ALL
+                          payout_method: BT
+                          payout_frequency:
+                          - DAILY
+                          - WEEKLY
+                          - MONTHLY
+                          payout_netting:
+                          - GROSS
+                          - NET
+                          additional_requirements: []
+                        - is_eligible: false
+                          payin_collection_strategy: ALL
+                          payout_method: STRIPE
+                          payout_frequency: []
+                          payout_netting:
+                          - GROSS
+                          additional_requirements: []
+                        vcc_activation_policy_code: '3'
+                        bt_payout_cost_information: null
+                        is_config_update_supported_by_api: true
+                    errors: []
+                    warnings: []
+                stripeEligibleProperties:
+                  summary: STRIPE eligible properties
+                  value:
+                    meta:
+                      ruid: UQ-f9b1d473-2e8a-5c6f-a3b9-7d0e4f2c8a1b
+                    data:
+                      payout_configurations:
+                      - property_id: '72615839'
+                        legal_entity_id: '6139'
+                        current_payout_configuration:
+                          payin_collection_strategy: ALL
+                          payout_method: STRIPE
+                          payout_frequency: null
+                          payout_netting: GROSS
+                        payout_configuration_options:
+                        - is_eligible: true
+                          payin_collection_strategy: PARTIAL
+                          payout_method: VCC
+                          payout_frequency: []
+                          payout_netting:
+                          - GROSS
+                          additional_requirements: []
+                        - is_eligible: true
+                          payin_collection_strategy: ALL
+                          payout_method: BT
+                          payout_frequency:
+                          - DAILY
+                          - WEEKLY
+                          - MONTHLY
+                          payout_netting:
+                          - GROSS
+                          - NET
+                          additional_requirements: []
+                        - is_eligible: true
+                          payin_collection_strategy: ALL
+                          payout_method: STRIPE
+                          payout_frequency: []
+                          payout_netting:
+                          - GROSS
+                          additional_requirements:
+                          - name: REQUIRES_KYC_FOR_PAYOUT
+                            action: COMPLETE_KYC_AFTER_ONBOARDING
+                        vcc_activation_policy_code: '4'
+                        bt_payout_cost_information:
+                          value: '200'
+                          type: PERCENTAGE
+                          decimals: 2
+                        is_config_update_supported_by_api: true
+                      - property_id: '91483620'
+                        legal_entity_id: '6182739'
+                        current_payout_configuration:
+                          payin_collection_strategy: ALL
+                          payout_method: STRIPE
+                          payout_frequency: null
+                          payout_netting: GROSS
+                        payout_configuration_options:
+                        - is_eligible: true
+                          payin_collection_strategy: PARTIAL
+                          payout_method: VCC
+                          payout_frequency: []
+                          payout_netting:
+                          - GROSS
+                          additional_requirements: []
+                        - is_eligible: true
+                          payin_collection_strategy: ALL
+                          payout_method: BT
+                          payout_frequency:
+                          - DAILY
+                          - WEEKLY
+                          - MONTHLY
+                          payout_netting:
+                          - GROSS
+                          - NET
+                          additional_requirements: []
+                        - is_eligible: true
+                          payin_collection_strategy: ALL
+                          payout_method: STRIPE
+                          payout_frequency: []
+                          payout_netting:
+                          - GROSS
+                          additional_requirements: []
+                        vcc_activation_policy_code: '4'
+                        bt_payout_cost_information:
+                          value: '200'
+                          type: PERCENTAGE
+                          decimals: 2
+                        is_config_update_supported_by_api: true
+                    errors: []
+                    warnings: []
+        '400':
+          description: Invalid request payload.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+              examples:
+                tooManyProperties:
+                  summary: Too many properties
+                  value:
+                    meta:
+                      ruid: UQ-b3e7a182-6c4d-9f1e-2a8b-5d0c7e3f9a4b
+                    data: null
+                    errors:
+                    - description: The number of property_ids exceeds the maximum allowed limit of 10.
+                      message: BAD_REQUEST
+                      status_code: 400
+                      debug_message: null
+                    warnings: []
+                duplicateProperties:
+                  summary: Duplicate properties
+                  value:
+                    meta:
+                      ruid: UQ-e4c8b291-7d5a-2f3e-1b9c-6a0d8f4e2c7b
+                    data: null
+                    errors:
+                    - description: The request contains duplicate property_ids.
+                      message: BAD_REQUEST
+                      status_code: 400
+                      debug_message: null
+                    warnings: []
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidTokenResponse'
+              examples:
+                unauthorizedRequest:
+                  summary: Invalid or expired token
+                  value:
+                    meta:
+                      ruid: UQ-c7d2e481-9f3a-4b6c-8e5d-1a2b3c4d5e6f
+                    data: null
+                    errors:
+                    - description: Invalid or expired token.
+                      message: UNAUTHORIZED
+                      status_code: 401
+                      debug_message: null
+                    warnings: []
+        '403':
+          description: Access Denied!
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequestResponse'
+              examples:
+                accessDenied:
+                  summary: Insufficient permissions
+                  value:
+                    meta:
+                      ruid: UQ-d8e3f592-0a4b-5c7d-9f6e-2b3c4d5e6f7a
+                    data: null
+                    errors:
+                    - description: Access Denied!
+                      message: FORBIDDEN
+                      status_code: 403
+                      debug_message: null
+                    warnings: []
+        '429':
+          description: Rate limit exceeded. Maximum 30 requests per minute.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+        '500':
+          description: The request failed with an internal server error.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+              examples:
+                internalError:
+                  summary: Internal server error
+                  value:
+                    meta:
+                      ruid: UQ-e9f4a6b3-1b5c-6d8e-0a7f-3c4d5e6f7a8b
+                    data: null
+                    errors:
+                    - description: The request failed with an internal server error.
+                      message: INTERNAL_SERVER_ERROR
+                      status_code: 500
+                      debug_message: null
+                    warnings: []
+  /connectivity-payments/pbb/configurations:
+    post:
+      tags:
+      - Payments by Booking configurations
+      summary: Update Payments by Booking configurations
+      description: Updates Payments by Booking configurations and returns processing status
+      operationId: updatePBBConfigurations
+      parameters:
+      - name: accept-version
+        in: header
+        required: false
+        schema:
+          type: string
+          default: '1.0'
+        example: '1.0'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PBBConfigurationUpdateRequest'
+            examples:
+              singleConfigMultipleProperties:
+                summary: Single config with multiple properties
+                value:
+                  payout_configurations:
+                  - legal_entity_id: '7293851'
+                    property_ids:
+                    - 84729163
+                    - 55318472
+                    payout_method: VCC
+                    payout_netting: GROSS
+                    payout_frequency: null
+                    payin_collection_strategy: PARTIAL
+              multipleConfigsDifferentOptions:
+                summary: Multiple configs with different payout methods
+                value:
+                  payout_configurations:
+                  - legal_entity_id: '7293851'
+                    property_ids:
+                    - 84729163
+                    payout_method: VCC
+                    payout_netting: GROSS
+                    payout_frequency: null
+                    payin_collection_strategy: PARTIAL
+                  - legal_entity_id: '1847293'
+                    property_ids:
+                    - 55318472
+                    payout_method: BT
+                    payout_netting: NET
+                    payout_frequency: MONTHLY
+                    payin_collection_strategy: ALL
+              stripeConfiguration:
+                summary: STRIPE configuration
+                value:
+                  payout_configurations:
+                  - legal_entity_id: '6182739'
+                    property_ids:
+                    - 72615839
+                    - 91483620
+                    payout_method: STRIPE
+                    payout_netting: GROSS
+                    payout_frequency: null
+                    payin_collection_strategy: ALL
+              btFrequencyChange:
+                summary: BT frequency change
+                value:
+                  payout_configurations:
+                  - legal_entity_id: '9374621'
+                    property_ids:
+                    - 63947281
+                    payout_method: BT
+                    payout_netting: GROSS
+                    payout_frequency: WEEKLY
+                    payin_collection_strategy: ALL
+              tooManyProperties:
+                summary: Too many properties
+                value:
+                  payout_configurations:
+                  - legal_entity_id: '7293851'
+                    property_ids:
+                    - 84729163
+                    - 55318472
+                    - 63947281
+                    - 72615839
+                    - 91483620
+                    - 47382916
+                    - 29164738
+                    - 61827394
+                    - 83741629
+                    - 54829163
+                    - 70193846
+                    payout_method: VCC
+                    payout_netting: GROSS
+                    payout_frequency: null
+                    payin_collection_strategy: PARTIAL
+              triggerForbidden:
+                summary: 'Trigger 403 - Set Authorization header to: Bearer invalid-scope-token'
+                value:
+                  payout_configurations:
+                  - legal_entity_id: '7293851'
+                    property_ids:
+                    - 84729163
+                    payout_method: VCC
+                    payout_netting: GROSS
+                    payout_frequency: null
+                    payin_collection_strategy: PARTIAL
+              triggerServerError:
+                summary: 'Trigger 500 - Set Authorization header to: Bearer trigger-500-test'
+                value:
+                  payout_configurations:
+                  - legal_entity_id: '7293851'
+                    property_ids:
+                    - 84729163
+                    payout_method: VCC
+                    payout_netting: GROSS
+                    payout_frequency: null
+                    payin_collection_strategy: PARTIAL
+        required: true
+      responses:
+        '202':
+          description: Request accepted for processing
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PBBConfigurationUpdateStatusResponse'
+              examples:
+                mixedAcceptedRejected:
+                  summary: Mixed accepted and rejected
+                  value:
+                    meta:
+                      ruid: UQ-d1f5b392-8a4c-7e2b-3d9f-6c1a8b5e4d7f
+                    data:
+                      config_update_details:
+                      - property_id: '84729163'
+                        request_id: req-a7c4e291-8f3b-4d6e-9c1a-2b5d8f0e3a7c
+                        status: ACCEPTED
+                        rejection_reason: null
+                        requested_at: '2025-06-18T10:32:47Z'
+                      - property_id: '55318472'
+                        request_id: null
+                        status: REJECTED
+                        rejection_reason: The property signed up with Payments By Booking in the past, or the requested payout
+                          configuration change is not supported.
+                        requested_at: null
+                    errors: []
+                    warnings: []
+                allAccepted:
+                  summary: All accepted
+                  value:
+                    meta:
+                      ruid: UQ-7e3a9b14-5c8d-2f6e-4a1b-9d7c0e5f3b2a
+                    data:
+                      config_update_details:
+                      - property_id: '72615839'
+                        request_id: req-b8d5f302-9a4c-5e7d-1b2f-4c6e9a1d8b3e
+                        status: ACCEPTED
+                        rejection_reason: null
+                        requested_at: '2025-06-18T11:14:23Z'
+                      - property_id: '91483620'
+                        request_id: req-b8d5f302-9a4c-5e7d-1b2f-4c6e9a1d8b3e
+                        status: ACCEPTED
+                        rejection_reason: null
+                        requested_at: '2025-06-18T11:14:23Z'
+                    errors: []
+                    warnings: []
+                rejectedDifferentLegalEntities:
+                  summary: Rejected - different legal entities
+                  value:
+                    meta:
+                      ruid: UQ-2c6a4f81-7b3e-5d9c-8f2a-1e4b9d7c3f6a
+                    data:
+                      config_update_details:
+                      - property_id: '84729163'
+                        request_id: null
+                        status: REJECTED
+                        rejection_reason: The requested configuration has properties from different legal entities.
+                        requested_at: null
+                      - property_id: '55318472'
+                        request_id: null
+                        status: REJECTED
+                        rejection_reason: The requested configuration has properties from different legal entities.
+                        requested_at: null
+                    errors: []
+                    warnings: []
+                rejectedSameAsCurrentConfig:
+                  summary: Rejected - same as current config
+                  value:
+                    meta:
+                      ruid: UQ-9f4b2e73-1d6c-8a5f-3e7b-4c1d9a2f6e8b
+                    data:
+                      config_update_details:
+                      - property_id: '38274916'
+                        request_id: null
+                        status: REJECTED
+                        rejection_reason: The requested configuration is the same as current.
+                        requested_at: null
+                    errors: []
+                    warnings: []
+                rejectedUnsupportedSwitch:
+                  summary: Rejected - unsupported configuration switch
+                  value:
+                    meta:
+                      ruid: UQ-6a1c8d35-4f7b-9e2a-5c3d-8b0f4e7a1c9d
+                    data:
+                      config_update_details:
+                      - property_id: '63947281'
+                        request_id: null
+                        status: REJECTED
+                        rejection_reason: The property signed up with Payments By Booking in the past, or the requested payout
+                          configuration change is not supported.
+                        requested_at: null
+                    errors: []
+                    warnings: []
+                stripeMixedResult:
+                  summary: STRIPE - mixed result
+                  value:
+                    meta:
+                      ruid: UQ-3b7e9f42-8c1a-6d4e-2f5b-9a0c3d7e1f4b
+                    data:
+                      config_update_details:
+                      - property_id: '72615839'
+                        request_id: req-c9f2b481-3e6d-7a5f-2c4b-8d1e9f0a3c5b
+                        status: ACCEPTED
+                        rejection_reason: null
+                        requested_at: '2025-06-18T14:07:52Z'
+                      - property_id: '47382916'
+                        request_id: null
+                        status: REJECTED
+                        rejection_reason: The requested configuration is ineligible for the property.
+                        requested_at: null
+                    errors: []
+                    warnings: []
+        '400':
+          description: Invalid request payload.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+              examples:
+                tooManyProperties:
+                  summary: Too many properties
+                  value:
+                    meta:
+                      ruid: UQ-5d8c3a71-2f9b-4e6d-1a7c-3b0f9e4d8c2a
+                    data: null
+                    errors:
+                    - description: The number of property_ids exceeds the maximum allowed limit of 10.
+                      message: BAD_REQUEST
+                      status_code: 400
+                      debug_message: null
+                    warnings: []
+                duplicateProperties:
+                  summary: Duplicate properties
+                  value:
+                    meta:
+                      ruid: UQ-1e9f4b82-6c3d-5a7f-8b2e-4d0c9a1f7b3e
+                    data: null
+                    errors:
+                    - description: The request contains duplicate property_ids.
+                      message: BAD_REQUEST
+                      status_code: 400
+                      debug_message: null
+                    warnings: []
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidTokenResponse'
+              examples:
+                unauthorizedRequest:
+                  summary: Invalid or expired token
+                  value:
+                    meta:
+                      ruid: UQ-c7d2e481-9f3a-4b6c-8e5d-1a2b3c4d5e6f
+                    data: null
+                    errors:
+                    - description: Invalid or expired token.
+                      message: UNAUTHORIZED
+                      status_code: 401
+                      debug_message: null
+                    warnings: []
+        '403':
+          description: Access Denied!
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequestResponse'
+              examples:
+                accessDenied:
+                  summary: Insufficient permissions
+                  value:
+                    meta:
+                      ruid: UQ-d8e3f592-0a4b-5c7d-9f6e-2b3c4d5e6f7a
+                    data: null
+                    errors:
+                    - description: Access Denied!
+                      message: FORBIDDEN
+                      status_code: 403
+                      debug_message: null
+                    warnings: []
+        '429':
+          description: Rate limit exceeded. Maximum 30 requests per minute.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+        '500':
+          description: The request failed with an internal server error.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+              examples:
+                internalError:
+                  summary: Internal server error
+                  value:
+                    meta:
+                      ruid: UQ-e9f4a6b3-1b5c-6d8e-0a7f-3c4d5e6f7a8b
+                    data: null
+                    errors:
+                    - description: The request failed with an internal server error.
+                      message: INTERNAL_SERVER_ERROR
+                      status_code: 500
+                      debug_message: null
+                    warnings: []
+  /connectivity-payments/pbb/configurations/status:
+    post:
+      tags:
+      - Payments by Booking configurations status
+      summary: Check Payments by Booking configuration request status
+      description: Checks the processing status of Payments by Booking configuration update requests for given property IDs
+        or a request ID.
+      operationId: fetchAcceptedPBBConfigurationUpdateRequestsStatus
+      parameters:
+      - name: accept-version
+        in: header
+        required: false
+        schema:
+          type: string
+          default: '1.0'
+        example: '1.0'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PBBConfigurationUpdateStatusRequest'
+            examples:
+              statusByPropertyIds:
+                summary: Status by property IDs
+                value:
+                  property_ids:
+                  - 84729163
+                  - 55318472
+                  request_id: null
+                  kyc_callback_url: https://partner.example.com/kyc/callback
+              statusByRequestId:
+                summary: Status by request ID
+                value:
+                  property_ids: []
+                  request_id: req-a7c4e291-8f3b-4d6e-9c1a-2b5d8f0e3a7c
+                  kyc_callback_url: https://partner.example.com/kyc/callback
+              triggerForbidden:
+                summary: 'Trigger 403 - Set Authorization header to: Bearer invalid-scope-token'
+                value:
+                  property_ids:
+                  - 84729163
+                  request_id: null
+                  kyc_callback_url: https://www.example.com
+              triggerServerError:
+                summary: 'Trigger 500 - Set Authorization header to: Bearer trigger-500-test'
+                value:
+                  property_ids:
+                  - 84729163
+                  request_id: null
+                  kyc_callback_url: https://www.example.com
+        required: true
+      responses:
+        '200':
+          description: Request accepted for processing
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PBBConfigurationUpdateStatusLookupResponse'
+              examples:
+                completedStatus:
+                  summary: Completed status
+                  value:
+                    meta:
+                      ruid: UQ-4a7c1f83-9e2b-5d6a-3f8c-1b4e9d0a7c2f
+                    data:
+                      config_update_details:
+                      - property_id: '84729163'
+                        request_id: req-a7c4e291-8f3b-4d6e-9c1a-2b5d8f0e3a7c
+                        status: SUCCESSFUL
+                        rejection_reason: null
+                        requested_at: '2025-06-18T10:32:47Z'
+                        actions: []
+                      - property_id: '55318472'
+                        request_id: req-a7c4e291-8f3b-4d6e-9c1a-2b5d8f0e3a7c
+                        status: SUCCESSFUL
+                        rejection_reason: null
+                        requested_at: '2025-06-18T10:32:47Z'
+                        actions: []
+                    errors: []
+                    warnings: []
+                pendingKycAction:
+                  summary: Pending with KYC action
+                  value:
+                    meta:
+                      ruid: UQ-8b2e5c94-3f1a-7d4e-6b9c-2a5f8d1e4c7b
+                    data:
+                      config_update_details:
+                      - property_id: '72615839'
+                        request_id: req-c9f2b481-3e6d-7a5f-2c4b-8d1e9f0a3c5b
+                        status: WAITING
+                        rejection_reason: null
+                        requested_at: '2025-06-18T14:07:52Z'
+                        actions:
+                        - reference: https://kyc.booking.com/submit?token=eyJhbGciOiJIUzI1NiJ9.partner.72615839
+                          type: SUBMIT_KYC
+                    errors: []
+                    warnings: []
+        '400':
+          description: Invalid request payload.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+              examples:
+                missingRequiredFields:
+                  summary: Missing required fields
+                  value:
+                    meta:
+                      ruid: UQ-0d3f7a25-8b6c-4e9d-1f2a-7c5b9e3d8f1a
+                    data: null
+                    errors:
+                    - description: Invalid request payload.
+                      message: BAD_REQUEST
+                      status_code: 400
+                      debug_message: null
+                    warnings: []
+                propertiesNotCommonLegalEntity:
+                  summary: Properties do not belong to common legal entity
+                  value:
+                    meta:
+                      ruid: UQ-2a4c6e81-3f5b-7d9a-1c8e-4b0d2f6a8c3e
+                    data: null
+                    errors:
+                    - description: The properties do not belong to a common legal entity.
+                      message: BAD_REQUEST
+                      status_code: 400
+                      debug_message: null
+                    warnings: []
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidTokenResponse'
+              examples:
+                unauthorizedRequest:
+                  summary: Invalid or expired token
+                  value:
+                    meta:
+                      ruid: UQ-c7d2e481-9f3a-4b6c-8e5d-1a2b3c4d5e6f
+                    data: null
+                    errors:
+                    - description: Invalid or expired token.
+                      message: UNAUTHORIZED
+                      status_code: 401
+                      debug_message: null
+                    warnings: []
+        '403':
+          description: Access Denied!
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequestResponse'
+              examples:
+                accessDenied:
+                  summary: Insufficient permissions
+                  value:
+                    meta:
+                      ruid: UQ-d8e3f592-0a4b-5c7d-9f6e-2b3c4d5e6f7a
+                    data: null
+                    errors:
+                    - description: Access Denied!
+                      message: FORBIDDEN
+                      status_code: 403
+                      debug_message: null
+                    warnings: []
+        '404':
+          description: The request id not found.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PBBConfigUpdateRequestDataNotFoundErrorResponse'
+              examples:
+                requestNotFound:
+                  summary: Request not found
+                  value:
+                    meta:
+                      ruid: UQ-7f4a1c86-2e9d-5b3f-8a4c-1d6e0f9b7a3c
+                    data: null
+                    errors:
+                    - description: The request id not found.
+                      message: REQUEST_ID_NOT_FOUND
+                      status_code: 404
+                      debug_message: null
+                    warnings: []
+        '429':
+          description: Rate limit exceeded. Maximum 30 requests per minute.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+        '500':
+          description: The request failed with an internal server error.
+          headers:
+            api-version:
+              $ref: '#/components/headers/ApiVersion'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+              examples:
+                internalError:
+                  summary: Internal server error
+                  value:
+                    meta:
+                      ruid: UQ-e9f4a6b3-1b5c-6d8e-0a7f-3c4d5e6f7a8b
+                    data: null
+                    errors:
+                    - description: The request failed with an internal server error.
+                      message: INTERNAL_SERVER_ERROR
+                      status_code: 500
+                      debug_message: null
+                    warnings: []
+components:
+  headers:
+    ApiVersion:
+      description: The response includes the API version used. Either the version requested, or the default if none was specified
+        in the request.
+      schema:
+        type: string
+      example: '1.0'
+  schemas:
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type: string
+          nullable: true
+          description: Detailed debug message for the error
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    InvalidTokenResponse:
+      type: object
+      description: Response when the authentication token is missing, invalid, or expired.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          nullable: true
+          description: Response data (null for error responses)
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          maxItems: 0
+          items: {}
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          nullable: true
+          description: Response data (null for error responses)
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          nullable: true
+          description: Response data (null for error responses)
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    BadRequestErrorResponse:
+      type: object
+      description: Response when the request doesn't have valid parameters
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    Action:
+      description: Pending actions to be performed by the partner
+      properties:
+        reference:
+          type: string
+          description: Reference to the action to be taken
+        type:
+          type: string
+          description: 'Type of action to be taken. Possible values: SUBMIT_KYC.'
+    AdditionalRequirement:
+      description: Additional requirement to be met for a property to be eligible for Payments by Booking
+      properties:
+        name:
+          type: string
+          description: Name of the requirement
+        action:
+          type: string
+          description: Action needed to complete the requirement
+    BTPayoutCostInformation:
+      description: Bank transfer payout cost information
+      properties:
+        value:
+          type: string
+        type:
+          type: string
+        decimals:
+          type: integer
+          format: int32
+    CurrentPayoutOption:
+      description: Current payout configuration for a property
+      properties:
+        payin_collection_strategy:
+          type: string
+          description: 'Payin collection strategy. Possible values: PARTIAL, ALL.'
+        payout_method:
+          type: string
+          description: 'The method by which Booking.com remits payments to the partner for this property. Possible values:
+            VCC, BT, STRIPE.'
+        payout_frequency:
+          type: string
+          nullable: true
+          description: 'How often payouts are executed to the partner for this property, as per the current configuration.
+            Applies mainly when payout_method is ''BT''. Possible values: DAILY, WEEKLY, MONTHLY. For VCC, null is returned.'
+        payout_netting:
+          type: string
+          description: 'Defines how commissions or payment-related costs are deducted directly from each payout. Possible
+            values: GROSS, NET.'
+    PayoutOption:
+      description: A payout option for the property
+      properties:
+        is_eligible:
+          type: boolean
+          description: Indicates if this payout option is currently eligible
+        payin_collection_strategy:
+          type: string
+          description: 'Payin collection strategy. Possible values: PARTIAL, ALL.'
+        payout_method:
+          type: string
+          description: 'The method by which Booking.com remits payments to the partner for this property. Possible values:
+            VCC, BT, STRIPE.'
+        payout_frequency:
+          type: array
+          description: Available payout frequencies for this option. Applies mainly when payout_method is 'BT'
+          items:
+            type: string
+            description: 'Available payout frequency. Possible values: DAILY, WEEKLY, MONTHLY.'
+        payout_netting:
+          type: array
+          description: Defines how commissions or payment-related costs are deducted directly from each payout
+          items:
+            type: string
+            description: 'Defines how commissions or payment-related costs are deducted directly from each payout. Possible
+              values: GROSS, NET.'
+        additional_requirements:
+          type: array
+          description: List of additional requirements for this payout option
+          items:
+            $ref: '#/components/schemas/AdditionalRequirement'
+    PayoutConfiguration:
+      required:
+      - legal_entity_id
+      - property_ids
+      - payout_method
+      - payout_netting
+      - payin_collection_strategy
+      properties:
+        legal_entity_id:
+          type: string
+        property_ids:
+          description: <=10 property IDs per request. All `property_ids` in a request should belong to a common legal entity
+            ID.
+          type: array
+          maxItems: 10
+          items:
+            type: integer
+        payout_method:
+          type: string
+          description: 'The method by which Booking.com remits payments to the partner for this property. Possible values:
+            VCC, BT, STRIPE.'
+        payout_netting:
+          type: string
+          description: 'Defines how commissions or payment-related costs are deducted directly from each payout. Possible
+            values: GROSS, NET.'
+        payout_frequency:
+          type: string
+          nullable: true
+          description: 'How often payouts should be executed to the partner for this property. Applies mainly when payout_method
+            is ''BT''. Possible values: DAILY, WEEKLY, MONTHLY. Set to null when payout_method is VCC or STRIPE.'
+        payin_collection_strategy:
+          type: string
+          description: 'Payin collection strategy. Possible values: PARTIAL, ALL.'
+    PaymentsEligibility:
+      description: Payout configuration for a property
+      properties:
+        property_id:
+          type: string
+          description: Property identifier
+        legal_entity_id:
+          type: string
+          description: Legal entity identifier
+        current_payout_configuration:
+          $ref: '#/components/schemas/CurrentPayoutOption'
+        payout_configuration_options:
+          type: array
+          description: List of other payout configuration options
+          items:
+            $ref: '#/components/schemas/PayoutOption'
+        vcc_activation_policy_code:
+          type: string
+          description: VCC activation policy code
+        bt_payout_cost_information:
+          $ref: '#/components/schemas/BTPayoutCostInformation'
+        is_config_update_supported_by_api:
+          type: boolean
+          description: Indicates whether the property can be onboarded to Payments by Booking via the Payments Configuration
+            API.
+    PaymentsEligibilityModel:
+      description: Data containing required information
+      properties:
+        payout_configurations:
+          type: array
+          description: Details about payout configurations for property_ids
+          items:
+            $ref: '#/components/schemas/PaymentsEligibility'
+    PaymentsEligibilityRequest:
+      properties:
+        property_ids:
+          description: <=10 property IDs per request.
+          type: array
+          maxItems: 10
+          items:
+            type: integer
+      required:
+      - property_ids
+    PaymentsEligibilityResponse:
+      description: Response containing payments eligibility information for the specified property IDs
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        data:
+          $ref: '#/components/schemas/PaymentsEligibilityModel'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    PBBConfigurationUpdateRequest:
+      properties:
+        payout_configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayoutConfiguration'
+    PBBConfigurationUpdateStatusRequest:
+      properties:
+        property_ids:
+          description: <=10 property IDs per request. All `property_ids` in a request should belong to a common legal entity
+            ID. Required if `request_id` is not provided. Set to empty array if using `request_id`.
+          type: array
+          maxItems: 10
+          items:
+            type: integer
+        request_id:
+          description: Identifier of the accepted configuration request. Required if `property_ids` is not provided. Set to
+            null if using `property_ids`.
+          type: string
+          nullable: true
+        kyc_callback_url:
+          description: Callback URL where the user is redirected after completing pending actions (e.g. KYC submission).
+          type: string
+      required:
+      - property_ids
+      - request_id
+      - kyc_callback_url
+    PBBConfigurationUpdateStatusDetail:
+      description: Status information regarding validated Payments by Booking configuration change request for a property
+        (update response)
+      properties:
+        property_id:
+          type: string
+          description: Property identifier
+        request_id:
+          type: string
+          nullable: true
+          description: Idempotency key of the latest accepted Payments by Booking configuration change request. Null when
+            status is REJECTED.
+        status:
+          type: string
+          description: Payments by Booking configuration change status for property
+        rejection_reason:
+          type: string
+          nullable: true
+          description: Reason for rejection of Payments by Booking configuration change request. Null when request is accepted.
+        requested_at:
+          type: string
+          nullable: true
+          description: Payments by Booking configuration change requested at. Null when status is REJECTED.
+    PBBConfigurationUpdateStatusDetails:
+      description: Information regarding Payments by Booking configuration change request for properties
+      properties:
+        config_update_details:
+          type: array
+          description: Status information for Payments by Booking configuration change requested for properties
+          items:
+            $ref: '#/components/schemas/PBBConfigurationUpdateStatusDetail'
+    PBBConfigurationUpdateStatusResponse:
+      description: Response of Payments by Booking configurations update request with property-level processing status of
+        accepted configuration change request.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        data:
+          $ref: '#/components/schemas/PBBConfigurationUpdateStatusDetails'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    PBBConfigurationUpdateStatusLookupDetail:
+      description: Status information regarding accepted Payments by Booking configuration change request for a property
+      properties:
+        property_id:
+          type: string
+          description: Property identifier
+        request_id:
+          type: string
+          description: Idempotency key of the latest accepted Payments by Booking configuration change request
+        status:
+          type: string
+          description: Payments by Booking configuration change status for property
+        rejection_reason:
+          type: string
+          description: Reason for rejection of Payments by Booking configuration change request
+        requested_at:
+          type: string
+          description: Payments by Booking configuration change requested at
+        actions:
+          type: array
+          description: Pending actions to be performed by the partner
+          items:
+            $ref: '#/components/schemas/Action'
+    PBBConfigurationUpdateStatusLookupDetails:
+      description: Information regarding accepted Payments by Booking configuration update request status for properties
+      properties:
+        config_update_details:
+          type: array
+          description: Status information for accepted Payments by Booking configuration change requests for properties
+          items:
+            $ref: '#/components/schemas/PBBConfigurationUpdateStatusLookupDetail'
+    PBBConfigurationUpdateStatusLookupResponse:
+      description: Response of Payments by Booking configurations update request with property-level processing status of
+        accepted configuration change request.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        data:
+          $ref: '#/components/schemas/PBBConfigurationUpdateStatusLookupDetails'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    PBBConfigUpdateRequestDataNotFoundErrorResponse:
+      description: Response when the requested resource doesn't exist
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token for authentication. Use your API credentials to obtain a token.
