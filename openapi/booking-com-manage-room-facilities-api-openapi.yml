@@ -1,0 +1,638 @@
+openapi: 3.2.0
+info:
+  title: Booking Com Manage room facilities API
+  version: '1.0'
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  description: 'Operations tagged Manage room facilities across 2 of this provider''s published API definitions: booking-com-facilities-api-openapi.yml, booking-com-facilities-api-remote-sync-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://supply-xml.booking.com/
+  description: Test using live endpoint
+- url: https://supply-xml.booking.com/facilities-api/
+tags:
+- name: Manage room facilities
+  description: 'Use the GET and the PUT endpoints to:
+
+
+    Retrieve room facilities set for a property.
+
+
+    Add, modify or delete room facilities.'
+paths:
+  /facilities-api/properties/{propertyId}/rooms/{roomId}:
+    get:
+      tags:
+      - Manage room facilities
+      summary: Retrieve room facilities set for a property
+      description: Retrieve the facility details for all the facility instances added to the rooms
+      operationId: getRoomFacilities
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: roomId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: debugInfo
+        in: query
+        required: false
+        description: When set to `true`, attaches room facility metadata (facility names, OTA codes, allowed detail types) to each item in the response. Significantly increases payload size. Do not use in production environments.
+        schema:
+          type: string
+          default: 'false'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseListRoomFacility'
+              example:
+                data: []
+                warnings: []
+                errors: []
+                meta:
+                  ruid: 59b721b1-7d21-4cce-b847-79e5ccb6399f
+    put:
+      tags:
+      - Manage room facilities
+      summary: Manage room-level facilities
+      description: Add, modify or delete room-level facilities details for a property
+      operationId: setRoomFacilities
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: roomId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/RoomFacilityRequest'
+            examples:
+              Room facilities without additional details:
+                description: Room facilities without additional details
+                value:
+                - room_facility_id: 1
+                  state: PRESENT
+                - room_facility_id: 3
+                  state: MISSING
+              Room facilities with additional details:
+                description: Room facilities with additional details
+                value:
+                - room_facility_id: 125
+                  state: PRESENT
+                  room_facility_instances:
+                  - linen_details:
+                      has_crib_linen: true
+                      has_fitted_sheet: true
+                      has_top_sheet: false
+                      has_blanket: true
+                      has_extra_blankets: false
+                      has_pillow: true
+                      has_mattress_protector: false
+                - room_facility_id: 175
+                  state: PRESENT
+                  room_facility_instances:
+                  - crib_details:
+                      is_foldable: false
+                      is_standalone: true
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseSuccess'
+        '400':
+          description: 'Invalid request payload. The `errors` array contains one or more entries with `code: 320`. The `details.fields` path identifies the exact field that failed validation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseSuccessObject'
+              examples:
+                Unrecognized field in room facility:
+                  description: The request body contains a field name the API does not recognize for a room facility instance.
+                  value:
+                    warnings: []
+                    errors:
+                    - message: Invalid value
+                      code: 320
+                      details:
+                        fields:
+                        - instances.wrong_field
+                        room_facility_id: 175
+                        instance_id: null
+                      description: Unrecognized field "wrong_field"
+                    meta:
+                      ruid: X-RUID-EXAMPLE
+                Missing required field:
+                  description: A required field is null or absent. The `details.fields` path pinpoints the exact field.
+                  value:
+                    warnings: []
+                    errors:
+                    - message: Invalid value
+                      code: 320
+                      details:
+                        fields:
+                        - room_facility_list[0].room_facility_id
+                      description: must not be null
+                    meta:
+                      ruid: X-RUID-EXAMPLE
+    servers:
+    - url: https://supply-xml.booking.com/
+      description: Test using live endpoint
+  /properties/{propertyId}/rooms/{roomId}:
+    get:
+      tags:
+      - Manage room facilities
+      summary: Retrieve room facilities set for a property
+      description: Retrieve the facility details for all the facility instances added to the rooms
+      operationId: getPropertiesByPropertyIdRoomsByRoomId
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: roomId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: debugInfo
+        in: query
+        required: false
+        schema:
+          type: string
+          default: 'false'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseListRoomFacility_2'
+      x-operation-id-source: normalized
+      x-operation-id-original: getRoomFacilities
+    put:
+      tags:
+      - Manage room facilities
+      summary: Manage room-level facilities
+      description: Add, modify or delete room-level facilities details for a property
+      operationId: putPropertiesByPropertyIdRoomsByRoomId
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: roomId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/RoomFacility'
+            examples:
+              Room Facilities without additional details:
+                description: Room Facilities without additional details
+                value:
+                - room_facility_id: 1
+                  state: PRESENT
+                - room_facility_id: 3
+                  state: MISSING
+              Room Facilities with additional details:
+                description: Room Facilities with additional details
+                value:
+                - room_facility_id: 175
+                  state: PRESENT
+                  room_facility_instances:
+                  - crib_details:
+                      is_foldable: true
+                      is_standalone: false
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseSuccessObject_2'
+      x-operation-id-source: normalized
+      x-operation-id-original: setRoomFacilities
+    servers:
+    - url: https://supply-xml.booking.com/facilities-api/
+components:
+  schemas:
+    RoomFacilityRequest:
+      required:
+      - room_facility_id
+      - state
+      type: object
+      properties:
+        room_facility_id:
+          type: integer
+          description: Room Facility ID
+          format: int32
+        state:
+          type: string
+          description: Is facility Present/Missing?
+          enum:
+          - MISSING
+          - PRESENT
+        room_facility_instances:
+          type: array
+          description: List of Room Facility Instances
+          items:
+            $ref: '#/components/schemas/RoomFacilityInstanceRequest'
+    SuccessObject:
+      type: object
+      properties:
+        success:
+          type: boolean
+    CribDetails:
+      type: object
+      properties:
+        is_foldable:
+          type: boolean
+          description: Foldable
+          default: false
+        is_standalone:
+          type: boolean
+          description: Standalone
+          default: false
+      description: Crib Details
+    ApiResponseSuccessObject:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/SuccessObject'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    RoomFacilityResponse:
+      type: object
+      properties:
+        room_facility_id:
+          type: integer
+          description: Room Facility ID
+          format: int32
+        state:
+          type: string
+          description: Is facility Present/Missing?
+          enum:
+          - MISSING
+          - PRESENT
+        room_facility_instances:
+          type: array
+          description: List of Room Facility Instances
+          items:
+            $ref: '#/components/schemas/RoomFacilityInstanceResponse'
+        room_facility_meta:
+          allOf:
+          - $ref: '#/components/schemas/RoomFacilityMetaSummary'
+          description: Present only when `debugInfo=true` is passed. Contains the facility name, OTA codes, and allowed detail types for this room facility.
+    ApiResponseSuccess:
+      type: object
+      description: Successful response with empty warnings and errors
+      properties:
+        data:
+          $ref: '#/components/schemas/SuccessObject'
+        warnings:
+          type: array
+          maxItems: 0
+        errors:
+          type: array
+          maxItems: 0
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    DetailsType:
+      type: string
+      description: Name of a details object that can be used in facility instances
+      enum:
+      - AgeLimitDetails
+      - CribDetails
+      - InternetDetails
+      - KidsPoolDetails
+      - LinenDetails
+      - MealDetails
+      - OnsiteDetails
+      - ParkingDetails
+      - PaymentDetails
+      - RestaurantDetails
+      - ScheduleDetails
+      - SurchargeDetails
+      - SwimmingPoolDetails
+      - TemporarilyClosedDetails
+    ApiError:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          description: Error code
+        description:
+          type: string
+          description: Detailed error description
+        details:
+          type: object
+          description: Additional error context
+    LinenDetails:
+      type: object
+      properties:
+        has_crib_linen:
+          type: boolean
+          description: Crib (cot) linen
+          default: false
+        has_fitted_sheet:
+          type: boolean
+          description: Fitted sheet
+          default: false
+        has_top_sheet:
+          type: boolean
+          description: Top sheet
+          default: false
+        has_blanket:
+          type: boolean
+          description: Blanket
+          default: false
+        has_extra_blankets:
+          type: boolean
+          description: Extra blankets
+          default: false
+        has_pillow:
+          type: boolean
+          description: Pillow
+          default: false
+        has_mattress_protector:
+          type: boolean
+          description: Mattress protector
+          default: false
+      description: Linen Details
+    RoomFacilityInstanceRequest:
+      type: object
+      properties:
+        linen_details:
+          allOf:
+          - $ref: '#/components/schemas/LinenDetails'
+          description: 'Applicable to: LINEN (125).'
+        crib_details:
+          allOf:
+          - $ref: '#/components/schemas/CribDetails'
+          description: 'Applicable to: CHILDREN_CRIB_COTS (175).'
+      description: A room facility instance. The valid detail object for a given instance depends on the parent room_facility_id — only detail types listed in that facility's allowed_details_list (from GET /facilities-api/meta) will be present.
+    RoomFacilityMetaSummary:
+      type: object
+      properties:
+        room_facility_id:
+          type: integer
+          description: Booking.com Room Facility ID
+          format: int32
+        ota_room_amenity_type:
+          type: integer
+          description: OTA RMA (Room Amenity Type Code)
+          format: int32
+        booking_extended_legacy_code:
+          type: integer
+          description: '[Legacy] Booking.com Extended RMA Room Facility Code'
+          format: int32
+        room_facility_name:
+          type: string
+          description: Name
+        allowed_details_list:
+          type: array
+          description: List of applicable detail type names
+          items:
+            $ref: '#/components/schemas/DetailsType'
+      description: Room Facility meta summary with detail type names
+    RoomFacilityInstanceResponse:
+      type: object
+      properties:
+        linen_details:
+          allOf:
+          - $ref: '#/components/schemas/LinenDetails'
+          description: 'Applicable to: LINEN (125).'
+        crib_details:
+          allOf:
+          - $ref: '#/components/schemas/CribDetails'
+          description: 'Applicable to: CHILDREN_CRIB_COTS (175).'
+      description: A room facility instance. The valid detail object for a given instance depends on the parent room_facility_id — only detail types listed in that facility's allowed_details_list (from GET /facilities-api/meta) will be present.
+    ApiResponseListRoomFacility:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomFacilityResponse'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+    RoomFacilityInstance:
+      description: List of Room Facility Instances
+      properties:
+        linen_details:
+          $ref: '#/components/schemas/LinenDetails_2'
+        crib_details:
+          $ref: '#/components/schemas/CribDetails_2'
+    SuccessObject_2:
+      properties:
+        success:
+          type: boolean
+    CribDetails_2:
+      description: Crib Details
+      properties:
+        is_foldable:
+          type: boolean
+          default: false
+          description: Foldable
+        is_standalone:
+          type: boolean
+          default: false
+          description: Standalone
+    ApiResponseSuccessObject_2:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          $ref: '#/components/schemas/SuccessObject_2'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta_2'
+    ApiError_2:
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          type: object
+    LinenDetails_2:
+      description: Linen Details
+      properties:
+        has_crib_linen:
+          type: boolean
+          default: false
+          description: Crib (cot) linen
+        has_fitted_sheet:
+          type: boolean
+          default: false
+          description: Fitted sheet
+        has_top_sheet:
+          type: boolean
+          default: false
+          description: Top sheet
+        has_blanket:
+          type: boolean
+          default: false
+          description: Blanket
+        has_extra_blankets:
+          type: boolean
+          default: false
+          description: Extra blankets
+        has_pillow:
+          type: boolean
+          default: false
+          description: Pillow
+        has_mattress_protector:
+          type: boolean
+          default: false
+          description: Mattress protector
+    RoomFacility:
+      properties:
+        room_facility_id:
+          type: integer
+          format: int32
+          description: Room Facility ID
+        state:
+          type: string
+          description: Is facility Present/Missing?
+          enum:
+          - MISSING
+          - PRESENT
+        room_facility_instances:
+          type: array
+          description: List of Room Facility Instances
+          items:
+            $ref: '#/components/schemas/RoomFacilityInstance'
+        room_facility_meta:
+          $ref: '#/components/schemas/RoomFacilityMeta'
+        facilityMetaType:
+          $ref: '#/components/schemas/RoomFacilityMeta'
+      required:
+      - room_facility_id
+      - state
+    ApiResponseListRoomFacility_2:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomFacility'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta_2'
+    RoomFacilityMeta:
+      description: DEBUG ONLY. Contains Room Facility meta
+      properties:
+        room_facility_id:
+          type: integer
+          format: int32
+          description: Booking.com Room Facility ID
+        ota_room_amenity_type:
+          type: integer
+          format: int32
+          description: OTA RMA (Room Amenity Type Code)
+        booking_extended_legacy_code:
+          type: integer
+          format: int32
+          description: '[Legacy] Booking.com Extended RMA Room Facility Code'
+        room_facility_name:
+          type: string
+          description: Name
+        allowed_details_list:
+          type: array
+          description: List of applicable Details Objects
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/CribDetails_2'
+            - $ref: '#/components/schemas/LinenDetails_2'
+            description: List of applicable Details Objects
+    ResponseMeta_2:
+      properties:
+        ruid:
+          type: string
+x-refined-from:
+- booking-com-facilities-api-openapi.yml
+- booking-com-facilities-api-remote-sync-openapi.yml
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Charges endpoint
+  - Charges meta endpoint
+- name: Documentation
+  tags:
+  - About Try it

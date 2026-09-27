@@ -34,77 +34,12 @@ x-docs-platform: redocly
 x-docs-platform-confidence: high
 x-docs-platform-checked: 2026-09-20
 apis:
-- aid: booking-com:booking-com-demand-api
-  name: Booking.com Demand API
-  description: 'The Demand API is Booking.com''s RESTful JSON API for affiliate partners: search and book accommodations,
-    car rentals, attractions and transfers, preview and create orders, manage cancellations and modifications, and
-    read reviews, locations, languages and payment constants. Version 3.2 is current; 3.1 remains published and
-    a 3.2-Beta track carries attractions, transfers, smart search and the messaging endpoints.'
-  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
-  baseURL: https://demandapi.booking.com/3.2
-  tags:
-  - Travel
-  - Accommodation
-  - Car Rental
-  - Booking
-  - Order
-  - Search
-  tags_raw:
-  - Travel
-  - Accommodation
-  - Car Rental
-  - Booking
-  - Orders
-  - Search
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-demand-api-3-2-openapi.yml
-  - type: OpenAPI
-    url: openapi/booking-com-demand-api-3-1-openapi.yml
-  - type: OpenAPI
-    url: openapi/booking-com-demand-api-3-2-beta-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
-  - type: GettingStarted
-    url: https://developers.booking.com/demand/docs/getting-started/overview
-  - type: Sandbox
-    url: sandbox/booking-com-sandbox.yml
-  - type: RateLimits
-    url: rate-limits/booking-com-rate-limits.yml
-  - type: Overlay
-    url: overlays/booking-com-demand-api-3-2-overlay.yaml
-  - type: Overlay
-    url: overlays/booking-com-demand-api-3-1-overlay.yaml
-  - type: Overlay
-    url: overlays/booking-com-demand-api-3-2-beta-overlay.yaml
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
-- aid: booking-com:booking-com-connect-api
-  name: Booking.com Connect API
-  description: The metasearch Connect API streams Booking.com property inventory and conversion reporting to metasearch
-    partners, and carries a Demand API v2 compatible surface for hotels, availability, reviews, review scores and
-    facility, theme and hotel type constants during migration.
-  humanURL: https://developers.booking.com/metasearch/connect-api/open-api
-  baseURL: https://metasearch-connect-api.booking.com
-  tags:
-  - Travel
-  - Metasearch
-  - Inventory
-  - Reporting
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-connect-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/metasearch/connect-api/open-api
-  - type: GettingStarted
-    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
-  - type: Overlay
-    url: overlays/booking-com-connect-api-overlay.yaml
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
 - aid: booking-com:booking-com-status-api
   name: Booking.com Status API
-  description: The Status API reports the current operational status of monitored Demand API endpoints, grouped
-    by endpoint group, so partners can detect degradation and drive automated responses such as adjusting retry
-    behaviour or switching to a fallback.
+  description: >-
+    The Status API reports the current operational status of monitored Demand API endpoints, grouped by
+    endpoint group, so partners can detect degradation and drive automated responses such as adjusting
+    retry behaviour or switching to a fallback.
   humanURL: https://developers.booking.com/demand/docs/additional-services/status-api/about
   baseURL: https://partnerships-status.booking.com
   tags:
@@ -119,31 +54,14 @@ apis:
   - type: Overlay
     url: overlays/booking-com-status-api-overlay.yaml
   image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
-- aid: booking-com:booking-com-charges-api
-  name: Booking.com Charges API
-  description: Create and update charges that apply at the property and room level for Connectivity partners, and
-    set up different charge configurations for different date ranges.
-  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
-  baseURL: https://supply-xml.booking.com
-  tags:
-  - Travel
-  - Connectivity
-  - Pricing
-  - Hospitality
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-charges-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
-  - type: Overlay
-    url: overlays/booking-com-charges-api-overlay.yaml
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
 - aid: booking-com:booking-com-contacts-api
   name: Booking.com Contacts API
-  description: The Connectivity Contacts endpoint manages the contact records attached to a property on Booking.com,
-    letting connectivity providers read and maintain property contact details programmatically instead of through
-    the extranet.
-  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/contacts-api/contacts-api-specification
+  description: >-
+    The Connectivity Contacts endpoint manages the contact records attached to a property on Booking.com,
+    letting connectivity providers read and maintain property contact details programmatically instead
+    of through the extranet.
+  humanURL: >-
+    https://developers.booking.com/connectivity/docs/openapispecs/contacts-api/contacts-api-specification
   baseURL: https://supply-xml.booking.com
   tags:
   - Travel
@@ -154,64 +72,21 @@ apis:
   - type: OpenAPI
     url: openapi/booking-com-contacts-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/contacts-api/contacts-api-specification
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contacts-api/contacts-api-specification
   - type: Overlay
     url: overlays/booking-com-contacts-api-overlay.yaml
   image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
-- aid: booking-com:booking-com-contracting-api
-  name: Booking.com Contracting API
-  description: Use the Contracting API to invite a new partner to Booking.com, check whether a partner has signed
-    the contract, resend the invitation mail and retrieve the legal entity of the partner. Requests carry a JWT
-    in the Authorization header, with machine accounts managed in the Connectivity Portal.
-  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
-  baseURL: https://supply-xml.booking.com/contracts-api
-  tags:
-  - Travel
-  - Connectivity
-  - Onboarding
-  - Contracts
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-contracting-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
-  - type: Overlay
-    url: overlays/booking-com-contracting-api-overlay.yaml
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
-- aid: booking-com:booking-com-facilities-api
-  name: Booking.com Facilities API
-  description: Manage facilities at both property and room level on Booking.com, covering single-instance facilities
-    that toggle on or off, single-instance facilities carrying optional parameters, and multi-instance facilities
-    such as restaurants, swimming pools and parking. A separate remote-sync specification covers the pull-based
-    synchronisation surface.
-  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
-  baseURL: https://supply-xml.booking.com
-  tags:
-  - Travel
-  - Connectivity
-  - Hospitality
-  - Content
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-facilities-api-openapi.yml
-  - type: OpenAPI
-    url: openapi/booking-com-facilities-api-remote-sync-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
-  - type: Overlay
-    url: overlays/booking-com-facilities-api-overlay.yaml
-  - type: Overlay
-    url: overlays/booking-com-facilities-api-remote-sync-overlay.yaml
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
 - aid: booking-com:booking-com-historical-reservations-api
   name: Booking.com Historical Reservations API
-  description: Retrieve a property's historical reservation details to initialise or reconcile reservation data
-    for revenue management. Room reservations are selected by creation timestamp and optionally by status, and responses
-    carry stay dates, available occupancy and guest and property price perspectives. Preview reference for version
-    1.0; access requires a connection authorised to read the property's reservation history.
-  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/historical-reservations-api/historical-reservations-api-specification
+  description: >-
+    Retrieve a property's historical reservation details to initialise or reconcile reservation data for
+    revenue management. Room reservations are selected by creation timestamp and optionally by status,
+    and responses carry stay dates, available occupancy and guest and property price perspectives. Preview
+    reference for version 1.0; access requires a connection authorised to read the property's reservation
+    history.
+  humanURL: >-
+    https://developers.booking.com/connectivity/docs/openapispecs/historical-reservations-api/historical-reservations-api-specification
   baseURL: https://supply-xml.booking.com
   tags:
   - Travel
@@ -222,76 +97,19 @@ apis:
   - type: OpenAPI
     url: openapi/booking-com-historical-reservations-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/historical-reservations-api/historical-reservations-api-specification
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/historical-reservations-api/historical-reservations-api-specification
   - type: Overlay
     url: overlays/booking-com-historical-reservations-api-overlay.yaml
   image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
-- aid: booking-com:booking-com-payments-api
-  name: Booking.com Payments API
-  description: Retrieve payment and payout details for accommodation reservations, including partner payout information,
-    payout breakdowns, bank transfer details, virtual credit card payout details, VCCs to be charged and refundable
-    VCCs.
-  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
-  baseURL: https://payments-api.booking.com
-  tags:
-  - Travel
-  - Connectivity
-  - Payments
-  - Payouts
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-payments-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
-  - type: Overlay
-    url: overlays/booking-com-payments-api-overlay.yaml
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
-- aid: booking-com:booking-com-payments-by-booking-onboarding-api
-  name: Booking.com Payments by Booking Onboarding API
-  description: Manage Payments by Booking onboarding configurations, check property eligibility for the different
-    payout options, and monitor the processing status of configuration update requests. Accepted change requests
-    are tracked by an idempotency key returned as request_id.
-  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
-  baseURL: https://payments-api.booking.com
-  tags:
-  - Travel
-  - Connectivity
-  - Payments
-  - Onboarding
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-payments-by-booking-onboarding-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
-  - type: Overlay
-    url: overlays/booking-com-payments-by-booking-onboarding-api-overlay.yaml
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
-- aid: booking-com:booking-com-property-api
-  name: Booking.com Property API
-  description: Use the Property API to create or update a property and its settings, check and update property status,
-    and create or update the property description, replacing extranet work for connectivity providers managing properties
-    at scale.
-  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
-  baseURL: https://supply-xml.booking.com/property-api
-  tags:
-  - Travel
-  - Connectivity
-  - Hospitality
-  - Property Management
-  properties:
-  - type: OpenAPI
-    url: openapi/booking-com-property-api-openapi.yml
-  - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
-  - type: Overlay
-    url: overlays/booking-com-property-api-overlay.yaml
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
 - aid: booking-com:booking-com-property-health-api
   name: Booking.com Property Health API
-  description: A read-only JSON API for connectivity providers that returns property health and status data, explaining
-    why properties are unbookable or at risk so providers can prioritise action across the properties they can access
-    or across explicit Booking.com property IDs.
-  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/property-health-api/property-health-api-specification
+  description: >-
+    A read-only JSON API for connectivity providers that returns property health and status data, explaining
+    why properties are unbookable or at risk so providers can prioritise action across the properties
+    they can access or across explicit Booking.com property IDs.
+  humanURL: >-
+    https://developers.booking.com/connectivity/docs/openapispecs/property-health-api/property-health-api-specification
   baseURL: https://supply-xml.booking.com/property-health-api
   tags:
   - Travel
@@ -302,82 +120,2729 @@ apis:
   - type: OpenAPI
     url: openapi/booking-com-property-health-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/property-health-api/property-health-api-specification
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-health-api/property-health-api-specification
   - type: Overlay
     url: overlays/booking-com-property-health-api-overlay.yaml
   image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
-- aid: booking-com:booking-com-reconciliation-api
-  name: Booking.com Reconciliation API
-  description: 'Generate and download financial reconciliation reports for properties: request payout reports for
-    a date range and set of properties, poll report generation status, and retrieve the available filter and configuration
-    options. Rate limiting is signalled with a 429 and a Retry-After header.'
-  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
-  baseURL: https://payments-api.booking.com
+- aid: booking-com:booking-com-accommodations-api
+  name: Booking.com Accommodations API
+  description: >-
+    This API collection is specific for the stay part of the connected trip. </br></br>Use these endpoints
+    to search for stays such as hotels and apartments, check availability, retrieve reviews, and get detailed
+    property information.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
   tags:
-  - Travel
-  - Connectivity
-  - Finance
-  - Reporting
+  - Accommodations
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-reconciliation-api-openapi.yml
+    url: openapi/booking-com-accommodations-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
-  - type: Overlay
-    url: overlays/booking-com-reconciliation-api-overlay.yaml
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
-- aid: booking-com:booking-com-rooms-api
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-attachments-api
+  name: Booking.com Attachments API
+  description: >-
+    Provides endpoints for handling message attachments. </br></br>Use these endpoints to upload and download
+    images shared within conversations.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Attachments
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-attachments-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-attractions-api
+  name: Booking.com Attractions API
+  description: The Attractions API from Booking.com — 5 operation(s) for attractions.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Attractions
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-attractions-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-bank-transfer-payout-api
+  name: Booking.com Bank transfer payout API
+  description: Retrieve Bank Transfer payout details for accommodation reservations.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Bank transfer payout
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-bank-transfer-payout-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-cars-api
+  name: Booking.com Cars API
+  description: >-
+    This API collection is specific to the car rentals part of the connected trip.</br></br> Use these
+    endpoints to search for car rentals, check car details and look for depots and suppliers.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Cars
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-cars-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-charges-endpoint-api
+  name: Booking.com Charges endpoint API
+  description: >-
+    Lists the details of the Charges endpoints to set and retrieve taxes and fees at the property and
+    room level.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Charges endpoint
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-charges-endpoint-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-charges-meta-endpoint-api
+  name: Booking.com Charges meta endpoint API
+  description: >-
+    Lists the details of the Charges meta endpoint to retrieve a full list of charge types supported by
+    the Charges API.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Charges meta endpoint
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-charges-meta-endpoint-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-check-legal-details-api
+  name: Booking.com Check legal details API
+  description: Check legal details of Partner using email or entity ID.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Check legal details
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-check-legal-details-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-common-autocomplete-api
+  name: Booking.com Common/autocomplete API
+  description: >-
+    Use this endpoint to retrieve ranked suggestions based on a free-text query. Designed for real-time
+    "as-you-type" autocomplete experiences.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Common/autocomplete
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-common-autocomplete-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-common-languages-api
+  name: Booking.com Common/languages API
+  description: Provides a list of supported language codes for use in API requests.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Common/languages
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-common-languages-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-common-locations-api
+  name: Booking.com Common/locations API
+  description: >-
+    Provides identifiers for a wide range of geographical locations, including airports, countries, cities,
+    and regions. </br></br>Use these identifiers to construct your requests. </br></br>Note: These identifiers
+    are available across all travel services and you can use them for both accommodotation and car rentals
+    requests.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Common/locations
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-common-locations-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-common-payments-api
+  name: Booking.com Common/payments API
+  description: >-
+    Provides generic payment-related endpoints, including supported currencies and payment types.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Common/payments
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-common-payments-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-conversations-api
+  name: Booking.com Conversations API
+  description: >-
+    Provides endpoints to retrieve and manage messaging conversations. </br></br>Use these endpoints to
+    list conversations, fetch conversation details, and track updates.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Conversations
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-conversations-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-demand-api-v2-compatible-api
+  name: Booking.com Demand API V2 Compatible API
+  description: >-
+    The demand-api-v2-compatible API from Booking.com — 8 operation(s) for demand-api-v2-compatible.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - demand-api-v2-compatible
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-demand-api-v2-compatible-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-inventory-api
+  name: Booking.com Inventory API
+  description: The Inventory API from Booking.com — 1 operation(s) for inventory.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Inventory
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-inventory-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-manage-bathrooms-api
+  name: Booking.com Manage bathrooms API
+  description: >-
+    Use the GET and the PUT endpoints to:
+
+    <ul><li>Retrieve room bathroom configuration</li>
+
+    <li>Add, modify or delete room-level bathroom information</li></ul>
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Manage bathrooms
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-manage-bathrooms-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-manage-contracts-api
+  name: Booking.com Manage contracts API
+  description: Create, update or resend contract details.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Manage contracts
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-manage-contracts-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-manage-property-facilities-api
+  name: Booking.com Manage property facilities API
+  description: >-
+    Use the GET and the PUT endpoints to:
+
+    <ul><li>Retrieve property-level facilities details</li>
+
+    <li>Add, modify or delete property-level facilities details<ul><li>Add single-instance facilities</li>
+
+    <li>Add multi-instance facilities</li></ul></li></ul>
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Manage property facilities
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-manage-property-facilities-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-manage-room-facilities-api
+  name: Booking.com Manage room facilities API
+  description: >-
+    Use the GET and the PUT endpoints to:
+
+    <ul><li>Retrieve room facilities set for a property.</li><li>Add, modify or delete room facilities.</li></ul>
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Manage room facilities
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-manage-room-facilities-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-messages-api
+  name: Booking.com Messages API
+  description: >-
+    Provides endpoints for two-way post-booking communication between guests and properties. </br></br>Use
+    these endpoints to send and retrieve messages, exchange images, and check conversation details.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Messages
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-messages-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-meta-api
+  name: Booking.com Meta API
+  description: Retrieve units meta data and translations
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - meta
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-meta-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-meta-data-endpoint-api
+  name: Booking.com Meta data endpoint API
+  description: >-
+    <p>Retrieve the latest facility definitions.</p>
+
+    <ul>
+
+    <li>Get the list of all supported facilities<ul>
+
+    <li>To get the details of a property-level facility: Look for a matching name under the facility_name
+    in the response.
+
+    To add this facility, you must specify the facility_id.
+
+    Property-level facilities are listed under the property_facility_metas in the meta endpoint response.</li>
+
+    <li>To get the details of the room-level facility: Look for a matching name under the room_facility_name
+    in the response.
+
+    To add the facility, you must specify the room_facility_id.
+
+    Room-level facilities are listed under the room_facility_metas in the meta endpoint response.</li>
+
+    </ul>
+
+    </li>
+
+    <li>Details of the facilities such as ID, OTA code and any optional parameters.</li>
+
+    </ul>
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Meta data endpoint
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-meta-data-endpoint-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-orders-api
+  name: Booking.com Orders API
+  description: >-
+    Enables management of booking orders within the Demand API. </br></br>Use these endpoints to preview
+    and create new orders, check order details, cancel or modify existing orders. This collection is required
+    to integrate booking and order management functionality.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-orders-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-payments-by-booking-configurations-api
+  name: Booking.com Payments by Booking configurations API
+  description: Update Payments by Booking payout configurations for properties.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Payments by Booking configurations
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-payments-by-booking-configurations-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-payments-by-booking-configurations-status-api
+  name: Booking.com Payments by Booking configurations status API
+  description: Check the processing status of Payments by Booking configuration update requests.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Payments by Booking configurations status
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-payments-by-booking-configurations-status-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-payments-eligibility-details-for-partners-api
+  name: Booking.com Payments eligibility details for partners API
+  description: Retrieve payments eligibility details for partners.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Payments eligibility details for partners
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-payments-eligibility-details-for-partners-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-property-description-api-api
+  name: Booking.com Property Description API
+  description: Create, update and retrieve property description
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Property Description API
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-property-description-api-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-property-details-api-api
+  name: Booking.com Property Details API
+  description: Create, update and retrieve property details
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Property Details API
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-property-details-api-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-property-settings-api-api
+  name: Booking.com Property Settings API
+  description: Add, update or retrieve property settings
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Property Settings API
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-property-settings-api-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-property-status-api-api
+  name: Booking.com Property Status API
+  description: Check if a property is ready to open; open or close a property
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Property Status API
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-property-status-api-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-reconciliation-reports-api
+  name: Booking.com Reconciliation reports API
+  description: Generate financial reconciliation reports for one or more properties.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Reconciliation reports
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-reconciliation-reports-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-refundable-vccs-api
+  name: Booking.com Refundable VCCs API
+  description: Provides information of the refundable VCCs.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Refundable VCCs
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-refundable-vccs-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-report-filters-api
+  name: Booking.com Report filters API
+  description: >-
+    Retrieve the available filter and configuration options for reconciliation report generation.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Report filters
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-report-filters-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-report-status-api
+  name: Booking.com Report status API
+  description: >-
+    Check the processing status of a reconciliation report generation request and retrieve the download
+    URL when the report is ready.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Report status
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-report-status-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-reports-api
+  name: Booking.com Reports API
+  description: The Reports API from Booking.com — 1 operation(s) for reports.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-reports-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-request-access-api
+  name: Booking.com Request access API
+  description: Request access to existing partner.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Request access
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-request-access-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-reservation-breakdown-api
+  name: Booking.com Reservation breakdown API
+  description: >-
+    Retrieve detailed breakdown for accommodation reservations with respect to partner payout.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Reservation breakdown
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-reservation-breakdown-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-reservation-payout-details-api
+  name: Booking.com Reservation payout details API
+  description: Retrieve detailed partner payout information for accommodation reservations.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Reservation payout details
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-reservation-payout-details-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-reservation-status-api-api
+  name: Booking.com Reservation Status API
+  description: Provides reservation status information with respect to a reservation ID.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Reservation Status API
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-reservation-status-api-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-rooms-api-api
   name: Booking.com Rooms API
-  description: Create and manage room types on Booking.com, including the bulk surface and the generated-names variant.
-    Room definitions carry occupancy, extra beds configuration and rate-relevant attributes; the legacy max payable
-    child field is deprecated and sunset under the published deprecation policy.
-  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
-  baseURL: https://supply-xml.booking.com
+  description: Create, update, retrieve and delete property units
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
   tags:
-  - Travel
-  - Connectivity
-  - Hospitality
-  - Rooms
+  - rooms-api
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-rooms-api-openapi.yml
-  - type: OpenAPI
-    url: openapi/booking-com-rooms-api-bulk-openapi.yml
-  - type: OpenAPI
-    url: openapi/booking-com-rooms-api-generated-names-openapi.yml
+    url: openapi/booking-com-rooms-api-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
   - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
   - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
-  - type: Overlay
-    url: overlays/booking-com-rooms-api-overlay.yaml
-  - type: Overlay
-    url: overlays/booking-com-rooms-api-bulk-overlay.yaml
-  - type: Overlay
-    url: overlays/booking-com-rooms-api-generated-names-overlay.yaml
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
-- aid: booking-com:booking-com-valueadds-api
-  name: Booking.com Value Adds Catalog API
-  description: Returns the catalogue of value adds available for properties on Booking.com. Responses are JSON or
-    XML depending on the Accept header, and each value add carries dynamic attributes such as currency and amount.
-  humanURL: https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
-  baseURL: https://supply-xml.booking.com
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-rooms-api-bulk-api
+  name: Booking.com Rooms API Bulk API
+  description: Create, update and delete multiple units
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
   tags:
-  - Travel
-  - Connectivity
-  - Hospitality
-  - Catalog
+  - rooms-api-bulk
   properties:
   - type: OpenAPI
-    url: openapi/booking-com-valueadds-api-openapi.yml
+    url: openapi/booking-com-rooms-api-bulk-api-openapi.yml
   - type: Documentation
-    url: https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
-  - type: Overlay
-    url: overlays/booking-com-valueadds-api-overlay.yaml
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/booking-com.png
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-transfers-api
+  name: Booking.com Transfers API
+  description: >-
+    This collection includes endpoints related to **transfer** services within the connected trip experience.<br/>Use
+    these endpoints to:<br/>- Search for airport transfers and point-to-point rides.<br/>- Retrieve vehicle
+    options, capacity, pricing, and a redirect URL to complete the booking on Booking.com.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-transfers-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-value-adds-api
+  name: Booking.com Value Adds API
+  description: Retrieve catalog of value adds available for properties with dynamic attributes
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - Value Adds
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-value-adds-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-vcc-payout-details-per-accommodation-reservation-api
+  name: Booking.com VCC payout details, per accommodation reservation API
+  description: Provides VCC payout details for an accommodation reservation
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - VCC payout details, per accommodation reservation
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-vcc-payout-details-per-accommodation-reservation-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
+- aid: booking-com:booking-com-vccs-to-be-charged-api
+  name: Booking.com VCCs to be charged API
+  description: Provides information of the VCCs to be charged.
+  humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  baseURL: https://demandapi.booking.com/3.2
+  tags:
+  - VCCs to be charged
+  properties:
+  - type: OpenAPI
+    url: openapi/booking-com-vccs-to-be-charged-api-openapi.yml
+  - type: Documentation
+    url: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
+  - type: GettingStarted
+    url: https://developers.booking.com/demand/docs/getting-started/overview
+  - type: Sandbox
+    url: sandbox/booking-com-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/booking-com-rate-limits.yml
+  - type: Documentation
+    url: https://developers.booking.com/metasearch/connect-api/open-api
+  - type: GettingStarted
+    url: https://developers.booking.com/metasearch/connect-api/getting-started/overview
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/charges-api/charges-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/contracting-api/contracting-api-specificaion
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/facilities-api/facilities-openspec-remote-sync
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-api/payments-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/payments-by-booking-onboarding-api/pbb-onboarding-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/property-details-api/property-details-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/reconciliation-api/reconciliation-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-bulk
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/rooms-api/rooms-api-specification-generated-names
+  - type: Documentation
+    url: >-
+      https://developers.booking.com/connectivity/docs/openapispecs/valueadds-api/valueadds-api-specification
 common:
+- type: Overlay
+  url: overlays/booking-com-demand-api-3-2-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-demand-api-3-1-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-demand-api-3-2-beta-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-connect-api-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-charges-api-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-contracting-api-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-facilities-api-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-facilities-api-remote-sync-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-payments-api-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-payments-by-booking-onboarding-api-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-property-api-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-reconciliation-api-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-rooms-api-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-rooms-api-bulk-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-rooms-api-generated-names-overlay.yaml
+- type: Overlay
+  url: overlays/booking-com-valueadds-api-overlay.yaml
 - type: TrustCenter
   url: security/booking-com-trust-center.yml
 - type: Website
@@ -505,6 +2970,7 @@ tags:
 - OTA
 - Attractions
 - A2A
+- Hotels
 created: '2026-05-03'
 maintainers:
 - FN: API Evangelist
@@ -528,3 +2994,10 @@ x-coverage:
   - url: https://demandapi.booking.com/openapi.json
     status: 401
   checked: '2026-09-17'
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://developers.booking.com/.well-known/agent-card.json"
+  grade: "conformant"
+  protocol_version: "0.3.0"
+  control: 404

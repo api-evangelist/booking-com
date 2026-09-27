@@ -1,0 +1,284 @@
+openapi: 3.2.0
+info:
+  title: Booking.com Demand Common/autocomplete API
+  version: 3.2-Beta
+  summary: '**Beta version – experimental endpoints**
+
+
+    This API version is **currently in Beta** and is offered to a limited set of pilot affiliate partners. Access is granted on request via your Booking.com account manager.
+
+
+    > ⚠️ **Important:** This API is **under active development**. Endpoints, request/response structures, and functionality may change without prior notice. Specifications are updated frequently during the pilot phase.
+
+
+    - Consult the [Changelog](/demand/docs/whats-new/changelog) for the latest updates.
+
+    - All requests **require authentication** using your Affiliate ID and token credentials.'
+  description: Use this endpoint to retrieve ranked suggestions based on a free-text query. Designed for real-time "as-you-type" autocomplete experiences.
+servers:
+- url: https://demandapi.booking.com/3.2
+  description: Production environment – use for live integrations.
+- url: https://demandapi-sandbox.booking.com/3.2
+  description: Sandbox environment – use for testing and validation.
+security:
+- BearerAuth: []
+tags:
+- name: Common/autocomplete
+  x-displayName: Autocomplete
+  description: Use this endpoint to retrieve ranked suggestions based on a free-text query. Designed for real-time "as-you-type" autocomplete experiences.
+paths:
+  /common/autocomplete:
+    post:
+      summary: Retrieve autocomplete suggestions
+      description: Returns ranked suggestions based on the free-text query, destination popularity, and the provided context. This endpoint is designed for real-time "as-you-type" autocomplete experiences.\n\nSupports prefix matching with basic typo tolerance and is optimised for low-latency search.\n\nYou can optionally restrict results by destination type using filters.types.\n\nEach suggestion includes a destination identifier, localised name, and geographic context.
+      operationId: /common/autocomplete
+      parameters:
+      - $ref: '#/components/parameters/AffiliateIdHeader'
+      tags:
+      - Common/autocomplete
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/autoCompleteInput'
+            examples:
+              default:
+                $ref: '#/components/examples/input'
+      responses:
+        '200':
+          description: Successful response with ranked suggestions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/autoCompleteOutput'
+              examples:
+                default:
+                  $ref: '#/components/examples/output'
+        '400':
+          description: The request is invalid or contains unsupported parameter values (for example, query too short or invalid `filters.types`). Refer to the [Error handling section](/demand/docs/support/error-handling/about-errors) for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '500':
+          description: Internal server error.
+components:
+  schemas:
+    countryId:
+      description: 'A two-letter code that uniquely identifies a country. This code is defined by the ISO 3166-1 alpha-2 standard (ISO2) as described here: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/countries" target="_blank">common/locations/countries</a>.'
+      type: string
+      pattern: ^[a-z]{2}$
+      example: nl
+    autoCompleteOutput:
+      title: AutoCompleteOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/autoCompleteResult'
+    autoCompleteLocation:
+      title: AutoCompleteLocation
+      description: Geographic context of the suggestion, including city, country and coordinates.
+      type: object
+      properties:
+        city:
+          $ref: '#/components/schemas/cityId'
+        city_name:
+          $ref: '#/components/schemas/translatedString'
+        coordinates:
+          $ref: '#/components/schemas/dataTypes_coordinates'
+        country:
+          $ref: '#/components/schemas/countryId'
+        country_name:
+          $ref: '#/components/schemas/translatedString'
+    autoCompleteFilters:
+      title: AutoCompleteFilters
+      description: Filters to restrict autocomplete results.
+      type: object
+      properties:
+        types:
+          description: Restricts results to the specified destination types. If omitted, all destination types are considered.
+          type: array
+          items:
+            $ref: '#/components/schemas/destinationType'
+    languageId:
+      description: 'A [IETF language tag code](https://en.wikipedia.org/wiki/IETF_language_tag) that uniquely identifies a supported human language or dialect. **Note:** Demand API only accepts lowercase for the language codes. Examples: "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.'
+      type: string
+      pattern: ^[a-z]{2}(-[a-z]{2})?$
+      example: en-us
+    autoCompleteInput:
+      title: AutoCompleteInput
+      type: object
+      required:
+      - query
+      - country
+      properties:
+        query:
+          description: Free-text search query used to generate suggestions. Leading and trailing whitespace is ignored. Must contain between 3 and 200 characters.
+          type: string
+          minLength: 3
+          maxLength: 200
+          examples:
+          - ams
+          - amster
+          - amsterdam
+        language:
+          description: Language code used to localise names in the response. Only one language can be specified per request.
+          $ref: '#/components/schemas/languageId'
+          default: en-gb
+        country:
+          description: ISO 3166-1 alpha-2 country code used as the primary search context for autocomplete ranking. This field is required.
+          $ref: '#/components/schemas/countryId'
+        filters:
+          description: Restricts results to the specified destination types. If omitted, all types are included. It should not be an empty object.
+          $ref: '#/components/schemas/autoCompleteFilters'
+    autoCompleteResult:
+      title: AutoCompleteResultOutput
+      description: Represents a single ranked autocomplete suggestion with a display name in the requested language and geographic context.
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/destinationType'
+        name:
+          description: Display name in the requested language. Only one language key is returned.
+          $ref: '#/components/schemas/translatedString'
+        id:
+          description: The identifier of the destination. The format depends on the destination type.
+          type: string
+        location:
+          $ref: '#/components/schemas/autoCompleteLocation'
+    dataTypes_coordinates:
+      title: Coordinates
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+    cityId:
+      description: A signed integer number that uniquely identifies a city. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/cities" target="_blank">common/locations/cities</a>.
+      type: integer
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
+    destinationType:
+      description: The type of destination.
+      type: string
+      enum:
+      - airport
+      - hotel
+      - landmark
+      - city
+      - district
+      - region
+      - country
+    translatedString:
+      title: TranslatedString
+      description: A string localised in multiple languages.
+      type: object
+      patternProperties:
+        ^[a-z]{2}(-[a-z]{2})$:
+          description: The content localised in this language.
+          type:
+          - string
+          - 'null'
+    error_response:
+      title: ErrorResponse
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              message:
+                type: string
+            required:
+            - id
+            - message
+      required:
+      - request_id
+      - errors
+  examples:
+    output:
+      request_id: 01khs9q981dta9fptx2edvq9r3
+      data:
+      - type: city
+        name:
+          en-gb: Amsterdam
+        id: '-2140479'
+        location:
+          city: -2140479
+          city_name:
+            en-gb: Amsterdam
+          coordinates:
+            latitude: 52.378281
+            longitude: 4.90007
+          country: nl
+          country_name:
+            en-gb: Netherlands
+      - type: hotel
+        name:
+          en-gb: Hotel Zuiderduin
+        id: '10531'
+        location:
+          city: -2143979
+          city_name:
+            en-gb: Egmond aan Zee
+          coordinates:
+            latitude: 52.6163698767988
+            longitude: 4.62512746453285
+          country: nl
+          country_name:
+            en-gb: Netherlands
+    input:
+      query: amsterdam
+      language: en-gb
+      country: nl
+      filters:
+        types:
+        - city
+  parameters:
+    AffiliateIdHeader:
+      in: header
+      name: X-Affiliate-Id
+      schema:
+        type: integer
+      required: true
+      description: Include here your Affiliate identifier number
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: string
+x-tagGroups:
+- name: Travel services
+  tags:
+  - Accommodations
+  - Attractions
+  - Cars
+  - Transfers
+- name: Common
+  tags:
+  - Common/autocomplete
+  - Common/locations
+  - Common/payments
+  - Common/languages
+- name: Orders
+  tags:
+  - Orders
+- name: Messaging
+  tags:
+  - Messages
+  - Conversations
+  - Attachments

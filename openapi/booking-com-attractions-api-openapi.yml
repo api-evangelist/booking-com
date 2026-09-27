@@ -1,0 +1,1273 @@
+openapi: 3.2.0
+info:
+  title: Booking.com Demand Attractions API
+  version: 3.2-Beta
+  summary: '**Beta version – experimental endpoints**
+
+
+    This API version is **currently in Beta** and is offered to a limited set of pilot affiliate partners. Access is granted on request via your Booking.com account manager.
+
+
+    > ⚠️ **Important:** This API is **under active development**. Endpoints, request/response structures, and functionality may change without prior notice. Specifications are updated frequently during the pilot phase.
+
+
+    - Consult the [Changelog](/demand/docs/whats-new/changelog) for the latest updates.
+
+    - All requests **require authentication** using your Affiliate ID and token credentials.'
+servers:
+- url: https://demandapi.booking.com/3.2
+  description: Production environment – use for live integrations.
+- url: https://demandapi-sandbox.booking.com/3.2
+  description: Sandbox environment – use for testing and validation.
+security:
+- BearerAuth: []
+tags:
+- name: Attractions
+paths:
+  /attractions/search:
+    post:
+      summary: Search attractions
+      description: Use this endpoint to search for attractions based on a single search criterion, such as attraction IDs, cities, countries, or geographic coordinates.
+      operationId: /search
+      parameters:
+      - $ref: '#/components/parameters/AffiliateIdHeader'
+      tags:
+      - Attractions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/attractionsSearchInput'
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/attractionsSearchOutput'
+              example:
+                data:
+                - id: PRahAzWtTraa
+                  free_cancellation: true
+                  price:
+                    currency: EUR
+                    total: 20
+                  urls:
+                    app:
+                      detail: booking://attractions/product?slug=prahazwttraa-heineken-experience-amsterdam&aid=956509
+                      search_results: booking://attractions/searchresults?ufi=-2140479&pinned_product_id=PRahAzWtTraa&aid=956509
+                    web:
+                      detail: https://www.booking.com/attractions/nl/prahazwttraa-heineken-experience-amsterdam.en-gb.html?selected_currency=EUR&aid=956509
+                      search_results: https://www.booking.com/attractions/searchresults/nl/amsterdam.en-gb.html?pinned_product=PRahAzWtTraa&aid=956509
+                - id: PRAmdacCwQLH
+                  free_cancellation: false
+                  price:
+                    currency: EUR
+                    total: 15.5
+                  urls:
+                    app:
+                      detail: booking://attractions/product?slug=pramdaccwqlh-madame-tussauds-ticket&aid=956509
+                      search_results: booking://attractions/searchresults?ufi=-2140479&pinned_product_id=PRAmdacCwQLH&aid=956509
+                    web:
+                      detail: https://www.booking.com/attractions/nl/pramdaccwqlh-madame-tussauds-ticket.en-gb.html?selected_currency=EUR&aid=956509
+                      search_results: https://www.booking.com/attractions/searchresults/nl/amsterdam.en-gb.html?pinned_product=PRAmdacCwQLH&aid=956509
+                - id: PRNQsDG3swdK
+                  free_cancellation: true
+                  price:
+                    currency: EUR
+                    total: 27.99
+                  urls:
+                    app:
+                      detail: booking://attractions/product?slug=prnqsdg3swdk-full-day-dutch-countryside-tour-with-canal-cruise&aid=956509
+                      search_results: booking://attractions/searchresults?ufi=-2140479&pinned_product_id=PRNQsDG3swdK&aid=956509
+                    web:
+                      detail: https://www.booking.com/attractions/nl/prnqsdg3swdk-full-day-dutch-countryside-tour-with-canal-cruise.en-gb.html?selected_currency=EUR&aid=956509
+                      search_results: https://www.booking.com/attractions/searchresults/nl/amsterdam.en-gb.html?pinned_product=PRNQsDG3swdK&aid=956509
+                metadata:
+                  next_page: eyJhbGciOiJIUzI1NiJ9.eyJwIjp7ImN1cnJlbmN5IjoiRVVSIiwicXVlcnkiOnsiY291bnRyaWVzIjpbIm5sIiwiZnIiXSwiY29vcmRpbmF0ZXMiOnsibGF0aXR1ZGUiOjUyLjM3LCJsb25naXR1ZGUiOjQuOTAsIm1heF9kaXN0YW5jZV9rbSI6MTAwLjAwfSwic3RhcnRfZGF0ZSI6IjIwMjUtMDktMjEiLCJlbmRfZGF0ZSI6IjIwMjUtMDktMjIiLCJzdXBwb3J0ZWRfbGFuZ3VhZ2VzIjpbIm5sIl0sIm1pbl9yYXRpbmciOjQuMDAsIm1pbl9yZXZpZXdfY291bnQiOjV9LCJvcmRlcl9ieSI6Im1hdGNoX3Njb3JlIiwicGFnZV9udW1iZXIiOjJ9LCJhdWQiOiIvYXR0cmFjdGlvbnMvc2VhcmNoIiwiZXhwIjoxNzU3Mzc0MzI0fQ.JUU7kbuwiCaS4n_SZANA577BvZWdqDDQizU8q6fTrg0
+                  total_results: 128
+                request_id: 01fr9ez700exycb98w90w5r9sh
+  /attractions/details:
+    post:
+      summary: Attraction details
+      description: Use this endpoint to retrieve static information about attractions such as name, description, address, URL, etc. **Note:** This endpoint does not return any pricing information.
+      operationId: /attractions/details
+      parameters:
+      - $ref: '#/components/parameters/AffiliateIdHeader'
+      tags:
+      - Attractions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/attractionsInput'
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/attractionsOutput'
+              example:
+                request_id: 01fr9ez700exycb98w90w5r9sh
+                data:
+                - id: PRTcWzDlwXjP
+                  badges:
+                  - best_seller
+                  categories:
+                  - PTCMCuXtHgrC
+                  - PTCMCY1Fkppn
+                  duration: PT2H
+                  photos:
+                  - url: https://cf.bstatic.com/xdata/images/xphoto/500x375/170335205.jpg
+                  locations:
+                  - address: Museumstraat 1
+                    city: -2140479
+                    coordinates:
+                      latitude: 52.360043
+                      longitude: 4.885177
+                    country: nl
+                    post_code: 1071XX
+                    type: attraction
+                  long_description:
+                    en-gb: Discover Dutch art and history at the Rijksmuseum, home to masterpieces by Rembrandt and Vermeer.
+                  name:
+                    en-gb: Rijksmuseum Admission
+                  ratings:
+                    number_of_reviews: 3250
+                    score: 4.8
+                  supported_languages:
+                  - en-gb
+                  - en-us
+                  - nl
+                  urls:
+                    app:
+                      detail: booking://attractions/product?slug=pr0dwcibnsiu-rijksmuseum-admission&aid=956509
+                      search_results: booking://attractions/searchresults?ufi=-2140479&pinned_product_id=PR0dwCIbnsiU&aid=956509
+                    web:
+                      detail: https://www.booking.com/attractions/nl/pr0dwcibnsiu-rijksmuseum-admission.html?aid=956509
+                      search_results: https://www.booking.com/attractions/searchresults/nl/amsterdam.en-gb.html?pinned_product=PR0dwCIbnsiU&aid=956509
+                metadata:
+                  next_page: eyJhbGciOiJIUzI1NiJ9.eyJwIjp7ImN1cnJlbmN5IjoiRVVSIiwicXVlcnkiOnsiY291bnRyaWVzIjpbIm5sIiwiZnIiXSwiY29vcmRpbmF0ZXMiOnsibGF0aXR1ZGUiOjUyLjM3LCJsb25naXR1ZGUiOjQuOTAsIm1heF9kaXN0YW5jZV9rbSI6MTAwLjAwfSwic3RhcnRfZGF0ZSI6IjIwMjUtMDktMjEiLCJlbmRfZGF0ZSI6IjIwMjUtMDktMjIiLCJzdXBwb3J0ZWRfbGFuZ3VhZ2VzIjpbIm5sIl0sIm1pbl9yYXRpbmciOjQuMDAsIm1pbl9yZXZpZXdfY291bnQiOjV9LCJvcmRlcl9ieSI6Im1hdGNoX3Njb3JlIiwicGFnZV9udW1iZXIiOjJ9LCJhdWQiOiIvYXR0cmFjdGlvbnMvc2VhcmNoIiwiZXhwIjoxNzU3Mzc0MzI0fQ.JUU7kbuwiCaS4n_SZANA577BvZWdqDDQizU8q6fTrg0
+                  total_results: 128
+        '400':
+          description: The request is invalid or missing required parameters. Refer to the [Error handling section](/demand/docs/support/error-handling/about-errors) for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '401':
+          description: Authentication failed or the API key is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '500':
+          description: An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+  /attractions/reviews:
+    post:
+      summary: Attraction Reviews
+      description: 'Retrieves reviews for a specific attraction. The reviews returned can be filtered and sorted, with the option to limit the number of reviews per attraction by specifying the "rows" parameter.
+
+        **Note:** The scores reflect all traveller feedback across Booking.com and may not directly correspond to the experiences of your own customers. If you choose to display or use these ratings and reviews, you are responsible for ensuring that your travellers understand what these scores represent.'
+      operationId: /attractions/reviews
+      parameters:
+      - $ref: '#/components/parameters/AffiliateIdHeader'
+      tags:
+      - Attractions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/schemas-input'
+            example:
+              attraction: PRTcWzDlwXjP
+              language: en-gb
+              rows: 10
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/schemas-output'
+              example:
+                request_id: 01fr9ez700exycb98w90w5r9sh
+                data:
+                - attraction: PRTcWzDlwXjP
+                  id: review123456
+                  author: John D.
+                  author_country_code: us
+                  rating: 5
+                  text: Amazing experience at the museum. The artwork is incredible and the building itself is an architectural masterpiece.
+                  language: en-gb
+                  date: '2025-08-15'
+                - attraction: PR0dwCIbnsiU
+                  id: review789012
+                  author: Maria S.
+                  author_country_code: es
+                  rating: 4
+                  text: Very good museum with impressive collections. Would recommend allowing more time than suggested to see everything.
+                  language: en-gb
+                  date: '2025-07-22'
+                metadata:
+                  next_page: NextPageToken123
+                  total_results: 243
+  /attractions/reviews/scores:
+    post:
+      summary: Attraction Review Scores
+      description: Returns detailed review scores for specific attractions.
+      operationId: /attractions/reviews/scores
+      parameters:
+      - $ref: '#/components/parameters/AffiliateIdHeader'
+      tags:
+      - Attractions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/reviewScores_input'
+            example:
+              attractions:
+              - PRTcWzDlwXjP
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reviewScores_output'
+              examples:
+                typical-attractions:
+                  $ref: '#/components/examples/example-1'
+                few-reviews:
+                  $ref: '#/components/examples/example-2'
+                no-reviews:
+                  $ref: '#/components/examples/example-3'
+  /attractions/constants:
+    post:
+      '400':
+        description: Bad request. The request is invalid or contains unsupported parameters. Refer to the [Error handling section](/demand/docs/support/error-handling/about-errors) for details.
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/error-response.json#/error_response
+            examples:
+              invalid_language:
+                summary: Unsupported language code
+                value:
+                  request_id: 01fr9ez700exycb98w90w5r9sh
+                  errors:
+                  - code: invalid_parameter
+                    message: Parameter 'languages[0]' is invalid.
+      '401':
+        description: Unauthorised. Authentication failed or the API key is missing or invalid. Refer to the [Authentication section](/demand/docs/development-guide/authentication) for details.
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/error-response.json#/error_response
+      '500':
+        description: Internal server error. An unexpected error occurred on the server.
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/error-response.json#/error_response
+            examples:
+              server_error:
+                summary: Unexpected server error
+                value:
+                  request_id: 01fr9ez700exycb98w90w5r9sh
+                  errors:
+                  - code: internal_server_error
+                    message: An unexpected error occurred. Please try again later.
+      summary: Attraction constants
+      description: 'Returns localised attraction constants, including category and subcategory metadata.
+
+
+        - Use this endpoint to retrieve and cache the category ID-to-name mapping before performing attraction searches with category filters.
+
+        - Call this endpoint during initial integration or periodically to refresh cached values.
+
+        - To retrieve all constants, send an empty request body.'
+      operationId: constants
+      parameters:
+      - $ref: '#/components/parameters/AffiliateIdHeader'
+      tags:
+      - Attractions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/constants_input'
+            examples:
+              english:
+                summary: Request with English language
+                value:
+                  languages:
+                  - en-gb
+      responses:
+        '200':
+          description: Successful response. Returns localised attraction category constants.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/attractions_constants_output'
+              examples:
+                single_language:
+                  summary: Response with default language (en-gb)
+                  value:
+                    request_id: 01fr9ez700exycb98w90w5r9sh
+                    data:
+                      categories:
+                      - id: PTCMCuXtHgrC
+                        name:
+                          en-gb: Tours
+                        parent: null
+                      - id: PTCMCcodv3rh
+                        name:
+                          en-gb: Museums, arts & culture
+                        parent: null
+                      - id: PTCMCY1Fkppn
+                        name:
+                          en-gb: Boat tours & cruises
+                        parent: PTCMCuXtHgrC
+                multi_language:
+                  summary: Response with multiple languages
+                  value:
+                    request_id: 01fr9ez700exycb98w90w5r9sh
+                    data:
+                      categories:
+                      - id: PTCMCuXtHgrC
+                        name:
+                          en-gb: Tours
+                          es: Tours
+                        parent: null
+                      - id: PTCMCcodv3rh
+                        name:
+                          en-gb: Museums, arts & culture
+                          es: Museos, arte y cultura
+                        parent: null
+components:
+  schemas:
+    attractionDetails:
+      title: AttractionsDetailsDataOutput
+      description: All static information related to an attraction.
+      type: object
+      properties:
+        id:
+          description: Uniquely identifies the attraction.
+          $ref: '#/components/schemas/attractionId'
+        badges:
+          description: Badges that indicate notable selling points of the attraction. Examples include `best_seller` or `guest_pickup`.
+          type: array
+          items:
+            type: string
+            enum:
+            - best_seller
+            - direct_admission
+            - free_cancellation
+            - guest_pickup
+            - itinerary_duration
+            - itinerary_private_tour
+            - itinerary_skip_the_line
+            - new_product
+            - service_animals_allowed
+        categories:
+          description: 'IDs of the categories the attraction belongs to. Both root categories and subcategories are included.
+
+
+            - Call the `/attractions/constants` endpoint to map each ID to a localised category name and its parent category.
+
+            - Any of these IDs can be used as a `filters.categories` value in `/attractions/search`.'
+          type: array
+          items:
+            type: string
+            example: PTCMCuXtHgrC
+        duration:
+          description: 'Estimated time spent in attraction (ISO 8601 duration format).  Example: PT2H = 2 hours.'
+          type: string
+          example: PT2H
+          pattern: ^P(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$
+        photos:
+          description: Images of the attraction.
+          type: array
+          items:
+            $ref: '#/components/schemas/attractionImage'
+        locations:
+          description: Location information for the attraction.
+          type: array
+          items:
+            $ref: '#/components/schemas/attractionLocation'
+        long_description:
+          description: Detailed description of the attraction.
+          $ref: '#/components/schemas/localisedString'
+        name:
+          description: The attraction's display name.
+          $ref: '#/components/schemas/localisedString'
+        ratings:
+          $ref: '#/components/schemas/details_rating'
+        supported_languages:
+          description: 'List of languages this attraction is available in. For example: A city tour available in Spanish and German.'
+          type: array
+          items:
+            type: string
+            pattern: '[a-z]{2}(-[a-z]{2})?'
+        urls:
+          $ref: '#/components/schemas/urls'
+    locations_countryId:
+      description: ISO 3166 country code. The full list of countries can be retrieved from [/common/locations/countries](#/common/locations/countries).
+      type: string
+      pattern: '[a-z]{2}'
+    page:
+      description: Pagination token used to retrieve the next page of results. Obtained from `next_page`.
+      type: string
+    coordinatesInput:
+      description: Geographic coordinates used to search for attractions near a specific location.
+      type: object
+      properties:
+        latitude:
+          description: Latitude of the location.
+          type: number
+          format: double
+          minimum: -90
+          maximum: 90
+          example: 52.3676
+        longitude:
+          description: Longitude of the location.
+          type: number
+          format: double
+          minimum: -180
+          maximum: 180
+          example: 4.9041
+        radius:
+          description: Maximum distance in kilometers from the specified coordinates. Defaults to 10 km if not provided.
+          type: number
+          format: double
+          default: 10
+          exclusiveMinimum: 0
+      required:
+      - latitude
+      - longitude
+    maximumResults:
+      description: The maximum number of results to return.
+      type: integer
+      multipleOf: 10
+      minimum: 10
+      maximum: 100
+      default: 100
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
+    DetailsBase:
+      title: AttractionsDetailsBase
+      type: object
+      properties:
+        attractions:
+          description: List of attraction IDs to retrieve details for.
+          type: array
+          items:
+            $ref: '#/components/schemas/attractionId'
+          minItems: 1
+          maxItems: 100
+        cities:
+          description: Search by city ID. Retrieve the full list of supported cities IDs from the /common/location/cities endpoint.
+          type: array
+          minItems: 1
+          maxItems: 5
+          items:
+            $ref: '#/components/schemas/locations_cityId'
+        countries:
+          description: Search by country code. Retrieve the full list of supported country codes from the /common/locations/countries endpoint. Maximum 3 countries per request.
+          type: array
+          minItems: 1
+          maxItems: 3
+          items:
+            type: string
+            pattern: ^[a-z]{2}$
+            example: nl
+        languages:
+          description: The language in which attraction details are returned. Must be an IETF BCP 47 language code (e.g., 'fr').
+          type: array
+          items:
+            type: string
+            pattern: '[a-z]{2}(-[a-z]{2})?'
+          maxItems: 1
+          default:
+          - en-gb
+        page:
+          description: Pagination token used to retrieve the next page of results. Obtained from `metadata.next_page`
+          type: string
+        rows:
+          $ref: '#/components/schemas/maximumResults'
+          default: 20
+          minimum: 10
+          maximum: 500
+    metadata:
+      title: MetadataOutput
+      description: Metadata about the request.
+      type: object
+      properties:
+        next_page:
+          description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
+          type: string
+          nullable: true
+        total_results:
+          description: The total number of results available.
+          type: integer
+          minimum: 0
+    attractionScore:
+      title: AttractionScore
+      type: object
+      properties:
+        id:
+          description: The unique identifier of the attraction.
+          $ref: '#/components/schemas/attractionId'
+        breakdown:
+          $ref: '#/components/schemas/reviewScores_breakdown'
+      required:
+      - id
+      - breakdown
+    attractions_constants_output:
+      title: AttractionsConstantsOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: object
+          properties:
+            categories:
+              type: array
+              items:
+                $ref: '#/components/schemas/attractionCategory'
+    translatedString:
+      title: TranslatedString
+      description: A string localised in multiple languages.
+      type: object
+      patternProperties:
+        ^[a-z]{2}(-[a-z]{2})$:
+          description: The content localised in this language.
+          type:
+          - string
+          - 'null'
+    locations_cityId:
+      description: Uniquely identifies a city. The full list of cities can be retrieved from [/common/locations/cities](#/common/locations/cities).
+      type: integer
+    pricing_monetaryAmount:
+      type: number
+      multipleOf: 0.01
+      exclusiveMinimum: 0
+    attractionCoordinates:
+      title: AttractionsCoordinatesOutput
+      description: Geographic coordinates.
+      type: object
+      properties:
+        latitude:
+          description: The latitude.
+          type: number
+        longitude:
+          description: The longitude.
+          type: number
+    sort:
+      description: Sorting options that control the order of the search results.
+      type: object
+      properties:
+        by:
+          description: Defines how the search results are sorted.
+          type: string
+          enum:
+          - highest_review_score
+          - highest_weighted_review_score
+          - lowest_price_first
+          - most_popular
+          - nearest_location
+          - trending
+          x-enumDescriptions:
+            highest_review_score: Shows products with the highest average review score first.
+            highest_weighted_review_score: Orders products by a weighted review score. A product's priority increases with a higher rating, with the weight based on the number of reviews it has.
+            lowest_price_first: Displays products with the lowest price first.
+            most_popular: Orders products based on the highest number of reservations in the last 30 days.
+            nearest_location: When using the coordinates search criterion, displays products closest to the provided search coordinates first.
+            trending: Orders products based on predicted scores from a machine learning model.
+    details_rating:
+      title: AttractionsDetailsRatingOutput
+      description: User rating information.
+      type: object
+      properties:
+        number_of_reviews:
+          description: Number of ratings.
+          type: integer
+          minimum: 0
+        score:
+          description: Average rating value.
+          type: number
+          minimum: 0
+          maximum: 5
+    review:
+      title: AttractionsReviewDataOutput
+      description: List of reviews for the requested attraction.
+      type: object
+      properties:
+        attraction:
+          description: Unique identifier of the attraction.
+          $ref: '#/components/schemas/attractionId'
+        id:
+          description: Unique identifier of the review.
+          type: string
+        author:
+          description: Name of the review author.
+          type: string
+        author_country_code:
+          description: ISO 3166 country code of the review author.
+          $ref: '#/components/schemas/locations_countryId'
+        rating:
+          description: Rating given in the review (1–5 scale).
+          type: integer
+          minimum: 1
+          maximum: 5
+        text:
+          description: Text content of the review.
+          type: string
+        language:
+          description: Language of the review content. IETF BCP 47 language code.
+          type: string
+          pattern: '[a-z]{2}(-[a-z]{2})?'
+        date:
+          description: Date when the review was submitted.
+          type: string
+          format: date
+    attractionId:
+      description: Uniquely identifies an attraction.
+      type: string
+    attractionLocation:
+      title: AttractionsLocationOutput
+      description: Location details for the attraction.
+      type: object
+      properties:
+        address:
+          description: The address.
+          type: string
+        city:
+          $ref: '#/components/schemas/locations_cityId'
+        coordinates:
+          $ref: '#/components/schemas/attractionCoordinates'
+        country:
+          $ref: '#/components/schemas/locations_countryId'
+        post_code:
+          description: The post code.
+          type: string
+        type:
+          description: The type of location.
+          type: string
+          enum:
+          - arrival
+          - attraction
+          - departure
+          - entrance
+          - guest_pickup
+          - meeting
+          - pickup
+          x-enumDescriptions:
+            arrival: The location where the tour or experience ends.
+            attraction: The location where the experience takes place or can be accessed, such as a landmark, shop, museum, or restaurant.
+            departure: The location where the tour or experience starts, typically for day trips or multi-stop tours.
+            entrance: The entrance point for an attraction when it has multiple access points or entry locations.
+            guest_pickup: The location where travellers are collected before the tour or experience begins.
+            meeting: The designated meeting point for participants before starting the experience, often used for guided tours.
+            pickup: The location where travellers can collect their tickets before joining the experience.
+    filtersInput:
+      description: Optional filters to narrow down attraction search results.
+      type: object
+      properties:
+        rating:
+          type: object
+          description: Filters based on guest review ratings.
+          properties:
+            minimum_review_score:
+              description: Minimum average guest review score, on a scale from 0 to 5.
+              type: number
+              format: double
+              minimum: 0
+              maximum: 5
+            minimum_review_count:
+              description: Minimum number of guest reviews required for an attraction to be included.
+              type: integer
+              format: int64
+              minimum: 0
+        supported_languages:
+          description: Filter results by supported languages. Uses [IETF language tag codes](https://en.wikipedia.org/wiki/IETF_language_tag) in lowercase, for example "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.
+          type: array
+          items:
+            type: string
+            pattern: ^[a-z]{2}(-[a-z]{2})?$
+        categories:
+          description: Filter results by one or more attraction category IDs. Only attractions that match at least one of the specified categories are returned. Call the `/attractions/constants` endpoint to retrieve the available category IDs and their localised names; both root categories and subcategories can be used as filter values. If an invalid or unsupported category ID is provided, the search response will contain no results.
+          type: array
+          items:
+            type: string
+            example: PTCMCuXtHgrC
+    languageId:
+      description: 'A [IETF language tag code](https://en.wikipedia.org/wiki/IETF_language_tag) that uniquely identifies a supported human language or dialect. **Note:** Demand API only accepts lowercase for the language codes. Examples: "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.'
+      type: string
+      pattern: ^[a-z]{2}(-[a-z]{2})?$
+      example: en-us
+    attraction:
+      type: object
+      description: Basic information about an attraction returned by the search.
+      properties:
+        id:
+          description: Unique identifier of the attraction.
+          $ref: '#/components/schemas/attractionId'
+        free_cancellation:
+          description: Indicates whether the attraction offers free cancellation.
+          type: boolean
+        price:
+          $ref: '#/components/schemas/attractionPrice'
+        urls:
+          $ref: '#/components/schemas/urls'
+    attractionsInput:
+      title: AttractionsDetailsInput
+      oneOf:
+      - title: Retrieve by Attraction IDs
+        description: Retrieve details for specific attractions using their IDs.
+        example:
+          attractions:
+          - PRTcWzDlwXjP
+          - PRahAzWtTraa
+          - PRAmdacCwQLH
+          languages:
+          - en-gb
+          rows: 50
+        allOf:
+        - $ref: '#/components/schemas/DetailsBase'
+        - type: object
+          required:
+          - attractions
+          properties:
+            cities: false
+            countries: false
+      - title: Retrieve by City IDs
+        description: Retrieve details for attractions located in the specified cities. Use city IDs obtained from /common/location/cities response.
+        example:
+          cities:
+          - -2156821
+          - -2140479
+          languages:
+          - en-gb
+          rows: 50
+        allOf:
+        - $ref: '#/components/schemas/DetailsBase'
+        - type: object
+          required:
+          - cities
+          properties:
+            attractions: false
+            countries: false
+      - title: Retrieve by Country Codes
+        description: Retrieve details for attractions located in the specified countries. Use ISO 3166-1 alpha-2 country codes obtained from /common/locations/countries response.
+        example:
+          countries:
+          - nl
+          - be
+          languages:
+          - en-gb
+          rows: 50
+        allOf:
+        - $ref: '#/components/schemas/DetailsBase'
+        - type: object
+          required:
+          - countries
+          properties:
+            attractions: false
+            cities: false
+    attractionsOutput:
+      title: AttractionsDetailsOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/attractionDetails'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    reviewScores_breakdown:
+      title: AttractionsScoresBreakdown
+      description: Detailed breakdown of review scores for different aspects of the attraction.
+      type: object
+      properties:
+        easy_to_access:
+          description: Accessibility rating based on location, transport, and convenience
+          $ref: '#/components/schemas/scoreDetail'
+        facilities_rating:
+          description: Assessment of facilities such as restrooms, seating areas, or amenities
+          $ref: '#/components/schemas/scoreDetail'
+        quality_of_service:
+          description: Rating of staff professionalism, kindness, and helpfulness.
+          $ref: '#/components/schemas/scoreDetail'
+        value_of_experience:
+          description: Users' perception of the overall value for money.
+          $ref: '#/components/schemas/scoreDetail'
+    urls:
+      type: object
+      description: Platform-specific URLs for viewing this item.
+      example:
+        app:
+          detail: booking://attractions/product?slug=prvlvlwpbs1m-moco-museum-amsterdam-official-tickets&aid=956509
+          search_results: booking://attractions/searchresults?ufi=-2140479&pinned_product_id=PRvlvlWPbS1M&aid=956509
+        web:
+          detail: https://www.booking.com/attractions/nl/prvlvlwpbs1m-moco-museum-amsterdam-official-tickets.en-gb.html?selected_currency=EUR&aid=956509
+          search_results: https://www.booking.com/attractions/searchresults/nl/amsterdam.en-gb.html?dest_id=-2140479&pinned_product=PRvlvlWPbS1M&selected_currency=EUR&aid=956509
+      properties:
+        app:
+          type: object
+          properties:
+            detail:
+              description: URL to view the attraction detail page in the app.
+              type: string
+              format: uri
+            search_results:
+              description: URL to view the attraction within search results in the app.
+              type: string
+              format: uri
+        web:
+          type: object
+          properties:
+            detail:
+              description: URL to view the attraction detail page on the website.
+              type: string
+              format: uri
+            search_results:
+              description: URL to view the attraction within the website search results page.
+              type: string
+              format: uri
+    datesInput:
+      description: Date range used to search for attraction availability.
+      type: object
+      properties:
+        start_date:
+          description: Start date of the availability period, in ISO 8601 date format (YYYY-MM-DD).
+          type: string
+          format: date
+        end_date:
+          description: End date of the availability period, in ISO 8601 date format (YYYY-MM-DD). Can be the same as start_date for single-day attractions.
+          type: string
+          format: date
+      required:
+      - start_date
+      - end_date
+    error_response:
+      title: ErrorResponse
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              message:
+                type: string
+            required:
+            - id
+            - message
+      required:
+      - request_id
+      - errors
+    scoreDetail:
+      title: AttractionsScoreDetail
+      type: object
+      properties:
+        number_of_reviews:
+          description: Number of reviews contributing to this score.
+          type: integer
+          minimum: 0
+        score:
+          description: Average score for this category.
+          type: number
+          minimum: 0
+          maximum: 5
+          example: 4.5
+    localisedString:
+      description: A string localised in multiple languages.
+      type: object
+      patternProperties:
+        '[a-z]{2}(-[a-z]{2})':
+          description: The content localised in this language.
+          type:
+          - string
+          - 'null'
+    pricing_currencyId:
+      description: ISO 4217 currency code. The list of supported currencies can be retrieved from [/common/payments/currencies](#/common/payments/currencies).
+      type: string
+      pattern: '[A-Z]{3}'
+    reviewScores_input:
+      title: AttractionsScoresInput
+      type: object
+      properties:
+        attractions:
+          description: Uniquely identifies attractions to retrieve review scores for.
+          type: array
+          items:
+            $ref: '#/components/schemas/attractionId'
+          minItems: 1
+          maxItems: 1
+      required:
+      - attractions
+    attractionPrice:
+      description: Pricing information for the cheapest available adult offer for the attraction.
+      type: object
+      properties:
+        currency:
+          description: Currency in which the price is returned.
+          $ref: '#/components/schemas/pricing_currencyId'
+        total:
+          $ref: '#/components/schemas/pricing_monetaryAmount'
+    schemas-output:
+      title: AttractionsReviewsOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/review'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    reviewScores_output:
+      title: AttractionsScoresOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/attractionScore'
+    constants_input:
+      title: AttractionsConstantsInput
+      type: object
+      properties:
+        languages:
+          description: 'List of language codes used to localise category names. Each category name is returned as an object keyed by language code.
+
+
+            - If a requested language is not available, it may be omitted from the response.
+
+            - If not provided, `en-gb` is used by default.'
+          type: array
+          items:
+            $ref: '#/components/schemas/languageId'
+          maxItems: 50
+          default:
+          - en-gb
+          example:
+          - es
+    attractionImage:
+      title: AttractionsImageOutput
+      description: Image information.
+      type: object
+      properties:
+        url:
+          description: URL of the image.
+          type: string
+          format: uri
+    attractionCategory:
+      title: AttractionCategory
+      type: object
+      properties:
+        id:
+          description: The unique identifier of the category.
+          type: string
+          example: PTCMCuXtHgrC
+        name:
+          description: The display name of the category translated into the requested languages, keyed by language code.
+          $ref: '#/components/schemas/translatedString'
+        parent:
+          description: The unique identifier of the parent category. Null for root categories. Use this field to reconstruct the category hierarchy.
+          type:
+          - string
+          - 'null'
+          example: null
+      required:
+      - id
+      - name
+    SearchBase:
+      type: object
+      properties:
+        attractions:
+          description: List of attraction IDs to search for. When provided, results are limited to these specific attractions.
+          type: array
+          items:
+            type: string
+          minimum: 1
+          maximum: 100
+        cities:
+          description: Search for attractions located in one or more cities. Use city IDs obtained from [/common/location/cities](/demand/docs/open-api/demand-api/commonlocations/common/locations/cities)
+          type: array
+          items:
+            $ref: '#/components/schemas/locations_cityId'
+          minimum: 1
+          maximum: 5
+        coordinates:
+          $ref: '#/components/schemas/coordinatesInput'
+        countries:
+          description: Search for attractions located in one or more countries. Use ISO 3166-1 alpha-2 country codes obtained from [/common/locations/countries](/demand/docs/open-api/demand-api/commonlocations/common/locations/countries)
+          type: array
+          items:
+            type: string
+            pattern: ^[a-z]{2}$
+            example: nl
+          minimum: 1
+          maximum: 3
+        currency:
+          description: 'A three-letter ISO 4217 currency code that defines the currency used for pricing in the response, for example: `EUR` or `USD`. n/See <a href="/demand/docs/open-api/demand-api/commonpayments/common/payments/currencies" target="_blank">common/payments/currencies</a> for the full list of supported currencies.'
+          $ref: '#/components/schemas/pricing_currencyId'
+        dates:
+          $ref: '#/components/schemas/datesInput'
+        filters:
+          $ref: '#/components/schemas/filtersInput'
+        page:
+          description: Pagination token used to retrieve the next page of results. Omit this parameter on the first request and use the value returned in `metadata.next_page` for subsequent pages.
+          type: string
+        rows:
+          $ref: '#/components/schemas/maximumResults'
+          default: 20
+        sort:
+          $ref: '#/components/schemas/sort'
+      required:
+      - currency
+      - dates
+    attractionsSearchOutput:
+      type: object
+      description: Response object containing the list of matching attractions, pagination metadata, and a unique request identifier.
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/attraction'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+        request_id:
+          $ref: '#/components/schemas/requestId'
+    attractionsSearchInput:
+      oneOf:
+      - title: Search by Attraction IDs
+        description: Search for specific attractions by their IDs. Results are limited to the specified attractions.
+        example:
+          currency: EUR
+          attractions:
+          - PR0dwCIbnsiU
+          - AFd2wcIjMauX
+          dates:
+            start_date: '2026-09-18'
+            end_date: '2026-09-20'
+          rows: 50
+          sort:
+            by: most_popular
+        allOf:
+        - $ref: '#/components/schemas/SearchBase'
+        - type: object
+          required:
+          - attractions
+          properties:
+            cities: false
+            countries: false
+            coordinates: false
+      - title: Search by City IDs
+        description: Search for attractions located in the specified cities. Use city IDs obtained from /common/location/cities response.
+        example:
+          currency: EUR
+          cities:
+          - -2140479
+          - -2154955
+          dates:
+            start_date: '2026-10-01'
+            end_date: '2026-10-07'
+          rows: 50
+          sort:
+            by: most_popular
+        allOf:
+        - $ref: '#/components/schemas/SearchBase'
+        - type: object
+          required:
+          - cities
+          properties:
+            attractions: false
+            countries: false
+            coordinates: false
+      - title: Search by Country Codes
+        description: Search for attractions located in the specified countries. Use ISO 3166-1 alpha-2 country codes obtained from /common/locations/countries response.
+        example:
+          currency: EUR
+          countries:
+          - nl
+          - fr
+          dates:
+            start_date: '2026-12-24'
+            end_date: '2026-12-26'
+          filters:
+            rating:
+              minimum_review_score: 4.5
+              minimum_review_count: 50
+            supported_languages:
+            - en-gb
+            - es
+            categories:
+            - PTCMCuXtHgrC
+            - PTCMCY1Fkppn
+        allOf:
+        - $ref: '#/components/schemas/SearchBase'
+        - type: object
+          required:
+          - countries
+          properties:
+            attractions: false
+            cities: false
+            coordinates: false
+      - title: Search by Coordinates
+        description: Search for attractions near the specified geographic coordinates.
+        example:
+          currency: GBP
+          coordinates:
+            latitude: 51.509865
+            longitude: -0.118092
+            radius: 10
+          dates:
+            start_date: '2026-12-24'
+            end_date: '2026-12-26'
+          rows: 50
+          sort:
+            by: most_popular
+        allOf:
+        - $ref: '#/components/schemas/SearchBase'
+        - type: object
+          required:
+          - coordinates
+          properties:
+            attractions: false
+            cities: false
+            countries: false
+    schemas-input:
+      title: AttractionsReviewsInput
+      type: object
+      properties:
+        attraction:
+          description: Uniquely identifies an attraction to retrieve reviews for.
+          $ref: '#/components/schemas/attractionId'
+        language:
+          description: The language for reviews content. IETF BCP 47 language code.
+          type: string
+          pattern: '[a-z]{2}(-[a-z]{2})?'
+        page:
+          $ref: '#/components/schemas/page'
+        rows:
+          description: The maximum number of results to return per page.
+          type: integer
+          multipleOf: 10
+          minimum: 10
+          maximum: 100
+          default: 10
+      required:
+      - attraction
+  parameters:
+    AffiliateIdHeader:
+      in: header
+      name: X-Affiliate-Id
+      schema:
+        type: integer
+      required: true
+      description: Include here your Affiliate identifier number
+  examples:
+    example-2:
+      summary: Attraction with few reviews
+      value:
+        request_id: 01fr9ez700exycb98w90w5r9si
+        data:
+        - id: PRTcWzDlwXjP
+          breakdown:
+            easy_to_access:
+              number_of_reviews: 4
+              score: 4.1
+            facilities_rating:
+              number_of_reviews: 3
+              score: 4.2
+            quality_of_service:
+              number_of_reviews: 4
+              score: 3.8
+            value_of_experience:
+              number_of_reviews: 5
+              score: 4
+    example-3:
+      summary: New attraction with no reviews
+      value:
+        request_id: 01fr9ez700exycb98w90w5r9sj
+        data:
+        - id: PRTcWzDlwXjP
+          breakdown:
+            easy_to_access:
+              number_of_reviews: 0
+              score: 0
+            facilities_rating:
+              number_of_reviews: 0
+              score: 0
+            quality_of_service:
+              number_of_reviews: 0
+              score: 0
+            value_of_experience:
+              number_of_reviews: 0
+              score: 0
+    example-1:
+      summary: Typical attraction
+      value:
+        request_id: 01fr9ez700exycb98w90w5r9sh
+        data:
+        - id: PRTcWzDlwXjP
+          breakdown:
+            easy_to_access:
+              number_of_reviews: 182
+              score: 4.5
+            facilities_rating:
+              number_of_reviews: 160
+              score: 4.7
+            quality_of_service:
+              number_of_reviews: 175
+              score: 4.6
+            value_of_experience:
+              number_of_reviews: 187
+              score: 4.8
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: string
+x-tagGroups:
+- name: Travel services
+  tags:
+  - Accommodations
+  - Attractions
+  - Cars
+  - Transfers
+- name: Common
+  tags:
+  - Common/autocomplete
+  - Common/locations
+  - Common/payments
+  - Common/languages
+- name: Orders
+  tags:
+  - Orders
+- name: Messaging
+  tags:
+  - Messages
+  - Conversations
+  - Attachments

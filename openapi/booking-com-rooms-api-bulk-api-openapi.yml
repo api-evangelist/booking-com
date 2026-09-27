@@ -1,0 +1,1443 @@
+openapi: 3.2.0
+info:
+  title: Rooms API Bulk API
+  description: Contains Rooms API specification
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.3'
+servers:
+- url: https://supply-xml.booking.com/
+  description: Test using live endpoint
+tags:
+- name: rooms-api-bulk
+  description: Create, update and delete multiple units
+paths:
+  /rooms-api/units:
+    post:
+      tags:
+      - rooms-api-bulk
+      summary: Create units
+      description: Create one or more units
+      operationId: createUnits
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Specifies the expected content type. Currently supports `application/json`.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
+      - name: Accept-Version
+        in: header
+        description: 'Specify the version number to get the API functionality specific to that version. Currently supports the value: 1.0'
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1.0'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkUnitsCreateRequest'
+            examples:
+              MULTI_ROOM_UNITS:
+                description: Create two multi-room units with all fields
+                value:
+                  units:
+                  - property_id: 123456
+                    correlation_id: corr-01
+                    configuration:
+                      unit_type_id: 31
+                      rooms:
+                      - type: BEDROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 6
+                            bed_count: 1
+                          - bed_type_id: 1
+                            bed_count: 1
+                          is_default_configuration: true
+                      - type: BEDROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 1
+                            bed_count: 3
+                          is_default_configuration: true
+                      - type: LIVING_ROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 5
+                            bed_count: 1
+                          is_default_configuration: true
+                    unit_name_id: 4180
+                    number_of_units: 5
+                    smoking_policy: SMOKING_AND_NONSMOKING
+                    size:
+                      value: 155
+                      unit: SQM
+                    partner_reference_name: Two-bedroom villa with living room
+                    floor_numbers_located_on:
+                    - 2
+                    occupancy_details:
+                      max_guests: 5
+                      max_adults: 5
+                      max_children: 4
+                      max_infants: 4
+                      max_infants_on_top: 0
+                    extra_beds_configuration:
+                      extra_beds: 1
+                      cribs: 0
+                      is_crib_and_extra_bed_allowed: false
+                  - property_id: 123456
+                    correlation_id: corr-02
+                    configuration:
+                      unit_type_id: 1
+                      rooms:
+                      - type: BEDROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 3
+                            bed_count: 1
+                          is_default_configuration: true
+                      - type: LIVING_ROOM_SUBROOM
+                    unit_name_id: 865
+                    number_of_units: 3
+                    smoking_policy: NONSMOKING
+                    size:
+                      value: 75
+                      unit: SQM
+                    partner_reference_name: One-bedroom apartment
+                    occupancy_details:
+                      max_guests: 3
+                      max_adults: 3
+                      max_children: 2
+                      max_infants: 0
+                      max_infants_on_top: 2
+                    extra_beds_configuration:
+                      extra_beds: 1
+                      cribs: 1
+                      is_crib_and_extra_bed_allowed: true
+              SINGLE_ROOM_UNITS:
+                description: Create two single-room units with minimal fields
+                value:
+                  units:
+                  - property_id: 123456
+                    correlation_id: corr-01
+                    configuration:
+                      unit_type_id: 9
+                      rooms:
+                      - type: GUEST_ROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 3
+                            bed_count: 1
+                          is_default_configuration: true
+                        - beds:
+                          - bed_type_id: 1
+                            bed_count: 2
+                          is_default_configuration: false
+                    unit_name_id: 255
+                    number_of_units: 20
+                    smoking_policy: NONSMOKING
+                  - property_id: 123456
+                    correlation_id: corr-02
+                    configuration:
+                      unit_type_id: 12
+                      rooms:
+                      - type: GUEST_ROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 3
+                            bed_count: 1
+                          is_default_configuration: true
+                    unit_name_id: 1147
+              MIXED_UNIT_TYPES:
+                description: Create a multi-room and a single-room unit in one request
+                value:
+                  units:
+                  - property_id: 123456
+                    correlation_id: corr-01
+                    configuration:
+                      unit_type_id: 5
+                      rooms:
+                      - type: BEDROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 3
+                            bed_count: 1
+                          is_default_configuration: true
+                    unit_name_id: 746
+                  - property_id: 123456
+                    correlation_id: corr-02
+                    configuration:
+                      unit_type_id: 9
+                      rooms:
+                      - type: GUEST_ROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 3
+                            bed_count: 1
+                          is_default_configuration: true
+                        - beds:
+                          - bed_type_id: 1
+                            bed_count: 2
+                          is_default_configuration: false
+                    unit_name_id: 255
+                    number_of_units: 20
+                    smoking_policy: NONSMOKING
+                    size:
+                      value: 24
+                      unit: SQM
+                    partner_reference_name: Double with multiple bed configurations
+                    floor_numbers_located_on:
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                    - 5
+                    occupancy_details:
+                      max_guests: 2
+                      max_adults: 2
+                      max_children: 1
+                      max_infants: 1
+                      max_infants_on_top: 0
+                    extra_beds_configuration:
+                      extra_beds: 0
+                      cribs: 1
+                      is_crib_and_extra_bed_allowed: false
+              MINIMAL_REQUIRED_FIELDS:
+                description: Create a single unit with only required fields
+                value:
+                  units:
+                  - property_id: 123456
+                    correlation_id: corr-01
+                    configuration:
+                      unit_type_id: 10
+                      rooms:
+                      - type: GUEST_ROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 1
+                            bed_count: 1
+                          is_default_configuration: true
+                    unit_name_id: 69
+        required: true
+      responses:
+        '200':
+          description: Units created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBulkUnitsCreateResponse'
+              examples:
+                SUCCESS:
+                  description: Successful creation of two units
+                  value:
+                    data:
+                      units:
+                      - unit_id: 100000001
+                        correlation_id: corr-01
+                        property_id: 123456
+                        unit_name_id: 4180
+                        number_of_units: 5
+                        smoking_policy: SMOKING_AND_NONSMOKING
+                        configuration:
+                          unit_type_id: 31
+                          rooms:
+                          - type: BEDROOM_SUBROOM
+                            bed_configurations:
+                            - beds:
+                              - bed_type_id: 6
+                                bed_count: 1
+                              - bed_type_id: 1
+                                bed_count: 1
+                              is_default_configuration: true
+                          - type: LIVING_ROOM_SUBROOM
+                            bed_configurations:
+                            - beds:
+                              - bed_type_id: 5
+                                bed_count: 1
+                              is_default_configuration: true
+                        size:
+                          value: 155
+                          unit: SQM
+                        occupancy_details:
+                          max_guests: 5
+                          max_adults: 5
+                          max_children: 4
+                          max_infants: 4
+                          max_infants_on_top: 0
+                        extra_beds_configuration:
+                          extra_beds: 1
+                          cribs: 0
+                          is_crib_and_extra_bed_allowed: false
+                      - unit_id: 100000002
+                        correlation_id: corr-02
+                        property_id: 123456
+                        unit_name_id: 865
+                        number_of_units: 3
+                        smoking_policy: NONSMOKING
+                        configuration:
+                          unit_type_id: 1
+                          rooms:
+                          - type: BEDROOM_SUBROOM
+                            bed_configurations:
+                            - beds:
+                              - bed_type_id: 3
+                                bed_count: 1
+                              is_default_configuration: true
+                          - type: LIVING_ROOM_SUBROOM
+                        size:
+                          value: 75
+                          unit: SQM
+                        occupancy_details:
+                          max_guests: 3
+                          max_adults: 3
+                          max_children: 2
+                          max_infants: 0
+                          max_infants_on_top: 2
+                        extra_beds_configuration:
+                          extra_beds: 1
+                          cribs: 1
+                          is_crib_and_extra_bed_allowed: true
+                    errors: []
+                    warnings: []
+                    meta:
+                      ruid: test-ruid
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBulkUnitsCreateResponseError'
+              examples:
+                VALIDATION_ERROR:
+                  description: Validation errors for multiple units
+                  value:
+                    data: null
+                    errors:
+                    - message: Invalid value
+                      code: 320
+                      description: Error description
+                      details:
+                        fields:
+                        - $.units[0].configuration
+                    - message: Invalid value
+                      code: 320
+                      description: Error description
+                      details:
+                        fields:
+                        - $.units[1].correlation_id
+                    warnings: []
+                    meta:
+                      ruid: test-ruid
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBulkUnitsCreateResponseError'
+              examples:
+                SYSTEM_ERROR:
+                  description: ''
+                  value:
+                    data: null
+                    errors:
+                    - message: System error
+                      code: 448
+                      description: Unknown error, please contact Booking.com for support
+                    warnings: []
+                    meta:
+                      ruid: test-ruid
+    delete:
+      tags:
+      - rooms-api-bulk
+      summary: Delete units
+      description: Delete one or more existing units
+      operationId: deleteUnits
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Specifies the expected content type. Currently supports `application/json`.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
+      - name: Accept-Version
+        in: header
+        description: 'Specify the version number to get the API functionality specific to that version. Currently supports the value: 1.0'
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1.0'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkUnitsDeleteRequest'
+            examples:
+              DELETE_UNITS:
+                description: Delete multiple units from a property
+                value:
+                  units:
+                  - property_id: 123456
+                    unit_id: 111111111
+                  - property_id: 123456
+                    unit_id: 222222222
+                  - property_id: 123456
+                    unit_id: 333333333
+        required: true
+      responses:
+        '200':
+          description: Units deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseVoid'
+              examples:
+                SUCCESS:
+                  description: Successful deletion of multiple units
+                  value:
+                    errors: []
+                    warnings: []
+                    meta:
+                      ruid: test-ruid
+        '400':
+          description: Delete error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseVoidError'
+              examples:
+                ERROR:
+                  description: Errors deleting multiple units
+                  value:
+                    data: null
+                    errors:
+                    - message: Unable to process
+                      code: 450
+                      description: Error description
+                      details:
+                        fields:
+                        - $.units[0].unit_id
+                    - message: Unable to process
+                      code: 450
+                      description: Error description
+                      details:
+                        fields:
+                        - $.units[2].unit_id
+                    warnings: []
+                    meta:
+                      ruid: test-ruid
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseVoidError'
+              examples:
+                SYSTEM_ERROR:
+                  description: ''
+                  value:
+                    data: null
+                    errors:
+                    - message: System error
+                      code: 448
+                      description: Unknown error, please contact Booking.com for support
+                    warnings: []
+                    meta:
+                      ruid: test-ruid
+    patch:
+      tags:
+      - rooms-api-bulk
+      summary: Update units
+      description: Update one or more existing units
+      operationId: updateUnits
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Specifies the expected content type. Currently supports `application/json`.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
+      - name: Accept-Version
+        in: header
+        description: 'Specify the version number to get the API functionality specific to that version. Currently supports the value: 1.0'
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1.0'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkUnitsUpdateRequest'
+            examples:
+              BED_CONFIGURATION:
+                description: Update bed configurations for two units
+                value:
+                  units:
+                  - property_id: 123456
+                    unit_id: 111111111
+                    configuration:
+                      unit_type_id: 9
+                      rooms:
+                      - type: GUEST_ROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 3
+                            bed_count: 1
+                          is_default_configuration: true
+                        - beds:
+                          - bed_type_id: 1
+                            bed_count: 2
+                          is_default_configuration: false
+                  - property_id: 123456
+                    unit_id: 222222222
+                    configuration:
+                      unit_type_id: 1
+                      rooms:
+                      - type: BEDROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 3
+                            bed_count: 1
+                          - bed_type_id: 1
+                            bed_count: 1
+                          is_default_configuration: true
+                      - type: LIVING_ROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 5
+                            bed_count: 1
+                          is_default_configuration: true
+              ADD_ROOM:
+                description: Add a second bedroom to a multi-room unit
+                value:
+                  units:
+                  - property_id: 123456
+                    unit_id: 111111111
+                    configuration:
+                      unit_type_id: 1
+                      rooms:
+                      - type: BEDROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 3
+                            bed_count: 1
+                          is_default_configuration: true
+                      - type: BEDROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 1
+                            bed_count: 2
+                          is_default_configuration: true
+                      - type: LIVING_ROOM_SUBROOM
+              REMOVE_ROOM:
+                description: Remove a living room from a multi-room unit
+                value:
+                  units:
+                  - property_id: 123456
+                    unit_id: 111111111
+                    configuration:
+                      unit_type_id: 1
+                      rooms:
+                      - type: BEDROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 3
+                            bed_count: 1
+                          is_default_configuration: true
+              UPDATE_ROOM_BEDS:
+                description: Add bed to bedroom and remove beds from living room for a multi-room unit
+                value:
+                  units:
+                  - property_id: 123456
+                    unit_id: 111111111
+                    configuration:
+                      unit_type_id: 1
+                      rooms:
+                      - type: BEDROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 3
+                            bed_count: 1
+                          - bed_type_id: 1
+                            bed_count: 1
+                          is_default_configuration: true
+                      - type: LIVING_ROOM_SUBROOM
+              MIXED_UNIT_TYPES:
+                description: Update a multi-room and a single-room unit in one request
+                value:
+                  units:
+                  - property_id: 123456
+                    unit_id: 111111111
+                    configuration:
+                      unit_type_id: 1
+                      rooms:
+                      - type: BEDROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 3
+                            bed_count: 1
+                          is_default_configuration: true
+                      - type: BEDROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 1
+                            bed_count: 2
+                          is_default_configuration: true
+                      - type: LIVING_ROOM_SUBROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 5
+                            bed_count: 1
+                          is_default_configuration: true
+                    occupancy_details:
+                      max_guests: 5
+                      max_adults: 5
+                      max_children: 4
+                      max_infants: 4
+                      max_infants_on_top: 0
+                  - property_id: 123456
+                    unit_id: 222222222
+                    configuration:
+                      unit_type_id: 9
+                      rooms:
+                      - type: GUEST_ROOM
+                        bed_configurations:
+                        - beds:
+                          - bed_type_id: 3
+                            bed_count: 1
+                          is_default_configuration: true
+                        - beds:
+                          - bed_type_id: 1
+                            bed_count: 2
+                          is_default_configuration: false
+                    number_of_units: 10
+                    smoking_policy: NONSMOKING
+                    partner_reference_name: Updated double room
+              SIMPLE_FIELDS:
+                description: Update simple fields for two units
+                value:
+                  units:
+                  - property_id: 123456
+                    unit_id: 111111111
+                    unit_name_id: 2273
+                    number_of_units: 10
+                    smoking_policy: NONSMOKING
+                    partner_reference_name: Updated reference name
+                  - property_id: 123456
+                    unit_id: 222222222
+                    size:
+                      value: 99
+                      unit: SQM
+                    occupancy_details:
+                      max_guests: 5
+                      max_adults: 5
+                      max_children: 4
+                      max_infants: 4
+                      max_infants_on_top: 0
+                    extra_beds_configuration:
+                      extra_beds: 2
+                      cribs: 1
+                      is_crib_and_extra_bed_allowed: true
+        required: true
+      responses:
+        '200':
+          description: Units updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseVoid'
+              examples:
+                SUCCESS:
+                  description: Successful update of two units
+                  value:
+                    errors: []
+                    warnings: []
+                    meta:
+                      ruid: test-ruid
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseVoidError'
+              examples:
+                VALIDATION_ERROR:
+                  description: Validation errors for multiple units
+                  value:
+                    data: null
+                    errors:
+                    - message: Invalid value
+                      code: 320
+                      description: Error description
+                      details:
+                        fields:
+                        - $.units[0].configuration.unit_type_id
+                    - message: Invalid value
+                      code: 320
+                      description: Error description
+                      details:
+                        fields:
+                        - $.units[1].configuration.rooms[0].bed_configurations[0].beds[0].bed_type_id
+                    warnings: []
+                    meta:
+                      ruid: test-ruid
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseVoidError'
+              examples:
+                SYSTEM_ERROR:
+                  description: ''
+                  value:
+                    data: null
+                    errors:
+                    - message: System error
+                      code: 448
+                      description: Unknown error, please contact Booking.com for support
+                    warnings: []
+                    meta:
+                      ruid: test-ruid
+components:
+  schemas:
+    BulkUnitsUpdateRequest:
+      description: Bulk unit update request
+      properties:
+        units:
+          type: array
+          description: List of units to update. All units must belong to the same property. Maximum 100 units per request.
+          items:
+            $ref: '#/components/schemas/UnitUpdateRequest'
+          maxItems: 100
+          minItems: 1
+      required:
+      - units
+    Bed:
+      properties:
+        bed_type_id:
+          type: integer
+          format: int32
+        bed_count:
+          type: integer
+          format: int32
+      required:
+      - bed_count
+      - bed_type_id
+    OccupancyDetailsUpdateRequest:
+      properties:
+        max_guests:
+          type: integer
+          format: int32
+          description: Maximum number of guests
+          maximum: 50
+          minimum: 1
+        max_adults:
+          type: integer
+          format: int32
+          description: Maximum number of adults
+          maximum: 50
+          minimum: 1
+        max_children:
+          type: integer
+          format: int32
+          description: Maximum number of children excluding infants (3-17 years old)
+          maximum: 49
+          minimum: 0
+        max_infants:
+          type: integer
+          format: int32
+          description: Maximum number of infants (0-2 years old)
+          maximum: 49
+          minimum: 0
+        max_infants_on_top:
+          type: integer
+          format: int32
+          description: Maximum number of infants (0-2 years old) on top of maximum number of guests
+          maximum: 49
+          minimum: 0
+      required:
+      - max_adults
+      - max_children
+      - max_guests
+      - max_infants
+      - max_infants_on_top
+    ExtraBedsConfigurationUpdateRequest:
+      properties:
+        extra_beds:
+          type: integer
+          format: int32
+          description: Number of extra beds you can provide
+          maximum: 100
+          minimum: 0
+        cribs:
+          type: integer
+          format: int32
+          description: Number of cribs you can provide
+          maximum: 100
+          minimum: 0
+        is_crib_and_extra_bed_allowed:
+          type: boolean
+          description: Both extra beds and cribs can be provided (<code>true</code>) or only one of the options (<code>false</code>)?
+      required:
+      - cribs
+      - extra_beds
+      - is_crib_and_extra_bed_allowed
+    ApiError:
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32
+          description: ''
+        details:
+          type: object
+          properties:
+            fields:
+              type: array
+              description: ''
+              items:
+                type: string
+        description:
+          type: string
+    UnitCreateResponseBedConfiguration:
+      properties:
+        beds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bed'
+        is_default_configuration:
+          type: boolean
+    RoomRequest:
+      properties:
+        type:
+          type: string
+          description: '<ul>
+
+            <li>For multi-room units you must add one or more <code>BEDROOM_SUBROOM</code> or <code>LIVING_ROOM_SUBROOM</code>, at least one of the rooms must have beds</li>
+
+            <li>For single-room units you must add exactly one <code>GUEST_ROOM</code></li>
+
+            </ul>
+
+            '
+          enum:
+          - BEDROOM_SUBROOM
+          - LIVING_ROOM_SUBROOM
+          - GUEST_ROOM
+        bed_configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/BedConfigurationRequest'
+      required:
+      - type
+    ExtraBedsConfigurationCreateRequest:
+      description: Extra bed & crib options
+      properties:
+        extra_beds:
+          type: integer
+          format: int32
+          default: 0
+          description: Number of extra beds you can provide
+          maximum: 100
+          minimum: 0
+        cribs:
+          type: integer
+          format: int32
+          default: 0
+          description: Number of cribs you can provide
+          maximum: 100
+          minimum: 0
+        is_crib_and_extra_bed_allowed:
+          type: boolean
+          default: false
+          description: Both extra beds and cribs can be provided (<code>true</code>) or only one of the options (<code>false</code>)?
+    BulkUnitsCreateResponse:
+      properties:
+        units:
+          type: array
+          description: List of created units. Use <code>correlation_id</code> to map each entry back to the corresponding item in the request.
+          items:
+            $ref: '#/components/schemas/UnitCreateResponse'
+    ConfigurationRequest:
+      properties:
+        unit_type_id:
+          type: integer
+          format: int32
+          description: '<ul>
+
+            <li>Must exist and be active in meta (see <code>$.unit_type[*].id</code> and <code>$.unit_type[*].is_active</code>) for unit creation/update</li>
+
+            <li>Must be valid for property''s category in meta (see <code>$.unit_type[*].valid_property_categories</code>)</li>
+
+            </ul>
+
+            '
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomRequest'
+          minItems: 1
+      required:
+      - rooms
+      - unit_type_id
+    UnitCreateResponse:
+      properties:
+        unit_id:
+          type: integer
+          format: int64
+          description: Id of the created unit
+        correlation_id:
+          type: string
+          description: Correlation id provided in the create request to map the created unit back to the request
+        property_id:
+          type: integer
+          format: int32
+          description: Property ID the unit belongs to
+        configuration:
+          $ref: '#/components/schemas/UnitCreateResponseConfiguration'
+        unit_name_id:
+          type: integer
+          format: int32
+          description: Unit name ID assigned to this unit
+        unit_name_source:
+          type: string
+          description: Indicates whether the unit name was explicitly provided (<code>PROVIDED</code>) or auto-generated (<code>GENERATED</code>)
+          enum:
+          - PROVIDED
+          - GENERATED
+        category_id:
+          type: integer
+          format: int32
+          description: Category ID assigned to this unit
+        number_of_units:
+          type: integer
+          format: int32
+          description: Number of identical units of this type
+        smoking_policy:
+          type: string
+          description: Smoking policy for this unit
+          enum:
+          - SMOKING
+          - NONSMOKING
+          - SMOKING_AND_NONSMOKING
+        size:
+          $ref: '#/components/schemas/UnitCreateResponseSize'
+        partner_reference_name:
+          type: string
+        floor_numbers_located_on:
+          type: array
+          items:
+            type: integer
+            format: int32
+        occupancy:
+          $ref: '#/components/schemas/UnitCreateResponseOccupancy'
+        occupancy_details:
+          $ref: '#/components/schemas/UnitCreateResponseOccupancyDetails'
+        extra_beds_configuration:
+          $ref: '#/components/schemas/UnitCreateResponseExtraBedsConfiguration'
+    UnitCreateResponseExtraBedsConfiguration:
+      properties:
+        extra_beds:
+          type: integer
+          format: int32
+        cribs:
+          type: integer
+          format: int32
+        is_crib_and_extra_bed_allowed:
+          type: boolean
+    ApiResponseBulkUnitsCreateResponseError:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          type: 'null'
+          description: Always null when the request fails
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ApiResponseVoidError:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          type: 'null'
+          description: ''
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    UnitCreateResponseOccupancyDetails:
+      properties:
+        max_guests:
+          type: integer
+          format: int32
+        max_adults:
+          type: integer
+          format: int32
+        max_children:
+          type: integer
+          format: int32
+        max_infants:
+          type: integer
+          format: int32
+        max_infants_on_top:
+          type: integer
+          format: int32
+    UnitUpdateRequest:
+      description: Unit update schema
+      properties:
+        unit_id:
+          type: integer
+          format: int64
+          description: Id of the unit
+        property_id:
+          type: integer
+          format: int32
+          description: Property ID the unit belongs to. All units in a single request must belong to the same property.
+        configuration:
+          $ref: '#/components/schemas/ConfigurationRequest'
+        unit_name_id:
+          type: integer
+          format: int32
+          description: '<ul>
+
+            <li>The list of available unit names can be found in meta (see <code>$.unit_names</code>)</li>
+
+            <li>Set <code>debug_info</code> as <code>true</code> to retrieve the generated unit name (see <code>$.unit_name_fallback</code>)</li>
+
+            </ul>
+
+            '
+        unit_name_source:
+          type: string
+          description: " <ul>\n <li>PROVIDED uses the <code>unit_name_id</code> as the unit name source and <code>unit_name_id</code> must be set when using PROVIDED</li>\n <li>GENERATED generates the <code>unit_name_id</code> and <code>unit_name_id</code> must not be set when using GENERATED</li>\n </ul>\n"
+          enum:
+          - PROVIDED
+          - GENERATED
+        category_id:
+          type: integer
+          format: int32
+          description: '<ul>
+
+            <li>Category id for the unit</li>
+
+            <li>Use meta to retrieve the supported categories (see <code>$.unit_categories</code>)</li>
+
+            </ul>
+
+            '
+        number_of_units:
+          type: integer
+          format: int32
+          description: Number of units must be between 0 and 32000
+        smoking_policy:
+          type: string
+          description: Room smoking policy
+          enum:
+          - SMOKING
+          - NONSMOKING
+          - SMOKING_AND_NONSMOKING
+        size:
+          $ref: '#/components/schemas/SizeRequest'
+        partner_reference_name:
+          type: string
+          description: Internal room name, visible only in API and Extranet
+        floor_numbers_located_on:
+          type: array
+          description: One or more floors where the unit is located; 0 is a ground floor
+          items:
+            type: integer
+            format: int32
+            description: One or more floors where the unit is located; 0 is a ground floor
+        occupancy:
+          $ref: '#/components/schemas/OccupancyUpdateRequest'
+        occupancy_details:
+          $ref: '#/components/schemas/OccupancyDetailsUpdateRequest'
+        extra_beds_configuration:
+          $ref: '#/components/schemas/ExtraBedsConfigurationUpdateRequest'
+      required:
+      - property_id
+      - unit_id
+    BulkUnitsDeleteRequest:
+      description: Bulk unit delete request
+      properties:
+        units:
+          type: array
+          description: List of units to delete. All units must belong to the same property. Maximum 100 units per request.
+          items:
+            $ref: '#/components/schemas/UnitDeleteRequest'
+          maxItems: 100
+          minItems: 1
+      required:
+      - units
+    OccupancyCreateRequest:
+      deprecated: true
+      properties:
+        max_guests:
+          type: integer
+          format: int32
+          default: 1
+          description: Maximum number of guests
+          maximum: 50
+          minimum: 1
+        max_adults:
+          type: integer
+          format: int32
+          default: 1
+          description: Maximum number of adults
+          maximum: 50
+          minimum: 1
+        max_children:
+          type: integer
+          format: int32
+          default: 0
+          description: Maximum number of children (0-17 years old)
+          maximum: 49
+          minimum: 0
+    UnitCreateResponseConfiguration:
+      properties:
+        unit_type_id:
+          type: integer
+          format: int32
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitCreateResponseRoom'
+    OccupancyUpdateRequest:
+      deprecated: true
+      properties:
+        max_guests:
+          type: integer
+          format: int32
+          description: Maximum number of guests
+          maximum: 50
+          minimum: 1
+        max_adults:
+          type: integer
+          format: int32
+          description: Maximum number of adults
+          maximum: 50
+          minimum: 1
+        max_children:
+          type: integer
+          format: int32
+          description: Maximum number of children (0-17 years old)
+          maximum: 49
+          minimum: 0
+      required:
+      - max_adults
+      - max_children
+      - max_guests
+    BulkUnitsCreateRequest:
+      description: Bulk unit create request
+      properties:
+        units:
+          type: array
+          description: List of units to create. All units must belong to the same property. Maximum 100 units per request.
+          items:
+            $ref: '#/components/schemas/UnitCreateRequest'
+          maxItems: 100
+          minItems: 1
+      required:
+      - units
+    UnitCreateResponseOccupancy:
+      deprecated: true
+      properties:
+        max_guests:
+          type: integer
+          format: int32
+        max_adults:
+          type: integer
+          format: int32
+        max_children:
+          type: integer
+          format: int32
+    BedRequest:
+      properties:
+        bed_type_id:
+          type: integer
+          format: int32
+        bed_count:
+          type: integer
+          format: int32
+      required:
+      - bed_count
+      - bed_type_id
+    UnitCreateRequest:
+      description: Unit create schema
+      properties:
+        property_id:
+          type: integer
+          format: int32
+          description: Property ID the unit belongs to. All units in a single request must belong to the same property.
+        correlation_id:
+          type: string
+          description: '<ul>
+
+            <li>Correlation id to map the created unit in the response (see <code>$.units[i].correlation_id</code>)</li>
+
+            <li>Must be unique for all provided units in the request</li>
+
+            </ul>
+
+            '
+          minLength: 1
+        configuration:
+          $ref: '#/components/schemas/ConfigurationRequest'
+        unit_name_id:
+          type: integer
+          format: int32
+          description: '<ul>
+
+            <li>The list of available unit names can be found in meta (see <code>$.unit_names</code>)</li>
+
+            <li>Set <code>debug_info</code> as <code>true</code> to retrieve the generated unit name (see <code>$.unit_name_fallback</code>)</li>
+
+            </ul>
+
+            '
+        unit_name_source:
+          type: string
+          description: " <ul>\n <li>PROVIDED uses the <code>unit_name_id</code> as the unit name source and <code>unit_name_id</code> must be set when using PROVIDED</li>\n <li>GENERATED generates the <code>unit_name_id</code> and <code>unit_name_id</code> must not be set when using GENERATED</li>\n </ul>\n"
+          enum:
+          - PROVIDED
+          - GENERATED
+        category_id:
+          type: integer
+          format: int32
+          description: '<ul>
+
+            <li>Category id for the unit</li>
+
+            <li>Use meta to retrieve the supported categories (see <code>$.unit_categories</code>)</li>
+
+            </ul>
+
+            '
+        number_of_units:
+          type: integer
+          format: int32
+          default: 1
+          description: Number of units must be between 0 and 32000
+        smoking_policy:
+          type: string
+          default: SMOKING_AND_NONSMOKING
+          enum:
+          - SMOKING
+          - NONSMOKING
+          - SMOKING_AND_NONSMOKING
+        size:
+          $ref: '#/components/schemas/SizeRequest'
+        partner_reference_name:
+          type: string
+          description: Internal room name, visible only in API and Extranet
+        floor_numbers_located_on:
+          type: array
+          description: One or more floors where the unit is located; 0 is a ground floor
+          items:
+            type: integer
+            format: int32
+            description: One or more floors where the unit is located; 0 is a ground floor
+        occupancy:
+          $ref: '#/components/schemas/OccupancyCreateRequest'
+        occupancy_details:
+          $ref: '#/components/schemas/OccupancyDetailsCreateRequest'
+        extra_beds_configuration:
+          $ref: '#/components/schemas/ExtraBedsConfigurationCreateRequest'
+      required:
+      - configuration
+      - correlation_id
+      - property_id
+    UnitCreateResponseRoom:
+      properties:
+        type:
+          type: string
+          enum:
+          - BEDROOM_SUBROOM
+          - LIVING_ROOM_SUBROOM
+          - GUEST_ROOM
+        bed_configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitCreateResponseBedConfiguration'
+    ApiResponseVoid:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          type: 'null'
+          description: ''
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    UnitCreateResponseSize:
+      properties:
+        value:
+          type: number
+          format: double
+        unit:
+          type: string
+          enum:
+          - SQM
+          - SQFT
+    UnitDeleteRequest:
+      description: Unit delete schema
+      properties:
+        property_id:
+          type: integer
+          format: int32
+          description: Property ID the unit belongs to. All units in a single request must belong to the same property.
+        unit_id:
+          type: integer
+          format: int64
+          description: Id of the unit to delete
+      required:
+      - property_id
+      - unit_id
+    SizeRequest:
+      properties:
+        value:
+          type: number
+          format: double
+          description: Must be a value between 1 and 9999.99
+        unit:
+          type: string
+          description: SQM (square meters) or SQFT (square feet)
+          enum:
+          - SQM
+          - SQFT
+      required:
+      - unit
+      - value
+    ApiResponseBulkUnitsCreateResponse:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          $ref: '#/components/schemas/BulkUnitsCreateResponse'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    BedConfigurationRequest:
+      description: '<ul>
+
+        <li>For multi-room unit you must add exactly one bed configuration</li>
+
+        <li>For single-room unit you must add at least one bed configuration, others are optional</li>
+
+        <li>Bed type ID provided must exist and be active in meta (see <code>$.bed_types[*].is_active</code>)</li>
+
+        <li>Same bed type ID must be repeated within a single bed configuration</li>
+
+        </ul>
+
+        '
+      properties:
+        beds:
+          type: array
+          items:
+            $ref: '#/components/schemas/BedRequest'
+          minItems: 1
+        is_default_configuration:
+          type: boolean
+          description: Exactly one default bed configuration is mandatory for each room provided
+      required:
+      - beds
+      - is_default_configuration
+    OccupancyDetailsCreateRequest:
+      description: Occupancy settings for the unit. Replaces the deprecated <code>occupancy</code> object.
+      properties:
+        max_guests:
+          type: integer
+          format: int32
+          default: 1
+          description: Maximum number of guests
+          maximum: 50
+          minimum: 1
+        max_adults:
+          type: integer
+          format: int32
+          default: 1
+          description: Maximum number of adults
+          maximum: 50
+          minimum: 1
+        max_children:
+          type: integer
+          format: int32
+          default: 0
+          description: Maximum number of children excluding infants (3-17 years old)
+          maximum: 49
+          minimum: 0
+        max_infants:
+          type: integer
+          format: int32
+          default: 0
+          description: Maximum number of infants (0-2 years old). Infants are counted toward <code>max_guests</code>.
+          maximum: 49
+          minimum: 0
+        max_infants_on_top:
+          type: integer
+          format: int32
+          default: 0
+          description: Maximum number of infants (0-2 years old) on top of maximum number of guests
+          maximum: 49
+          minimum: 0
+    ResponseMeta:
+      properties:
+        ruid:
+          type: string
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - rooms-api
+  - rooms-api-bulk
+  - meta
+- name: Documentation
+  tags:
+  - About Try it

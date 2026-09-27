@@ -1,0 +1,154 @@
+openapi: 3.2.0
+info:
+  title: Property Description API
+  description: Use the Property API to create or update a property and its settings; check and update property status; as well as create or update property description.
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://supply-xml.booking.com/property-api/
+  description: Test using live endpoint
+  x-display-name: Test using live endpoint
+tags:
+- name: Property Description API
+  description: Create, update and retrieve property description
+paths:
+  /properties/{propertyId}/description:
+    get:
+      tags:
+      - Property Description API
+      summary: Get existing property description
+      operationId: get
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponsePropertyDescription'
+    put:
+      tags:
+      - Property Description API
+      summary: Create or update property description
+      operationId: create
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyDescription'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+    delete:
+      tags:
+      - Property Description API
+      summary: Delete existing property description
+      operationId: delete
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        data:
+          type: object
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ApiErrorOTA:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32
+        details:
+          $ref: '#/components/schemas/ObjectNode'
+        description:
+          type: string
+    ApiResponsePropertyDescription:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PropertyDescription'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    PropertyDescription:
+      required:
+      - text
+      type: object
+      properties:
+        text:
+          type: string
+        language_code:
+          maxLength: 5
+          minLength: 2
+          type: string
+        last_update:
+          type: string
+    ObjectNode:
+      type: object
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Property Details API
+  - Property Settings API
+  - Property Status API
+  - Property Description API
+- name: Documentation
+  tags:
+  - About Try it

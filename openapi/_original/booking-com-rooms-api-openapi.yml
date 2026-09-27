@@ -1,3 +1,5 @@
+# x-archived-from: booking-com-rooms-api-openapi.yml
+# x-archived-on: 2026-09-26
 openapi: 3.0.1
 info:
   title: Rooms API
@@ -6,7 +8,7 @@ info:
     name: Connectivity Team
     url: https://connect.booking.com
     email: connectivity@booking.com
-  version: '1.3'
+  version: '1.2'
 servers:
 - url: https://supply-xml.booking.com/
   description: Test using live endpoint
@@ -89,8 +91,8 @@ paths:
         description: Enable debug to return <code>$.unit_name_fallback</code> field in response
         required: false
         schema:
-          type: string
-          default: 'false'
+          type: boolean
+          default: false
       responses:
         '200':
           description: OK
@@ -145,8 +147,6 @@ paths:
                         is_default_configuration: true
                     - type: LIVING_ROOM_SUBROOM
                   unit_name_id: 4180
-                  unit_name_source: PROVIDED
-                  category_id: 0
                   number_of_units: 5
                   smoking_policy: SMOKING_AND_NONSMOKING
                   size:
@@ -161,6 +161,7 @@ paths:
                     max_children: 4
                     max_infants: 4
                     max_infants_on_top: 0
+                  max_children_that_pay_children_rate: 2
                   extra_beds_configuration:
                     extra_beds: 1
                     cribs: 0
@@ -179,8 +180,6 @@ paths:
                         is_default_configuration: true
                     - type: LIVING_ROOM_SUBROOM
                   unit_name_id: 865
-                  unit_name_source: PROVIDED
-                  category_id: 0
                   number_of_units: 5
                   smoking_policy: SMOKING
                   size:
@@ -195,6 +194,7 @@ paths:
                     max_children: 2
                     max_infants: 0
                     max_infants_on_top: 2
+                  max_children_that_pay_children_rate: 1
                   extra_beds_configuration:
                     extra_beds: 1
                     cribs: 1
@@ -212,8 +212,6 @@ paths:
                           bed_count: 1
                         is_default_configuration: true
                   unit_name_id: 746
-                  unit_name_source: PROVIDED
-                  category_id: 0
               SINGLE_ROOM_UNIT_W_MULTIPLE_BED_CONFIGS:
                 description: Create a Double with multiple bed configurations
                 value:
@@ -231,8 +229,6 @@ paths:
                           bed_count: 2
                         is_default_configuration: false
                   unit_name_id: 255
-                  unit_name_source: PROVIDED
-                  category_id: 0
                   number_of_units: 20
                   smoking_policy: NONSMOKING
                   size:
@@ -251,6 +247,7 @@ paths:
                     max_children: 1
                     max_infants: 1
                     max_infants_on_top: 0
+                  max_children_that_pay_children_rate: 1
                   extra_beds_configuration:
                     extra_beds: 0
                     cribs: 1
@@ -268,8 +265,6 @@ paths:
                           bed_count: 1
                         is_default_configuration: true
                   unit_name_id: 1147
-                  unit_name_source: PROVIDED
-                  category_id: 0
                   number_of_units: 20
                   smoking_policy: NONSMOKING
                   size:
@@ -282,6 +277,7 @@ paths:
                     max_children: 1
                     max_infants: 1
                     max_infants_on_top: 0
+                  max_children_that_pay_children_rate: 1
                   extra_beds_configuration:
                     extra_beds: 0
                     cribs: 1
@@ -299,8 +295,6 @@ paths:
                           bed_count: 1
                         is_default_configuration: true
                   unit_name_id: 69
-                  unit_name_source: PROVIDED
-                  category_id: 0
         required: true
       responses:
         '200':
@@ -462,8 +456,8 @@ paths:
         description: Enable debug to return <code>$.unit_name_fallback</code> field in response
         required: false
         schema:
-          type: string
-          default: 'false'
+          type: boolean
+          default: false
       responses:
         '200':
           description: OK
@@ -488,18 +482,15 @@ paths:
         \ the list of all room name IDs allowed during unit creation/update. For each <code>$.unit_names[*]</code> record\
         \ you will find:</li>\n        <ul>\n        <li><code>unit_name_id</code>: the unit name ID you must provide with\
         \ each create request</li>\n        <li><code>unit_name</code>: string representation of unit name ID (translatable)</li>\n\
-        \        </ul>\n     <li>Retrieve the list of all unit category IDs allowed during unit creation/update. For each\
-        \ <code>$.unit_categories[*]</code> record you will find:</li>\n        <ul>\n        <li><code>category_id</code>:\
-        \ the unit category ID you may provide with each create/update request</li>\n        <li><code>category_name</code>:\
-        \ string representation of unit category ID</li>\n        </ul><li>Retrieve the list of all bed type IDs allowed during\
-        \ unit creation/update. For each <code>$.bed_types[*]</code> record you will find:</li>\n        <ul>\n        <li><code>bed_type_id</code>:\
-        \ the bed type ID you must provide when configuring rooms</li>\n        <li><code>bed_type_name</code>: string representation\
-        \ of bed type (translatable)</li>\n        <li><code>bed_type_description</code>: description of bed type size using\
-        \ metric units (translatable)</li>\n        <li><code>bed_type_description_imperial</code>: description of bed type\
-        \ size using imperial units (translatable)</li>\n        <li><code>is_active</code>: attribute that defines if a bed\
-        \ type is available for creation/update, inactive bed types are available for read only</li>\n        </ul>\n    <li>Retrieve\
-        \ the list of all property categories for which you can create a unit. For each property type you will find its name\
-        \ and category ID, as well as an OTA or a Booking.com extended code</li>\n    </ul>\n"
+        \        </ul>\n    <li>Retrieve the list of all bed type IDs allowed during unit creation/update. For each <code>$.bed_types[*]</code>\
+        \ record you will find:</li>\n        <ul>\n        <li><code>bed_type_id</code>: the bed type ID you must provide\
+        \ when configuring rooms</li>\n        <li><code>bed_type_name</code>: string representation of bed type (translatable)</li>\n\
+        \        <li><code>bed_type_description</code>: description of bed type size using metric units (translatable)</li>\n\
+        \        <li><code>bed_type_description_imperial</code>: description of bed type size using imperial units (translatable)</li>\n\
+        \        <li><code>is_active</code>: attribute that defines if a bed type is available for creation/update, inactive\
+        \ bed types are available for read only</li>\n        </ul>\n    <li>Retrieve the list of all property categories\
+        \ for which you can create a unit. For each property type you will find its name and category ID, as well as an OTA\
+        \ or a Booking.com extended code</li>\n    </ul>\n"
       operationId: getRoomMeta
       parameters:
       - name: language_code
@@ -762,6 +753,7 @@ components:
     UnitCreate:
       required:
       - configuration
+      - unit_name_id
       type: object
       properties:
         configuration:
@@ -771,23 +763,6 @@ components:
           description: '<ul>
 
             <li>The list of available unit names can be found in meta (see <code>$.unit_names</code>)</li>
-
-            </ul>
-
-            '
-          format: int32
-        unit_name_source:
-          type: string
-          description: Indicates whether the unit name is provided through unit_name_id or generated by Booking.com based
-            on unit configuration.
-          enum:
-          - PROVIDED
-          - GENERATED
-        category_id:
-          type: integer
-          description: '<ul>
-
-            <li>The list of available categories can be found in meta (see <code>$.unit_categories</code>)</li>
 
             </ul>
 
@@ -823,6 +798,16 @@ components:
           $ref: '#/components/schemas/OccupancyDetailsCreate'
         extra_beds_configuration:
           $ref: '#/components/schemas/ExtraBedsConfigurationCreate'
+        max_children_that_pay_children_rate:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: This field will be deprecated on 29 June 2026 and sunset on 7 July 2026. Booking.com will ignore this
+            field after the sunset date. For more details, see [Deprecating legacy max payable child field.](/connectivity/docs/deprecation-policy/deprecation-and-sunsetting#deprecating-legacy-max-payable-child-field).
+            Maximum number of children eligible for the children rate (the rest are charged as adults), must be less than
+            or equal to number of children. If not specified, defaults to <code>max_children</code>.
+          format: int32
+          deprecated: true
       description: Unit creation schema; use meta endpoint for fetching relevant meta data
     ApiError:
       type: object
@@ -959,23 +944,6 @@ components:
 
             '
           format: int32
-        unit_name_source:
-          type: string
-          description: Indicates whether the unit name is provided through unit_name_id or generated by Booking.com based
-            on unit configuration.
-          enum:
-          - PROVIDED
-          - GENERATED
-        category_id:
-          type: integer
-          description: '<ul>
-
-            <li>The list of available categories can be found in meta (see <code>$.unit_categories</code>)</li>
-
-            </ul>
-
-            '
-          format: int32
         number_of_units:
           type: integer
           description: Number of units must be between 0 and 32000
@@ -1005,6 +973,16 @@ components:
           $ref: '#/components/schemas/OccupancyDetails'
         extra_beds_configuration:
           $ref: '#/components/schemas/ExtraBedsConfiguration'
+        max_children_that_pay_children_rate:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: This field will be deprecated on 29 June 2026 and sunset on 7 July 2026. For more details, see [Deprecating
+            legacy max payable child field.](/connectivity/docs/deprecation-policy/deprecation-and-sunsetting#deprecating-legacy-max-payable-child-field).
+            Maximum number of children eligible for the children rate (the rest are charged as adults), must be less than
+            or equal to number of children.
+          format: int32
+          deprecated: true
         unit_name_fallback:
           type: string
           description: Contains unit name (<code>EN_GB</code> locale) for any unit name ID, including those missing in meta
@@ -1025,23 +1003,6 @@ components:
 
             '
           format: int32
-        unit_name_source:
-          type: string
-          description: Indicates whether the unit name is provided through unit_name_id or generated by Booking.com based
-            on unit configuration.
-          enum:
-          - PROVIDED
-          - GENERATED
-        category_id:
-          type: integer
-          description: '<ul>
-
-            <li>The list of available categories can be found in meta (see <code>$.unit_categories</code>)</li>
-
-            </ul>
-
-            '
-          format: int32
         number_of_units:
           type: integer
           description: Number of units must be between 0 and 32000
@@ -1071,6 +1032,16 @@ components:
           $ref: '#/components/schemas/OccupancyDetails'
         extra_beds_configuration:
           $ref: '#/components/schemas/ExtraBedsConfiguration'
+        max_children_that_pay_children_rate:
+          maximum: 49
+          minimum: 0
+          type: integer
+          description: This field will be deprecated on 29 June 2026 and sunset on 7 July 2026. For more details, see [Deprecating
+            legacy max payable child field.](/connectivity/docs/deprecation-policy/deprecation-and-sunsetting#deprecating-legacy-max-payable-child-field).
+            Maximum number of children eligible for the children rate (the rest are charged as adults), must be less than
+            or equal to number of children.
+          format: int32
+          deprecated: true
         unit_name_fallback:
           type: string
           description: Contains unit name (<code>EN_GB</code> locale) for any unit name ID, including those missing in meta
@@ -1212,10 +1183,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UnitName'
-        unit_categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/UnitCategory'
         bed_types:
           type: array
           items:
@@ -1231,14 +1198,6 @@ components:
           type: integer
           format: int32
         unit_name:
-          type: string
-    UnitCategory:
-      type: object
-      properties:
-        category_id:
-          type: integer
-          format: int32
-        category_name:
           type: string
     UnitType:
       type: object

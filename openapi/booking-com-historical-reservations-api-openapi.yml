@@ -1,11 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Historical Reservations API
-  description: Preview reference for API version 1.0. Contact Connectivity Support to confirm availability and arrange access
-    and testing before integrating. Retrieve a property's historical reservation details to initialise or reconcile reservation
-    data for revenue management. Select room reservations by their creation timestamps and optionally by status. Responses
-    include stay dates, available occupancy, and guest and property price perspectives. Access requires a connection authorized
-    to read the property's reservation history.
+  title: Historical reservations API
+  description: Preview reference for API version 1.0.
   version: 1.0.0
   contact:
     name: Connectivity Team
@@ -14,9 +10,6 @@ info:
   license:
     name: Copyright Booking.com. All rights reserved.
     url: https://www.booking.com
-externalDocs:
-  description: Historical Reservations API guide
-  url: https://developers.booking.com/connectivity/docs/historical-reservations-api/overview
 servers:
 - url: https://supply-xml.booking.com
   description: Intended production API gateway; confirm availability and access before use
@@ -25,92 +18,13 @@ security:
 tags:
 - name: Historical reservations
   description: Retrieve historical reservation data for an authorized property.
-- name: About Try it
-  description: 'Use **Try it** to retrieve historical reservations with this read-only endpoint:
-
-
-    ```http
-
-    GET /revenue-management-api/properties/{property_id}/historical-reservations
-
-    ```
-
-
-    ## Environment
-
-
-    - **Mock (schema only)** returns schema-driven mock responses or predefined examples. Use it to inspect the response format;
-    it does not verify live authentication, property access, or reservation data.
-
-    - **Intended production API gateway** sends a request to the live API. Confirm availability and arrange access with Connectivity
-    Support first. Use an authorized test property and a valid Connectivity access token. Live requests are subject to the
-    [request quota](/connectivity/docs/historical-reservations-api/overview#response-size-and-pagination).
-
-
-    ## Request
-
-
-    1. Open **Try it** for the GET operation and select the environment.
-
-    2. For a live request, configure `Authorization: Bearer {access_token}`. Send `Accept: application/json` and `Accept-Version:
-    1.0`.
-
-    3. Fill in the following parameters:
-
-
-    | Parameter | Location | Required | Value |
-
-    | --- | --- | --- | --- |
-
-    | `property_id` | Path | Yes | The ID of the test property your account is authorized to access for reservation history.
-    |
-
-    | `created_at_start` | Query | Yes | Inclusive reservation-creation lower bound, as a UTC timestamp ending in `Z`. |
-
-    | `created_at_end` | Query | Yes | Inclusive reservation-creation upper bound, as a UTC timestamp ending in `Z`. |
-
-    | `status` | Query | No | `OK`, `CANCELLED`, or `NO_SHOW`. Omit to include all supported statuses. Repeat the parameter
-    for multiple values, for example `status=OK&status=NO_SHOW`. |
-
-
-    Both date bounds are required and have no defaults. Choose a start no later than the end, within the documented [24-calendar-month
-    eligibility limits](/connectivity/docs/historical-reservations-api/overview#choose-the-creation-date-interval); the end
-    must not be in the future. These dates select when reservations were created.
-
-
-    The request has no body. Check the selected environment and parameter values, then click **Send**.
-
-
-    ## Response
-
-
-    Inspect the HTTP status and JSON response. A successful `200` response contains `data.property_id` and `data.property_reservations`;
-    an empty reservation array is valid. Mock responses do not establish that the live request succeeds or that matching reservations
-    exist.
-
-
-    For a live error, use the endpoint''s documented response and the [troubleshooting guidance](/connectivity/docs/historical-reservations-api/overview#troubleshooting).
-    Retain the request identifier when present for Connectivity Support; do not include your access token or client secret.
-
-    '
-x-tagGroups:
-- name: API Endpoints
-  tags:
-  - Historical reservations
-- name: Documentation
-  tags:
-  - About Try it
 paths:
   /revenue-management-api/properties/{property_id}/historical-reservations:
     get:
       tags:
       - Historical reservations
       summary: Retrieve historical reservations
-      description: Retrieve eligible room reservations created within the inclusive UTC range, grouped by property reservation.
-        The range selects reservation creation timestamps, not check-in or check-out dates. Both bounds are required. The
-        endpoint returns confirmed, cancelled, and no-show reservations and supports an optional room status filter. It does
-        not expose pagination or a continuation token. Optional response fields are omitted when unavailable; an omitted value
-        does not mean zero.
+      description: Retrieve eligible room reservations created within the inclusive UTC range, grouped by property reservation. The range selects reservation creation timestamps, not check-in or check-out dates. Both bounds are required. The endpoint returns confirmed, cancelled, and no-show reservations and supports an optional room status filter. It does not expose pagination or a continuation token. Optional response fields are omitted when unavailable; an omitted value does not mean zero.
       operationId: getHistoricalReservations
       parameters:
       - name: property_id
@@ -129,10 +43,7 @@ paths:
       - name: created_at_start
         in: query
         required: true
-        description: Inclusive reservation-creation lower bound in UTC. Use an ISO 8601 timestamp ending in Z, for example
-          2026-01-01T00:00:00Z. This value must be on or after the current UTC time minus 24 calendar months and must not
-          be after created_at_end. There is no default. Choose dates within the current eligibility window; fixed examples
-          eventually expire.
+        description: Inclusive reservation-creation lower bound in UTC. Use an ISO 8601 timestamp ending in Z, for example 2026-01-01T00:00:00Z. This value must be on or after the current UTC time minus 24 calendar months and must not be after created_at_end. There is no default. Choose dates within the current eligibility window; fixed examples eventually expire.
         schema:
           type: string
           format: date-time
@@ -143,9 +54,7 @@ paths:
       - name: created_at_end
         in: query
         required: true
-        description: Inclusive reservation-creation upper bound in UTC. Use an ISO 8601 timestamp ending in Z. This value
-          must not be in the future. created_at_start must be on or after created_at_end minus 24 calendar months. Calendar
-          subtraction adjusts a leap day to the final valid day of February. There is no default.
+        description: Inclusive reservation-creation upper bound in UTC. Use an ISO 8601 timestamp ending in Z. This value must not be in the future. created_at_start must be on or after created_at_end minus 24 calendar months. Calendar subtraction adjusts a leap day to the final valid day of February. There is no default.
         schema:
           type: string
           format: date-time
@@ -158,9 +67,7 @@ paths:
         required: false
         style: form
         explode: true
-        description: Room reservation statuses to include. Omit this parameter to include all supported statuses. Repeat the
-          parameter to select multiple statuses, for example status=OK&status=NO_SHOW. Only matching rooms remain in each
-          property reservation; property reservations without matching rooms are omitted.
+        description: Room reservation statuses to include. Omit this parameter to include all supported statuses. Repeat the parameter to select multiple statuses, for example status=OK&status=NO_SHOW. Only matching rooms remain in each property reservation; property reservations without matching rooms are omitted.
         schema:
           type: array
           uniqueItems: true
@@ -191,8 +98,7 @@ paths:
             value: '1.0'
       responses:
         '200':
-          description: Historical reservations matching the request. The response has no pagination parameters or continuation
-            token.
+          description: Historical reservations matching the request. The response has no pagination parameters or continuation token.
           content:
             application/json:
               schema:
@@ -250,8 +156,7 @@ paths:
                             price_components: []
                     meta:
                       ruid: synthetic-request-id
-                  description: Synthetic data showing both price perspectives, an explicit zero child count, and a cancelled
-                    reservation without optional guest or occupancy data.
+                  description: Synthetic data showing both price perspectives, an explicit zero child count, and a cancelled reservation without optional guest or occupancy data.
                 noShows:
                   summary: No-show reservation with partial occupancy
                   value:
@@ -273,8 +178,7 @@ paths:
                             price_components: []
                     meta:
                       ruid: synthetic-request-id
-                  description: Synthetic data for status=NO_SHOW. The omitted children count is unknown; it does not mean
-                    zero.
+                  description: Synthetic data for status=NO_SHOW. The omitted children count is unknown; it does not mean zero.
                 noMatches:
                   summary: No matching reservations
                   value:
@@ -284,8 +188,7 @@ paths:
                     meta:
                       ruid: synthetic-request-id
         '400':
-          description: A required parameter is missing or invalid, including an invalid property ID, timestamp, creation range,
-            or status.
+          description: A required parameter is missing or invalid, including an invalid property ID, timestamp, creation range, or status.
           content:
             application/json:
               schema:
@@ -300,8 +203,7 @@ paths:
                     meta:
                       ruid: synthetic-request-id
         '401':
-          description: Authentication is missing, invalid, or expired. Obtain a valid Connectivity token and send it in the
-            Authorization header. Gateway authentication error codes and messages can differ from the service example.
+          description: Authentication is missing, invalid, or expired. Obtain a valid Connectivity token and send it in the Authorization header. Gateway authentication error codes and messages can differ from the service example.
           content:
             application/json:
               schema:
@@ -316,8 +218,7 @@ paths:
                     meta:
                       ruid: synthetic-request-id
         '403':
-          description: Access to the requested property is not permitted. Check that your connection includes permission to
-            read reservation history.
+          description: Access to the requested property is not permitted. Check that your connection includes permission to read reservation history.
           content:
             application/json:
               schema:
@@ -332,16 +233,13 @@ paths:
                     meta:
                       ruid: synthetic-request-id
         '429':
-          description: The API gateway rejected the request because a rate limit was exceeded. The production quota is 25
-            requests per provider and property in a rolling one-day window. Wait before retrying and reduce the request frequency.
-            Quota errors can use a different gateway body from the service errors shown for other responses.
+          description: The API gateway rejected the request because a rate limit was exceeded. The production quota is 25 requests per provider and property in a rolling one-day window. Wait before retrying and reduce the request frequency. Quota errors can use a different gateway body from the service errors shown for other responses.
           content:
             application/json:
               schema:
                 description: Gateway error response. The body depends on which rate-limiting policy rejected the request.
         '500':
-          description: An unexpected error occurred while processing the request. Retain the request identifier when contacting
-            support.
+          description: An unexpected error occurred while processing the request. Retain the request identifier when contacting support.
           content:
             application/json:
               schema:
@@ -379,45 +277,9 @@ paths:
                     meta:
                       ruid: synthetic-request-id
         default:
-          description: Other API gateway errors. Gateway responses can differ from the service error body. Check the HTTP
-            status and retain any request identifier supplied.
+          description: Other API gateway errors. Gateway responses can differ from the service error body. Check the HTTP status and retain any request identifier supplied.
 components:
   schemas:
-    HistoricalReservationsResponse:
-      type: object
-      description: Historical reservations and metadata for this request.
-      properties:
-        data:
-          $ref: '#/components/schemas/HistoricalReservationsData'
-        meta:
-          $ref: '#/components/schemas/RequestMetadata'
-      required:
-      - data
-      - meta
-    HistoricalReservationsData:
-      type: object
-      description: Reservation data for the requested property. Optional values are omitted when unavailable, rather than
-        returned as null.
-      properties:
-        property_id:
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 2147483647
-          description: The Booking.com property ID requested in the path.
-        currency:
-          type: string
-          description: Currency code for the monetary amounts, for example EUR. Omitted when unavailable; do not infer a currency
-            when this field is absent.
-        property_reservations:
-          type: array
-          description: Property reservations with matching room reservations. Empty when no eligible room reservations match
-            the creation range and status filter.
-          items:
-            $ref: '#/components/schemas/PropertyReservation'
-      required:
-      - property_id
-      - property_reservations
     PropertyReservation:
       type: object
       description: A property reservation grouping one or more matching room reservations.
@@ -428,116 +290,13 @@ components:
           minLength: 1
         room_reservations:
           type: array
-          description: Matching room reservations. Rooms excluded by the status filter are omitted; the entire property reservation
-            is omitted if no rooms match.
+          description: Matching room reservations. Rooms excluded by the status filter are omitted; the entire property reservation is omitted if no rooms match.
           items:
             $ref: '#/components/schemas/RoomReservation'
           minItems: 1
       required:
       - property_reservation_id
       - room_reservations
-    RoomReservation:
-      type: object
-      description: Reservation details for a room. Dates of stay are separate from the reservation creation timestamp used
-        to select records.
-      properties:
-        room_id:
-          type: string
-          description: Booking.com room product identifier. This identifies the booked room type; it is not a unique room-reservation
-            identifier.
-          minLength: 1
-        created_at:
-          type: string
-          description: Reservation creation timestamp in UTC.
-          format: date-time
-        cancelled_at:
-          type: string
-          description: Cancellation timestamp in UTC when available. Omitted when unavailable; a cancelled or no-show reservation
-            can omit this field.
-          format: date-time
-        checkin:
-          type: string
-          description: Check-in date.
-          format: date
-        checkout:
-          type: string
-          description: Check-out date.
-          format: date
-        status:
-          $ref: '#/components/schemas/ReservationStatus'
-        occupancy:
-          description: Guest counts when available. Omitted when unavailable. An absent count does not mean zero.
-          allOf:
-          - $ref: '#/components/schemas/Occupancy'
-        guest:
-          description: Guest price perspective. total_price is the reservation total value; included indicates whether a component
-            is included in that total. This object is omitted when the guest price perspective is unavailable, including reservations
-            with guest price markup.
-          allOf:
-          - $ref: '#/components/schemas/ReservationPrice'
-        hotel:
-          description: Property price perspective. total_price is the total net room price; included indicates whether a component
-            is included in the room rate. This required object can differ from the guest price perspective.
-          allOf:
-          - $ref: '#/components/schemas/ReservationPrice'
-      required:
-      - room_id
-      - created_at
-      - checkin
-      - checkout
-      - status
-      - hotel
-    ReservationStatus:
-      type: string
-      description: 'Room reservation status: OK for confirmed reservations, CANCELLED for cancellations, and NO_SHOW for no-shows.'
-      enum:
-      - OK
-      - CANCELLED
-      - NO_SHOW
-    Occupancy:
-      type: object
-      description: Known guest counts. Each count is independently optional and is omitted when unknown.
-      properties:
-        adults:
-          type: integer
-          format: int32
-          minimum: 0
-          description: Number of adults, when known.
-        children:
-          type: integer
-          format: int32
-          minimum: 0
-          description: Number of children, when known. An explicit zero means no children.
-    ReservationPrice:
-      type: object
-      description: 'Monetary values for one price perspective, as major-unit decimal strings in data.currency. The Connectivity
-        currency limits are 0 fractional digits for AFA, BIF, BYR, CLP, COP, DJF, ECS, GNF, HUF, IDR, ISK, JPY, KMF, KRW,
-        LAK, MGA, MZM, PYG, RWF, TJR, TMM, TWD, UGX, VND, VUV, XAF, XOF and XPF; 3 for BHD, IQD, JOD, KWD, LYD, OMR and TND;
-        and 2 for all other currency codes. These limits include historical currency codes and can differ from ISO currency
-        fraction digits. When an amount has more fractional digits than the currency limit, the amount is rounded to drop
-        the excess digits, to the nearest value, with exact halfway values rounded to the value whose last retained digit
-        is even (HALF_EVEN). Shorter scales are preserved without zero-padding. Values use plain decimal notation without
-        exponents or locale separators. Preserve the returned decimal value. Use the supplied total instead of reconstructing
-        it by summing components: totals and components are rounded independently, components have inclusion flags, and some
-        component categories are omitted.'
-      properties:
-        total_price:
-          type: string
-          description: Total amount for this perspective, as a major-unit decimal string in data.currency. When an amount
-            has more fractional digits than the currency limit, the amount is rounded to drop the excess digits using the
-            currency limits and HALF_EVEN rule described in ReservationPrice; shorter scales are preserved. For example, EUR
-            2.665 becomes "2.66", EUR 2.675 becomes "2.68", and EUR 12.3 stays "12.3". The supplied total is authoritative
-            and need not equal the sum of returned components. See guest and hotel for the meaning of each total.
-          minLength: 1
-        price_components:
-          type: array
-          description: Available price components. The array can be empty. Markup components are omitted, and hotel components
-            omit deposits.
-          items:
-            $ref: '#/components/schemas/PriceComponent'
-      required:
-      - total_price
-      - price_components
     PriceComponent:
       type: object
       description: One base-price, fee, or tax component.
@@ -555,20 +314,106 @@ components:
           - TAX
         price:
           type: string
-          description: Component amount as a major-unit decimal string in data.currency, rounded only when it exceeds the
-            currency limit. Uses the currency limits and HALF_EVEN rule described in ReservationPrice; shorter scales are
-            preserved without zero-padding. For example, JPY 1526.99 becomes "1527", IDR -12.9 becomes "-13", and BHD 1.2345
-            becomes "1.234".
+          description: Component amount as a major-unit decimal string in data.currency, rounded only when it exceeds the currency limit. Uses the currency limits and HALF_EVEN rule described in ReservationPrice; shorter scales are preserved without zero-padding. For example, JPY 1526.99 becomes "1527", IDR -12.9 becomes "-13", and BHD 1.2345 becomes "1.234".
           minLength: 1
         included:
           type: boolean
-          description: For guest components, whether the amount is included in the reservation total value. For hotel components,
-            whether it is included in the room rate.
+          description: For guest components, whether the amount is included in the reservation total value. For hotel components, whether it is included in the room rate.
       required:
       - description
       - type
       - price
       - included
+    HistoricalReservationsResponse:
+      type: object
+      description: Historical reservations and metadata for this request.
+      properties:
+        data:
+          $ref: '#/components/schemas/HistoricalReservationsData'
+        meta:
+          $ref: '#/components/schemas/RequestMetadata'
+      required:
+      - data
+      - meta
+    HistoricalReservationsData:
+      type: object
+      description: Reservation data for the requested property. Optional values are omitted when unavailable, rather than returned as null.
+      properties:
+        property_id:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+          description: The Booking.com property ID requested in the path.
+        currency:
+          type: string
+          description: Currency code for the monetary amounts, for example EUR. Omitted when unavailable; do not infer a currency when this field is absent.
+        property_reservations:
+          type: array
+          description: Property reservations with matching room reservations. Empty when no eligible room reservations match the creation range and status filter.
+          items:
+            $ref: '#/components/schemas/PropertyReservation'
+      required:
+      - property_id
+      - property_reservations
+    RoomReservation:
+      type: object
+      description: Reservation details for a room. Dates of stay are separate from the reservation creation timestamp used to select records.
+      properties:
+        room_id:
+          type: string
+          description: Booking.com room product identifier. This identifies the booked room type; it is not a unique room-reservation identifier.
+          minLength: 1
+        created_at:
+          type: string
+          description: Reservation creation timestamp in UTC.
+          format: date-time
+        cancelled_at:
+          type: string
+          description: Cancellation timestamp in UTC when available. Omitted when unavailable; a cancelled or no-show reservation can omit this field.
+          format: date-time
+        checkin:
+          type: string
+          description: Check-in date.
+          format: date
+        checkout:
+          type: string
+          description: Check-out date.
+          format: date
+        status:
+          $ref: '#/components/schemas/ReservationStatus'
+        occupancy:
+          description: Guest counts when available. Omitted when unavailable. An absent count does not mean zero.
+          allOf:
+          - $ref: '#/components/schemas/Occupancy'
+        guest:
+          description: Guest price perspective. total_price is the reservation total value; included indicates whether a component is included in that total. This object is omitted when the guest price perspective is unavailable, including reservations with guest price markup.
+          allOf:
+          - $ref: '#/components/schemas/ReservationPrice'
+        hotel:
+          description: Property price perspective. total_price is the total net room price; included indicates whether a component is included in the room rate. This required object can differ from the guest price perspective.
+          allOf:
+          - $ref: '#/components/schemas/ReservationPrice'
+      required:
+      - room_id
+      - created_at
+      - checkin
+      - checkout
+      - status
+      - hotel
+    ApiError:
+      type: object
+      description: Details of an error.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code.
+        message:
+          type: string
+          description: Human-readable error description.
+      required:
+      - code
+      - message
     RequestMetadata:
       type: object
       description: Metadata for support and request tracing.
@@ -578,6 +423,43 @@ components:
           description: Request unique identifier. Include it when contacting Connectivity support.
       required:
       - ruid
+    ReservationStatus:
+      type: string
+      description: 'Room reservation status: OK for confirmed reservations, CANCELLED for cancellations, and NO_SHOW for no-shows.'
+      enum:
+      - OK
+      - CANCELLED
+      - NO_SHOW
+    ReservationPrice:
+      type: object
+      description: 'Monetary values for one price perspective, as major-unit decimal strings in data.currency. The Connectivity currency limits are 0 fractional digits for AFA, BIF, BYR, CLP, COP, DJF, ECS, GNF, HUF, IDR, ISK, JPY, KMF, KRW, LAK, MGA, MZM, PYG, RWF, TJR, TMM, TWD, UGX, VND, VUV, XAF, XOF and XPF; 3 for BHD, IQD, JOD, KWD, LYD, OMR and TND; and 2 for all other currency codes. These limits include historical currency codes and can differ from ISO currency fraction digits. When an amount has more fractional digits than the currency limit, the amount is rounded to drop the excess digits, to the nearest value, with exact halfway values rounded to the value whose last retained digit is even (HALF_EVEN). Shorter scales are preserved without zero-padding. Values use plain decimal notation without exponents or locale separators. Preserve the returned decimal value. Use the supplied total instead of reconstructing it by summing components: totals and components are rounded independently, components have inclusion flags, and some component categories are omitted.'
+      properties:
+        total_price:
+          type: string
+          description: Total amount for this perspective, as a major-unit decimal string in data.currency. When an amount has more fractional digits than the currency limit, the amount is rounded to drop the excess digits using the currency limits and HALF_EVEN rule described in ReservationPrice; shorter scales are preserved. For example, EUR 2.665 becomes "2.66", EUR 2.675 becomes "2.68", and EUR 12.3 stays "12.3". The supplied total is authoritative and need not equal the sum of returned components. See guest and hotel for the meaning of each total.
+          minLength: 1
+        price_components:
+          type: array
+          description: Available price components. The array can be empty. Markup components are omitted, and hotel components omit deposits.
+          items:
+            $ref: '#/components/schemas/PriceComponent'
+      required:
+      - total_price
+      - price_components
+    Occupancy:
+      type: object
+      description: Known guest counts. Each count is independently optional and is omitted when unknown.
+      properties:
+        adults:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Number of adults, when known.
+        children:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Number of children, when known. An explicit zero means no children.
     ServiceErrorResponse:
       type: object
       description: An error returned while processing the historical reservations request.
@@ -593,23 +475,19 @@ components:
       required:
       - errors
       - meta
-    ApiError:
-      type: object
-      description: Details of an error.
-      properties:
-        code:
-          type: string
-          description: Machine-readable error code.
-        message:
-          type: string
-          description: Human-readable error description.
-      required:
-      - code
-      - message
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: 'Use a Connectivity API token obtained through token-based authentication. Send `Authorization: Bearer
-        {token}`. Your connection must be authorized to read reservation history for the requested property.'
+      description: 'Use a Connectivity API token obtained through token-based authentication. Send `Authorization: Bearer {token}`. Your connection must be authorized to read reservation history for the requested property.'
+externalDocs:
+  description: Historical Reservations API guide
+  url: https://developers.booking.com/connectivity/docs/historical-reservations-api/overview
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Historical reservations
+- name: Documentation
+  tags:
+  - About Try it

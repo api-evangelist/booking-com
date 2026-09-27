@@ -1,0 +1,653 @@
+openapi: 3.2.0
+info:
+  title: Booking Com Meta API
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+  description: 'Operations tagged meta across 3 of this provider''s published API definitions: booking-com-rooms-api-bulk-openapi.yml, booking-com-rooms-api-generated-names-openapi.yml, booking-com-rooms-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://supply-xml.booking.com/
+  description: Test using live endpoint
+tags:
+- name: Meta
+  description: Retrieve units meta data and translations
+paths:
+  /rooms-api/meta:
+    get:
+      tags:
+      - Meta
+      summary: Get meta data for units
+      description: 'Retrieve meta data required for unit creation and update for any supported language_code
+
+
+        Retrieve the list of all unit type IDs allowed for creation/update. For each $.unit_types[*] record you will find:
+
+
+        unit_type_id: the unit type ID you must provide with each create and update request
+
+
+        unit_type_name: string representation of unit type ID (translatable)
+
+
+        is_multi_room: attribute that defines what type of room types you can use add in your unit
+
+
+        is_active: attribute that defines if a unit type is available for creation/update, inactive room types are available for read only
+
+
+        valid_property_categories: list of property categories that allow creation of this unit type
+
+
+        suggested_unit_names: list of unit names that we recommend to use in combination with this unit type
+
+
+        Retrieve the list of all room name IDs allowed during unit creation/update. For each $.unit_names[*] record you will find:
+
+
+        unit_name_id: the unit name ID you must provide with each create request
+
+
+        unit_name: string representation of unit name ID (translatable)
+
+
+        Retrieve the list of all bed type IDs allowed during unit creation/update. For each $.bed_types[*] record you will find:
+
+
+        bed_type_id: the bed type ID you must provide when configuring rooms
+
+
+        bed_type_name: string representation of bed type (translatable)
+
+
+        bed_type_description: description of bed type size using metric units (translatable)
+
+
+        bed_type_description_imperial: description of bed type size using imperial units (translatable)
+
+
+        is_active: attribute that defines if a bed type is available for creation/update, inactive bed types are available for read only
+
+
+        Retrieve the list of all property categories for which you can create a unit. For each property type you will find its name and category ID, as well as an OTA or a Booking.com extended code'
+      operationId: getRoomMeta
+      parameters:
+      - name: language_code
+        in: query
+        description: Language code for localization. Defaults to <code>EN_GB</code>.
+        required: false
+        schema:
+          type: string
+          enum:
+          - EN_GB
+          - EN_US
+          - DE
+          - NL
+          - FR
+          - ES
+          - ES_AR
+          - ES_MX
+          - CA
+          - IT
+          - PT_PT
+          - PT_BR
+          - 'NO'
+          - FI
+          - SV
+          - DA
+          - CS
+          - HU
+          - RO
+          - JA
+          - ZH_CN
+          - ZH_TW
+          - PL
+          - EL
+          - RU
+          - TR
+          - BG
+          - AR
+          - KA
+          - KO
+          - HE
+          - LV
+          - UK
+          - ID
+          - MS
+          - TH
+          - ET
+          - HR
+          - LT
+          - SK
+          - SR
+          - SL
+          - VI
+          - TL
+          - IS
+          - HI
+          - SQ
+      - name: show_inactive
+        in: query
+        description: Show/hide inactive unit and bed types
+        required: false
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnitMeta'
+    servers:
+    - url: https://supply-xml.booking.com/
+      description: Test using live endpoint
+components:
+  schemas:
+    UnitMeta:
+      properties:
+        language_code:
+          type: string
+          enum:
+          - EN_GB
+          - EN_US
+          - DE
+          - NL
+          - FR
+          - ES
+          - ES_AR
+          - ES_MX
+          - CA
+          - IT
+          - PT_PT
+          - PT_BR
+          - 'NO'
+          - FI
+          - SV
+          - DA
+          - CS
+          - HU
+          - RO
+          - JA
+          - ZH_CN
+          - ZH_TW
+          - PL
+          - EL
+          - RU
+          - TR
+          - BG
+          - AR
+          - KA
+          - KO
+          - HE
+          - LV
+          - UK
+          - ID
+          - MS
+          - TH
+          - ET
+          - HR
+          - LT
+          - SK
+          - SR
+          - SL
+          - VI
+          - TL
+          - IS
+          - HI
+          - SQ
+        unit_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitType'
+        unit_names:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitName'
+        bed_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/BedType'
+        property_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyCategory'
+        unit_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitCategory'
+    UnitName:
+      properties:
+        unit_name_id:
+          type: integer
+          format: int32
+        unit_name:
+          type: string
+    ApiResponseUnitMeta:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          $ref: '#/components/schemas/UnitMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ApiError:
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32
+          description: ''
+        details:
+          type: object
+          properties:
+            fields:
+              type: array
+              description: ''
+              items:
+                type: string
+        description:
+          type: string
+    UnitCategory:
+      properties:
+        category_id:
+          type: integer
+          format: int32
+        category_name:
+          type: string
+    UnitType:
+      properties:
+        unit_type_id:
+          type: integer
+          format: int32
+        unit_type_name:
+          type: string
+        is_multi_room:
+          type: boolean
+        is_active:
+          type: boolean
+        valid_property_categories:
+          type: array
+          items:
+            type: integer
+            format: int32
+        suggested_unit_names:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitName'
+    ResponseMeta:
+      properties:
+        ruid:
+          type: string
+    PropertyCategory:
+      properties:
+        code:
+          type: integer
+          format: int32
+        name:
+          type: string
+        code_ota:
+          type: integer
+          format: int32
+        code_booking_extended:
+          type: integer
+          format: int32
+    BedType:
+      properties:
+        bed_type_id:
+          type: integer
+          format: int32
+        bed_type_name:
+          type: string
+        bed_type_description:
+          type: string
+        bed_type_description_imperial:
+          type: string
+        is_active:
+          type: boolean
+    UnitMeta_2:
+      type: object
+      properties:
+        language_code:
+          type: string
+          enum:
+          - EN_GB
+          - EN_US
+          - DE
+          - NL
+          - FR
+          - ES
+          - ES_AR
+          - ES_MX
+          - CA
+          - IT
+          - PT_PT
+          - PT_BR
+          - 'NO'
+          - FI
+          - SV
+          - DA
+          - CS
+          - HU
+          - RO
+          - JA
+          - ZH_CN
+          - ZH_TW
+          - PL
+          - EL
+          - RU
+          - TR
+          - BG
+          - AR
+          - KA
+          - KO
+          - HE
+          - LV
+          - UK
+          - ID
+          - MS
+          - TH
+          - ET
+          - HR
+          - LT
+          - SK
+          - SR
+          - SL
+          - VI
+          - TL
+          - IS
+          - HI
+          - SQ
+        unit_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitType_2'
+        unit_names:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitName_2'
+        unit_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitCategory_2'
+        bed_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/BedType_2'
+        property_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyCategory_2'
+    UnitName_2:
+      type: object
+      properties:
+        unit_name_id:
+          type: integer
+          format: int32
+        unit_name:
+          type: string
+    ApiResponseUnitMeta_2:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UnitMeta_2'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta_2'
+    ApiError_2:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          type: object
+    UnitCategory_2:
+      type: object
+      properties:
+        category_id:
+          type: integer
+          format: int32
+        category_name:
+          type: string
+    UnitType_2:
+      type: object
+      properties:
+        unit_type_id:
+          type: integer
+          format: int32
+        unit_type_name:
+          type: string
+        is_multi_room:
+          type: boolean
+        is_active:
+          type: boolean
+        valid_property_categories:
+          type: array
+          items:
+            type: integer
+            format: int32
+        suggested_unit_names:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitName_2'
+    ResponseMeta_2:
+      type: object
+      properties:
+        ruid:
+          type: string
+    PropertyCategory_2:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        name:
+          type: string
+        code_ota:
+          type: integer
+          format: int32
+        code_booking_extended:
+          type: integer
+          format: int32
+    BedType_2:
+      type: object
+      properties:
+        bed_type_id:
+          type: integer
+          format: int32
+        bed_type_name:
+          type: string
+        bed_type_description:
+          type: string
+        bed_type_description_imperial:
+          type: string
+        is_active:
+          type: boolean
+    UnitMeta_3:
+      type: object
+      properties:
+        language_code:
+          type: string
+          enum:
+          - EN_GB
+          - EN_US
+          - DE
+          - NL
+          - FR
+          - ES
+          - ES_AR
+          - ES_MX
+          - CA
+          - IT
+          - PT_PT
+          - PT_BR
+          - 'NO'
+          - FI
+          - SV
+          - DA
+          - CS
+          - HU
+          - RO
+          - JA
+          - ZH_CN
+          - ZH_TW
+          - PL
+          - EL
+          - RU
+          - TR
+          - BG
+          - AR
+          - KA
+          - KO
+          - HE
+          - LV
+          - UK
+          - ID
+          - MS
+          - TH
+          - ET
+          - HR
+          - LT
+          - SK
+          - SR
+          - SL
+          - VI
+          - TL
+          - IS
+          - HI
+          - SQ
+        unit_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitType_3'
+        unit_names:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitName_3'
+        bed_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/BedType_3'
+        property_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyCategory_3'
+    UnitName_3:
+      type: object
+      properties:
+        unit_name_id:
+          type: integer
+          format: int32
+        unit_name:
+          type: string
+    ApiResponseUnitMeta_3:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UnitMeta_3'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_3'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_3'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta_3'
+    ApiError_3:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          type: object
+    UnitType_3:
+      type: object
+      properties:
+        unit_type_id:
+          type: integer
+          format: int32
+        unit_type_name:
+          type: string
+        is_multi_room:
+          type: boolean
+        is_active:
+          type: boolean
+        valid_property_categories:
+          type: array
+          items:
+            type: integer
+            format: int32
+        suggested_unit_names:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitName_3'
+    ResponseMeta_3:
+      type: object
+      properties:
+        ruid:
+          type: string
+    PropertyCategory_3:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        name:
+          type: string
+        code_ota:
+          type: integer
+          format: int32
+        code_booking_extended:
+          type: integer
+          format: int32
+    BedType_3:
+      type: object
+      properties:
+        bed_type_id:
+          type: integer
+          format: int32
+        bed_type_name:
+          type: string
+        bed_type_description:
+          type: string
+        bed_type_description_imperial:
+          type: string
+        is_active:
+          type: boolean
+x-refined-from:
+- booking-com-rooms-api-bulk-openapi.yml
+- booking-com-rooms-api-generated-names-openapi.yml
+- booking-com-rooms-api-openapi.yml
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Charges endpoint
+  - Charges meta endpoint
+- name: Documentation
+  tags:
+  - About Try it

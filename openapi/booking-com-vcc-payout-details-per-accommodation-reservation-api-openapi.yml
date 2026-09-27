@@ -1,0 +1,380 @@
+openapi: 3.2.0
+info:
+  title: Payments VCC payout details, per accommodation reservation…
+  description: Retrieve payment and payout details for accommodation reservations, including partner payout information, breakdowns, bank transfer details, and VCC management.
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://payments-api.booking.com/
+  description: Test using live endpoint
+tags:
+- name: VCC payout details, per accommodation reservation
+  description: Provides VCC payout details for an accommodation reservation
+paths:
+  /connectivity-payments/reservations/{reservation-id}/payout/vcc:
+    get:
+      tags:
+      - VCC payout details, per accommodation reservation
+      summary: Get VCC payout details for a reservation
+      description: Retrieve information on the virtual credit cards associated with a reservation and changes to the VCC payout.
+      operationId: getVCCDetailsPerReservation
+      parameters:
+      - name: reservation-id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: vcc-id
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: accept-version
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Bearer token for authentication.
+        example: Bearer <your_token>
+      responses:
+        '200':
+          description: Successfully retrieved information about the VCCs associated with respective accommodation reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VCCPayoutResponse'
+        '400':
+          description: Invalid request payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidTokenResponse'
+        '403':
+          description: Access Denied!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequestResponse'
+        '404':
+          description: The reservation data is not found at this moment.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationDataNotFoundErrorResponse'
+        '410':
+          description: Reservation cannot be processed because the checkout date is older than the allowed 18-months window.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutDateTooOldErrorResponse'
+        '429':
+          description: You exceeded the rate limit.
+        '500':
+          description: The request failed with an internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+components:
+  schemas:
+    CheckoutDateTooOldErrorResponse:
+      type: object
+      description: Response when the checkout date is older than the allowed 18-months window
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    VCCCardDetails:
+      type: object
+      description: Card details for a virtual credit card
+      properties:
+        cvc:
+          type: string
+          description: Card verification code
+        card_name:
+          type: string
+          description: Name on the card
+        card_number:
+          type: string
+          description: Card number
+        card_type:
+          type: string
+          description: Type of the VCC
+        card_expiry:
+          type: string
+          description: Card expiry date (MM/YY)
+      required:
+      - cvc
+      - card_name
+      - card_number
+      - card_expiry
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    InvalidTokenResponse:
+      type: object
+      description: Response when the authentication token is missing, invalid, or expired.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          maxItems: 0
+          items: {}
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              code:
+                type: string
+                description: Error code
+              details:
+                type:
+                - string
+                - 'null'
+                description: Additional error details
+    AmountVCCBalance:
+      description: Contains information on the current balance of the VCC.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Current balance of the VCC.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    ReservationDataNotFoundErrorResponse:
+      type: object
+      description: Response when the reservation data is not found
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    VCCPayoutData:
+      type: object
+      description: VCC payout information for a reservation
+      properties:
+        reservation_id:
+          type: string
+          description: Accommodation reservation identifier
+        property_id:
+          type: string
+          description: Property identifier
+        payout_type:
+          type: string
+          description: 'Type of payout: GROSS, NET, or UNKNOWN.'
+        payout:
+          type: object
+          description: Payout instruments
+          properties:
+            virtual_credit_cards:
+              type: array
+              description: Virtual credit card payouts
+              items:
+                $ref: '#/components/schemas/PayoutVCC'
+    PayoutVCC:
+      type: object
+      description: Virtual credit card included in the payout
+      properties:
+        activation_date:
+          type: string
+          format: date
+          description: Date the VCC becomes active
+        id:
+          type: string
+          description: VCC identifier
+        current_balance:
+          $ref: '#/components/schemas/AmountVCCBalance'
+        expiration_date:
+          type: string
+          format: date
+          description: Date the VCC expires
+        status:
+          type: string
+          description: 'Possible VCC status values: NOT_LOADED, FUNDED, AVAILABLE, PARTIALLY_CHARGED, FULLY_CHARGED, CANCELLED, or UNKNOWN.'
+        card_details:
+          $ref: '#/components/schemas/VCCCardDetails'
+      required:
+      - id
+      - status
+      - current_balance
+      - card_details
+    VCCPayoutResponse:
+      type: object
+      description: Response containing VCC payout information for a reservation
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: Response metadata
+        data:
+          allOf:
+          - $ref: '#/components/schemas/VCCPayoutData'
+          description: VCC payout data
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    BadRequestErrorResponse:
+      type: object
+      description: Response when the request doesn't have valid parameters
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token for authentication. Use your API credentials to obtain a token.
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Reservation payout details
+  - Reservation breakdown
+  - Bank transfer payout
+  - VCC payout details, per accommodation reservation
+  - VCCs to be charged
+  - Refundable VCCs
+  - Reservation Status API
+- name: Documentation
+  tags:
+  - About Try it

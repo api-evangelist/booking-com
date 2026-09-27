@@ -1,0 +1,333 @@
+openapi: 3.2.0
+info:
+  title: Reconciliation Report filters API
+  description: Generate and download financial reconciliation reports for your properties. Use the Reconciliation API to request payout reports for a specified date range and set of properties, check the report generation status, and retrieve the available filter and configuration options.
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://payments-api.booking.com/
+  description: Test using live endpoint
+tags:
+- name: Report filters
+  description: Retrieve the available filter and configuration options for reconciliation report generation.
+paths:
+  /connectivity-payments/recon-reports/filters:
+    get:
+      tags:
+      - Report filters
+      summary: Retrieve report filters and configurations
+      description: 'Retrieves the available filter and configuration options for generating reconciliation reports for a given legal entity. Use the returned values to populate `report_configurations` and `report_filters` in the generate report request.
+
+
+        The response also includes `data_available_from_date`, which indicates the earliest date for which report data is available.
+
+
+        **Connection type**: Reservations connection type is required to access this endpoint.
+
+
+        This endpoint is rate-limited to 50 requests per minute.'
+      operationId: getReconReportFilters
+      parameters:
+      - name: Authorization
+        in: header
+        description: Bearer token for authentication.
+        required: true
+        schema:
+          type: string
+        example: Bearer <your_token>
+      - name: accept-version
+        in: header
+        description: API version to use.
+        required: false
+        schema:
+          type: string
+          default: '1.0'
+        example: '1.0'
+      - name: legal-entity-ids
+        in: query
+        description: One or more legal entity IDs to retrieve filter options for.
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+        style: form
+        explode: false
+        example:
+        - 1234567
+      responses:
+        '200':
+          description: Available report filters and configurations retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconReportFiltersResponse'
+        '400':
+          description: Invalid request payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidTokenResponse'
+        '403':
+          description: Access Denied!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequestResponse'
+        '429':
+          description: Too many requests. Rate limiting is enforced.
+          headers:
+            Retry-After:
+              description: Number of seconds to wait before retrying.
+              schema:
+                type: integer
+                format: int32
+                minimum: 0
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitErrorResponse'
+        '500':
+          description: The request failed with an internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+components:
+  schemas:
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    InvalidTokenResponse:
+      type: object
+      description: Response when the authentication token is missing, invalid, or expired.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          maxItems: 0
+          items: {}
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              code:
+                type: string
+                description: Error code
+              details:
+                type:
+                - string
+                - 'null'
+                description: Additional error details
+    ReconReportFiltersResponse:
+      type: object
+      description: Response containing available filter and configuration options for reconciliation report generation.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          allOf:
+          - $ref: '#/components/schemas/ReconReportFiltersData'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    ReportFilterOption:
+      type: object
+      description: An available report filter with all supported values.
+      properties:
+        filter_key:
+          type: string
+          description: 'The filter key. Possible values: `bank_accounts`, `payout_type`, `statement_descriptor`.'
+          example: bank_accounts
+        filter_values:
+          type: array
+          description: All supported filter values for this filter key. An empty array indicates the filter is available but has no pre-defined values.
+          items:
+            type: string
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type: string
+          description: Detailed debug message for the error
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    ReconReportFiltersData:
+      type: object
+      description: Available filter and configuration options for reconciliation report generation.
+      properties:
+        data_available_from_date:
+          type: string
+          format: date
+          description: The earliest date for which reconciliation report data is available, in `YYYY-MM-DD` format.
+          example: '2019-01-01'
+        report_configurations:
+          type: array
+          description: Available report configuration options, such as output format and locale.
+          items:
+            $ref: '#/components/schemas/ReportConfigurationOption'
+        report_filters:
+          type: array
+          description: Available report filters, such as bank accounts and payout types.
+          items:
+            $ref: '#/components/schemas/ReportFilterOption'
+    ReportConfigurationOption:
+      type: object
+      description: An available report configuration option with all supported values and the default.
+      properties:
+        config_key:
+          type: string
+          description: 'The configuration key. Possible values: `format_type`, `locale`.'
+          example: format_type
+        config_values:
+          type: array
+          description: All supported values for this configuration key.
+          items:
+            type: string
+          example:
+          - XLS
+          - CSV
+          - JSON
+        default_value:
+          type: string
+          description: The default value applied when this configuration key is not specified in the report generation request.
+          example: CSV
+    RateLimitErrorResponse:
+      type: object
+      description: Response when the rate limit has been exceeded
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    BadRequestErrorResponse:
+      type: object
+      description: Response when the request doesn't have valid parameters
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token for authentication. Use your API credentials to obtain a token.
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Reconciliation reports
+  - Report status
+  - Report filters
+- name: Documentation
+  tags:
+  - About Try it

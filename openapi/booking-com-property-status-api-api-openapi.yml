@@ -1,0 +1,123 @@
+openapi: 3.2.0
+info:
+  title: Property Status API
+  description: Use the Property API to create or update a property and its settings; check and update property status; as well as create or update property description.
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://supply-xml.booking.com/property-api/
+  description: Test using live endpoint
+  x-display-name: Test using live endpoint
+tags:
+- name: Property Status API
+  description: Check if a property is ready to open; open or close a property
+paths:
+  /properties/{propertyId}/status:
+    post:
+      tags:
+      - Property Status API
+      summary: Check property status
+      operationId: checkPropertyStatus
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyStatusInput'
+        required: true
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponsePropertyStatusOutput'
+components:
+  schemas:
+    Reason:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - OTHER
+          - SEASON
+          - RENOVATION
+          - PROPERTY_NOT_AVAILABLE
+          - FULLY_BOOKED
+          - ISSUES_GUESTS
+          - ISSUES_BOOKING
+          - STRATEGY
+        description:
+          type: string
+    ApiErrorOTA:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32
+        details:
+          $ref: '#/components/schemas/ObjectNode'
+        description:
+          type: string
+    PropertyStatusOutput:
+      type: object
+      properties:
+        status:
+          type: string
+    PropertyStatusInput:
+      required:
+      - operation
+      type: object
+      properties:
+        operation:
+          type: string
+          enum:
+          - CHECK
+          - OPEN
+          - CLOSE
+        reason:
+          $ref: '#/components/schemas/Reason'
+    ApiResponsePropertyStatusOutput:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PropertyStatusOutput'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ObjectNode:
+      type: object
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Property Details API
+  - Property Settings API
+  - Property Status API
+  - Property Description API
+- name: Documentation
+  tags:
+  - About Try it

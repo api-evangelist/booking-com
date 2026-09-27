@@ -1,0 +1,337 @@
+openapi: 3.2.0
+info:
+  title: Reconciliation Report status API
+  description: Generate and download financial reconciliation reports for your properties. Use the Reconciliation API to request payout reports for a specified date range and set of properties, check the report generation status, and retrieve the available filter and configuration options.
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://payments-api.booking.com/
+  description: Test using live endpoint
+tags:
+- name: Report status
+  description: Check the processing status of a reconciliation report generation request and retrieve the download URL when the report is ready.
+paths:
+  /connectivity-payments/recon-reports/{request-id}:
+    get:
+      tags:
+      - Report status
+      summary: Retrieve report status
+      description: 'Retrieves the current processing status of a reconciliation report generation request.
+
+
+        Poll this endpoint after calling the generate report endpoint until `status` is `READY`, `EMPTY`, or `ERROR`. When the report is ready, the response includes a pre-signed `download_url` and a `filename`. The download URL is valid until `download_url_expires_at` (approximately 15 minutes after generation). Download the report before it expires — to get a new download URL after expiry, call the generate report endpoint again. If `status` is `ERROR` or `EMPTY`, stop polling and submit a new report generation request if needed.
+
+
+        **Connection type**: Reservations connection type is required to access this endpoint.
+
+
+        This endpoint is rate-limited to 10 requests per minute.'
+      operationId: getReconReportStatus
+      parameters:
+      - name: Authorization
+        in: header
+        description: Bearer token for authentication.
+        required: true
+        schema:
+          type: string
+        example: Bearer <your_token>
+      - name: accept-version
+        in: header
+        description: API version to use.
+        required: false
+        schema:
+          type: string
+          default: '1.0'
+        example: '1.0'
+      - name: request-id
+        in: path
+        description: The unique identifier of the reconciliation report generation request, returned by the generate report endpoint.
+        required: true
+        schema:
+          type: string
+        example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      responses:
+        '200':
+          description: Report status retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconReportStatusResponse'
+        '400':
+          description: Invalid request payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidTokenResponse'
+        '403':
+          description: Access Denied!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequestResponse'
+        '404':
+          description: The requested report was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+        '429':
+          description: Too many requests. Rate limiting is enforced.
+          headers:
+            Retry-After:
+              description: Number of seconds to wait before retrying.
+              schema:
+                type: integer
+                format: int32
+                minimum: 0
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitErrorResponse'
+        '500':
+          description: The request failed with an internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+components:
+  schemas:
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    InvalidTokenResponse:
+      type: object
+      description: Response when the authentication token is missing, invalid, or expired.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          maxItems: 0
+          items: {}
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              code:
+                type: string
+                description: Error code
+              details:
+                type:
+                - string
+                - 'null'
+                description: Additional error details
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type: string
+          description: Detailed debug message for the error
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    ReconReportStatusResponse:
+      type: object
+      description: Response containing the current status of a reconciliation report generation request.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          allOf:
+          - $ref: '#/components/schemas/ReconReportStatusData'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    RateLimitErrorResponse:
+      type: object
+      description: Response when the rate limit has been exceeded
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    ReconReportStatusData:
+      type: object
+      description: Status and download details for a reconciliation report generation request.
+      properties:
+        request_id:
+          type: string
+          description: Unique identifier of the report generation request.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        status:
+          type: string
+          description: 'Current status of the report. Possible values: `GENERATING`, `READY`, `EMPTY`, `ERROR`.'
+          example: READY
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp of the most recent status update, in ISO 8601 format.
+          example: '2026-06-10T08:50:48Z'
+        download_url_expires_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Timestamp at which the `download_url` expires, in ISO 8601 format. Only present when `status` is `READY`. Download the report before this time.
+          example: '2026-06-11T08:50:48Z'
+        filename:
+          type:
+          - string
+          - 'null'
+          description: Name of the generated report file. Only present when `status` is `READY`.
+          example: reconciliation-report.csv
+        download_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: Pre-signed URL for downloading the generated report. Only present when `status` is `READY`. This URL is valid for approximately 15 minutes and expires at `download_url_expires_at`. To obtain a new download URL after expiry, call the generate report endpoint again.
+          example: https://example.com/path
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    NotFoundErrorResponse:
+      type: object
+      description: Response when the requested resource is not found
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    BadRequestErrorResponse:
+      type: object
+      description: Response when the request doesn't have valid parameters
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token for authentication. Use your API credentials to obtain a token.
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Reconciliation reports
+  - Report status
+  - Report filters
+- name: Documentation
+  tags:
+  - About Try it

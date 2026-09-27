@@ -1,0 +1,254 @@
+openapi: 3.2.0
+info:
+  title: Charges meta endpoint API
+  description: Create and update charges that apply at the property and room level, and setup up different configurations for different dates.
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://supply-xml.booking.com/
+  description: Test using live endpoint
+tags:
+- name: Charges meta endpoint
+  description: Lists the details of the Charges meta endpoint to retrieve a full list of charge types supported by the Charges API.
+paths:
+  /charges-api/meta:
+    get:
+      tags:
+      - Charges meta endpoint
+      summary: Retrieve Charges meta information
+      description: 'Retrieve a full list of charge types supported by the Charges API. The API returns:
+
+
+        Charge type names translated in the specified language
+
+
+        Their corresponding OTA codes
+
+
+        The charge category each type belongs to'
+      operationId: meta
+      parameters:
+      - name: language_code
+        in: query
+        description: Language code for localization. Defaults to <code>EN_GB</code>.
+        required: false
+        schema:
+          type: string
+          enum:
+          - EN_GB
+          - EN_US
+          - DE
+          - NL
+          - FR
+          - ES
+          - ES_AR
+          - ES_MX
+          - CA
+          - IT
+          - PT_PT
+          - PT_BR
+          - 'NO'
+          - FI
+          - SV
+          - DA
+          - CS
+          - HU
+          - RO
+          - JA
+          - ZH_CN
+          - ZH_TW
+          - PL
+          - EL
+          - RU
+          - TR
+          - BG
+          - AR
+          - KA
+          - KO
+          - HE
+          - LV
+          - UK
+          - ID
+          - MS
+          - TH
+          - ET
+          - HR
+          - LT
+          - SK
+          - SR
+          - SL
+          - VI
+          - TL
+          - IS
+          - HI
+          - SQ
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseListChargeTypeMetaEntry'
+components:
+  schemas:
+    ChargeTypeMetaEntry:
+      type: object
+      properties:
+        charge_type_id:
+          type: string
+          description: Booking.com Charge Type ID
+          enum:
+          - SERVICECHARGE_ASIA
+          - SERVICECHARGE
+          - RESORTFEE
+          - CLEANINGFEE
+          - TOWELFEE
+          - ELECTRICITYFEE
+          - BEDLINEN
+          - GASFEE
+          - OILFEE
+          - WOODFEE
+          - WATERFEE
+          - DESTINATIONFEE
+          - ENVIRONMENTFEE
+          - SPATAX
+          - TRANSFERFEE
+          - VAT
+          - CITYTAX
+          - TAX
+          - DAMAGEDEPOSIT
+          - LINENPACKAGEFEE
+          - HEATINGFEE
+          - AIRCONDITIONINGFEE
+          - KITCHENLINNENFEE
+          - HOUSEKEEPINGFEE
+          - CLUBCARDFEE
+          - PETFEE
+          - INTERNETFEE
+          - PARKINGFEE
+          - HOTSPRINGTAX
+          - MUNICIPALITYFEE
+          - TOURISMFEE
+          - RESIDENTIALTAX
+          - GOODSSERVICESTAX
+          - HERITAGECHARGE
+          - GOVERNMENTTAX
+          - LOCALCOUNCILTAX
+          - GOVERNMENTCHARGE
+          - LOCALITYCONSERVATIONFEE
+          - INSURANCEFEE
+          - AIRPORTSHUTTLEFEE
+          - SHUTTLEBOATFEE
+          - GALADINNERFEE
+          - SEAPLANEFEE
+          - SKIPASS
+          - FINALCLEANINGFEE
+          - WRISTBANDFEE
+          - VISASUPPORTFEE
+          - WATERPARKFEE
+          - CONSERVATIONFEE
+          - CREDITCARDFEE
+          - CITYTICKET
+          - FITNESSTAX
+          - GOODSSERVICESFLOODTAX
+          - SUSTAINABILITYFEE
+          - SPA
+          - HOTSPRINGBATH
+          - POOL
+          - LOUNGE
+          - DESTINATIONCHARGE
+          - DESTINATIONTAX
+        charge_type_name:
+          type: string
+          description: Booking.com Charge Type name
+        ota_fee_tax_types:
+          type: array
+          description: Legacy OTA Fee Tax Type Codes (FTT). In rare cases there are two historical type codes for one modern type.
+          items:
+            type: integer
+            description: Legacy OTA Fee Tax Type Codes (FTT). In rare cases there are two historical type codes for one modern type.
+            format: int32
+        booking_extended_legacy_code:
+          type: array
+          description: Legacy Booking.com Extended Fee Tax Type Codes (FTT).
+          items:
+            type: integer
+            description: Legacy Booking.com Extended Fee Tax Type Codes (FTT).
+            format: int32
+        charge_category:
+          type: string
+          description: Charge category as used in the charge configuration base
+          enum:
+          - NET_ROOM_PRICE
+          - TAXES
+          - LOCALITY_CHARGES
+          - PROPERTY_CHARGES
+          - FACILITY_CHARGES
+        discontinuation_notice:
+          type: string
+          description: 'In the case that a charge type is discontinued, this will provide information about what to use instead or why it was discontinued.
+
+            '
+        allowed_charge_modes:
+          type: array
+          description: 'Lists the modes that this charge type supports.
+
+            '
+          items:
+            type: string
+            description: 'Lists the modes that this charge type supports.
+
+              '
+            enum:
+            - PER_NIGHT
+            - PER_STAY
+            - PER_PERSON_PER_NIGHT
+            - PER_PERSON_PER_STAY
+            - PERCENTAGE
+            - INCALCULABLE
+        discontinued:
+          type: boolean
+    ApiError:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+        details:
+          type: object
+        description:
+          type: string
+    ApiResponseListChargeTypeMetaEntry:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChargeTypeMetaEntry'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Charges endpoint
+  - Charges meta endpoint
+- name: Documentation
+  tags:
+  - About Try it

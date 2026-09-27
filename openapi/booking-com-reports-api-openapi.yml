@@ -1,0 +1,374 @@
+openapi: 3.2.0
+info:
+  title: Connect Reports API
+  description: Partner Connect API Service
+  version: 1.2.2
+servers:
+- url: https://metasearch-connect-api.booking.com
+  description: Production URL
+security:
+- BearerAuth: []
+tags:
+- name: Reports
+paths:
+  /reports/conversions:
+    post:
+      tags:
+      - Reports
+      summary: List conversions
+      description: 'This endpoint returns conversion data for bookings within a specified date range.
+
+
+        **Note:** Conversions data is only provided for selected accounts based on contractual agreements.
+
+
+        Exactly one date filter must be provided. The available filters are:
+
+        - `booking_date_range`: Filter by the date the booking was made
+
+        - `cancellation_date_range`: Filter by the date the booking was cancelled
+
+        - `checkout_date_range`: Filter by the checkout date of the booking
+
+
+        Each date range must include both `from` and `to` dates in ISO-8601 format (YYYY-MM-DD).
+
+        Results are paginated with a default page size of 100 and a maximum of 1000 records per page.
+
+        Use the `page_token` from the response to retrieve subsequent pages.
+
+
+        **Example requests:**
+
+
+        Filter by booking date:
+
+        ```json
+
+        {
+
+        "booking_date_range": {
+
+        "from": "2025-01-01",
+
+        "to": "2025-01-31"
+
+        },
+
+        "page_size": 100
+
+        }
+
+        ```
+
+
+        Filter by cancellation date:
+
+        ```json
+
+        {
+
+        "cancellation_date_range": {
+
+        "from": "2025-01-01",
+
+        "to": "2025-01-31"
+
+        },
+
+        "page_size": 100
+
+        }
+
+        ```
+
+
+        Filter by checkout date:
+
+        ```json
+
+        {
+
+        "checkout_date_range": {
+
+        "from": "2025-01-01",
+
+        "to": "2025-01-31"
+
+        },
+
+        "page_size": 100
+
+        }
+
+        ```'
+      operationId: getConversions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConversionsRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversionsResponse'
+        '400':
+          description: Bad Request - Invalid input parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                conflicting_filters:
+                  summary: Multiple date filters provided
+                  description: Returned when more than one date filter is specified in the request
+                  value:
+                    errors:
+                    - id: conflicting_parameters
+                      name: Conflicting Parameters
+                      message: Parameters booking_date_range, cancellation_date_range are mutually exclusive.
+                    request_id: req_abc123xyz
+                missing_filter:
+                  summary: No date filter provided
+                  description: Returned when no date filter is specified in the request
+                  value:
+                    errors:
+                    - id: invalid_parameter
+                      name: Invalid Parameter
+                      message: 'Exactly one date filter must be specified: booking_date_range, cancellation_date_range, or checkout_date_range'
+                    request_id: req_abc123xyz
+components:
+  schemas:
+    ErrorDetail:
+      type: object
+      description: Details of a single error.
+      properties:
+        id:
+          type: string
+          description: Machine-readable error identifier.
+          example: invalid_parameter
+        name:
+          type: string
+          description: Human-readable error name.
+          example: Invalid Value
+        message:
+          type: string
+          description: Detailed error message explaining what went wrong.
+          example: The request contains an invalid parameter.
+    ConversionsPagination:
+      type: object
+      description: Pagination information for the conversions response.
+      properties:
+        next_page_token:
+          type: string
+          description: Token to use for retrieving the next page of results. Empty if there are no more pages.
+          example: eyJwYWdlIjogMn0=
+        total_results:
+          type: integer
+          format: int32
+          description: Total number of conversion records matching the search criteria.
+          example: 150
+        total_pages:
+          type: integer
+          format: int32
+          description: Total number of pages available.
+          example: 2
+        random_page_access:
+          type: boolean
+          description: Indicates whether random page access is supported. If false, only sequential pagination is available.
+          example: false
+    DateRange:
+      type: object
+      description: Date range for filtering conversions. Both 'from' and 'to' dates are required.
+      required:
+      - from
+      - to
+      properties:
+        from:
+          type: string
+          format: date
+          description: Start date of the range in ISO-8601 format (YYYY-MM-DD).
+          example: '2025-01-01'
+        to:
+          type: string
+          format: date
+          description: End date of the range in ISO-8601 format (YYYY-MM-DD). Must be equal to or after the 'from' date.
+          example: '2025-01-31'
+    ConversionsResponse:
+      type: object
+      description: Response object containing conversion data, pagination info, and metadata.
+      properties:
+        conversions:
+          type: array
+          description: List of conversion records matching the search criteria.
+          items:
+            $ref: '#/components/schemas/Conversion'
+        pagination:
+          $ref: '#/components/schemas/ConversionsPagination'
+        metadata:
+          $ref: '#/components/schemas/ConversionsMetadata'
+    ErrorResponse:
+      type: object
+      description: Standard error response format for API errors.
+      properties:
+        errors:
+          type: array
+          description: List of errors that occurred during request processing.
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+        request_id:
+          type: string
+          description: Unique identifier for this request, useful for debugging and support.
+          example: req_abc123xyz
+        account_id:
+          type: string
+          description: Account ID that triggered request, useful for debugging and support.
+          example: '1234654'
+    ConversionsRequest:
+      type: object
+      description: 'Request object for retrieving conversion data.
+
+
+        **Important:** Exactly one date filter must be provided. The date filters are mutually exclusive -
+
+        specifying more than one will result in a 400 Bad Request error with `conflicting_parameters`.
+
+
+        Available date filters (choose exactly one):
+
+        - `booking_date_range`: Filter by when the booking was made
+
+        - `cancellation_date_range`: Filter by when the booking was cancelled
+
+        - `checkout_date_range`: Filter by the checkout date
+
+        '
+      oneOf:
+      - required:
+        - booking_date_range
+        properties:
+          booking_date_range:
+            allOf:
+            - $ref: '#/components/schemas/DateRange'
+            - description: 'Filter conversions by the date the booking was made.
+
+                **Mutually exclusive** with cancellation_date_range and checkout_date_range.
+
+                '
+      - required:
+        - cancellation_date_range
+        properties:
+          cancellation_date_range:
+            allOf:
+            - $ref: '#/components/schemas/DateRange'
+            - description: 'Filter conversions by the date the booking was cancelled. Only returns cancelled bookings.
+
+                **Mutually exclusive** with booking_date_range and checkout_date_range.
+
+                '
+      - required:
+        - checkout_date_range
+        properties:
+          checkout_date_range:
+            allOf:
+            - $ref: '#/components/schemas/DateRange'
+            - description: 'Filter conversions by the checkout date of the booking.
+
+                **Mutually exclusive** with booking_date_range and cancellation_date_range.
+
+                '
+      properties:
+        page_size:
+          type: integer
+          format: int32
+          description: Number of results per page. Default is 100, maximum is 1000.
+          default: 100
+          minimum: 1
+          maximum: 1000
+          example: 100
+        page_token:
+          type: string
+          description: Token for retrieving the next page of results. Obtained from the previous response's pagination.next_page_token.
+          example: ''
+    Conversion:
+      type: object
+      description: A single conversion record representing a booking.
+      properties:
+        booking_date:
+          type: string
+          format: date-time
+          description: The date and time when the booking was made (ISO 8601 datetime).
+          example: '2025-01-15T14:30:00Z'
+        cancellation_date:
+          type: string
+          format: date-time
+          description: The date and time when the booking was cancelled, if applicable (ISO 8601 datetime).
+          example: '2025-01-16T10:00:00Z'
+        booking_reference:
+          type: string
+          description: Unique reference identifier for the booking.
+          example: '1234567890'
+        checkin_date:
+          type: string
+          format: date
+          description: The check-in date for the booking (YYYY-MM-DD).
+          example: '2025-02-01'
+        checkout_date:
+          type: string
+          format: date
+          description: The check-out date for the booking (YYYY-MM-DD).
+          example: '2025-02-05'
+        label:
+          type: string
+          description: Custom label associated with the booking, typically used for tracking campaigns or sources.
+          example: campaign_xyz
+        booking_status:
+          type: string
+          description: Current status of the booking.
+          example: confirmed
+          enum:
+          - confirmed
+          - cancelled
+          - no_show
+        commission_amount:
+          type: string
+          description: The commission amount for this booking.
+          example: '25.50'
+        commission_currency:
+          type: string
+          description: The currency of the commission amount (ISO 4217 currency code).
+          example: EUR
+        device_type:
+          type: string
+          description: The type of device used to make the booking.
+          example: mobile
+          enum:
+          - desktop
+          - mobile
+    ConversionsMetadata:
+      type: object
+      description: Metadata about the conversions response.
+      properties:
+        request_id:
+          type: string
+          description: Unique identifier for this request, useful for debugging and support.
+          example: req_abc123xyz
+        timestamp:
+          type: string
+          format: date-time
+          description: The timestamp when the response was generated (ISO 8601 datetime).
+          example: '2025-01-19T10:30:00Z'
+        result_count:
+          type: integer
+          format: int32
+          description: Number of conversion records returned in this response.
+          example: 50
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: string

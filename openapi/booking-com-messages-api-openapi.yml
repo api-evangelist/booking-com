@@ -1,0 +1,468 @@
+openapi: 3.2.0
+info:
+  title: Booking Com Messages API
+  version: '1.0'
+  description: 'Operations tagged Messages across 2 of this provider''s published API definitions: booking-com-demand-api-3-1-openapi.yml, booking-com-demand-api-3-2-beta-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production environment
+- url: https://demandapi-sandbox.booking.com/3.1
+  description: Sandbox environment
+- url: https://demandapi.booking.com/3.2
+  description: Production environment – use for live integrations.
+- url: https://demandapi-sandbox.booking.com/3.2
+  description: Sandbox environment – use for testing and validation.
+security:
+- BearerAuth: []
+tags:
+- name: Messages
+  x-displayName: Messages
+  description: 'Provides endpoints for two-way post-booking communication between guests and properties.
+
+
+    Use these endpoints to send and retrieve messages, exchange images, and check conversation details.'
+paths:
+  /messages/send:
+    post:
+      summary: Send a message
+      description: 'Sends a message within a conversation. The message body supports plain text.
+
+        Optionally, attach a file by referencing a previously uploaded attachment ID.'
+      operationId: sendMessage
+      tags:
+      - Messages
+      parameters:
+      - $ref: '#/components/parameters/AffiliateIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              title: SendMessageRequest
+              type: object
+              required:
+              - conversation
+              - content
+              - accommodation
+              properties:
+                conversation:
+                  type: string
+                  description: Unique identifier of the conversation.
+                accommodation:
+                  type: string
+                  description: Unique identifier of the property.
+                content:
+                  type: string
+                  description: The message text to send.
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                  description: Optional list of attachment IDs, if sending one or more files.
+            example:
+              conversation: 8586a789-44f4-5521-9f27-f5efd097cba6
+              accommodation: '6819547'
+              content: Hello, I'm your guest!.
+              attachments:
+              - c325f460-1dc6-11f0-80f0-8d0908786f77
+      responses:
+        '200':
+          description: Message sent successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_id:
+                    type: string
+                    description: Unique identifier for this request. Provide this ID when contacting support.
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        description: Unique identifier for the sent message.
+              example:
+                request_id: cdb0b154-2eae-481b-8fee-fb2725296e1f
+                data:
+                  message: 3164e570-19e0-11f0-baca-e5019c8df435
+    servers:
+    - url: https://demandapi.booking.com/3.1
+      description: Production environment
+    - url: https://demandapi-sandbox.booking.com/3.1
+      description: Sandbox environment
+  /messages/latest:
+    post:
+      summary: Fetch latest messages
+      description: 'Retrieves up to 100 of the most recent messages from a specified conversation, including messages from both property and guest.
+
+
+        - Messages are returned in reverse chronological order (newest first).
+
+        - Use this endpoint to sync message threads or poll for updates.
+
+
+        **Important:** This endpoint **does not accept a request body**. To retrieve the latest messages, send an empty POST request.
+
+        Any content in the request body will be ignored.'
+      operationId: fetchLatestMessages
+      tags:
+      - Messages
+      parameters:
+      - $ref: '#/components/parameters/AffiliateIdHeader'
+      responses:
+        '200':
+          description: Latest messages fetched successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_id:
+                    type: string
+                    description: Unique identifier for this request. Provide this ID when contacting support.
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message_id:
+                              type: string
+                              description: Unique identifier of the message.
+                            reply_to:
+                              type: string
+                              description: ID of the message this is replying to (if applicable).
+                            conversation:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                  description: Unique identifier of the conversation.
+                                accommodation:
+                                  type: string
+                                  description: Unique identifier of the property.
+                                reservation:
+                                  type: string
+                                  description: Unique identifier of the reservation.
+                            content:
+                              type: string
+                              description: Message text content.
+                            sender:
+                              type: object
+                              properties:
+                                participant_id:
+                                  type: string
+                                  description: Unique identifier of the conversation participant.
+                                metadata:
+                                  type: object
+                                  description: Additional metadata about the sender.
+                            attachments:
+                              type: array
+                              items:
+                                type: string
+                                description: Attachment IDs included with the message.
+                            timestamp:
+                              type: string
+                              format: date-time
+                              description: Timestamp in ISO 8601 format (UTC) when the message was sent.
+              example:
+                request_id: 0248d85a-17e0-44b3-a37c-7d4b5c03f58b
+                data:
+                  messages:
+                  - message_id: daca26da-4ce3-519d-b9eb-623eeb674800
+                    reply_to: null
+                    conversation:
+                      id: b2364f9b-6466-599a-a947-0d35cff4f492
+                      accommodation: '5589515'
+                      reservation: '4439608993'
+                    content: Hello Anne, welcome to CS Training Test Hotel...
+                    sender:
+                      participant_id: 930d9af8-2390-5e43-a4d7-235b52a30a14
+                      metadata:
+                        type: property
+                        name: CS Training Test Hotel Sloterdijk 10
+                    attachments: []
+                    timestamp: '2025-05-08T08:49:15.000Z'
+    servers:
+    - url: https://demandapi.booking.com/3.1
+      description: Production environment
+    - url: https://demandapi-sandbox.booking.com/3.1
+      description: Sandbox environment
+  /messages/latest/confirm:
+    post:
+      summary: Confirm message receipt
+      description: 'Confirms receipt of specified messages.
+
+        This confirmation is required before receiving new messages from the POST /messages/latest endpoint.'
+      operationId: confirmMessageReceipt
+      tags:
+      - Messages
+      parameters:
+      - $ref: '#/components/parameters/AffiliateIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              title: ConfirmMessageReceiptRequest
+              type: object
+              properties:
+                messages:
+                  type: array
+                  items:
+                    type: string
+                    description: Unique identifier of a message to confirm receipt of.
+              example:
+                messages:
+                - 8586a789-44f4-5521-9f27-f5efd097cba
+    servers:
+    - url: https://demandapi.booking.com/3.1
+      description: Production environment
+    - url: https://demandapi-sandbox.booking.com/3.1
+      description: Sandbox environment
+  /messages/attachments/metadata:
+    post:
+      summary: Retrieve attachment metadata
+      description: Use this endpoint to get basic information about an uploaded file, such as its name, type, and size.
+      operationId: metadata
+      parameters:
+      - $ref: '#/components/parameters/AffiliateIdHeader'
+      tags:
+      - Messages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/metadata_input'
+            example:
+              conversation: 8586a789-44f4-5521-9f27-f5efd097cba6
+              accommodation: 6819547
+              attachment: 9635be40-1dc6-11f0-8893-0130f0cdef6d
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadata_output'
+              example:
+                request_id: fec1a9bb-9c85-42fc-a109-3707e1ed4de7
+                data:
+                  metadata:
+                    file_size: 92620
+                    file_name: 1ce51916-d8de-4144-a4be-265ccae5df9d.jpg
+                    file_type: image/jpeg
+    servers:
+    - url: https://demandapi.booking.com/3.2
+      description: Production environment – use for live integrations.
+    - url: https://demandapi-sandbox.booking.com/3.2
+      description: Sandbox environment – use for testing and validation.
+components:
+  parameters:
+    AffiliateIdHeader:
+      in: header
+      name: X-Affiliate-Id
+      schema:
+        type: integer
+      required: true
+      description: Include here your Affiliate identifier number
+  schemas:
+    timestamp:
+      description: 'The timestamp in ISO-8601 format from which the message is sent. Format: YYYY-MM-DDTHH:mm:ss+00:00'
+      type: string
+      format: date-time
+    send_output:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: object
+          properties:
+            message:
+              $ref: '#/components/schemas/message'
+    common_accommodation:
+      type: string
+      description: The unique identifier of the property
+    message:
+      description: A unique identifier for the message.
+      type: string
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
+    confirm_output:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        confirmedMessages:
+          type: array
+          items:
+            $ref: '#/components/schemas/message'
+    confirm_input:
+      title: ConfirmMessageReceiptRequest
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/message'
+    conversation:
+      description: A unique identifier for the conversation thread.
+      type: string
+    latest_conversation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the conversation
+          $ref: '#/components/schemas/conversation'
+        accommodation:
+          type: string
+          description: The unique identifier of the property
+          $ref: '#/components/schemas/common_accommodation'
+        reservation:
+          type: string
+          description: The unique identifier of the reservation
+          $ref: '#/components/schemas/common_reservation'
+    metadata_output:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: object
+          properties:
+            metadata:
+              $ref: '#/components/schemas/metadata_metadata'
+    sender:
+      type: object
+      properties:
+        participant:
+          description: A unique identifier for the conversation participant.
+          type: string
+        metadata:
+          type: object
+          $ref: '#/components/schemas/latest_metadata'
+    latest_message:
+      type: object
+      properties:
+        conversation:
+          type: object
+          $ref: '#/components/schemas/latest_conversation'
+        content:
+          type: string
+          description: The body of the message.
+        id:
+          $ref: '#/components/schemas/message'
+        sender:
+          type: object
+          $ref: '#/components/schemas/sender'
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/attachment'
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+    latest_metadata:
+      type: object
+      properties:
+        type:
+          description: Specifies the conversation participant type.
+          type: string
+          enum:
+          - guest
+          - property
+        name:
+          description: The display name of the participant (e.g., guest or property name).
+          type: string
+    metadata_input:
+      type: object
+      properties:
+        conversation:
+          type: string
+          description: The unique identifier of the conversation
+          $ref: '#/components/schemas/conversation'
+        accommodation:
+          type: string
+          description: The unique identifier of the property
+          $ref: '#/components/schemas/common_accommodation'
+        attachment:
+          type: string
+          description: The unique identifier of the attachment
+          $ref: '#/components/schemas/attachment'
+    latest_input: {}
+    metadata_metadata:
+      type: object
+      properties:
+        file_size:
+          description: The size of the attachment (up to 1MB)
+          type: integer
+          format: int64
+          maximum: 1048576
+        file_name:
+          description: The original file name.
+          type: string
+        file_type:
+          description: 'The MIME type of the attachment. Note only the following image formats are supported: PNG, JPEG, and JPG.'
+          type: string
+    send_input:
+      type: object
+      required:
+      - accommodation
+      - conversation
+      - content
+      properties:
+        conversation:
+          type: string
+          description: The unique identifier of the conversation
+          $ref: '#/components/schemas/conversation'
+        accommodation:
+          type: string
+          description: The unique identifier of the property
+          $ref: '#/components/schemas/common_accommodation'
+        content:
+          type: string
+          description: The body of the message.
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/attachment'
+    attachment:
+      type: string
+      description: The unique identifier of the attachment
+    latest_output:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: object
+          properties:
+            messages:
+              type: array
+              description: List of recent messages in reverse chronological order.
+              items:
+                $ref: '#/components/schemas/latest_message'
+    common_reservation:
+      type: string
+      description: The unique identifier of the reservation
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: string
+x-refined-from:
+- booking-com-demand-api-3-1-openapi.yml
+- booking-com-demand-api-3-2-beta-openapi.yml
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Charges endpoint
+  - Charges meta endpoint
+- name: Documentation
+  tags:
+  - About Try it

@@ -1,15 +1,26 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Booking.com Status API
-  description: "> The Status API provides the current operational status of monitored\nDemand API endpoints.\n\n- Use the\
-    \ API to detect service degradation and support automated operational\nresponses, such as adjusting retry behaviour or\
-    \ switching to a fallback.\n\n- Status information is organised into endpoint groups. \n- Each group includes its overall\
-    \ status and the status of its monitored endpoints."
+  description: '> The Status API provides the current operational status of monitored
+
+    Demand API endpoints.
+
+
+    - Use the API to detect service degradation and support automated operational
+
+    responses, such as adjusting retry behaviour or switching to a fallback.
+
+
+    - Status information is organised into endpoint groups.
+
+    - Each group includes its overall status and the status of its monitored endpoints.'
   version: '1.0'
   summary: Check the operational status of Demand API endpoints.
 servers:
 - url: https://partnerships-status.booking.com
   description: Production
+tags:
+- name: Status
 paths:
   /api/1.0/status:
     get:
@@ -35,8 +46,7 @@ paths:
       parameters:
       - name: x-partner-id
         in: header
-        description: Your Booking.com partner identifier. This identifier is used to verify that your integration has access
-          to the Status API.
+        description: Your Booking.com partner identifier. This identifier is used to verify that your integration has access to the Status API.
         required: true
         schema:
           type: string
@@ -76,8 +86,7 @@ paths:
                         since: '2026-04-20T14:30:15Z'
                         reason: Upstream provider issue
         '401':
-          description: The partner identifier is missing or invalid. Refer to the [Error handling section](/demand/docs/support/error-handling/about-errors)
-            for more details.
+          description: The partner identifier is missing or invalid. Refer to the [Error handling section](/demand/docs/support/error-handling/about-errors) for more details.
           content:
             application/json:
               schema:
@@ -91,8 +100,7 @@ paths:
                     - id: unauthorized
                       message: A valid partner identifier is required.
         '403':
-          description: Your partner account is not authorised to access the Status API. Refer to the [Error handling section](/demand/docs/support/error-handling/about-errors)
-            for more details.
+          description: Your partner account is not authorised to access the Status API. Refer to the [Error handling section](/demand/docs/support/error-handling/about-errors) for more details.
           content:
             application/json:
               schema:
@@ -106,8 +114,7 @@ paths:
                     - id: forbidden
                       message: Your partner account is not authorised to access the Status API.
         '429':
-          description: Too many requests. Try again later. Refer to the [Error handling section](/demand/docs/support/error-handling/about-errors)
-            for more details.
+          description: Too many requests. Try again later. Refer to the [Error handling section](/demand/docs/support/error-handling/about-errors) for more details.
           headers:
             Retry-After:
               description: Number of seconds to wait before making another request.
@@ -142,8 +149,49 @@ paths:
                     errors:
                     - id: '500'
                       message: Internal server error. Try again later or contact support.
+      tags:
+      - Status
 components:
   schemas:
+    error:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Machine-readable identifier for the error.
+          example: invalid_request
+        message:
+          type: string
+          description: Human-readable description of the error.
+          example: Invalid request parameters.
+      required:
+      - id
+      - message
+    operational_status:
+      type: string
+      description: 'The current operational status of a monitored Demand API endpoint or
+
+        endpoint group.'
+      enum:
+      - up
+      - minor_outage
+      - major_outage
+      example: up
+      x-enumDescriptions:
+        major_outage: Experiencing significant disruption or unavailability.
+        minor_outage: Experiencing degraded operation or partial disruption.
+        up: Operating normally.
+    status_response:
+      type: object
+      description: The current operational status of the monitored Demand API endpoint groups.
+      properties:
+        data:
+          type: array
+          description: The operational status of each monitored endpoint group.
+          items:
+            $ref: '#/components/schemas/group_status'
+      required:
+      - data
     endpoint_status:
       type: object
       description: The current operational status of a monitored Demand API endpoint.
@@ -222,45 +270,6 @@ components:
       - group
       - status
       - updated_at
-    operational_status:
-      type: string
-      description: 'The current operational status of a monitored Demand API endpoint or
-
-        endpoint group.'
-      enum:
-      - up
-      - minor_outage
-      - major_outage
-      example: up
-      x-enumDescriptions:
-        major_outage: Experiencing significant disruption or unavailability.
-        minor_outage: Experiencing degraded operation or partial disruption.
-        up: Operating normally.
-    status_response:
-      type: object
-      description: The current operational status of the monitored Demand API endpoint groups.
-      properties:
-        data:
-          type: array
-          description: The operational status of each monitored endpoint group.
-          items:
-            $ref: '#/components/schemas/group_status'
-      required:
-      - data
-    error:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Machine-readable identifier for the error.
-          example: invalid_request
-        message:
-          type: string
-          description: Human-readable description of the error.
-          example: Invalid request parameters.
-      required:
-      - id
-      - message
     error_response:
       type: object
       properties:
@@ -277,17 +286,3 @@ components:
       required:
       - errors
       - request_id
-  parameters:
-    partner_id:
-      name: x-partner-id
-      in: header
-      description: 'Your Booking.com partner identifier.
-
-
-        This identifier is used to verify that your integration has access to
-
-        the Status API.'
-      required: true
-      schema:
-        type: string
-      example: '1523684'

@@ -1,0 +1,297 @@
+openapi: 3.2.0
+info:
+  title: Payments Refundable VCCs API
+  description: Retrieve payment and payout details for accommodation reservations, including partner payout information, breakdowns, bank transfer details, and VCC management.
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://payments-api.booking.com/
+  description: Test using live endpoint
+tags:
+- name: Refundable VCCs
+  description: Provides information of the refundable VCCs.
+paths:
+  /connectivity-payments/properties/{property-id}/refundable-vccs:
+    get:
+      tags:
+      - Refundable VCCs
+      summary: Get refundable VCCs for a property
+      description: Retrieve details on refundable VCCs associated with a given accommodation property.
+      operationId: getVCCRefundablesForProperty
+      parameters:
+      - name: Authorization
+        in: header
+        description: Bearer token for authentication.
+        required: true
+        schema:
+          type: string
+        example: Bearer <your_token>
+      - name: property-id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: page
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: page-size
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 10
+      responses:
+        '200':
+          description: Successfully retrieved refundable VCCs for the accommodation property
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccommodationVCCRefundResponse'
+        '400':
+          description: Invalid request payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidTokenResponse'
+        '403':
+          description: Access Denied!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequestResponse'
+        '429':
+          description: You exceeded the rate limit.
+        '500':
+          description: The request failed with an internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+components:
+  schemas:
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    InvalidTokenResponse:
+      type: object
+      description: Response when the authentication token is missing, invalid, or expired.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          maxItems: 0
+          items: {}
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              code:
+                type: string
+                description: Error code
+              details:
+                type:
+                - string
+                - 'null'
+                description: Additional error details
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    AmountRefund:
+      description: Contains information on the amount to be refunded.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Amount to be refunded.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
+    AccommodationVCCRefundResponse:
+      description: Response having information regarding VCC refunds associated with an accommodation reservations
+      properties:
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+        data:
+          type: array
+          description: Data containing required information
+          items:
+            $ref: '#/components/schemas/VCCRefundInformation'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    PaginationMeta:
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+        total_count:
+          type: integer
+          format: int32
+          description: Total number of records.
+        next_page:
+          type: boolean
+          description: Next page exists
+      required:
+      - ruid
+      - total_count
+      - next_page
+    VCCRefundInformation:
+      description: Information regarding refund associated with an accommodation reservation
+      properties:
+        reservation_id:
+          type: integer
+          description: Accommodation reservation identifier
+        refund_status:
+          type: string
+          description: Refund status
+          example: REFUNDABLE
+        vcc_id:
+          type: string
+          description: VCC identifier
+        refund_amount:
+          $ref: '#/components/schemas/AmountRefund'
+        refund_due_date:
+          type: string
+          description: Due date for the refund
+        reason:
+          type: string
+          description: Reason for the refund
+        comment:
+          type:
+          - string
+          - 'null'
+          description: Additional comments for the refund
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    BadRequestErrorResponse:
+      type: object
+      description: Response when the request doesn't have valid parameters
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token for authentication. Use your API credentials to obtain a token.
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Reservation payout details
+  - Reservation breakdown
+  - Bank transfer payout
+  - VCC payout details, per accommodation reservation
+  - VCCs to be charged
+  - Refundable VCCs
+  - Reservation Status API
+- name: Documentation
+  tags:
+  - About Try it

@@ -1,0 +1,216 @@
+openapi: 3.2.0
+info:
+  description: Use the Contracting API to invite a new partner on Booking.com, check whether a partner has signed the contract, resend invitation mail and retrieve the legal entity of the partner.
+  title: Contracting Request access API
+  version: 1.0.0
+servers:
+- url: https://supply-xml.booking.com/contracts-api
+  description: Test using live endpoint
+tags:
+- name: Request access
+  description: Request access to existing partner.
+paths:
+  /partners/request_access:
+    post:
+      operationId: postPartnersRequestAccess
+      tags:
+      - Request access
+      summary: Request access to existing partner
+      description: Use this endpoint to request access to an existing partner of Booking.com
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      link_to_connect:
+                        description: URL link for the partner to authorize the connectivity provider.
+                        type: string
+                    required:
+                    - link_to_connect
+                    type: object
+                  errors:
+                    $ref: '#/components/schemas/DiagnosisList'
+                  meta:
+                    properties:
+                      ruid:
+                        description: Response Unique Identifier. Refer to this when talking to Booking.com Connectivity Support.
+                        example: UmFuZG9tSVYkc2Rl...=
+                        type: string
+                    required:
+                    - ruid
+                    type: object
+                  warnings:
+                    $ref: '#/components/schemas/DiagnosisList'
+                required:
+                - data
+                - meta
+                type: object
+              examples:
+                success:
+                  value:
+                    data:
+                      link_to_connect: https://admin.booking.com/hotel/hoteladmin/extranet_ng/manage/channel-manager/authorize_connectivity_provider.html?uuid=CFCE5640-Q21A-00Z0-892F-8FF19DC8E916
+                    errors: []
+                    warnings: []
+                    meta:
+                      ruid: UmFuZG9tSVYkc2RlIyh9YfU1y5UhuOwySx8U7ODUMv1XFnS2gZqGrD7Qnnx7KwM3nrQ86Wa25ThCRDZD+9g/b3Alw/i7IPQV9GXD3lES74I=
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  errors:
+                    $ref: '#/components/schemas/DiagnosisList'
+                  meta:
+                    properties:
+                      ruid:
+                        description: Response Unique Identifier. Refer to this when talking to Booking.com Connectivity Support.
+                        example: UmFuZG9tSVYkc2Rl...=
+                        type: string
+                    required:
+                    - ruid
+                    type: object
+                  warnings:
+                    $ref: '#/components/schemas/DiagnosisList'
+                required:
+                - errors
+                - meta
+                type: object
+              examples:
+                partner already connected:
+                  value:
+                    warnings: []
+                    errors:
+                    - details: null
+                      message: Partner is already connected to provider
+                      code: INVALID_ARGUMENT
+                    meta:
+                      ruid: UmFuZG9tSVYkc2RlIyh9YRXWxUR5Litn5pPevveOX8oBhmf6nZoVn6uKALFMZP1jBI0i8W/GxVS8u056NVS10CWYux3L2ldO2PX3dkhcDJM=
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  errors:
+                    $ref: '#/components/schemas/DiagnosisList'
+                  meta:
+                    properties:
+                      ruid:
+                        description: Response Unique Identifier. Refer to this when talking to Booking.com Connectivity Support.
+                        example: UmFuZG9tSVYkc2Rl...=
+                        type: string
+                    required:
+                    - ruid
+                    type: object
+                  warnings:
+                    $ref: '#/components/schemas/DiagnosisList'
+                required:
+                - errors
+                - meta
+                type: object
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                properties:
+                  errors:
+                    $ref: '#/components/schemas/DiagnosisList'
+                  meta:
+                    properties:
+                      ruid:
+                        description: Response Unique Identifier. Refer to this when talking to Booking.com Connectivity Support.
+                        example: UmFuZG9tSVYkc2Rl...=
+                        type: string
+                    required:
+                    - ruid
+                    type: object
+                  warnings:
+                    $ref: '#/components/schemas/DiagnosisList'
+                required:
+                - errors
+                - meta
+                type: object
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  errors:
+                    $ref: '#/components/schemas/DiagnosisList'
+                  meta:
+                    properties:
+                      ruid:
+                        description: Response Unique Identifier. Refer to this when talking to Booking.com Connectivity Support.
+                        example: UmFuZG9tSVYkc2Rl...=
+                        type: string
+                    required:
+                    - ruid
+                    type: object
+                  warnings:
+                    $ref: '#/components/schemas/DiagnosisList'
+                required:
+                - errors
+                - meta
+                type: object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                le_id:
+                  description: Legal entity ID of the partner. This is treated as the unique identifier for the partner.
+                  format: int32
+                  type: integer
+                legal_contact_email:
+                  description: Contract contact email id of the partner. This is treated as the unique identifier for the partner.
+                  type: string
+              type: object
+            examples:
+              request access:
+                value:
+                  le_id: 14379109
+components:
+  schemas:
+    DiagnosisList:
+      items:
+        properties:
+          code:
+            description: Alphanumeric identifier for warning/error.
+            type: string
+          details:
+            additionalProperties:
+              type: string
+            description: Additional details of warning/error.
+            type: object
+          message:
+            description: English-language description of warning/error.
+            type: string
+        required:
+        - code
+        - details
+        - message
+        type: object
+      type: array
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Manage contracts
+  - Check legal details
+  - Request access
+- name: Documentation
+  tags:
+  - About Try it

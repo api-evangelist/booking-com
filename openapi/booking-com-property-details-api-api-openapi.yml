@@ -1,0 +1,937 @@
+openapi: 3.2.0
+info:
+  title: Property Details API
+  description: Use the Property API to create or update a property and its settings; check and update property status; as well as create or update property description.
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://supply-xml.booking.com/property-api/
+  description: Test using live endpoint
+  x-display-name: Test using live endpoint
+tags:
+- name: Property Details API
+  description: Create, update and retrieve property details
+paths:
+  /properties:
+    post:
+      tags:
+      - Property Details API
+      summary: Create property
+      operationId: createPropertyInfo
+      parameters:
+      - name: Accept-Version
+        in: header
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyInfoCreate'
+        required: true
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponsePropertyId'
+  /properties/{propertyId}:
+    get:
+      tags:
+      - Property Details API
+      summary: Read property
+      operationId: readPropertyInfo
+      parameters:
+      - name: Accept-Version
+        in: header
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponsePropertyInfoRead'
+    patch:
+      tags:
+      - Property Details API
+      summary: Partial update property info
+      operationId: patchPropertyInfo
+      parameters:
+      - name: Accept-Version
+        in: header
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyInfoUpdate'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponsePropertyId'
+  /meta:
+    get:
+      tags:
+      - Property Details API
+      summary: Read property
+      operationId: readPropertyInfoMeta
+      parameters:
+      - name: Accept-Version
+        in: header
+        schema:
+          type: string
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseMetaContainer'
+components:
+  schemas:
+    PropertyCategoryMetaEntry:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: The Booking.com property category code
+          format: int32
+        name:
+          type: string
+          description: Name of the property category
+        code_ota:
+          type: integer
+          description: If applicable, the OTA code for this Booking.com category
+          format: int32
+        code_booking_extended:
+          type: integer
+          description: If applicable, the legacy Booking Extended code for this Booking.com category
+          format: int32
+        additional_ota_mappings:
+          type: array
+          description: In the case that we have defined additional OTA codes that will remap to this category, this will be the list of those mappings
+          items:
+            $ref: '#/components/schemas/PropertyCategoryMetaEntry'
+    ApiResponsePropertyId:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PropertyId'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    PropertyInfoCreate:
+      required:
+      - check_in
+      - legal_entity_id
+      - physical_address
+      - position
+      - property_name
+      - room_count
+      - target
+      type: object
+      properties:
+        translations:
+          type: array
+          description: 'Non-English translations of the physical address
+
+            [Current Documentation](/connectivity/docs/api-reference/addresses/)
+
+            DataMapping: Addresses
+
+            '
+          items:
+            $ref: '#/components/schemas/Translation'
+        position:
+          $ref: '#/components/schemas/Position'
+        check_in:
+          $ref: '#/components/schemas/TimeRange'
+        check_out:
+          $ref: '#/components/schemas/TimeRange'
+        property_name:
+          maxLength: 255
+          minLength: 3
+          type: string
+          description: 'Specifies the name of the property on Booking.com.
+
+            Validation: We do not allow CJK Unified Ideographs. Should be shorter than 255 characters. Must have at
+
+            least 3 letters, one of which must be lower case. Must not have more than 5 numbers.
+
+            Can''t include punctuation, asterisks or symbols.
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            DataMapping: HotelName
+
+            '
+        property_category:
+          type: integer
+          description: 'The Property Class Type Code for the property.
+
+            Validation: One of [(PCT) Property Class Type Codes (OTA 2014B)](/connectivity/docs/codes-pct/).
+
+            During creation, either property_category or booking_property_category are required.
+
+            [Current Documentation](/connectivity/docs/api-reference/hotelcategory/)
+
+            DataMapping: HotelCategory/Code
+
+            '
+          format: int32
+        booking_property_category:
+          type: integer
+          description: 'The Booking.com code for property_category. Utilize the meta endpoint for valid values and their OTA mappings.
+
+            Validation: During creation, either property_category or booking_property_category are required.
+
+            '
+          format: int32
+        primary_language:
+          type: string
+          description: 'Specifies the language in which the property wants their Booking.com extranet content and communication
+
+            (emails, notifications, ...) etc.
+
+            Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            Default: en-gb
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            DataMapping: LanguageCode
+
+            '
+        languages_spoken:
+          type: array
+          description: 'The languages spoken by staff.
+
+            Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            DataMapping: HotelInfo->Languages
+
+            '
+          items:
+            type: string
+            description: 'The languages spoken by staff.
+
+              Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+              DataMapping: HotelInfo->Languages
+
+              '
+        room_count:
+          minimum: 0
+          type: integer
+          description: 'The number of sellable units the property offers.
+
+            DataMapping: GuestRoomInfo->Quantity
+
+            '
+          format: int32
+        floor_count:
+          maximum: 200
+          minimum: 0
+          type: integer
+          description: 'Total number of floors the building has (excl. underground floors).
+
+            Validation: Max value of 200
+
+            DataMapping: TotalNumberOfFloors->Number
+
+            '
+          format: int32
+        provider_property_id:
+          maxLength: 16
+          minLength: 0
+          type: string
+          description: 'An external id to be associated with the property (e.g. the providers internal id)
+
+            Validation: Maximum length of 16 characters
+
+            DataMapping: HotelInfo-ID
+
+            '
+        currency_code:
+          maxLength: 3
+          minLength: 0
+          type: string
+          description: "Booking.com defines the currency for each property. In most cases this should not be passed as only one currency\n is allowed per country. Retrieve a list of all currency codes with /xml/currencies\nValidation: Must be allowed for property's country\n[Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)\nData Mapping: currencyCode\n"
+        stars:
+          pattern: ^0(\.0)?|[1-4](\.[05])?|5(\.0)?$
+          type: string
+          description: 'The number of stars a property has.
+
+            Validation: String with values 0 through 5, optionally may include half stars for values 1 or greater
+
+            (i.e. 0, 1, 1.5, 2, 2.5 ... 4, 4.5, 5)
+
+            Default: 0
+
+            DataMapping: AffiliationInfo->Awards->Award
+
+            '
+        target:
+          type: string
+          description: 'Specifies whether the request is to create a test property or a real property.
+
+            Validation: String value of production or test
+
+            DataMapping: Target
+
+            '
+          enum:
+          - test
+          - production
+        physical_address:
+          $ref: '#/components/schemas/Address'
+        legal_entity_id:
+          type: integer
+          description: 'The leid for the property.
+
+            [Current Documentation](/connectivity/docs/api-reference/companyname/)
+
+            DataMapping: HotelInfo/OwnershipManagementInfos/OwnershipManagementInfo/CompanyName/Code
+
+            '
+          format: int64
+    TimeRange:
+      type: object
+      properties:
+        from:
+          pattern: ^(?:[01]\d|2[0-3]):[03]0$
+          type: string
+          description: 'Validation: Specified via the format HH:MM, where HH can be 00 to 24 and MM can be 00 or 30
+
+            Required for check-in, optional for check-out
+
+            24-hour check-in/check-out can be specified using 00:00 as both from and to
+
+            '
+        until:
+          pattern: ^(?:[01]\d|2[0-3]):[03]0$
+          type: string
+          description: 'Validation: Specified via the format HH:MM, where HH can be 00 to 24 and MM can be 00 or 30
+
+            Optional for check-in. If check-out passed, required.
+
+            24-hour check-in/check-out can be specified using 00:00 as both from and to
+
+            '
+      description: '[Current Documentation](/connectivity/docs/api-reference/policyinfo/)
+
+        Data Mapping: PolicyInfo/CheckInTime/CheckOutTime
+
+        '
+    ApiErrorOTA:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32
+        details:
+          $ref: '#/components/schemas/ObjectNode'
+        description:
+          type: string
+    PropertyInfoUpdate:
+      required:
+      - check_in
+      - physical_address
+      - position
+      - property_name
+      - room_count
+      type: object
+      properties:
+        translations:
+          type: array
+          description: 'Non-English translations of the physical address
+
+            [Current Documentation](/connectivity/docs/api-reference/addresses/)
+
+            DataMapping: Addresses
+
+            '
+          items:
+            $ref: '#/components/schemas/Translation'
+        position:
+          $ref: '#/components/schemas/Position'
+        check_in:
+          $ref: '#/components/schemas/TimeRange'
+        check_out:
+          $ref: '#/components/schemas/TimeRange'
+        property_name:
+          maxLength: 255
+          minLength: 3
+          type: string
+          description: 'Specifies the name of the property on Booking.com.
+
+            Validation: We do not allow CJK Unified Ideographs. Should be shorter than 255 characters. Must have at
+
+            least 3 letters, one of which must be lower case. Must not have more than 5 numbers.
+
+            Can''t include punctuation, asterisks or symbols.
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            DataMapping: HotelName
+
+            '
+        property_category:
+          type: integer
+          description: 'The Property Class Type Code for the property.
+
+            Validation: One of [(PCT) Property Class Type Codes (OTA 2014B)](/connectivity/docs/codes-pct/).
+
+            [Current Documentation](/connectivity/docs/api-reference/hotelcategory/)
+
+            DataMapping: HotelCategory/Code
+
+            '
+          format: int32
+        booking_property_category:
+          type: integer
+          description: 'The Booking.com code for property_category. Utilize the meta endpoint for valid values and their OTA mappings.
+
+            '
+          format: int32
+        primary_language:
+          type: string
+          description: 'Specifies the language in which the property wants their Booking.com extranet content and communication
+
+            (emails, notifications, ...) etc.
+
+            Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            Default: en-gb
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            DataMapping: LanguageCode
+
+            '
+        languages_spoken:
+          type: array
+          description: 'The languages spoken by staff.
+
+            Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            DataMapping: HotelInfo->Languages
+
+            '
+          items:
+            type: string
+            description: 'The languages spoken by staff.
+
+              Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+              DataMapping: HotelInfo->Languages
+
+              '
+        room_count:
+          minimum: 0
+          type: integer
+          description: 'The number of sellable units the property offers.
+
+            DataMapping: GuestRoomInfo->Quantity
+
+            '
+          format: int32
+        floor_count:
+          maximum: 200
+          minimum: 0
+          type: integer
+          description: 'Total number of floors the building has (excl. underground floors).
+
+            Validation: Max value of 200
+
+            DataMapping: TotalNumberOfFloors->Number
+
+            '
+          format: int32
+        provider_property_id:
+          maxLength: 16
+          minLength: 0
+          type: string
+          description: 'An external id to be associated with the property (e.g. the providers internal id)
+
+            Validation: Maximum length of 16 characters
+
+            DataMapping: HotelInfo-ID
+
+            '
+        currency_code:
+          maxLength: 3
+          minLength: 0
+          type: string
+          description: "Booking.com defines the currency for each property. In most cases this should not be passed as only one currency\n is allowed per country. Retrieve a list of all currency codes with /xml/currencies\nValidation: Must be allowed for property's country\n[Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)\nData Mapping: currencyCode\n"
+        stars:
+          pattern: ^0(\.0)?|[1-4](\.[05])?|5(\.0)?$
+          type: string
+          description: 'The number of stars a property has.
+
+            Validation: String with values 0 through 5, optionally may include half stars for values 1 or greater
+
+            (i.e. 0, 1, 1.5, 2, 2.5 ... 4, 4.5, 5)
+
+            Default: 0
+
+            DataMapping: AffiliationInfo->Awards->Award
+
+            '
+        physical_address:
+          $ref: '#/components/schemas/Address'
+    ApiResponsePropertyInfoRead:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PropertyInfoRead'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    MetaContainer:
+      type: object
+      properties:
+        property_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyCategoryMetaEntry'
+    Position:
+      required:
+      - latitude
+      - longitude
+      type: object
+      properties:
+        latitude:
+          maximum: 90
+          minimum: -90
+          type: number
+          description: 'Property''s latitude.
+
+            Validation: Must be between -90 and 90
+
+            '
+          format: double
+        longitude:
+          maximum: 180
+          minimum: -180
+          type: number
+          description: 'Property''s longitude.
+
+            Validation: Must be between -180 and 180
+
+            '
+          format: double
+      description: '[Current Documentation](/connectivity/docs/api-reference/position/)
+
+        Data Mapping: Position
+
+        '
+    Translation:
+      required:
+      - address_line
+      - city_name
+      - language_code
+      - property_name
+      type: object
+      properties:
+        city_name:
+          type: string
+          description: 'The name of the city, town, or village.
+
+            [Current Documentation: CityName](/connectivity/docs/api-reference/address/)
+
+            DataMapping: ContactInfo/Addresses/CityName
+
+            '
+        address_line:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: 'The full street name and number.
+
+            Should not contain abbreviations (such as "Rd." for "Road") and should not exceed 255 characters.
+
+            [Current Documentation: AddressLine](/connectivity/docs/api-reference/address/)
+
+            DataMapping: ContactInfo/Addresses/AddressLine
+
+            '
+        language_code:
+          type: string
+          description: 'Specifies the language of this set of address details. Used for non-English translations
+
+            As defined by BCL table in docs
+
+            [Current Documentation](/connectivity/docs/api-reference/address/)
+
+            DataMapping: Language
+
+            '
+        property_name:
+          type: string
+          description: 'Non-english name
+
+            [Current Documentation](/connectivity/docs/api-reference/address/)
+
+            DataMapping: Language
+
+            '
+      description: 'Non-English translations of the physical address
+
+        [Current Documentation](/connectivity/docs/api-reference/addresses/)
+
+        DataMapping: Addresses
+
+        '
+    Address:
+      required:
+      - address_line
+      - city_name
+      - country_code
+      type: object
+      properties:
+        city_name:
+          type: string
+          description: 'The name of the city, town, or village.
+
+            Validation: We do not allow CJK Unified Ideographs
+
+            [Current Documentation: CityName](/connectivity/docs/api-reference/address/)
+
+            DataMapping: ContactInfo/Addresses/CityName
+
+            '
+        country_code:
+          type: string
+          description: '[Two-letter country code](/connectivity/docs/b_xml-countries/).
+
+            Validation: One of [Two-letter country code](/connectivity/docs/b_xml-countries/)
+
+            Country codes follow ISO 3166
+
+            [Current Documentation: CountryName](/connectivity/docs/api-reference/address/)
+
+            DataMapping: ContactInfo/Addresses/CountryName
+
+            '
+        postal_code:
+          type: string
+          description: 'Postal/zip code.
+
+            Validation: We validate against country specific post code formats.
+
+            [Current Documentation: PostalCode](/connectivity/docs/api-reference/address/)
+
+            DataMapping: ContactInfo/Addresses/PostalCode
+
+            '
+        address_line:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: 'The full street name and number.
+
+            Validations: Minimum 1 at most 255 characters. We also do not allow CJK Unified Ideographs.
+
+            Should not contain abbreviations (such as "Rd." for "Road") and should not exceed 255 characters.
+
+            [Current Documentation: AddressLine](/connectivity/docs/api-reference/address/)
+
+            DataMapping: ContactInfo/Addresses/AddressLine
+
+            '
+        display_address:
+          type: boolean
+          description: 'Specifies whether to hide the address details. Defaults to true.
+
+            [Current Documentation: HiddenAddress](/connectivity/docs/api-reference/hidden-address/)
+
+            DataMapping: ContactInfo/HiddenAddress/ShouldHideAddress
+
+            '
+    ApiResponseMetaContainer:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/MetaContainer'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    PropertyInfoRead:
+      required:
+      - check_in
+      - legal_entity_id
+      - physical_address
+      - position
+      - property_name
+      - room_count
+      - target
+      type: object
+      properties:
+        translations:
+          type: array
+          description: 'Non-English translations of the physical address
+
+            [Current Documentation](/connectivity/docs/api-reference/addresses/)
+
+            DataMapping: Addresses
+
+            '
+          items:
+            $ref: '#/components/schemas/Translation'
+        position:
+          $ref: '#/components/schemas/Position'
+        check_in:
+          $ref: '#/components/schemas/TimeRange'
+        check_out:
+          $ref: '#/components/schemas/TimeRange'
+        property_name:
+          maxLength: 255
+          minLength: 3
+          type: string
+          description: 'Specifies the name of the property on Booking.com.
+
+            Validation: We do not allow CJK Unified Ideographs. Should be shorter than 255 characters. Must have at
+
+            least 3 letters, one of which must be lower case. Must not have more than 5 numbers.
+
+            Can''t include punctuation, asterisks or symbols.
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            DataMapping: HotelName
+
+            '
+        property_category:
+          type: integer
+          description: 'The Property Class Type Code for the property.
+
+            Validation: One of [(PCT) Property Class Type Codes (OTA 2014B)](/connectivity/docs/codes-pct/).
+
+            During creation, either property_category or booking_property_category are required.
+
+            [Current Documentation](/connectivity/docs/api-reference/hotelcategory/)
+
+            DataMapping: HotelCategory/Code
+
+            '
+          format: int32
+        booking_property_category:
+          type: integer
+          description: 'The Booking.com code for property_category. Utilize the meta endpoint for valid values and their OTA mappings.
+
+            Validation: During creation, either property_category or booking_property_category are required.
+
+            '
+          format: int32
+        primary_language:
+          type: string
+          description: 'Specifies the language in which the property wants their Booking.com extranet content and communication
+
+            (emails, notifications, ...) etc.
+
+            Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            Default: en-gb
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            DataMapping: LanguageCode
+
+            '
+        languages_spoken:
+          type: array
+          description: 'The languages spoken by staff.
+
+            Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            DataMapping: HotelInfo->Languages
+
+            '
+          items:
+            type: string
+            description: 'The languages spoken by staff.
+
+              Validation: One of [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+              DataMapping: HotelInfo->Languages
+
+              '
+        room_count:
+          minimum: 0
+          type: integer
+          description: 'The number of sellable units the property offers.
+
+            DataMapping: GuestRoomInfo->Quantity
+
+            '
+          format: int32
+        floor_count:
+          maximum: 200
+          minimum: 0
+          type: integer
+          description: 'Total number of floors the building has (excl. underground floors).
+
+            Validation: Max value of 200
+
+            DataMapping: TotalNumberOfFloors->Number
+
+            '
+          format: int32
+        provider_property_id:
+          maxLength: 16
+          minLength: 0
+          type: string
+          description: 'An external id to be associated with the property (e.g. the providers internal id)
+
+            Validation: Maximum length of 16 characters
+
+            DataMapping: HotelInfo-ID
+
+            '
+        currency_code:
+          maxLength: 3
+          minLength: 0
+          type: string
+          description: "Booking.com defines the currency for each property. In most cases this should not be passed as only one currency\n is allowed per country. Retrieve a list of all currency codes with /xml/currencies\nValidation: Must be allowed for property's country\n[Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)\nData Mapping: currencyCode\n"
+        stars:
+          pattern: ^0(\.0)?|[1-4](\.[05])?|5(\.0)?$
+          type: string
+          description: 'The number of stars a property has.
+
+            Validation: String with values 0 through 5, optionally may include half stars for values 1 or greater
+
+            (i.e. 0, 1, 1.5, 2, 2.5 ... 4, 4.5, 5)
+
+            Default: 0
+
+            DataMapping: AffiliationInfo->Awards->Award
+
+            '
+        target:
+          type: string
+          description: 'Specifies whether the request is to create a test property or a real property.
+
+            Validation: String value of production or test
+
+            DataMapping: Target
+
+            '
+          enum:
+          - test
+          - production
+        property_id:
+          type: integer
+          description: 'The Booking.com property ID, returned on creation of the property.
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            Data Mapping: HotelCode
+
+            '
+          format: int32
+        status:
+          type: string
+          description: 'The current status of the property.
+
+            [Current Documentation](/connectivity/docs/property-statuses/#property-statuses)
+
+            Data Mapping: hoteldescriptivecontent->Status
+
+            '
+        url:
+          type: string
+          description: 'The booking URL of the property (if available).
+
+            [Current Documentation](/connectivity/docs/tsk-retrieve-property/#response-body-parameters)
+
+            Data Mapping: HotelInfo->Descriptions->MultimediaDescriptions->...->TextItem->URL
+
+            '
+        physical_address:
+          $ref: '#/components/schemas/Address'
+        legal_entity_id:
+          type: integer
+          description: 'The leid for the property.
+
+            [Current Documentation](/connectivity/docs/api-reference/companyname/)
+
+            DataMapping: HotelInfo/OwnershipManagementInfos/OwnershipManagementInfo/CompanyName/Code
+
+            '
+          format: int64
+    PropertyId:
+      type: object
+      properties:
+        property_id:
+          type: integer
+          description: 'The Booking.com property ID, returned on creation of the property.
+
+            [Current Documentation](/connectivity/docs/api-reference/hoteldescriptivecontent/)
+
+            Data Mapping: HotelCode
+
+            '
+          format: int32
+    ObjectNode:
+      type: object
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Property Details API
+  - Property Settings API
+  - Property Status API
+  - Property Description API
+- name: Documentation
+  tags:
+  - About Try it

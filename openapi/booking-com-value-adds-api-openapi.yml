@@ -1,0 +1,202 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Catalog Value Adds API
+  description: 'This API provides a list of value adds available for properties. The response can be in JSON or XML format depending on the `Accept` header.
+
+    The value adds include dynamic attributes such as currency, amount, and more.'
+  contact:
+    name: ''
+    url: ''
+    email: ''
+servers:
+- url: https://supply-xml.booking.com
+  description: Test using live endpoint
+tags:
+- name: Value Adds
+  description: Retrieve catalog of value adds available for properties with dynamic attributes
+paths:
+  /valueadds/properties/catalog:
+    get:
+      tags:
+      - Value Adds
+      summary: Retrieve catalog of value adds for properties
+      description: This endpoint returns a list of value adds, including dynamic attributes, in either JSON or XML format. The response format is determined by the `Accept` header.
+      operationId: getValueAddsCatalog
+      parameters:
+      - name: Accept
+        in: header
+        description: 'Specifies the response format. If omitted, JSON is returned by default.
+
+          '
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/xml
+      responses:
+        '200':
+          description: Successful response with a list of value adds.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValueAdd'
+              examples:
+                default:
+                  value:
+                  - id: 2001
+                    category: Food and Beverage (F&B)
+                    type: Credit or discount
+                    name: Daily Credit Per adult - No Daily Accrual
+                    attributes:
+                    - name: CurrencyCode
+                      dataType: string
+                      description: Specifies the currency code for the selected amount.
+                      required: false
+                    - name: Amount
+                      dataType: double
+                      description: Specifies an estimated worth of the value add included in the rate.
+                      required: true
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  valueAdds:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ValueAddXML'
+              examples:
+                default:
+                  value:
+                    valueAdds:
+                    - valueAdd:
+                        id: 2001
+                        category: Food and Beverage (F&B)
+                        type: Credit or discount
+                        name: Daily Credit Per adult - No Daily Accrual
+                        attributes:
+                        - attribute:
+                            name: CurrencyCode
+                            dataType: string
+                            description: Specifies the currency code for the selected amount.
+                            required: false
+                        - attribute:
+                            name: Amount
+                            dataType: double
+                            description: Specifies an estimated worth of the value add included in the rate. The `Amount` attribute is used only for display purposes and to show the perceived worth of the specific value-added service or product.
+                            required: true
+        '406':
+          description: Unsupported media type. The server only supports JSON and XML responses.
+          content:
+            application/json:
+              examples:
+                default:
+                  value:
+                    message: Unsupported media type. Accept header must be 'application/json' or 'application/xml'.
+            application/xml:
+              examples:
+                default:
+                  value:
+                    error: Unsupported media type. Accept header must be 'application/json' or 'application/xml'.
+        '500':
+          description: Internal Server Error
+      servers:
+      - url: https://supply-xml.booking.com
+        description: Production server
+components:
+  schemas:
+    AttributeXML:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the attribute.
+          example: CurrencyCode
+        dataType:
+          type: string
+          description: Data type of the attribute (e.g., string, double).
+          example: string
+        description:
+          type: string
+          description: Detailed description of the attribute.
+          example: Specifies the currency code for the selected amount.
+        required:
+          type: string
+          description: Indicates if the attribute is required (true/false).
+          example: false
+    Attribute:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the attribute.
+          example: CurrencyCode
+        dataType:
+          type: string
+          description: Data type of the attribute (e.g., string, double).
+          example: string
+        description:
+          type: string
+          description: Detailed description of the attribute.
+          example: Specifies the currency code for the selected amount.
+        required:
+          type: boolean
+          description: Indicates if the attribute is required.
+          example: false
+    ValueAddXML:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the value add.
+          example: 2001
+        category:
+          type: string
+          description: Category of the value add (e.g., Food and Beverage, Spa).
+          example: Food and Beverage (F&B)
+        type:
+          type: string
+          description: Type of value add, such as Credit or Discount.
+          example: Credit or discount
+        name:
+          type: string
+          description: Name of the value add.
+          example: Daily Credit Per adult - No Daily Accrual
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeXML'
+    ValueAdd:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the value add.
+          example: 2001
+        category:
+          type: string
+          description: Category of the value add (e.g., Food and Beverage, Spa).
+          example: Food and Beverage (F&B)
+        type:
+          type: string
+          description: Type of value add, such as Credit or Discount.
+          example: Credit or discount
+        name:
+          type: string
+          description: Name of the value add.
+          example: Daily Credit Per adult - No Daily Accrual
+        attributes:
+          type: array
+          description: List of dynamic attributes for the value add.
+          items:
+            $ref: '#/components/schemas/Attribute'
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Value Adds
+- name: Documentation
+  tags:
+  - About Try it

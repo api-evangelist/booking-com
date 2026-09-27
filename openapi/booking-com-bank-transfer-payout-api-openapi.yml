@@ -1,0 +1,337 @@
+openapi: 3.2.0
+info:
+  title: Payments Bank transfer payout API
+  description: Retrieve payment and payout details for accommodation reservations, including partner payout information, breakdowns, bank transfer details, and VCC management.
+  contact:
+    name: Connectivity Team
+    url: https://connect.booking.com
+    email: connectivity@booking.com
+  version: '1.0'
+servers:
+- url: https://payments-api.booking.com/
+  description: Test using live endpoint
+tags:
+- name: Bank transfer payout
+  description: Retrieve Bank Transfer payout details for accommodation reservations.
+paths:
+  /connectivity-payments/reservations/{reservation-id}/payout/bt:
+    get:
+      tags:
+      - Bank transfer payout
+      summary: Get bank transfer payout details for a reservation
+      description: Retrieve information on the bank transfer payout for a reservation and any changes to the payout.
+      operationId: getBTDetails
+      parameters:
+      - name: Authorization
+        in: header
+        description: Bearer token for authentication.
+        required: true
+        schema:
+          type: string
+        example: Bearer <your_token>
+      - name: reservation-id
+        in: path
+        description: The unique identifier of the reservation.
+        required: true
+        schema:
+          type: integer
+      - name: accept-version
+        in: header
+        description: API version to use.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully fetched information about the Bank Transfer payouts associated with respective accommodation reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccommodationReservationBTPayoutResponse'
+        '400':
+          description: Invalid request payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidTokenResponse'
+        '403':
+          description: Access Denied!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequestResponse'
+        '404':
+          description: The reservation data is not found at this moment.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationDataNotFoundErrorResponse'
+        '410':
+          description: Reservation cannot be processed because the checkout date is older than the allowed 18-months window.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutDateTooOldErrorResponse'
+        '429':
+          description: You exceeded the rate limit.
+        '500':
+          description: The request failed with an internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+components:
+  schemas:
+    CheckoutDateTooOldErrorResponse:
+      type: object
+      description: Response when the checkout date is older than the allowed 18-months window
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    AccommodationReservationBTPayoutResponse:
+      type: object
+      description: Response having information of the Bank Transfer payouts associated with respective accommodation reservation
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          allOf:
+          - $ref: '#/components/schemas/BTPayoutResponse'
+          description: The data
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    InvalidTokenResponse:
+      type: object
+      description: Response when the authentication token is missing, invalid, or expired.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          maxItems: 0
+          items: {}
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              code:
+                type: string
+                description: Error code
+              details:
+                type:
+                - string
+                - 'null'
+                description: Additional error details
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    ReservationDataNotFoundErrorResponse:
+      type: object
+      description: Response when the reservation data is not found
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    BTPayoutResponse:
+      type: object
+      description: Bank transfer payout data for a reservation
+      properties:
+        reservation_id:
+          type: string
+          description: Accommodation reservation identifier
+        property_id:
+          type: string
+          description: Property identifier
+        payout_type:
+          type: string
+          description: 'Type of payout: GROSS, NET, or UNKNOWN.'
+        payout:
+          type: object
+          description: Payout instruments
+          properties:
+            bank_transfers:
+              type: array
+              description: Bank transfer payouts
+              items:
+                type: object
+                properties:
+                  amount:
+                    type: object
+                    description: Contains information on the amount to be transferred.
+                    properties:
+                      value:
+                        type: string
+                        description: Payout amount.
+                      currency:
+                        type: string
+                        description: Currency of the amount.
+                      decimals:
+                        type: integer
+                        format: int32
+                        description: Number of decimals in the amount.
+                  status:
+                    type: string
+                    description: 'Status of the bank transfer payout: PENDING, PAID, or UNKNOWN. While the status is PENDING, the estimated amount and payout_date are shown.'
+                  payout_date:
+                    type: string
+                    description: 'Date the amount is to be paid out to the partner. Format: YYYY-MM-DD.'
+                  bank_transfer_reference:
+                    type: string
+                    description: Identifier of the bank transfer payout.
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    BadRequestErrorResponse:
+      type: object
+      description: Response when the request doesn't have valid parameters
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token for authentication. Use your API credentials to obtain a token.
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Reservation payout details
+  - Reservation breakdown
+  - Bank transfer payout
+  - VCC payout details, per accommodation reservation
+  - VCCs to be charged
+  - Refundable VCCs
+  - Reservation Status API
+- name: Documentation
+  tags:
+  - About Try it

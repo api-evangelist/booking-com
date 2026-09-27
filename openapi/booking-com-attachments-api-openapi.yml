@@ -1,0 +1,332 @@
+openapi: 3.2.0
+info:
+  title: Booking Com Attachments API
+  version: '1.0'
+  description: 'Operations tagged Attachments across 2 of this provider''s published API definitions: booking-com-demand-api-3-1-openapi.yml, booking-com-demand-api-3-2-beta-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://demandapi.booking.com/3.1
+  description: Production environment
+- url: https://demandapi-sandbox.booking.com/3.1
+  description: Sandbox environment
+- url: https://demandapi.booking.com/3.2
+  description: Production environment – use for live integrations.
+- url: https://demandapi-sandbox.booking.com/3.2
+  description: Sandbox environment – use for testing and validation.
+security:
+- BearerAuth: []
+tags:
+- name: Attachments
+  x-displayName: Attachments
+  description: 'Provides endpoints for handling message attachments.
+
+
+    Use these endpoints to upload and download images shared within conversations.'
+paths:
+  /messages/attachments/upload:
+    post:
+      summary: Upload an attachment
+      description: 'Uploads a file to be used as a message attachment.
+
+        The response includes an attachment ID to reference when sending messages.'
+      operationId: uploadAttachment
+      tags:
+      - Attachments
+      parameters:
+      - $ref: '#/components/parameters/AffiliateIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              title: UploadAttachmentRequest
+              type: object
+              required:
+              - conversation
+              - accommodation
+              - file_size
+              - file_name
+              - file_type
+              - file_content
+              properties:
+                conversation:
+                  type: string
+                  description: Unique identifier of the conversation.
+                accommodation:
+                  type: string
+                  description: Unique identifier of the property.
+                file_size:
+                  type: integer
+                  description: Size of the file in bytes.
+                file_name:
+                  type: string
+                  description: Original file name including extension.
+                file_type:
+                  type: string
+                  description: MIME type of the file.
+                file_content:
+                  type: string
+                  description: Base64-encoded content of the file.
+            example:
+              accommodation: '6819547'
+              conversation: 8586a789-44f4-5521-9f27-f5efd097cba6
+              file_size: 17580
+              file_name: a3e062a0-3e6b-4592-9df2-64cf83688084.jpg
+              file_type: image/jpeg
+              file_content: /9j/4AAQSkZJRgABAQACWAJYAAD/2wCEAAgGBgc
+    servers:
+    - url: https://demandapi.booking.com/3.1
+      description: Production environment
+    - url: https://demandapi-sandbox.booking.com/3.1
+      description: Sandbox environment
+  /messages/attachments/download:
+    post:
+      summary: Download a message attachment
+      description: Retrieves a file that was attached to a message. The response includes the file's content as a base64-encoded string.
+      operationId: downloadMessageAttachment
+      tags:
+      - Attachments
+      parameters:
+      - $ref: '#/components/parameters/AffiliateIdHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: DownloadAttachmentRequest
+              type: object
+              required:
+              - conversation
+              - accommodation
+              - attachment
+              properties:
+                conversation:
+                  type: string
+                  description: The unique identifier of the conversation that contains the attachment.
+                accommodation:
+                  type: string
+                  description: The unique identifier of the property where the conversation occurred.
+                attachment:
+                  type: string
+                  description: The unique identifier of the attachment to download.
+            example:
+              conversation: 8586a789-44f4-5521-9f27-f5efd097cba6
+              accommodation: '6819547'
+              attachment: 9635be40-1dc6-11f0-8893-0130f0cdef6d
+      responses:
+        '200':
+          description: Attachment successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_id:
+                    type: string
+                    description: A unique ID for this request. Please include this when contacting support.
+                  data:
+                    type: object
+                    properties:
+                      conversation:
+                        type: string
+                        description: The ID of the conversation the file belongs to.
+                      file_content:
+                        type: string
+                        description: The base64-encoded content of the attachment.
+              example:
+                request_id: 773e2c0d-1ab3-449b-b88a-3d6b5ce09ae7
+                data:
+                  conversation: 8586a789-44f4-5521-9f27-f5efd097cba6
+                  file_content: /9j/4AAQSkZJRgABAQACWAJYAAD/2wCEAAgGBgc...
+    servers:
+    - url: https://demandapi.booking.com/3.1
+      description: Production environment
+    - url: https://demandapi-sandbox.booking.com/3.1
+      description: Sandbox environment
+  /messages/attachments/metadata:
+    post:
+      summary: Retrieve attachment metadata
+      description: Returns metadata for a file uploaded in a message, including its name, type, and size.
+      operationId: getAttachmentMetadata
+      tags:
+      - Attachments
+      parameters:
+      - $ref: '#/components/parameters/AffiliateIdHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: AttachmentMetadataRequest
+              type: object
+              required:
+              - conversation
+              - accommodation
+              - attachment
+              properties:
+                conversation:
+                  type: string
+                  description: The unique identifier of the conversation that includes the attachment.
+                accommodation:
+                  type: string
+                  description: The unique identifier of the property associated with the conversation.
+                attachment:
+                  type: string
+                  description: The unique identifier of the attachment whose metadata is being requested.
+            example:
+              conversation: 8586a789-44f4-5521-9f27-f5efd097cba6
+              accommodation: '6819547'
+              attachment: 9635be40-1dc6-11f0-8893-0130f0cdef6d
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_id:
+                    description: Uniquely identifies the request. Please provide this identifier when contacting support.
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      metadata:
+                        type: object
+                        properties:
+                          file_size:
+                            description: The size of the attachment (up to 1MB)
+                            type: integer
+                          file_name:
+                            description: Original name of the file, including extension.
+                            type: string
+                          file_type:
+                            description: MIME type of the file (e.g., image/jpeg).
+                            type: string
+              example:
+                request_id: fec1a9bb-9c85-42fc-a109-3707e1ed4de7
+                data:
+                  metadata:
+                    file_name: 1ce51916-d8de-4144-a4be-265ccae5df9d.jpg
+                    file_type: image/jpeg
+                    file_size: '92620'
+    servers:
+    - url: https://demandapi.booking.com/3.1
+      description: Production environment
+    - url: https://demandapi-sandbox.booking.com/3.1
+      description: Sandbox environment
+components:
+  parameters:
+    AffiliateIdHeader:
+      in: header
+      name: X-Affiliate-Id
+      schema:
+        type: integer
+      required: true
+      description: Include here your Affiliate identifier number
+  schemas:
+    download_output:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: object
+          properties:
+            conversation:
+              type: string
+              description: The unique identifier of the conversation
+              $ref: '#/components/schemas/conversation'
+            file_content:
+              type: string
+              description: The content of the attachment
+              contentEncoding: base64
+            attachment:
+              type: string
+              description: The unique identifier of the attachment
+              $ref: '#/components/schemas/attachment'
+    download_input:
+      type: object
+      properties:
+        conversation:
+          type: string
+          description: The unique identifier of the conversation
+          $ref: '#/components/schemas/conversation'
+        accommodation:
+          type: string
+          description: The unique identifier of the property
+          $ref: '#/components/schemas/common_accommodation'
+        attachment:
+          type: string
+          description: The unique identifier of the attachment
+          $ref: '#/components/schemas/attachment'
+    upload_input:
+      type: object
+      required:
+      - conversation
+      - accommodation
+      - file_size
+      - file_name
+      - file_type
+      - file_content
+      properties:
+        conversation:
+          type: string
+          description: The unique identifier of the conversation
+          $ref: '#/components/schemas/conversation'
+        accommodation:
+          type: string
+          description: The unique identifier of the property
+          $ref: '#/components/schemas/common_accommodation'
+        file_size:
+          description: The file size in bytes.
+          type: integer
+          format: int64
+          maximum: 1048576
+        file_name:
+          description: The original file name including extension.
+          type: string
+        file_type:
+          description: 'The MIME type of the attachment (supported formats: PNG, JPEG, JPG).'
+          type: string
+        file_content:
+          description: Base64-encoded content of the attachment.
+          type: string
+          contentEncoding: base64
+    upload_output:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: object
+          properties:
+            attachment:
+              type: string
+              description: The unique identifier of the attachment
+              $ref: '#/components/schemas/attachment'
+    common_accommodation:
+      type: string
+      description: The unique identifier of the property
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
+    conversation:
+      description: A unique identifier for the conversation thread.
+      type: string
+    attachment:
+      type: string
+      description: The unique identifier of the attachment
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: string
+x-refined-from:
+- booking-com-demand-api-3-1-openapi.yml
+- booking-com-demand-api-3-2-beta-openapi.yml
+x-tagGroups:
+- name: API Endpoints
+  tags:
+  - Charges endpoint
+  - Charges meta endpoint
+- name: Documentation
+  tags:
+  - About Try it
