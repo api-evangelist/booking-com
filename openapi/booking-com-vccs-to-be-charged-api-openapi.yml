@@ -83,6 +83,49 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
     AccommodationPropertyVCCToChargeResponse:
       description: Response regarding VCCs to be charged per accommodation property
       properties:
@@ -101,21 +144,6 @@ components:
           type: array
           maxItems: 0
           items: {}
-    ChargeableVCCInformation:
-      description: Information regarding VCC to be charged
-      properties:
-        reservation_id:
-          type: integer
-          description: Accommodation reservation identifier
-        current_balance:
-          $ref: '#/components/schemas/AmountVCCBalance'
-        vcc_id:
-          type: string
-          description: VCC identifier
-        vcc_status:
-          type: string
-          description: VCC Status
-          example: ACTIVE
     InvalidTokenResponse:
       type: object
       description: Response when the authentication token is missing, invalid, or expired.
@@ -144,70 +172,6 @@ components:
                 - string
                 - 'null'
                 description: Additional error details
-    UnauthorizedRequestResponse:
-      type: object
-      description: Response when the token is valid but does not have access to the requested resource.
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    AmountVCCBalance:
-      description: Contains information on the current balance of the VCC.
-      properties:
-        currency:
-          type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Current balance of the VCC.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
-    Warning:
-      type: object
-      description: Warning information
-      properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
     PaginationMeta:
       description: Metadata for the response
       properties:
@@ -224,6 +188,29 @@ components:
       - ruid
       - total_count
       - next_page
+    ChargeableVCCInformation:
+      description: Information regarding VCC to be charged
+      properties:
+        reservation_id:
+          type: integer
+          description: Accommodation reservation identifier
+        current_balance:
+          $ref: '#/components/schemas/AmountVCCBalance'
+        vcc_id:
+          type: string
+          description: VCC identifier
+        vcc_status:
+          type: string
+          description: VCC Status
+          example: ACTIVE
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
     InternalServerErrorResponse:
       type: object
       description: Response when the request failed with an internal reason
@@ -266,6 +253,19 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    AmountVCCBalance:
+      description: Contains information on the current balance of the VCC.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Current balance of the VCC.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
   securitySchemes:
     bearerAuth:
       type: http

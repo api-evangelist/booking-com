@@ -222,6 +222,51 @@ components:
       required: true
       description: Include here your Affiliate identifier number
   schemas:
+    conversation:
+      description: A unique identifier for the conversation thread.
+      type: string
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
+    common_accommodation:
+      type: string
+      description: The unique identifier of the property
+    attachment:
+      type: string
+      description: The unique identifier of the attachment
+    upload_input:
+      type: object
+      required:
+      - conversation
+      - accommodation
+      - file_size
+      - file_name
+      - file_type
+      - file_content
+      properties:
+        conversation:
+          type: string
+          description: The unique identifier of the conversation
+          $ref: '#/components/schemas/conversation'
+        accommodation:
+          type: string
+          description: The unique identifier of the property
+          $ref: '#/components/schemas/common_accommodation'
+        file_size:
+          description: The file size in bytes.
+          type: integer
+          format: int64
+          maximum: 1048576
+        file_name:
+          description: The original file name including extension.
+          type: string
+        file_type:
+          description: 'The MIME type of the attachment (supported formats: PNG, JPEG, JPG).'
+          type: string
+        file_content:
+          description: Base64-encoded content of the attachment.
+          type: string
+          contentEncoding: base64
     download_output:
       type: object
       properties:
@@ -257,39 +302,6 @@ components:
           type: string
           description: The unique identifier of the attachment
           $ref: '#/components/schemas/attachment'
-    upload_input:
-      type: object
-      required:
-      - conversation
-      - accommodation
-      - file_size
-      - file_name
-      - file_type
-      - file_content
-      properties:
-        conversation:
-          type: string
-          description: The unique identifier of the conversation
-          $ref: '#/components/schemas/conversation'
-        accommodation:
-          type: string
-          description: The unique identifier of the property
-          $ref: '#/components/schemas/common_accommodation'
-        file_size:
-          description: The file size in bytes.
-          type: integer
-          format: int64
-          maximum: 1048576
-        file_name:
-          description: The original file name including extension.
-          type: string
-        file_type:
-          description: 'The MIME type of the attachment (supported formats: PNG, JPEG, JPG).'
-          type: string
-        file_content:
-          description: Base64-encoded content of the attachment.
-          type: string
-          contentEncoding: base64
     upload_output:
       type: object
       properties:
@@ -302,18 +314,6 @@ components:
               type: string
               description: The unique identifier of the attachment
               $ref: '#/components/schemas/attachment'
-    common_accommodation:
-      type: string
-      description: The unique identifier of the property
-    requestId:
-      description: Uniquely identifies the request. Please provide this identifier when contacting support.
-      type: string
-    conversation:
-      description: A unique identifier for the conversation thread.
-      type: string
-    attachment:
-      type: string
-      description: The unique identifier of the attachment
   securitySchemes:
     BearerAuth:
       type: http

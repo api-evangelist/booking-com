@@ -179,83 +179,385 @@ paths:
                     - id: '500'
                       message: Internal server error. Try again later or contact support.
 components:
-  examples:
-    roundTripResponse:
-      summary: Return journey
-      value:
-        request_id: 01m2jekzc1y1nf2b37q3mg9tah
+  schemas:
+    countryId:
+      description: 'A two-letter code that uniquely identifies a country. This code is defined by the ISO 3166-1 alpha-2 standard (ISO2) as described here: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/countries" target="_blank">common/locations/countries</a>.'
+      type: string
+      pattern: ^[a-z]{2}$
+      example: nl
+    transfersRouteOutput:
+      title: TransfersRouteOutput
+      description: The route of the journey, containing its journey legs.
+      type: object
+      required:
+      - legs
+      properties:
+        legs:
+          description: The journey legs in travel order. A one-way journey has one leg; a return journey has an outbound and return leg.
+          type: array
+          items:
+            $ref: '#/components/schemas/transfersLegOutput'
+          minItems: 1
+          maxItems: 2
+    airportId:
+      description: A three-letter code that uniquely identifies an airport as defined by the International Air Transport Association (IATA). The full list can be obtained by calling  <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/airports" target="_blank">common/locations/airports</a>.
+      type: string
+      pattern: ^[A-Z]{3}$
+      example: AMS
+    currencyId:
+      description: A three-letter code that uniquely identifies a monetary currency as defined by the ISO 4217 standard. The full list can be obtained by calling <a href="/demand/docs/open-api/3.2/demand-api/commonpayments/common/payments/currencies" target="_blank">common/payments/currencies</a>.
+      type:
+      - string
+      - 'null'
+      pattern: ^[A-Z]{3}$
+      example: EUR
+    transfersVehicleOption:
+      title: TransfersVehicleOption
+      description: An available vehicle option, including its capacity, price and Booking.com redirect URL. For a return journey, the price covers both legs.
+      type: object
+      required:
+      - name
+      - max_passengers
+      - max_luggage
+      - price
+      - url
+      properties:
+        name:
+          description: The display name of the vehicle option.
+          type: string
+          example: Standard
+        max_passengers:
+          description: Maximum number of passengers this vehicle can accommodate.
+          type: integer
+          minimum: 1
+        max_luggage:
+          description: Maximum number of standard suitcases this vehicle can accommodate.
+          type: integer
+          minimum: 0
+        price:
+          description: The total price in the requested currency. For a return journey, the price covers both legs.
+          $ref: '#/components/schemas/monetaryAmount'
+          example: 45.5
+        url:
+          description: The Booking.com URL for this vehicle option. Redirect the traveller to this URL to complete the booking.
+          type: string
+          format: uri
+    monetaryAmount:
+      type: number
+      format: double
+      multipleOf: 0.01
+      exclusiveMinimum: 0
+    legInput:
+      title: TransfersLegInput
+      description: A single journey leg. Each leg must include its own pick-up location, pick-up date and time, and drop-off location.
+      type: object
+      properties:
+        pickup:
+          description: The pick-up details for this leg.
+          $ref: '#/components/schemas/pickupPointInput'
+        dropoff:
+          description: The drop-off details for this leg.
+          $ref: '#/components/schemas/dropOffPointInput'
+      required:
+      - pickup
+      - dropoff
+    locationInput:
+      title: TransfersLocationInput
+      description: The pick-up or drop-off location. Specify exactly one of `airport`, `google_place_id` or `coordinates`.
+      type: object
+      properties:
+        airport:
+          description: The IATA airport code identifying the airport.
+          $ref: '#/components/schemas/airportId'
+        google_place_id:
+          description: The Google Place ID identifying the pick-up or drop-off location.
+          $ref: '#/components/schemas/googlePlaceId'
+        coordinates:
+          description: The geographic coordinates of the pick-up or drop-off location.
+          $ref: '#/components/schemas/dataTypes_coordinates'
+      minProperties: 1
+      maxProperties: 1
+      additionalProperties: false
+    transfersCancellationPolicy:
+      title: TransfersCancellationPolicy
+      description: The cancellation policy that applies to the available vehicle options. For a return journey, the policy applies to both legs.
+      type: object
+      required:
+      - details
+      - type
+      properties:
+        details:
+          description: 'The free-cancellation conditions. For example: `duration=''PT48H''` and `context=before_pickup` means: free cancellation is available up to 48 hrs before pick up. `null` when free cancellation is not available.'
+          type:
+          - object
+          - 'null'
+          properties:
+            context:
+              description: The context in which the cancellation policy applies.
+              type: string
+              enum:
+              - before_pickup
+            duration:
+              description: The free-cancellation window before pick-up, in ISO 8601 duration format. For example, `PT48H` means 48 hours before pick-up.
+              type: string
+              pattern: ^P(?:\d+Y)?(?:\d+M)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$
+        type:
+          description: The cancellation policy type.
+          type: string
+          enum:
+          - free_cancellation
+          - non_refundable
+    languageId:
+      description: 'A [IETF language tag code](https://en.wikipedia.org/wiki/IETF_language_tag) that uniquely identifies a supported human language or dialect. **Note:** Demand API only accepts lowercase for the language codes. Examples: "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.'
+      type: string
+      pattern: ^[a-z]{2}(-[a-z]{2})?$
+      example: en-us
+    tripOffer:
+      title: TransfersTripOffer
+      description: The transfer details, including the route, available vehicle options, prices and cancellation policy.
+      type: object
+      required:
+      - currency
+      - expires_at
+      - route
+      - vehicle_options
+      - cancellation_policy
+      properties:
+        currency:
+          $ref: '#/components/schemas/currencyId'
+        expires_at:
+          description: The date and time when the search results expire. After this time, prices and availability may change.
+          type: string
+          format: date-time
+          example: '2026-11-11T10:30:00Z'
+        route:
+          description: The route of the journey, including each journey leg.
+          $ref: '#/components/schemas/transfersRouteOutput'
+        vehicle_options:
+          description: Available vehicle types for the trip, each with pricing and a redirect URL. For round trips, the price is the total for both legs combined. Options are sorted by price, cheapest first.
+          type: array
+          items:
+            $ref: '#/components/schemas/transfersVehicleOption'
+        cancellation_policy:
+          $ref: '#/components/schemas/transfersCancellationPolicy'
+    transfersLocationOutput:
+      title: TransfersLocationOutput
+      description: Details of a resolved pick-up or drop-off location, including its address and geographic coordinates.
+      type: object
+      required:
+      - name
+      - address
+      - country
+      - coordinates
+      properties:
+        name:
+          description: The display name of the location.
+          type: string
+          example: Amsterdam Airport Schiphol (AMS)
+        address:
+          description: Full street address of the location, suitable for display.
+          type: string
+          example: Evert van de Beekstraat 202, 1118 CP Schiphol, Netherlands
+        city:
+          description: City where the location is situated. `null` when the resolved location carries no city, which happens for some airports.
+          type:
+          - string
+          - 'null'
+          example: Amsterdam
+        country:
+          description: Two-letter ISO 3166-1 alpha-2 country code.
+          $ref: '#/components/schemas/countryId'
+        coordinates:
+          description: Geographic coordinates of the location, for plotting on a map.
+          $ref: '#/components/schemas/dataTypes_coordinates'
+        iata:
+          description: IATA airport code when the location is an airport; `null` otherwise.
+          type:
+          - string
+          - 'null'
+          pattern: ^[A-Z]{3}$
+          example: AMS
+    dataTypes_coordinates:
+      title: Coordinates
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+    dropOffPointInput:
+      title: TransfersDropOffPointInput
+      description: The drop-off location for a journey leg.
+      type: object
+      properties:
+        location:
+          description: The drop-off location.
+          $ref: '#/components/schemas/locationInput'
+      required:
+      - location
+    components-schemas-booker:
+      description: Defines the booker context.
+      type: object
+      properties:
+        country:
+          description: The booker's country. This is used to determine the most relevant price and to comply with applicable requirements for displaying taxes and fees.
+          $ref: '#/components/schemas/countryId'
+      required:
+      - country
+    transfersLegOutput:
+      title: TransfersLegOutput
+      description: Describes a single leg of the journey, including pick-up and drop-off details, estimated duration, and distance.
+      type: object
+      required:
+      - pickup
+      - dropoff
+      properties:
+        pickup:
+          description: The pick-up location and scheduled date and time for a journey leg.
+          $ref: '#/components/schemas/transfersPickupPointOutput'
+        dropoff:
+          description: The drop-off point for this leg.
+          $ref: '#/components/schemas/transfersDropoffPointOutput'
+        duration:
+          description: 'Estimated travel time for this leg, in minutes. Not yet provided by the transfer search: currently always `null`.'
+          type:
+          - integer
+          - 'null'
+          minimum: 1
+        distance:
+          description: 'Estimated distance for this leg, in kilometres. Not yet provided by the transfer search: currently always `null`.'
+          type:
+          - number
+          - 'null'
+          format: double
+          minimum: 0
+    transfersPickupPointOutput:
+      title: TransfersPickupPointOutput
+      description: The pick-up location and scheduled date and time for a journey leg.
+      type: object
+      required:
+      - datetime
+      - location
+      properties:
+        datetime:
+          description: The local pick-up date and time, in YYYY-MM-DDTHH:mm:ss format. The value does not include a time zone or UTC offset and is interpreted using the local time zone of the pick-up location.
+          type: string
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$
+          example: '2026-11-12T10:00:00'
+        location:
+          description: The pick-up location for this leg.
+          $ref: '#/components/schemas/transfersLocationOutput'
+    error_response:
+      title: ErrorResponse
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              message:
+                type: string
+            required:
+            - id
+            - message
+      required:
+      - request_id
+      - errors
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
+    transfersDropoffPointOutput:
+      title: TransfersDropoffPointOutput
+      description: The drop-off location for a journey leg. The estimated drop-off time can be derived from the pick-up time and journey duration.
+      type: object
+      required:
+      - location
+      properties:
+        location:
+          description: The drop-off location for this leg.
+          $ref: '#/components/schemas/transfersLocationOutput'
+    schemas-routeInput:
+      title: TransfersRouteInput
+      description: The route for the transfer journey. A route contains one leg for a one-way journey or two legs for a return journey. Every leg must fully specify its own pick-up and drop-off locations, including the return leg. For a return journey, the second leg normally uses the outbound locations in reverse.
+      type: object
+      properties:
+        legs:
+          description: The journey legs in travel order. The first leg is the outbound journey. For a return journey, add a second leg whose pick-up location must match the outbound drop-off location, and whose drop-off location must match the outbound pick-up location.
+          type: array
+          minItems: 1
+          maxItems: 2
+          items:
+            $ref: '#/components/schemas/legInput'
+      required:
+      - legs
+    googlePlaceId:
+      description: A Google Place ID that uniquely identifies a place.
+      type: string
+      example: ChIJ61zLckBTekgR9ZGwIGR3kas
+    pickupPointInput:
+      title: TransfersPickupPointInput
+      description: The pick-up location, date and time for a journey leg.
+      type: object
+      properties:
+        location:
+          description: The pick-up location.
+          $ref: '#/components/schemas/locationInput'
+        datetime:
+          $ref: '#/components/schemas/datetimeInput'
+      required:
+      - location
+      - datetime
+    transfers_search_output:
+      title: TransfersSearchOutput
+      description: The available transfers for the requested route.
+      type: object
+      required:
+      - request_id
+      - data
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
         data:
-          currency: GBP
-          expires_at: '2026-11-11T12:53:13Z'
-          route:
-            legs:
-            - pickup:
-                datetime: '2026-11-12T10:00:00'
-                location:
-                  name: Manchester Airport (MAN)
-                  address: Manchester Airport (MAN), Manchester M90 1QX, UK
-                  city: null
-                  country: gb
-                  coordinates:
-                    latitude: 53.3676
-                    longitude: -2.27906
-                  iata: MAN
-              dropoff:
-                location:
-                  name: DoubleTree by Hilton Manchester Airport
-                  address: DoubleTree by Hilton Manchester Airport, Outwood Ln, Manchester M90 4WP, UK
-                  city: null
-                  country: gb
-                  coordinates:
-                    latitude: 53.366218
-                    longitude: -2.270456
-                  iata: null
-              duration: null
-              distance: null
-            - pickup:
-                datetime: '2026-11-16T16:15:00'
-                location:
-                  name: DoubleTree by Hilton Manchester Airport
-                  address: DoubleTree by Hilton Manchester Airport, Outwood Ln, Manchester M90 4WP, UK
-                  city: null
-                  country: gb
-                  coordinates:
-                    latitude: 53.366218
-                    longitude: -2.270456
-                  iata: null
-              dropoff:
-                location:
-                  name: Manchester Airport (MAN)
-                  address: Manchester Airport (MAN), Manchester M90 1QX, UK
-                  city: null
-                  country: gb
-                  coordinates:
-                    latitude: 53.3676
-                    longitude: -2.27906
-                  iata: MAN
-              duration: null
-              distance: null
-          vehicle_options:
-          - name: Standard
-            max_passengers: 4
-            max_luggage: 2
-            price: 60.14
-            url: https://taxis.booking.com/search/?pickup=MAN&pickupType=airport&dropoff=ChIJ61zLckBTekgR9ZGwIGR3kas&dropoffType=address&date=2026-11-12&time=10%3A00&returnDate=2026-11-16&returnTime=16%3A15&passengers=2&offerId=91eac5f2-ea2b-4e21-bd56-20d0a1492502&currency=GBP&lang=en-gb&aid=111111&preSelectedResultReference=1
-          - name: Executive People Carrier
-            max_passengers: 6
-            max_luggage: 4
-            price: 104.04
-            url: https://taxis.booking.com/search/?pickup=MAN&pickupType=airport&dropoff=ChIJ61zLckBTekgR9ZGwIGR3kas&dropoffType=address&date=2026-11-12&time=10%3A00&returnDate=2026-11-16&returnTime=16%3A15&passengers=2&offerId=91eac5f2-ea2b-4e21-bd56-20d0a1492502&currency=GBP&lang=en-gb&aid=111111&preSelectedResultReference=3
-          - name: Large People Carrier
-            max_passengers: 8
-            max_luggage: 6
-            price: 104.69
-            url: https://taxis.booking.com/search/?pickup=MAN&pickupType=airport&dropoff=ChIJ61zLckBTekgR9ZGwIGR3kas&dropoffType=address&date=2026-11-12&time=10%3A00&returnDate=2026-11-16&returnTime=16%3A15&passengers=2&offerId=91eac5f2-ea2b-4e21-bd56-20d0a1492502&currency=GBP&lang=en-gb&aid=111111&preSelectedResultReference=6
-          cancellation_policy:
-            details:
-              context: before_pickup
-              duration: PT24H
-            type: free_cancellation
+          $ref: '#/components/schemas/tripOffer'
+    datetimeInput:
+      description: The local pick-up date and time, in YYYY-MM-DDTHH:mm:ss format. Do not include a time zone or UTC offset. The API interprets the value using the local time zone of the pick-up location. The date and time must not be in the past. For a return journey, the return pick-up must be later than the outbound pick-up.
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$
+      example: '2026-11-12T10:00:00'
+    transfers_search_input:
+      title: TransfersSearchInput
+      description: The criteria used to search for available transfers.
+      type: object
+      properties:
+        route:
+          $ref: '#/components/schemas/schemas-routeInput'
+        passengers:
+          description: The number of passengers travelling. The response only includes vehicles with sufficient passenger capacity.
+          type: integer
+          minimum: 1
+          example: 3
+        currency:
+          description: 'The currency used for prices in the response. The Transfers service API currently supports the following ISO 4217 currency codes: AED, AUD, CAD, CHF, CLP, CNY, CZK, DKK, EGP, EUR, GBP, HKD, HUF, IDR, ILS, INR, ISK, JPY, KRW, MAD, MXN, NOK, NZD, PLN, QAR, RON, RSD, SAR, SEK, SGD, THB, TRY, TWD, UAH, USD and ZAR. If you provide an unsupported currency, the API returns a 400 Bad Request response with an invalid_parameter error. The supported currencies may change over time, so do not hardcode this list in your integration.'
+          $ref: '#/components/schemas/currencyId'
+        language:
+          description: The language used for the results and Booking.com redirect URL.
+          $ref: '#/components/schemas/languageId'
+          default: en-gb
+        booker:
+          $ref: '#/components/schemas/components-schemas-booker'
+      required:
+      - route
+      - passengers
+      - currency
+      - booker
+  examples:
     oneWayCoordinatesToAirport:
       summary: One-way journey from coordinates to an airport
       value:
@@ -271,6 +573,47 @@ components:
               location:
                 airport: MAN
         passengers: 1
+        currency: GBP
+        language: en-gb
+        booker:
+          country: ro
+    oneWayGooglePlaceToGooglePlace:
+      summary: One-way journey between two Google Places
+      value:
+        route:
+          legs:
+          - pickup:
+              location:
+                google_place_id: ChIJxZPY38BSekgR4KXk5UeCC4s
+              datetime: '2026-11-20T12:00:00'
+            dropoff:
+              location:
+                google_place_id: ChIJ61zLckBTekgR9ZGwIGR3kas
+        passengers: 4
+        currency: USD
+        language: en-us
+        booker:
+          country: ro
+    roundTripAirportToGooglePlace:
+      summary: Return journey between an airport and a Google Place (airport hotel)
+      value:
+        route:
+          legs:
+          - pickup:
+              location:
+                airport: MAN
+              datetime: '2026-11-12T10:00:00'
+            dropoff:
+              location:
+                google_place_id: ChIJ61zLckBTekgR9ZGwIGR3kas
+          - pickup:
+              location:
+                google_place_id: ChIJ61zLckBTekgR9ZGwIGR3kas
+              datetime: '2026-11-16T16:15:00'
+            dropoff:
+              location:
+                airport: MAN
+        passengers: 2
         currency: GBP
         language: en-gb
         booker:
@@ -360,47 +703,82 @@ components:
               context: before_pickup
               duration: PT24H
             type: free_cancellation
-    roundTripAirportToGooglePlace:
-      summary: Return journey between an airport and a Google Place (airport hotel)
+    roundTripResponse:
+      summary: Return journey
       value:
-        route:
-          legs:
-          - pickup:
-              location:
-                airport: MAN
-              datetime: '2026-11-12T10:00:00'
-            dropoff:
-              location:
-                google_place_id: ChIJ61zLckBTekgR9ZGwIGR3kas
-          - pickup:
-              location:
-                google_place_id: ChIJ61zLckBTekgR9ZGwIGR3kas
-              datetime: '2026-11-16T16:15:00'
-            dropoff:
-              location:
-                airport: MAN
-        passengers: 2
-        currency: GBP
-        language: en-gb
-        booker:
-          country: ro
-    oneWayGooglePlaceToGooglePlace:
-      summary: One-way journey between two Google Places
-      value:
-        route:
-          legs:
-          - pickup:
-              location:
-                google_place_id: ChIJxZPY38BSekgR4KXk5UeCC4s
-              datetime: '2026-11-20T12:00:00'
-            dropoff:
-              location:
-                google_place_id: ChIJ61zLckBTekgR9ZGwIGR3kas
-        passengers: 4
-        currency: USD
-        language: en-us
-        booker:
-          country: ro
+        request_id: 01m2jekzc1y1nf2b37q3mg9tah
+        data:
+          currency: GBP
+          expires_at: '2026-11-11T12:53:13Z'
+          route:
+            legs:
+            - pickup:
+                datetime: '2026-11-12T10:00:00'
+                location:
+                  name: Manchester Airport (MAN)
+                  address: Manchester Airport (MAN), Manchester M90 1QX, UK
+                  city: null
+                  country: gb
+                  coordinates:
+                    latitude: 53.3676
+                    longitude: -2.27906
+                  iata: MAN
+              dropoff:
+                location:
+                  name: DoubleTree by Hilton Manchester Airport
+                  address: DoubleTree by Hilton Manchester Airport, Outwood Ln, Manchester M90 4WP, UK
+                  city: null
+                  country: gb
+                  coordinates:
+                    latitude: 53.366218
+                    longitude: -2.270456
+                  iata: null
+              duration: null
+              distance: null
+            - pickup:
+                datetime: '2026-11-16T16:15:00'
+                location:
+                  name: DoubleTree by Hilton Manchester Airport
+                  address: DoubleTree by Hilton Manchester Airport, Outwood Ln, Manchester M90 4WP, UK
+                  city: null
+                  country: gb
+                  coordinates:
+                    latitude: 53.366218
+                    longitude: -2.270456
+                  iata: null
+              dropoff:
+                location:
+                  name: Manchester Airport (MAN)
+                  address: Manchester Airport (MAN), Manchester M90 1QX, UK
+                  city: null
+                  country: gb
+                  coordinates:
+                    latitude: 53.3676
+                    longitude: -2.27906
+                  iata: MAN
+              duration: null
+              distance: null
+          vehicle_options:
+          - name: Standard
+            max_passengers: 4
+            max_luggage: 2
+            price: 60.14
+            url: https://taxis.booking.com/search/?pickup=MAN&pickupType=airport&dropoff=ChIJ61zLckBTekgR9ZGwIGR3kas&dropoffType=address&date=2026-11-12&time=10%3A00&returnDate=2026-11-16&returnTime=16%3A15&passengers=2&offerId=91eac5f2-ea2b-4e21-bd56-20d0a1492502&currency=GBP&lang=en-gb&aid=111111&preSelectedResultReference=1
+          - name: Executive People Carrier
+            max_passengers: 6
+            max_luggage: 4
+            price: 104.04
+            url: https://taxis.booking.com/search/?pickup=MAN&pickupType=airport&dropoff=ChIJ61zLckBTekgR9ZGwIGR3kas&dropoffType=address&date=2026-11-12&time=10%3A00&returnDate=2026-11-16&returnTime=16%3A15&passengers=2&offerId=91eac5f2-ea2b-4e21-bd56-20d0a1492502&currency=GBP&lang=en-gb&aid=111111&preSelectedResultReference=3
+          - name: Large People Carrier
+            max_passengers: 8
+            max_luggage: 6
+            price: 104.69
+            url: https://taxis.booking.com/search/?pickup=MAN&pickupType=airport&dropoff=ChIJ61zLckBTekgR9ZGwIGR3kas&dropoffType=address&date=2026-11-12&time=10%3A00&returnDate=2026-11-16&returnTime=16%3A15&passengers=2&offerId=91eac5f2-ea2b-4e21-bd56-20d0a1492502&currency=GBP&lang=en-gb&aid=111111&preSelectedResultReference=6
+          cancellation_policy:
+            details:
+              context: before_pickup
+              duration: PT24H
+            type: free_cancellation
     oneWayAirportToCoordinates:
       summary: One-way journey from an airport to coordinates
       value:
@@ -420,384 +798,6 @@ components:
         language: en-gb
         booker:
           country: ro
-  schemas:
-    transfersDropoffPointOutput:
-      title: TransfersDropoffPointOutput
-      description: The drop-off location for a journey leg. The estimated drop-off time can be derived from the pick-up time and journey duration.
-      type: object
-      required:
-      - location
-      properties:
-        location:
-          description: The drop-off location for this leg.
-          $ref: '#/components/schemas/transfersLocationOutput'
-    transfers_search_output:
-      title: TransfersSearchOutput
-      description: The available transfers for the requested route.
-      type: object
-      required:
-      - request_id
-      - data
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          $ref: '#/components/schemas/tripOffer'
-    requestId:
-      description: Uniquely identifies the request. Please provide this identifier when contacting support.
-      type: string
-    transfersLegOutput:
-      title: TransfersLegOutput
-      description: Describes a single leg of the journey, including pick-up and drop-off details, estimated duration, and distance.
-      type: object
-      required:
-      - pickup
-      - dropoff
-      properties:
-        pickup:
-          description: The pick-up location and scheduled date and time for a journey leg.
-          $ref: '#/components/schemas/transfersPickupPointOutput'
-        dropoff:
-          description: The drop-off point for this leg.
-          $ref: '#/components/schemas/transfersDropoffPointOutput'
-        duration:
-          description: 'Estimated travel time for this leg, in minutes. Not yet provided by the transfer search: currently always `null`.'
-          type:
-          - integer
-          - 'null'
-          minimum: 1
-        distance:
-          description: 'Estimated distance for this leg, in kilometres. Not yet provided by the transfer search: currently always `null`.'
-          type:
-          - number
-          - 'null'
-          format: double
-          minimum: 0
-    legInput:
-      title: TransfersLegInput
-      description: A single journey leg. Each leg must include its own pick-up location, pick-up date and time, and drop-off location.
-      type: object
-      properties:
-        pickup:
-          description: The pick-up details for this leg.
-          $ref: '#/components/schemas/pickupPointInput'
-        dropoff:
-          description: The drop-off details for this leg.
-          $ref: '#/components/schemas/dropOffPointInput'
-      required:
-      - pickup
-      - dropoff
-    transfersRouteOutput:
-      title: TransfersRouteOutput
-      description: The route of the journey, containing its journey legs.
-      type: object
-      required:
-      - legs
-      properties:
-        legs:
-          description: The journey legs in travel order. A one-way journey has one leg; a return journey has an outbound and return leg.
-          type: array
-          items:
-            $ref: '#/components/schemas/transfersLegOutput'
-          minItems: 1
-          maxItems: 2
-    dropOffPointInput:
-      title: TransfersDropOffPointInput
-      description: The drop-off location for a journey leg.
-      type: object
-      properties:
-        location:
-          description: The drop-off location.
-          $ref: '#/components/schemas/locationInput'
-      required:
-      - location
-    tripOffer:
-      title: TransfersTripOffer
-      description: The transfer details, including the route, available vehicle options, prices and cancellation policy.
-      type: object
-      required:
-      - currency
-      - expires_at
-      - route
-      - vehicle_options
-      - cancellation_policy
-      properties:
-        currency:
-          $ref: '#/components/schemas/currencyId'
-        expires_at:
-          description: The date and time when the search results expire. After this time, prices and availability may change.
-          type: string
-          format: date-time
-          example: '2026-11-11T10:30:00Z'
-        route:
-          description: The route of the journey, including each journey leg.
-          $ref: '#/components/schemas/transfersRouteOutput'
-        vehicle_options:
-          description: Available vehicle types for the trip, each with pricing and a redirect URL. For round trips, the price is the total for both legs combined. Options are sorted by price, cheapest first.
-          type: array
-          items:
-            $ref: '#/components/schemas/transfersVehicleOption'
-        cancellation_policy:
-          $ref: '#/components/schemas/transfersCancellationPolicy'
-    dataTypes_coordinates:
-      title: Coordinates
-      type: object
-      properties:
-        latitude:
-          type: number
-          format: double
-        longitude:
-          type: number
-          format: double
-    monetaryAmount:
-      type: number
-      format: double
-      multipleOf: 0.01
-      exclusiveMinimum: 0
-    components-schemas-booker:
-      description: Defines the booker context.
-      type: object
-      properties:
-        country:
-          description: The booker's country. This is used to determine the most relevant price and to comply with applicable requirements for displaying taxes and fees.
-          $ref: '#/components/schemas/countryId'
-      required:
-      - country
-    countryId:
-      description: 'A two-letter code that uniquely identifies a country. This code is defined by the ISO 3166-1 alpha-2 standard (ISO2) as described here: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/countries" target="_blank">common/locations/countries</a>.'
-      type: string
-      pattern: ^[a-z]{2}$
-      example: nl
-    airportId:
-      description: A three-letter code that uniquely identifies an airport as defined by the International Air Transport Association (IATA). The full list can be obtained by calling  <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/airports" target="_blank">common/locations/airports</a>.
-      type: string
-      pattern: ^[A-Z]{3}$
-      example: AMS
-    transfersLocationOutput:
-      title: TransfersLocationOutput
-      description: Details of a resolved pick-up or drop-off location, including its address and geographic coordinates.
-      type: object
-      required:
-      - name
-      - address
-      - country
-      - coordinates
-      properties:
-        name:
-          description: The display name of the location.
-          type: string
-          example: Amsterdam Airport Schiphol (AMS)
-        address:
-          description: Full street address of the location, suitable for display.
-          type: string
-          example: Evert van de Beekstraat 202, 1118 CP Schiphol, Netherlands
-        city:
-          description: City where the location is situated. `null` when the resolved location carries no city, which happens for some airports.
-          type:
-          - string
-          - 'null'
-          example: Amsterdam
-        country:
-          description: Two-letter ISO 3166-1 alpha-2 country code.
-          $ref: '#/components/schemas/countryId'
-        coordinates:
-          description: Geographic coordinates of the location, for plotting on a map.
-          $ref: '#/components/schemas/dataTypes_coordinates'
-        iata:
-          description: IATA airport code when the location is an airport; `null` otherwise.
-          type:
-          - string
-          - 'null'
-          pattern: ^[A-Z]{3}$
-          example: AMS
-    languageId:
-      description: 'A [IETF language tag code](https://en.wikipedia.org/wiki/IETF_language_tag) that uniquely identifies a supported human language or dialect. **Note:** Demand API only accepts lowercase for the language codes. Examples: "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.'
-      type: string
-      pattern: ^[a-z]{2}(-[a-z]{2})?$
-      example: en-us
-    pickupPointInput:
-      title: TransfersPickupPointInput
-      description: The pick-up location, date and time for a journey leg.
-      type: object
-      properties:
-        location:
-          description: The pick-up location.
-          $ref: '#/components/schemas/locationInput'
-        datetime:
-          $ref: '#/components/schemas/datetimeInput'
-      required:
-      - location
-      - datetime
-    transfers_search_input:
-      title: TransfersSearchInput
-      description: The criteria used to search for available transfers.
-      type: object
-      properties:
-        route:
-          $ref: '#/components/schemas/schemas-routeInput'
-        passengers:
-          description: The number of passengers travelling. The response only includes vehicles with sufficient passenger capacity.
-          type: integer
-          minimum: 1
-          example: 3
-        currency:
-          description: 'The currency used for prices in the response. The Transfers service API currently supports the following ISO 4217 currency codes: AED, AUD, CAD, CHF, CLP, CNY, CZK, DKK, EGP, EUR, GBP, HKD, HUF, IDR, ILS, INR, ISK, JPY, KRW, MAD, MXN, NOK, NZD, PLN, QAR, RON, RSD, SAR, SEK, SGD, THB, TRY, TWD, UAH, USD and ZAR. If you provide an unsupported currency, the API returns a 400 Bad Request response with an invalid_parameter error. The supported currencies may change over time, so do not hardcode this list in your integration.'
-          $ref: '#/components/schemas/currencyId'
-        language:
-          description: The language used for the results and Booking.com redirect URL.
-          $ref: '#/components/schemas/languageId'
-          default: en-gb
-        booker:
-          $ref: '#/components/schemas/components-schemas-booker'
-      required:
-      - route
-      - passengers
-      - currency
-      - booker
-    error_response:
-      title: ErrorResponse
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-              message:
-                type: string
-            required:
-            - id
-            - message
-      required:
-      - request_id
-      - errors
-    datetimeInput:
-      description: The local pick-up date and time, in YYYY-MM-DDTHH:mm:ss format. Do not include a time zone or UTC offset. The API interprets the value using the local time zone of the pick-up location. The date and time must not be in the past. For a return journey, the return pick-up must be later than the outbound pick-up.
-      type: string
-      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$
-      example: '2026-11-12T10:00:00'
-    schemas-routeInput:
-      title: TransfersRouteInput
-      description: The route for the transfer journey. A route contains one leg for a one-way journey or two legs for a return journey. Every leg must fully specify its own pick-up and drop-off locations, including the return leg. For a return journey, the second leg normally uses the outbound locations in reverse.
-      type: object
-      properties:
-        legs:
-          description: The journey legs in travel order. The first leg is the outbound journey. For a return journey, add a second leg whose pick-up location must match the outbound drop-off location, and whose drop-off location must match the outbound pick-up location.
-          type: array
-          minItems: 1
-          maxItems: 2
-          items:
-            $ref: '#/components/schemas/legInput'
-      required:
-      - legs
-    transfersPickupPointOutput:
-      title: TransfersPickupPointOutput
-      description: The pick-up location and scheduled date and time for a journey leg.
-      type: object
-      required:
-      - datetime
-      - location
-      properties:
-        datetime:
-          description: The local pick-up date and time, in YYYY-MM-DDTHH:mm:ss format. The value does not include a time zone or UTC offset and is interpreted using the local time zone of the pick-up location.
-          type: string
-          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$
-          example: '2026-11-12T10:00:00'
-        location:
-          description: The pick-up location for this leg.
-          $ref: '#/components/schemas/transfersLocationOutput'
-    currencyId:
-      description: A three-letter code that uniquely identifies a monetary currency as defined by the ISO 4217 standard. The full list can be obtained by calling <a href="/demand/docs/open-api/3.2/demand-api/commonpayments/common/payments/currencies" target="_blank">common/payments/currencies</a>.
-      type:
-      - string
-      - 'null'
-      pattern: ^[A-Z]{3}$
-      example: EUR
-    googlePlaceId:
-      description: A Google Place ID that uniquely identifies a place.
-      type: string
-      example: ChIJ61zLckBTekgR9ZGwIGR3kas
-    transfersVehicleOption:
-      title: TransfersVehicleOption
-      description: An available vehicle option, including its capacity, price and Booking.com redirect URL. For a return journey, the price covers both legs.
-      type: object
-      required:
-      - name
-      - max_passengers
-      - max_luggage
-      - price
-      - url
-      properties:
-        name:
-          description: The display name of the vehicle option.
-          type: string
-          example: Standard
-        max_passengers:
-          description: Maximum number of passengers this vehicle can accommodate.
-          type: integer
-          minimum: 1
-        max_luggage:
-          description: Maximum number of standard suitcases this vehicle can accommodate.
-          type: integer
-          minimum: 0
-        price:
-          description: The total price in the requested currency. For a return journey, the price covers both legs.
-          $ref: '#/components/schemas/monetaryAmount'
-          example: 45.5
-        url:
-          description: The Booking.com URL for this vehicle option. Redirect the traveller to this URL to complete the booking.
-          type: string
-          format: uri
-    transfersCancellationPolicy:
-      title: TransfersCancellationPolicy
-      description: The cancellation policy that applies to the available vehicle options. For a return journey, the policy applies to both legs.
-      type: object
-      required:
-      - details
-      - type
-      properties:
-        details:
-          description: 'The free-cancellation conditions. For example: `duration=''PT48H''` and `context=before_pickup` means: free cancellation is available up to 48 hrs before pick up. `null` when free cancellation is not available.'
-          type:
-          - object
-          - 'null'
-          properties:
-            context:
-              description: The context in which the cancellation policy applies.
-              type: string
-              enum:
-              - before_pickup
-            duration:
-              description: The free-cancellation window before pick-up, in ISO 8601 duration format. For example, `PT48H` means 48 hours before pick-up.
-              type: string
-              pattern: ^P(?:\d+Y)?(?:\d+M)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$
-        type:
-          description: The cancellation policy type.
-          type: string
-          enum:
-          - free_cancellation
-          - non_refundable
-    locationInput:
-      title: TransfersLocationInput
-      description: The pick-up or drop-off location. Specify exactly one of `airport`, `google_place_id` or `coordinates`.
-      type: object
-      properties:
-        airport:
-          description: The IATA airport code identifying the airport.
-          $ref: '#/components/schemas/airportId'
-        google_place_id:
-          description: The Google Place ID identifying the pick-up or drop-off location.
-          $ref: '#/components/schemas/googlePlaceId'
-        coordinates:
-          description: The geographic coordinates of the pick-up or drop-off location.
-          $ref: '#/components/schemas/dataTypes_coordinates'
-      minProperties: 1
-      maxProperties: 1
-      additionalProperties: false
   parameters:
     AffiliateIdHeader:
       in: header

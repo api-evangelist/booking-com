@@ -280,6 +280,44 @@ paths:
           description: Other API gateway errors. Gateway responses can differ from the service error body. Check the HTTP status and retain any request identifier supplied.
 components:
   schemas:
+    ReservationPrice:
+      type: object
+      description: 'Monetary values for one price perspective, as major-unit decimal strings in data.currency. The Connectivity currency limits are 0 fractional digits for AFA, BIF, BYR, CLP, COP, DJF, ECS, GNF, HUF, IDR, ISK, JPY, KMF, KRW, LAK, MGA, MZM, PYG, RWF, TJR, TMM, TWD, UGX, VND, VUV, XAF, XOF and XPF; 3 for BHD, IQD, JOD, KWD, LYD, OMR and TND; and 2 for all other currency codes. These limits include historical currency codes and can differ from ISO currency fraction digits. When an amount has more fractional digits than the currency limit, the amount is rounded to drop the excess digits, to the nearest value, with exact halfway values rounded to the value whose last retained digit is even (HALF_EVEN). Shorter scales are preserved without zero-padding. Values use plain decimal notation without exponents or locale separators. Preserve the returned decimal value. Use the supplied total instead of reconstructing it by summing components: totals and components are rounded independently, components have inclusion flags, and some component categories are omitted.'
+      properties:
+        total_price:
+          type: string
+          description: Total amount for this perspective, as a major-unit decimal string in data.currency. When an amount has more fractional digits than the currency limit, the amount is rounded to drop the excess digits using the currency limits and HALF_EVEN rule described in ReservationPrice; shorter scales are preserved. For example, EUR 2.665 becomes "2.66", EUR 2.675 becomes "2.68", and EUR 12.3 stays "12.3". The supplied total is authoritative and need not equal the sum of returned components. See guest and hotel for the meaning of each total.
+          minLength: 1
+        price_components:
+          type: array
+          description: Available price components. The array can be empty. Markup components are omitted, and hotel components omit deposits.
+          items:
+            $ref: '#/components/schemas/PriceComponent'
+      required:
+      - total_price
+      - price_components
+    ApiError:
+      type: object
+      description: Details of an error.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code.
+        message:
+          type: string
+          description: Human-readable error description.
+      required:
+      - code
+      - message
+    RequestMetadata:
+      type: object
+      description: Metadata for support and request tracing.
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier. Include it when contacting Connectivity support.
+      required:
+      - ruid
     PropertyReservation:
       type: object
       description: A property reservation grouping one or more matching room reservations.
@@ -297,65 +335,6 @@ components:
       required:
       - property_reservation_id
       - room_reservations
-    PriceComponent:
-      type: object
-      description: One base-price, fee, or tax component.
-      properties:
-        description:
-          type: string
-          description: Human-readable component description.
-          minLength: 1
-        type:
-          type: string
-          description: Component category.
-          enum:
-          - FEE
-          - BASE_PRICE
-          - TAX
-        price:
-          type: string
-          description: Component amount as a major-unit decimal string in data.currency, rounded only when it exceeds the currency limit. Uses the currency limits and HALF_EVEN rule described in ReservationPrice; shorter scales are preserved without zero-padding. For example, JPY 1526.99 becomes "1527", IDR -12.9 becomes "-13", and BHD 1.2345 becomes "1.234".
-          minLength: 1
-        included:
-          type: boolean
-          description: For guest components, whether the amount is included in the reservation total value. For hotel components, whether it is included in the room rate.
-      required:
-      - description
-      - type
-      - price
-      - included
-    HistoricalReservationsResponse:
-      type: object
-      description: Historical reservations and metadata for this request.
-      properties:
-        data:
-          $ref: '#/components/schemas/HistoricalReservationsData'
-        meta:
-          $ref: '#/components/schemas/RequestMetadata'
-      required:
-      - data
-      - meta
-    HistoricalReservationsData:
-      type: object
-      description: Reservation data for the requested property. Optional values are omitted when unavailable, rather than returned as null.
-      properties:
-        property_id:
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 2147483647
-          description: The Booking.com property ID requested in the path.
-        currency:
-          type: string
-          description: Currency code for the monetary amounts, for example EUR. Omitted when unavailable; do not infer a currency when this field is absent.
-        property_reservations:
-          type: array
-          description: Property reservations with matching room reservations. Empty when no eligible room reservations match the creation range and status filter.
-          items:
-            $ref: '#/components/schemas/PropertyReservation'
-      required:
-      - property_id
-      - property_reservations
     RoomReservation:
       type: object
       description: Reservation details for a room. Dates of stay are separate from the reservation creation timestamp used to select records.
@@ -401,28 +380,6 @@ components:
       - checkout
       - status
       - hotel
-    ApiError:
-      type: object
-      description: Details of an error.
-      properties:
-        code:
-          type: string
-          description: Machine-readable error code.
-        message:
-          type: string
-          description: Human-readable error description.
-      required:
-      - code
-      - message
-    RequestMetadata:
-      type: object
-      description: Metadata for support and request tracing.
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier. Include it when contacting Connectivity support.
-      required:
-      - ruid
     ReservationStatus:
       type: string
       description: 'Room reservation status: OK for confirmed reservations, CANCELLED for cancellations, and NO_SHOW for no-shows.'
@@ -430,22 +387,6 @@ components:
       - OK
       - CANCELLED
       - NO_SHOW
-    ReservationPrice:
-      type: object
-      description: 'Monetary values for one price perspective, as major-unit decimal strings in data.currency. The Connectivity currency limits are 0 fractional digits for AFA, BIF, BYR, CLP, COP, DJF, ECS, GNF, HUF, IDR, ISK, JPY, KMF, KRW, LAK, MGA, MZM, PYG, RWF, TJR, TMM, TWD, UGX, VND, VUV, XAF, XOF and XPF; 3 for BHD, IQD, JOD, KWD, LYD, OMR and TND; and 2 for all other currency codes. These limits include historical currency codes and can differ from ISO currency fraction digits. When an amount has more fractional digits than the currency limit, the amount is rounded to drop the excess digits, to the nearest value, with exact halfway values rounded to the value whose last retained digit is even (HALF_EVEN). Shorter scales are preserved without zero-padding. Values use plain decimal notation without exponents or locale separators. Preserve the returned decimal value. Use the supplied total instead of reconstructing it by summing components: totals and components are rounded independently, components have inclusion flags, and some component categories are omitted.'
-      properties:
-        total_price:
-          type: string
-          description: Total amount for this perspective, as a major-unit decimal string in data.currency. When an amount has more fractional digits than the currency limit, the amount is rounded to drop the excess digits using the currency limits and HALF_EVEN rule described in ReservationPrice; shorter scales are preserved. For example, EUR 2.665 becomes "2.66", EUR 2.675 becomes "2.68", and EUR 12.3 stays "12.3". The supplied total is authoritative and need not equal the sum of returned components. See guest and hotel for the meaning of each total.
-          minLength: 1
-        price_components:
-          type: array
-          description: Available price components. The array can be empty. Markup components are omitted, and hotel components omit deposits.
-          items:
-            $ref: '#/components/schemas/PriceComponent'
-      required:
-      - total_price
-      - price_components
     Occupancy:
       type: object
       description: Known guest counts. Each count is independently optional and is omitted when unknown.
@@ -460,6 +401,65 @@ components:
           format: int32
           minimum: 0
           description: Number of children, when known. An explicit zero means no children.
+    HistoricalReservationsData:
+      type: object
+      description: Reservation data for the requested property. Optional values are omitted when unavailable, rather than returned as null.
+      properties:
+        property_id:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+          description: The Booking.com property ID requested in the path.
+        currency:
+          type: string
+          description: Currency code for the monetary amounts, for example EUR. Omitted when unavailable; do not infer a currency when this field is absent.
+        property_reservations:
+          type: array
+          description: Property reservations with matching room reservations. Empty when no eligible room reservations match the creation range and status filter.
+          items:
+            $ref: '#/components/schemas/PropertyReservation'
+      required:
+      - property_id
+      - property_reservations
+    HistoricalReservationsResponse:
+      type: object
+      description: Historical reservations and metadata for this request.
+      properties:
+        data:
+          $ref: '#/components/schemas/HistoricalReservationsData'
+        meta:
+          $ref: '#/components/schemas/RequestMetadata'
+      required:
+      - data
+      - meta
+    PriceComponent:
+      type: object
+      description: One base-price, fee, or tax component.
+      properties:
+        description:
+          type: string
+          description: Human-readable component description.
+          minLength: 1
+        type:
+          type: string
+          description: Component category.
+          enum:
+          - FEE
+          - BASE_PRICE
+          - TAX
+        price:
+          type: string
+          description: Component amount as a major-unit decimal string in data.currency, rounded only when it exceeds the currency limit. Uses the currency limits and HALF_EVEN rule described in ReservationPrice; shorter scales are preserved without zero-padding. For example, JPY 1526.99 becomes "1527", IDR -12.9 becomes "-13", and BHD 1.2345 becomes "1.234".
+          minLength: 1
+        included:
+          type: boolean
+          description: For guest components, whether the amount is included in the reservation total value. For hotel components, whether it is included in the room rate.
+      required:
+      - description
+      - type
+      - price
+      - included
     ServiceErrorResponse:
       type: object
       description: An error returned while processing the historical reservations request.

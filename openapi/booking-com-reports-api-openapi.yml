@@ -143,22 +143,6 @@ paths:
                     request_id: req_abc123xyz
 components:
   schemas:
-    ErrorDetail:
-      type: object
-      description: Details of a single error.
-      properties:
-        id:
-          type: string
-          description: Machine-readable error identifier.
-          example: invalid_parameter
-        name:
-          type: string
-          description: Human-readable error name.
-          example: Invalid Value
-        message:
-          type: string
-          description: Detailed error message explaining what went wrong.
-          example: The request contains an invalid parameter.
     ConversionsPagination:
       type: object
       description: Pagination information for the conversions response.
@@ -181,6 +165,22 @@ components:
           type: boolean
           description: Indicates whether random page access is supported. If false, only sequential pagination is available.
           example: false
+    ErrorDetail:
+      type: object
+      description: Details of a single error.
+      properties:
+        id:
+          type: string
+          description: Machine-readable error identifier.
+          example: invalid_parameter
+        name:
+          type: string
+          description: Human-readable error name.
+          example: Invalid Value
+        message:
+          type: string
+          description: Detailed error message explaining what went wrong.
+          example: The request contains an invalid parameter.
     DateRange:
       type: object
       description: Date range for filtering conversions. Both 'from' and 'to' dates are required.
@@ -198,19 +198,79 @@ components:
           format: date
           description: End date of the range in ISO-8601 format (YYYY-MM-DD). Must be equal to or after the 'from' date.
           example: '2025-01-31'
-    ConversionsResponse:
+    ConversionsMetadata:
       type: object
-      description: Response object containing conversion data, pagination info, and metadata.
+      description: Metadata about the conversions response.
       properties:
-        conversions:
-          type: array
-          description: List of conversion records matching the search criteria.
-          items:
-            $ref: '#/components/schemas/Conversion'
-        pagination:
-          $ref: '#/components/schemas/ConversionsPagination'
-        metadata:
-          $ref: '#/components/schemas/ConversionsMetadata'
+        request_id:
+          type: string
+          description: Unique identifier for this request, useful for debugging and support.
+          example: req_abc123xyz
+        timestamp:
+          type: string
+          format: date-time
+          description: The timestamp when the response was generated (ISO 8601 datetime).
+          example: '2025-01-19T10:30:00Z'
+        result_count:
+          type: integer
+          format: int32
+          description: Number of conversion records returned in this response.
+          example: 50
+    Conversion:
+      type: object
+      description: A single conversion record representing a booking.
+      properties:
+        booking_date:
+          type: string
+          format: date-time
+          description: The date and time when the booking was made (ISO 8601 datetime).
+          example: '2025-01-15T14:30:00Z'
+        cancellation_date:
+          type: string
+          format: date-time
+          description: The date and time when the booking was cancelled, if applicable (ISO 8601 datetime).
+          example: '2025-01-16T10:00:00Z'
+        booking_reference:
+          type: string
+          description: Unique reference identifier for the booking.
+          example: '1234567890'
+        checkin_date:
+          type: string
+          format: date
+          description: The check-in date for the booking (YYYY-MM-DD).
+          example: '2025-02-01'
+        checkout_date:
+          type: string
+          format: date
+          description: The check-out date for the booking (YYYY-MM-DD).
+          example: '2025-02-05'
+        label:
+          type: string
+          description: Custom label associated with the booking, typically used for tracking campaigns or sources.
+          example: campaign_xyz
+        booking_status:
+          type: string
+          description: Current status of the booking.
+          example: confirmed
+          enum:
+          - confirmed
+          - cancelled
+          - no_show
+        commission_amount:
+          type: string
+          description: The commission amount for this booking.
+          example: '25.50'
+        commission_currency:
+          type: string
+          description: The currency of the commission amount (ISO 4217 currency code).
+          example: EUR
+        device_type:
+          type: string
+          description: The type of device used to make the booking.
+          example: mobile
+          enum:
+          - desktop
+          - mobile
     ErrorResponse:
       type: object
       description: Standard error response format for API errors.
@@ -294,79 +354,19 @@ components:
           type: string
           description: Token for retrieving the next page of results. Obtained from the previous response's pagination.next_page_token.
           example: ''
-    Conversion:
+    ConversionsResponse:
       type: object
-      description: A single conversion record representing a booking.
+      description: Response object containing conversion data, pagination info, and metadata.
       properties:
-        booking_date:
-          type: string
-          format: date-time
-          description: The date and time when the booking was made (ISO 8601 datetime).
-          example: '2025-01-15T14:30:00Z'
-        cancellation_date:
-          type: string
-          format: date-time
-          description: The date and time when the booking was cancelled, if applicable (ISO 8601 datetime).
-          example: '2025-01-16T10:00:00Z'
-        booking_reference:
-          type: string
-          description: Unique reference identifier for the booking.
-          example: '1234567890'
-        checkin_date:
-          type: string
-          format: date
-          description: The check-in date for the booking (YYYY-MM-DD).
-          example: '2025-02-01'
-        checkout_date:
-          type: string
-          format: date
-          description: The check-out date for the booking (YYYY-MM-DD).
-          example: '2025-02-05'
-        label:
-          type: string
-          description: Custom label associated with the booking, typically used for tracking campaigns or sources.
-          example: campaign_xyz
-        booking_status:
-          type: string
-          description: Current status of the booking.
-          example: confirmed
-          enum:
-          - confirmed
-          - cancelled
-          - no_show
-        commission_amount:
-          type: string
-          description: The commission amount for this booking.
-          example: '25.50'
-        commission_currency:
-          type: string
-          description: The currency of the commission amount (ISO 4217 currency code).
-          example: EUR
-        device_type:
-          type: string
-          description: The type of device used to make the booking.
-          example: mobile
-          enum:
-          - desktop
-          - mobile
-    ConversionsMetadata:
-      type: object
-      description: Metadata about the conversions response.
-      properties:
-        request_id:
-          type: string
-          description: Unique identifier for this request, useful for debugging and support.
-          example: req_abc123xyz
-        timestamp:
-          type: string
-          format: date-time
-          description: The timestamp when the response was generated (ISO 8601 datetime).
-          example: '2025-01-19T10:30:00Z'
-        result_count:
-          type: integer
-          format: int32
-          description: Number of conversion records returned in this response.
-          example: 50
+        conversions:
+          type: array
+          description: List of conversion records matching the search criteria.
+          items:
+            $ref: '#/components/schemas/Conversion'
+        pagination:
+          $ref: '#/components/schemas/ConversionsPagination'
+        metadata:
+          $ref: '#/components/schemas/ConversionsMetadata'
   securitySchemes:
     BearerAuth:
       type: http

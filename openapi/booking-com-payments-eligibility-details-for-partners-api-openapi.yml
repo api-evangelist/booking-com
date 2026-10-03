@@ -460,45 +460,14 @@ paths:
                     warnings: []
 components:
   schemas:
-    PayoutOption:
-      description: A payout option for the property
+    Warning:
+      type: object
+      description: Warning information
       properties:
-        is_eligible:
-          type: boolean
-          description: Indicates if this payout option is currently eligible
-        payin_collection_strategy:
+        message:
           type: string
-          description: 'Payin collection strategy. Possible values: PARTIAL, ALL.'
-        payout_method:
-          type: string
-          description: 'The method by which Booking.com remits payments to the partner for this property. Possible values: VCC, BT, STRIPE.'
-        payout_frequency:
-          type: array
-          description: Available payout frequencies for this option. Applies mainly when payout_method is 'BT'
-          items:
-            type: string
-            description: 'Available payout frequency. Possible values: DAILY, WEEKLY, MONTHLY.'
-        payout_netting:
-          type: array
-          description: Defines how commissions or payment-related costs are deducted directly from each payout
-          items:
-            type: string
-            description: 'Defines how commissions or payment-related costs are deducted directly from each payout. Possible values: GROSS, NET.'
-        additional_requirements:
-          type: array
-          description: List of additional requirements for this payout option
-          items:
-            $ref: '#/components/schemas/AdditionalRequirement'
-    PaymentsEligibilityRequest:
-      properties:
-        property_ids:
-          description: <=10 property IDs per request.
-          type: array
-          maxItems: 10
-          items:
-            type: integer
-      required:
-      - property_ids
+          description: Warning message
+          example: string
     PaymentsEligibilityModel:
       description: Data containing required information
       properties:
@@ -530,6 +499,52 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    PaymentsEligibilityRequest:
+      properties:
+        property_ids:
+          description: <=10 property IDs per request.
+          type: array
+          maxItems: 10
+          items:
+            type: integer
+      required:
+      - property_ids
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type:
+          - string
+          - 'null'
+          description: Detailed debug message for the error
+    CurrentPayoutOption:
+      description: Current payout configuration for a property
+      properties:
+        payin_collection_strategy:
+          type: string
+          description: 'Payin collection strategy. Possible values: PARTIAL, ALL.'
+        payout_method:
+          type: string
+          description: 'The method by which Booking.com remits payments to the partner for this property. Possible values: VCC, BT, STRIPE.'
+        payout_frequency:
+          type:
+          - string
+          - 'null'
+          description: 'How often payouts are executed to the partner for this property, as per the current configuration. Applies mainly when payout_method is ''BT''. Possible values: DAILY, WEEKLY, MONTHLY. For VCC, null is returned.'
+        payout_netting:
+          type: string
+          description: 'Defines how commissions or payment-related costs are deducted directly from each payout. Possible values: GROSS, NET.'
     InvalidTokenResponse:
       type: object
       description: Response when the authentication token is missing, invalid, or expired.
@@ -566,6 +581,35 @@ components:
           type: array
           maxItems: 0
           items: {}
+    PayoutOption:
+      description: A payout option for the property
+      properties:
+        is_eligible:
+          type: boolean
+          description: Indicates if this payout option is currently eligible
+        payin_collection_strategy:
+          type: string
+          description: 'Payin collection strategy. Possible values: PARTIAL, ALL.'
+        payout_method:
+          type: string
+          description: 'The method by which Booking.com remits payments to the partner for this property. Possible values: VCC, BT, STRIPE.'
+        payout_frequency:
+          type: array
+          description: Available payout frequencies for this option. Applies mainly when payout_method is 'BT'
+          items:
+            type: string
+            description: 'Available payout frequency. Possible values: DAILY, WEEKLY, MONTHLY.'
+        payout_netting:
+          type: array
+          description: Defines how commissions or payment-related costs are deducted directly from each payout
+          items:
+            type: string
+            description: 'Defines how commissions or payment-related costs are deducted directly from each payout. Possible values: GROSS, NET.'
+        additional_requirements:
+          type: array
+          description: List of additional requirements for this payout option
+          items:
+            $ref: '#/components/schemas/AdditionalRequirement'
     PaymentsEligibility:
       description: Payout configuration for a property
       properties:
@@ -590,77 +634,6 @@ components:
         is_config_update_supported_by_api:
           type: boolean
           description: Indicates whether the property can be onboarded to Payments by Booking via the Payments Configuration API.
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-        debug_message:
-          type:
-          - string
-          - 'null'
-          description: Detailed debug message for the error
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
-    Warning:
-      type: object
-      description: Warning information
-      properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
-    BTPayoutCostInformation:
-      description: Bank transfer payout cost information
-      properties:
-        value:
-          type: string
-        type:
-          type: string
-        decimals:
-          type: integer
-          format: int32
-    AdditionalRequirement:
-      description: Additional requirement to be met for a property to be eligible for Payments by Booking
-      properties:
-        name:
-          type: string
-          description: Name of the requirement
-        action:
-          type: string
-          description: Action needed to complete the requirement
-    CurrentPayoutOption:
-      description: Current payout configuration for a property
-      properties:
-        payin_collection_strategy:
-          type: string
-          description: 'Payin collection strategy. Possible values: PARTIAL, ALL.'
-        payout_method:
-          type: string
-          description: 'The method by which Booking.com remits payments to the partner for this property. Possible values: VCC, BT, STRIPE.'
-        payout_frequency:
-          type:
-          - string
-          - 'null'
-          description: 'How often payouts are executed to the partner for this property, as per the current configuration. Applies mainly when payout_method is ''BT''. Possible values: DAILY, WEEKLY, MONTHLY. For VCC, null is returned.'
-        payout_netting:
-          type: string
-          description: 'Defines how commissions or payment-related costs are deducted directly from each payout. Possible values: GROSS, NET.'
     InternalServerErrorResponse:
       type: object
       description: Response when the request failed with an internal reason
@@ -684,6 +657,24 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    BTPayoutCostInformation:
+      description: Bank transfer payout cost information
+      properties:
+        value:
+          type: string
+        type:
+          type: string
+        decimals:
+          type: integer
+          format: int32
     BadRequestErrorResponse:
       type: object
       description: Response when the request doesn't have valid parameters
@@ -705,6 +696,15 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    AdditionalRequirement:
+      description: Additional requirement to be met for a property to be eligible for Payments by Booking
+      properties:
+        name:
+          type: string
+          description: Name of the requirement
+        action:
+          type: string
+          description: Action needed to complete the requirement
   headers:
     ApiVersion:
       description: The response includes the API version used. Either the version requested, or the default if none was specified in the request.

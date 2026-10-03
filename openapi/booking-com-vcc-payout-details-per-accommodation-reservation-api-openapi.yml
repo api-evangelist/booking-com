@@ -91,6 +91,14 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
     CheckoutDateTooOldErrorResponse:
       type: object
       description: Response when the checkout date is older than the allowed 18-months window
@@ -112,30 +120,6 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    VCCCardDetails:
-      type: object
-      description: Card details for a virtual credit card
-      properties:
-        cvc:
-          type: string
-          description: Card verification code
-        card_name:
-          type: string
-          description: Name on the card
-        card_number:
-          type: string
-          description: Card number
-        card_type:
-          type: string
-          description: Type of the VCC
-        card_expiry:
-          type: string
-          description: Card expiry date (MM/YY)
-      required:
-      - cvc
-      - card_name
-      - card_number
-      - card_expiry
     UnauthorizedRequestResponse:
       type: object
       description: Response when the token is valid but does not have access to the requested resource.
@@ -157,6 +141,20 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
     InvalidTokenResponse:
       type: object
       description: Response when the authentication token is missing, invalid, or expired.
@@ -185,70 +183,26 @@ components:
                 - string
                 - 'null'
                 description: Additional error details
-    AmountVCCBalance:
-      description: Contains information on the current balance of the VCC.
-      properties:
-        currency:
-          type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Current balance of the VCC.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
-    Error:
+    VCCPayoutResponse:
       type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
-    ReservationDataNotFoundErrorResponse:
-      type: object
-      description: Response when the reservation data is not found
+      description: Response containing VCC payout information for a reservation
       properties:
         meta:
           allOf:
           - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
+          description: Response metadata
         data:
-          type: object
-          description: Data containing required information
+          allOf:
+          - $ref: '#/components/schemas/VCCPayoutData'
+          description: VCC payout data
         errors:
           type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
+          maxItems: 0
+          items: {}
         warnings:
           type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    Warning:
-      type: object
-      description: Warning information
-      properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
+          maxItems: 0
+          items: {}
     VCCPayoutData:
       type: object
       description: VCC payout information for a reservation
@@ -271,6 +225,35 @@ components:
               description: Virtual credit card payouts
               items:
                 $ref: '#/components/schemas/PayoutVCC'
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
     PayoutVCC:
       type: object
       description: Virtual credit card included in the payout
@@ -298,29 +281,33 @@ components:
       - status
       - current_balance
       - card_details
-    VCCPayoutResponse:
+    VCCCardDetails:
       type: object
-      description: Response containing VCC payout information for a reservation
+      description: Card details for a virtual credit card
       properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: Response metadata
-        data:
-          allOf:
-          - $ref: '#/components/schemas/VCCPayoutData'
-          description: VCC payout data
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
-    InternalServerErrorResponse:
+        cvc:
+          type: string
+          description: Card verification code
+        card_name:
+          type: string
+          description: Name on the card
+        card_number:
+          type: string
+          description: Card number
+        card_type:
+          type: string
+          description: Type of the VCC
+        card_expiry:
+          type: string
+          description: Card expiry date (MM/YY)
+      required:
+      - cvc
+      - card_name
+      - card_number
+      - card_expiry
+    ReservationDataNotFoundErrorResponse:
       type: object
-      description: Response when the request failed with an internal reason
+      description: Response when the reservation data is not found
       properties:
         meta:
           allOf:
@@ -360,6 +347,19 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    AmountVCCBalance:
+      description: Contains information on the current balance of the VCC.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Current balance of the VCC.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
   securitySchemes:
     bearerAuth:
       type: http

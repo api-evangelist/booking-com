@@ -88,15 +88,36 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
-    AmountToCollect:
-      description: Contains information on the estimated amount the partner needs to collect from the guest at checkin.
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    AmountPaid:
+      description: Contains information on the total amount the guest paid to Booking.com.
       properties:
         currency:
           type: string
           description: Currency of the amount.
         value:
           type: string
-          description: Estimated amount to be collected from the guest at checkin.
+          description: Amount paid by the guest.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
+    AmountCharges:
+      description: Contains information on the total amount of all charges.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Total amount of all charges.
         decimals:
           type: integer
           format: int32
@@ -122,19 +143,20 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    AmountPaid:
-      description: Contains information on the total amount the guest paid to Booking.com.
+    Error:
+      type: object
+      description: Error response containing details about the error
       properties:
-        currency:
+        description:
           type: string
-          description: Currency of the amount.
-        value:
+          description: Description of the error
+        message:
           type: string
-          description: Amount paid by the guest.
-        decimals:
+          description: Error message
+        status_code:
           type: integer
           format: int32
-          description: Number of decimals in the amount.
+          description: HTTP status code for the error
     UnauthorizedRequestResponse:
       type: object
       description: Response when the token is valid but does not have access to the requested resource.
@@ -184,51 +206,102 @@ components:
                 - string
                 - 'null'
                 description: Additional error details
-    AmountCommissionsAndCharges:
-      description: Contains information on the total amount of commissions and other charges such as fees.
+    AccommodationReservationPayoutBreakdownResponse:
+      type: object
+      description: Response of partner payout information with detailed breakdown for respective accommodation reservation
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          allOf:
+          - $ref: '#/components/schemas/BreakdownResponse'
+          description: The data
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    AmountPayout:
+      description: Contains information on the total amount to be paid out to the partner.
       properties:
         currency:
           type: string
           description: Currency of the amount.
         value:
           type: string
-          description: Total amount of commissions and other charges.
+          description: Total payout amount.
         decimals:
           type: integer
           format: int32
           description: Number of decimals in the amount.
-        breakdown:
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
           type: object
-          description: Breakdown of commissions and charges.
-          properties:
-            total_commissions:
-              type: object
-              description: Total commission amount.
-              properties:
-                currency:
-                  type: string
-                  description: Currency of the amount.
-                value:
-                  type: string
-                  description: Total commission amount.
-                decimals:
-                  type: integer
-                  format: int32
-                  description: Number of decimals in the amount.
-            total_charges:
-              type: object
-              description: Total charges amount.
-              properties:
-                currency:
-                  type: string
-                  description: Currency of the amount.
-                value:
-                  type: string
-                  description: Total charges amount.
-                decimals:
-                  type: integer
-                  format: int32
-                  description: Number of decimals in the amount.
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    AmountToCollect:
+      description: Contains information on the estimated amount the partner needs to collect from the guest at checkin.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Estimated amount to be collected from the guest at checkin.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
+    ReservationDataNotFoundErrorResponse:
+      type: object
+      description: Response when the reservation data is not found
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
     BreakdownResponse:
       type: object
       description: Detailed payout breakdown for a reservation
@@ -313,137 +386,51 @@ components:
                       description: The type of applicable rate.
                       items:
                         type: string
-    AmountCharges:
-      description: Contains information on the total amount of all charges.
+    AmountCommissionsAndCharges:
+      description: Contains information on the total amount of commissions and other charges such as fees.
       properties:
         currency:
           type: string
           description: Currency of the amount.
         value:
           type: string
-          description: Total amount of all charges.
+          description: Total amount of commissions and other charges.
         decimals:
           type: integer
           format: int32
           description: Number of decimals in the amount.
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
-    ReservationDataNotFoundErrorResponse:
-      type: object
-      description: Response when the reservation data is not found
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
+        breakdown:
           type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    Warning:
-      type: object
-      description: Warning information
-      properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
-    AccommodationReservationPayoutBreakdownResponse:
-      type: object
-      description: Response of partner payout information with detailed breakdown for respective accommodation reservation
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          allOf:
-          - $ref: '#/components/schemas/BreakdownResponse'
-          description: The data
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
-    AmountCommissionable:
-      description: Contains information on the total commissionable price.
-      properties:
-        currency:
-          type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Total commissionable price.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    AmountPayout:
-      description: Contains information on the total amount to be paid out to the partner.
-      properties:
-        currency:
-          type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Total payout amount.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
+          description: Breakdown of commissions and charges.
+          properties:
+            total_commissions:
+              type: object
+              description: Total commission amount.
+              properties:
+                currency:
+                  type: string
+                  description: Currency of the amount.
+                value:
+                  type: string
+                  description: Total commission amount.
+                decimals:
+                  type: integer
+                  format: int32
+                  description: Number of decimals in the amount.
+            total_charges:
+              type: object
+              description: Total charges amount.
+              properties:
+                currency:
+                  type: string
+                  description: Currency of the amount.
+                value:
+                  type: string
+                  description: Total charges amount.
+                decimals:
+                  type: integer
+                  format: int32
+                  description: Number of decimals in the amount.
     BadRequestErrorResponse:
       type: object
       description: Response when the request doesn't have valid parameters
@@ -465,6 +452,19 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    AmountCommissionable:
+      description: Contains information on the total commissionable price.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Total commissionable price.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
   securitySchemes:
     bearerAuth:
       type: http

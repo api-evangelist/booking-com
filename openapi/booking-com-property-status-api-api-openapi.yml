@@ -43,22 +43,21 @@ paths:
                 $ref: '#/components/schemas/ApiResponsePropertyStatusOutput'
 components:
   schemas:
-    Reason:
+    ApiResponsePropertyStatusOutput:
       type: object
       properties:
-        type:
-          type: string
-          enum:
-          - OTHER
-          - SEASON
-          - RENOVATION
-          - PROPERTY_NOT_AVAILABLE
-          - FULLY_BOOKED
-          - ISSUES_GUESTS
-          - ISSUES_BOOKING
-          - STRATEGY
-        description:
-          type: string
+        data:
+          $ref: '#/components/schemas/PropertyStatusOutput'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
     ApiErrorOTA:
       type: object
       properties:
@@ -89,21 +88,22 @@ components:
           - CLOSE
         reason:
           $ref: '#/components/schemas/Reason'
-    ApiResponsePropertyStatusOutput:
+    Reason:
       type: object
       properties:
-        data:
-          $ref: '#/components/schemas/PropertyStatusOutput'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorOTA'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorOTA'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
+        type:
+          type: string
+          enum:
+          - OTHER
+          - SEASON
+          - RENOVATION
+          - PROPERTY_NOT_AVAILABLE
+          - FULLY_BOOKED
+          - ISSUES_GUESTS
+          - ISSUES_BOOKING
+          - STRATEGY
+        description:
+          type: string
     ObjectNode:
       type: object
     ResponseMeta:

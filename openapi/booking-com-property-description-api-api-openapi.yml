@@ -80,11 +80,11 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
 components:
   schemas:
-    ApiResponse:
+    ApiResponsePropertyDescription:
       type: object
       properties:
         data:
-          type: object
+          $ref: '#/components/schemas/PropertyDescription'
         warnings:
           type: array
           items:
@@ -107,11 +107,11 @@ components:
           $ref: '#/components/schemas/ObjectNode'
         description:
           type: string
-    ApiResponsePropertyDescription:
+    ApiResponse:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/PropertyDescription'
+          type: object
         warnings:
           type: array
           items:

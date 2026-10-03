@@ -101,113 +101,62 @@ paths:
                       message: Parameter 'languages' is invalid. Only one language per request is supported (got 2)
 components:
   schemas:
-    ErrorDetail:
-      type: object
-      description: Details of a single error.
+    Policies:
+      description: Check-in/check-out times and bookability policies.
       properties:
-        id:
+        check_in_start_time:
           type: string
-          description: Machine-readable error identifier.
-          example: invalid_parameter
-        name:
+          description: Earliest check-in time, local to the property (HH:mm).
+          example: '15:00'
+        check_in_end_time:
           type: string
-          description: Human-readable error name.
-          example: Invalid Value
-        message:
+          description: Latest check-in time, local to the property (HH:mm).
+          example: '23:00'
+        check_out_start_time:
           type: string
-          description: Detailed error message explaining what went wrong.
-          example: The request contains an invalid parameter.
-    Image:
-      description: 'A single property image: its CDN URL and image type (e.g. "main").'
+          description: Earliest check-out time, local to the property (HH:mm).
+          example: 07:00
+        check_out_end_time:
+          type: string
+          description: Latest check-out time, local to the property (HH:mm).
+          example: '11:00'
+        is_instant_bookable:
+          type: boolean
+          description: Whether the property can be booked instantly (no host confirmation).
+          example: true
+    Ratings:
+      description: Star rating and guest review aggregates.
       properties:
-        url:
-          type: string
-          description: Image URL on the Booking.com image CDN, with the requested image_size applied.
-          example: https://q-xx.bstatic.com/xdata/images/hotel/max500/681992303.jpg?k=<sig>&o=
-        type:
-          type: string
-          description: Image type. Currently always "main".
-          example: main
-    Location:
-      description: Geographic location of the property.
-      properties:
-        country:
-          type: string
-          description: ISO 3166-1 alpha-2 country code.
-          example: nl
-        latitude:
+        star_rating:
           type: number
           format: double
-          description: Latitude in decimal degrees.
-          example: 52.3702
-        longitude:
+          description: Official star rating from 1.0 to 5.0. Unrated properties (e.g. many apartments) use 0.0, not null.
+          example: 5
+        is_star_rating_estimated:
+          type: boolean
+          description: Whether the star rating is estimated by Booking.com rather than officially assigned. Always present.
+          example: false
+        guest_review_score:
           type: number
           format: double
-          description: Longitude in decimal degrees.
-          example: 4.8952
-        street_address:
-          type: string
-          description: Street address, localized to the requested language.
-          example: Prins Hendrikkade 59
-        city:
-          type: string
-          description: City name, localized to the requested language.
-          example: Amsterdam
-        postal_code:
-          type: string
-          description: Postal or ZIP code.
-          example: 1012 AD
-        province:
-          type: string
-          description: Province or state, localized to the requested language.
-          example: North Holland
-    PropertyStreamRequest:
+          description: Average guest review score, from 1 to 10.
+          example: 8.6
+        guest_review_count:
+          type: integer
+          format: int64
+          description: Number of guest reviews the score is based on.
+          example: 1243
+    Links:
+      description: Partner-facing links to the property.
       properties:
-        languages:
-          type: array
-          description: Exactly one BCP-47 language code. Localizable fields are returned in this language. More than one language is not currently supported and returns HTTP 400.
-          example:
-          - en-gb
-          items:
-            type: string
-            description: Exactly one BCP-47 language code. Localizable fields are returned in this language. More than one language is not currently supported and returns HTTP 400.
-            example: '["en-gb"]'
-        updated_since:
+        booking_url:
           type: string
-          description: Optional ISO-8601 UTC timestamp with millisecond precision. When set, only properties changed at or after this instant are returned (delta sync); when omitted, the full inventory is returned.
-          example: '2026-04-20T00:00:00.000Z'
-        image_size:
+          description: Partner-attributed link to the property page on Booking.com.
+          example: https://www.booking.com/hotel/nl/grand-central.html?aid=343802
+        booking_deep_link_url:
           type: string
-          default: standard
-          description: 'Size token applied to every image URL:
-
-            - `thumbnail`: 100×100, square, center-cropped
-
-            - `thumbnail_large`: 300×300, square, center-cropped
-
-            - `standard`: up to 500px on the longest side (default)
-
-            - `large`: up to 1280px on the longest side'
-          enum:
-          - thumbnail
-          - thumbnail_large
-          - standard
-          - large
-    Status:
-      description: Lifecycle status of the property.
-      properties:
-        property_status:
-          type: string
-          description: 'Lifecycle status of the property: open (bookable) or closed (not bookable).'
-          enum:
-          - open
-          - closed
-          example: open
-        last_active_date:
-          type: string
-          format: date
-          description: Date the property was last active in the feed, as an ISO date (YYYY-MM-DD).
-          example: '2026-07-07'
+          description: Partner-attributed deep link that opens the property in the Booking.com app.
+          example: https://www.booking.com/hotel/nl/grand-central.html?aid=343802&utm_medium=deeplink
     PropertyStreamRecord:
       description: One property record emitted as one line in the NDJSON property stream.
       properties:
@@ -286,6 +235,113 @@ components:
           $ref: '#/components/schemas/Links'
         status:
           $ref: '#/components/schemas/Status'
+    Image:
+      description: 'A single property image: its CDN URL and image type (e.g. "main").'
+      properties:
+        url:
+          type: string
+          description: Image URL on the Booking.com image CDN, with the requested image_size applied.
+          example: https://q-xx.bstatic.com/xdata/images/hotel/max500/681992303.jpg?k=<sig>&o=
+        type:
+          type: string
+          description: Image type. Currently always "main".
+          example: main
+    ErrorDetail:
+      type: object
+      description: Details of a single error.
+      properties:
+        id:
+          type: string
+          description: Machine-readable error identifier.
+          example: invalid_parameter
+        name:
+          type: string
+          description: Human-readable error name.
+          example: Invalid Value
+        message:
+          type: string
+          description: Detailed error message explaining what went wrong.
+          example: The request contains an invalid parameter.
+    Location:
+      description: Geographic location of the property.
+      properties:
+        country:
+          type: string
+          description: ISO 3166-1 alpha-2 country code.
+          example: nl
+        latitude:
+          type: number
+          format: double
+          description: Latitude in decimal degrees.
+          example: 52.3702
+        longitude:
+          type: number
+          format: double
+          description: Longitude in decimal degrees.
+          example: 4.8952
+        street_address:
+          type: string
+          description: Street address, localized to the requested language.
+          example: Prins Hendrikkade 59
+        city:
+          type: string
+          description: City name, localized to the requested language.
+          example: Amsterdam
+        postal_code:
+          type: string
+          description: Postal or ZIP code.
+          example: 1012 AD
+        province:
+          type: string
+          description: Province or state, localized to the requested language.
+          example: North Holland
+    Status:
+      description: Lifecycle status of the property.
+      properties:
+        property_status:
+          type: string
+          description: 'Lifecycle status of the property: open (bookable) or closed (not bookable).'
+          enum:
+          - open
+          - closed
+          example: open
+        last_active_date:
+          type: string
+          format: date
+          description: Date the property was last active in the feed, as an ISO date (YYYY-MM-DD).
+          example: '2026-07-07'
+    PropertyStreamRequest:
+      properties:
+        languages:
+          type: array
+          description: Exactly one BCP-47 language code. Localizable fields are returned in this language. More than one language is not currently supported and returns HTTP 400.
+          example:
+          - en-gb
+          items:
+            type: string
+            description: Exactly one BCP-47 language code. Localizable fields are returned in this language. More than one language is not currently supported and returns HTTP 400.
+            example: '["en-gb"]'
+        updated_since:
+          type: string
+          description: Optional ISO-8601 UTC timestamp with millisecond precision. When set, only properties changed at or after this instant are returned (delta sync); when omitted, the full inventory is returned.
+          example: '2026-04-20T00:00:00.000Z'
+        image_size:
+          type: string
+          default: standard
+          description: 'Size token applied to every image URL:
+
+            - `thumbnail`: 100×100, square, center-cropped
+
+            - `thumbnail_large`: 300×300, square, center-cropped
+
+            - `standard`: up to 500px on the longest side (default)
+
+            - `large`: up to 1280px on the longest side'
+          enum:
+          - thumbnail
+          - thumbnail_large
+          - standard
+          - large
     ErrorResponse:
       type: object
       description: Standard error response format for API errors.
@@ -303,62 +359,6 @@ components:
           type: string
           description: Account ID that triggered request, useful for debugging and support.
           example: '1234654'
-    Links:
-      description: Partner-facing links to the property.
-      properties:
-        booking_url:
-          type: string
-          description: Partner-attributed link to the property page on Booking.com.
-          example: https://www.booking.com/hotel/nl/grand-central.html?aid=343802
-        booking_deep_link_url:
-          type: string
-          description: Partner-attributed deep link that opens the property in the Booking.com app.
-          example: https://www.booking.com/hotel/nl/grand-central.html?aid=343802&utm_medium=deeplink
-    Policies:
-      description: Check-in/check-out times and bookability policies.
-      properties:
-        check_in_start_time:
-          type: string
-          description: Earliest check-in time, local to the property (HH:mm).
-          example: '15:00'
-        check_in_end_time:
-          type: string
-          description: Latest check-in time, local to the property (HH:mm).
-          example: '23:00'
-        check_out_start_time:
-          type: string
-          description: Earliest check-out time, local to the property (HH:mm).
-          example: 07:00
-        check_out_end_time:
-          type: string
-          description: Latest check-out time, local to the property (HH:mm).
-          example: '11:00'
-        is_instant_bookable:
-          type: boolean
-          description: Whether the property can be booked instantly (no host confirmation).
-          example: true
-    Ratings:
-      description: Star rating and guest review aggregates.
-      properties:
-        star_rating:
-          type: number
-          format: double
-          description: Official star rating from 1.0 to 5.0. Unrated properties (e.g. many apartments) use 0.0, not null.
-          example: 5
-        is_star_rating_estimated:
-          type: boolean
-          description: Whether the star rating is estimated by Booking.com rather than officially assigned. Always present.
-          example: false
-        guest_review_score:
-          type: number
-          format: double
-          description: Average guest review score, from 1 to 10.
-          example: 8.6
-        guest_review_count:
-          type: integer
-          format: int64
-          description: Number of guest reviews the score is based on.
-          example: 1243
   securitySchemes:
     BearerAuth:
       type: http

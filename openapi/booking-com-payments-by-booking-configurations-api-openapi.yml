@@ -358,50 +358,14 @@ paths:
                     warnings: []
 components:
   schemas:
-    UnauthorizedRequestResponse:
+    Warning:
       type: object
-      description: Response when the token is valid but does not have access to the requested resource.
+      description: Warning information
       properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type:
-          - object
-          - 'null'
-          description: Response data (null for error responses)
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    InvalidTokenResponse:
-      type: object
-      description: Response when the authentication token is missing, invalid, or expired.
-      properties:
-        meta:
-          $ref: '#/components/schemas/DefaultMeta'
-        data:
-          type:
-          - object
-          - 'null'
-          description: Response data (null for error responses)
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          maxItems: 0
-          items: {}
+        message:
+          type: string
+          description: Warning message
+          example: string
     PBBConfigurationUpdateStatusDetails:
       description: Information regarding Payments by Booking configuration change request for properties
       properties:
@@ -410,33 +374,6 @@ components:
           description: Status information for Payments by Booking configuration change requested for properties
           items:
             $ref: '#/components/schemas/PBBConfigurationUpdateStatusDetail'
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-        debug_message:
-          type:
-          - string
-          - 'null'
-          description: Detailed debug message for the error
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
     PBBConfigurationUpdateStatusDetail:
       description: Status information regarding validated Payments by Booking configuration change request for a property (update response)
       properties:
@@ -461,14 +398,6 @@ components:
           - string
           - 'null'
           description: Payments by Booking configuration change requested at. Null when status is REJECTED.
-    Warning:
-      type: object
-      description: Warning information
-      properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
     PBBConfigurationUpdateStatusResponse:
       description: Response of Payments by Booking configurations update request with property-level processing status of accepted configuration change request.
       properties:
@@ -484,6 +413,106 @@ components:
           type: array
           maxItems: 0
           items: {}
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type:
+          - string
+          - 'null'
+          description: Detailed debug message for the error
+    PBBConfigurationUpdateRequest:
+      properties:
+        payout_configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayoutConfiguration'
+    InvalidTokenResponse:
+      type: object
+      description: Response when the authentication token is missing, invalid, or expired.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type:
+          - object
+          - 'null'
+          description: Response data (null for error responses)
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          maxItems: 0
+          items: {}
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type:
+          - object
+          - 'null'
+          description: Response data (null for error responses)
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type:
+          - object
+          - 'null'
+          description: Response data (null for error responses)
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
     PayoutConfiguration:
       required:
       - legal_entity_id
@@ -514,35 +543,6 @@ components:
         payin_collection_strategy:
           type: string
           description: 'Payin collection strategy. Possible values: PARTIAL, ALL.'
-    PBBConfigurationUpdateRequest:
-      properties:
-        payout_configurations:
-          type: array
-          items:
-            $ref: '#/components/schemas/PayoutConfiguration'
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type:
-          - object
-          - 'null'
-          description: Response data (null for error responses)
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
     BadRequestErrorResponse:
       type: object
       description: Response when the request doesn't have valid parameters

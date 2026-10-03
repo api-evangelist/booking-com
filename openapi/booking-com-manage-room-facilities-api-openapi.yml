@@ -250,44 +250,44 @@ paths:
     - url: https://supply-xml.booking.com/facilities-api/
 components:
   schemas:
-    RoomFacilityRequest:
-      required:
-      - room_facility_id
-      - state
+    ApiError:
       type: object
       properties:
-        room_facility_id:
-          type: integer
-          description: Room Facility ID
-          format: int32
-        state:
+        message:
           type: string
-          description: Is facility Present/Missing?
-          enum:
-          - MISSING
-          - PRESENT
-        room_facility_instances:
-          type: array
-          description: List of Room Facility Instances
-          items:
-            $ref: '#/components/schemas/RoomFacilityInstanceRequest'
-    SuccessObject:
+        code:
+          type: integer
+          description: Error code
+        description:
+          type: string
+          description: Detailed error description
+        details:
+          type: object
+          description: Additional error context
+    RoomFacilityInstanceResponse:
       type: object
       properties:
-        success:
-          type: boolean
-    CribDetails:
+        linen_details:
+          allOf:
+          - $ref: '#/components/schemas/LinenDetails'
+          description: 'Applicable to: LINEN (125).'
+        crib_details:
+          allOf:
+          - $ref: '#/components/schemas/CribDetails'
+          description: 'Applicable to: CHILDREN_CRIB_COTS (175).'
+      description: A room facility instance. The valid detail object for a given instance depends on the parent room_facility_id — only detail types listed in that facility's allowed_details_list (from GET /facilities-api/meta) will be present.
+    RoomFacilityInstanceRequest:
       type: object
       properties:
-        is_foldable:
-          type: boolean
-          description: Foldable
-          default: false
-        is_standalone:
-          type: boolean
-          description: Standalone
-          default: false
-      description: Crib Details
+        linen_details:
+          allOf:
+          - $ref: '#/components/schemas/LinenDetails'
+          description: 'Applicable to: LINEN (125).'
+        crib_details:
+          allOf:
+          - $ref: '#/components/schemas/CribDetails'
+          description: 'Applicable to: CHILDREN_CRIB_COTS (175).'
+      description: A room facility instance. The valid detail object for a given instance depends on the parent room_facility_id — only detail types listed in that facility's allowed_details_list (from GET /facilities-api/meta) will be present.
     ApiResponseSuccessObject:
       type: object
       properties:
@@ -304,74 +304,6 @@ components:
             $ref: '#/components/schemas/ApiError'
         meta:
           $ref: '#/components/schemas/ResponseMeta'
-    RoomFacilityResponse:
-      type: object
-      properties:
-        room_facility_id:
-          type: integer
-          description: Room Facility ID
-          format: int32
-        state:
-          type: string
-          description: Is facility Present/Missing?
-          enum:
-          - MISSING
-          - PRESENT
-        room_facility_instances:
-          type: array
-          description: List of Room Facility Instances
-          items:
-            $ref: '#/components/schemas/RoomFacilityInstanceResponse'
-        room_facility_meta:
-          allOf:
-          - $ref: '#/components/schemas/RoomFacilityMetaSummary'
-          description: Present only when `debugInfo=true` is passed. Contains the facility name, OTA codes, and allowed detail types for this room facility.
-    ApiResponseSuccess:
-      type: object
-      description: Successful response with empty warnings and errors
-      properties:
-        data:
-          $ref: '#/components/schemas/SuccessObject'
-        warnings:
-          type: array
-          maxItems: 0
-        errors:
-          type: array
-          maxItems: 0
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
-    DetailsType:
-      type: string
-      description: Name of a details object that can be used in facility instances
-      enum:
-      - AgeLimitDetails
-      - CribDetails
-      - InternetDetails
-      - KidsPoolDetails
-      - LinenDetails
-      - MealDetails
-      - OnsiteDetails
-      - ParkingDetails
-      - PaymentDetails
-      - RestaurantDetails
-      - ScheduleDetails
-      - SurchargeDetails
-      - SwimmingPoolDetails
-      - TemporarilyClosedDetails
-    ApiError:
-      type: object
-      properties:
-        message:
-          type: string
-        code:
-          type: integer
-          description: Error code
-        description:
-          type: string
-          description: Detailed error description
-        details:
-          type: object
-          description: Additional error context
     LinenDetails:
       type: object
       properties:
@@ -404,18 +336,25 @@ components:
           description: Mattress protector
           default: false
       description: Linen Details
-    RoomFacilityInstanceRequest:
+    ResponseMeta:
       type: object
       properties:
-        linen_details:
-          allOf:
-          - $ref: '#/components/schemas/LinenDetails'
-          description: 'Applicable to: LINEN (125).'
-        crib_details:
-          allOf:
-          - $ref: '#/components/schemas/CribDetails'
-          description: 'Applicable to: CHILDREN_CRIB_COTS (175).'
-      description: A room facility instance. The valid detail object for a given instance depends on the parent room_facility_id — only detail types listed in that facility's allowed_details_list (from GET /facilities-api/meta) will be present.
+        ruid:
+          type: string
+    ApiResponseSuccess:
+      type: object
+      description: Successful response with empty warnings and errors
+      properties:
+        data:
+          $ref: '#/components/schemas/SuccessObject'
+        warnings:
+          type: array
+          maxItems: 0
+        errors:
+          type: array
+          maxItems: 0
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
     RoomFacilityMetaSummary:
       type: object
       properties:
@@ -440,18 +379,36 @@ components:
           items:
             $ref: '#/components/schemas/DetailsType'
       description: Room Facility meta summary with detail type names
-    RoomFacilityInstanceResponse:
+    DetailsType:
+      type: string
+      description: Name of a details object that can be used in facility instances
+      enum:
+      - AgeLimitDetails
+      - CribDetails
+      - InternetDetails
+      - KidsPoolDetails
+      - LinenDetails
+      - MealDetails
+      - OnsiteDetails
+      - ParkingDetails
+      - PaymentDetails
+      - RestaurantDetails
+      - ScheduleDetails
+      - SurchargeDetails
+      - SwimmingPoolDetails
+      - TemporarilyClosedDetails
+    CribDetails:
       type: object
       properties:
-        linen_details:
-          allOf:
-          - $ref: '#/components/schemas/LinenDetails'
-          description: 'Applicable to: LINEN (125).'
-        crib_details:
-          allOf:
-          - $ref: '#/components/schemas/CribDetails'
-          description: 'Applicable to: CHILDREN_CRIB_COTS (175).'
-      description: A room facility instance. The valid detail object for a given instance depends on the parent room_facility_id — only detail types listed in that facility's allowed_details_list (from GET /facilities-api/meta) will be present.
+        is_foldable:
+          type: boolean
+          description: Foldable
+          default: false
+        is_standalone:
+          type: boolean
+          description: Standalone
+          default: false
+      description: Crib Details
     ApiResponseListRoomFacility:
       type: object
       properties:
@@ -469,33 +426,62 @@ components:
             $ref: '#/components/schemas/ApiError'
         meta:
           $ref: '#/components/schemas/ResponseMeta'
-    ResponseMeta:
+    RoomFacilityResponse:
       type: object
       properties:
-        ruid:
+        room_facility_id:
+          type: integer
+          description: Room Facility ID
+          format: int32
+        state:
           type: string
-    RoomFacilityInstance:
-      description: List of Room Facility Instances
-      properties:
-        linen_details:
-          $ref: '#/components/schemas/LinenDetails_2'
-        crib_details:
-          $ref: '#/components/schemas/CribDetails_2'
-    SuccessObject_2:
+          description: Is facility Present/Missing?
+          enum:
+          - MISSING
+          - PRESENT
+        room_facility_instances:
+          type: array
+          description: List of Room Facility Instances
+          items:
+            $ref: '#/components/schemas/RoomFacilityInstanceResponse'
+        room_facility_meta:
+          allOf:
+          - $ref: '#/components/schemas/RoomFacilityMetaSummary'
+          description: Present only when `debugInfo=true` is passed. Contains the facility name, OTA codes, and allowed detail types for this room facility.
+    SuccessObject:
+      type: object
       properties:
         success:
           type: boolean
-    CribDetails_2:
-      description: Crib Details
+    RoomFacilityRequest:
+      required:
+      - room_facility_id
+      - state
+      type: object
       properties:
-        is_foldable:
-          type: boolean
-          default: false
-          description: Foldable
-        is_standalone:
-          type: boolean
-          default: false
-          description: Standalone
+        room_facility_id:
+          type: integer
+          description: Room Facility ID
+          format: int32
+        state:
+          type: string
+          description: Is facility Present/Missing?
+          enum:
+          - MISSING
+          - PRESENT
+        room_facility_instances:
+          type: array
+          description: List of Room Facility Instances
+          items:
+            $ref: '#/components/schemas/RoomFacilityInstanceRequest'
+    ApiError_2:
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          type: object
     ApiResponseSuccessObject_2:
       properties:
         ruid:
@@ -513,14 +499,6 @@ components:
             $ref: '#/components/schemas/ApiError_2'
         meta:
           $ref: '#/components/schemas/ResponseMeta_2'
-    ApiError_2:
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-        details:
-          type: object
     LinenDetails_2:
       description: Linen Details
       properties:
@@ -552,6 +530,10 @@ components:
           type: boolean
           default: false
           description: Mattress protector
+    ResponseMeta_2:
+      properties:
+        ruid:
+          type: string
     RoomFacility:
       properties:
         room_facility_id:
@@ -576,25 +558,6 @@ components:
       required:
       - room_facility_id
       - state
-    ApiResponseListRoomFacility_2:
-      properties:
-        ruid:
-          type: string
-          writeOnly: true
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/RoomFacility'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError_2'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError_2'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta_2'
     RoomFacilityMeta:
       description: DEBUG ONLY. Contains Room Facility meta
       properties:
@@ -621,10 +584,47 @@ components:
             - $ref: '#/components/schemas/CribDetails_2'
             - $ref: '#/components/schemas/LinenDetails_2'
             description: List of applicable Details Objects
-    ResponseMeta_2:
+    CribDetails_2:
+      description: Crib Details
+      properties:
+        is_foldable:
+          type: boolean
+          default: false
+          description: Foldable
+        is_standalone:
+          type: boolean
+          default: false
+          description: Standalone
+    RoomFacilityInstance:
+      description: List of Room Facility Instances
+      properties:
+        linen_details:
+          $ref: '#/components/schemas/LinenDetails_2'
+        crib_details:
+          $ref: '#/components/schemas/CribDetails_2'
+    ApiResponseListRoomFacility_2:
       properties:
         ruid:
           type: string
+          writeOnly: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomFacility'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta_2'
+    SuccessObject_2:
+      properties:
+        success:
+          type: boolean
 x-refined-from:
 - booking-com-facilities-api-openapi.yml
 - booking-com-facilities-api-remote-sync-openapi.yml

@@ -79,110 +79,6 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
 components:
   schemas:
-    ApiResponse:
-      type: object
-      properties:
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
-    ContactInfo:
-      required:
-      - contacts
-      type: object
-      properties:
-        contacts:
-          type: array
-          description: 'General contact type is mandatory for setting up the property.
-
-            Validation: ContactProfileType entries cannot be repeated within the same array.
-
-            General contact can have only 1 entry in total.
-
-            [Current Documentation: ContactInfo Root Object](/connectivity/docs/api-reference/contactinfo)'
-          items:
-            $ref: '#/components/schemas/Contact'
-      description: List of all contacts
-    ContactPerson:
-      required:
-      - language_code
-      - name
-      type: object
-      properties:
-        gender:
-          pattern: male|female
-          type: string
-          description: 'Contact person''s gender.
-
-            Validation: One of valid value.
-
-            [Current Documentation: Gender](/connectivity/docs/api-reference/name)
-
-            DataMapping: ContactInfo/Names/Gender'
-          enum:
-          - male, female
-        name:
-          type: string
-          description: 'Contact person''s given name/full name.
-
-            Validation: Cannot be empty or null.
-
-            [Current Documentation: GivenName](/connectivity/docs/api-reference/name)
-
-            DataMapping: ContactInfo/Names/GivenName'
-        job_title:
-          type: string
-          description: 'The contact''s Job Title.
-
-            Validation: One of valid [Booking.com Job Title Code](/connectivity/docs/codes-bcjt/).
-
-            Default: Unknown
-
-            [Current Documentation: JobTitle](/connectivity/docs/api-reference/name)
-
-            DataMapping: ContactInfo/Names/JobTitle'
-        language_code:
-          type: string
-          description: 'The contact''s spoken language.
-
-            Validation: One of valid language codes provided [Booking.com Language Code](/connectivity/docs/codes-bcl/)
-
-            [Current Documentation: Language](/connectivity/docs/api-reference/name)
-
-            DataMapping: ContactInfo/Names/Language'
-      description: 'Name details for a contact person.
-
-        [Current Documentation](/connectivity/docs/api-reference/name)
-
-        '
-    ContactProfile:
-      required:
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          description: 'Type of Contact Profile. Each value corresponds with a similarly named heading on the Contacts page.
-
-            [Current Documentation](/connectivity/docs/api-reference/contactinfo/#contactprofiletype)
-
-            DataMapping: ContactInfo/ContactProfileType'
-          enum:
-          - general
-          - reservations
-          - invoices
-          - availability
-          - site_content
-          - parity
-          - requests
-          - central_reservations
-      description: One Single Contact Profile Object
     ApiError:
       type: object
       properties:
@@ -238,47 +134,71 @@ components:
 
             DataMapping: ContactInfo/Emails/Email'
       description: One Single Contact Object
-    ContactPhone:
-      required:
-      - phone_number
-      - phone_tech_type
+    ApiResponse:
       type: object
       properties:
-        phone_number:
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ContactPerson:
+      required:
+      - language_code
+      - name
+      type: object
+      properties:
+        gender:
+          pattern: male|female
           type: string
-          description: 'The international phone number.
+          description: 'Contact person''s gender.
 
-            Validation: We validate for country specific formats for the number against the address provided.
+            Validation: One of valid value.
 
-            [Current Documentation: PhoneNumber](/connectivity/docs/api-reference/phone/)
+            [Current Documentation: Gender](/connectivity/docs/api-reference/name)
 
-            DataMapping: ContactInfo/Phones/PhoneNumber'
-        phone_tech_type:
-          type: integer
-          description: 'The type of phone line/device.
-
-            Validations: One of a valid value.
-
-            [Current Documentation: PhoneTechType](/connectivity/docs/api-reference/phone)
-
-            DataMapping: ContactInfo/Phones/PhoneTechType'
-          format: int32
+            DataMapping: ContactInfo/Names/Gender'
           enum:
-          - 1
-          - 3
-          - 5
-        extension:
+          - male, female
+        name:
           type: string
-          description: 'The extension number that must be dialled in addition to the @PhoneNumber.
+          description: 'Contact person''s given name/full name.
 
-            Validation: Only accepted when @PhoneTechType= "1".
+            Validation: Cannot be empty or null.
 
-            [Current Documentation: Extension](/connectivity/docs/api-reference/phone/)
+            [Current Documentation: GivenName](/connectivity/docs/api-reference/name)
 
-            DataMapping: ContactInfo/Phones/Extension'
-      description: 'Phone number details for a contact person/point. Can be more than 1.
+            DataMapping: ContactInfo/Names/GivenName'
+        job_title:
+          type: string
+          description: 'The contact''s Job Title.
 
-        [Current Documentation](/connectivity/docs/api-reference/phone)'
+            Validation: One of valid [Booking.com Job Title Code](/connectivity/docs/codes-bcjt/).
+
+            Default: Unknown
+
+            [Current Documentation: JobTitle](/connectivity/docs/api-reference/name)
+
+            DataMapping: ContactInfo/Names/JobTitle'
+        language_code:
+          type: string
+          description: 'The contact''s spoken language.
+
+            Validation: One of valid language codes provided [Booking.com Language Code](/connectivity/docs/codes-bcl/)
+
+            [Current Documentation: Language](/connectivity/docs/api-reference/name)
+
+            DataMapping: ContactInfo/Names/Language'
+      description: 'Name details for a contact person.
+
+        [Current Documentation](/connectivity/docs/api-reference/name)
+
+        '
     ContactInfoResponse:
       type: object
       properties:
@@ -294,6 +214,30 @@ components:
             $ref: '#/components/schemas/ApiError'
         meta:
           $ref: '#/components/schemas/ResponseMeta'
+    ContactInfo:
+      required:
+      - contacts
+      type: object
+      properties:
+        contacts:
+          type: array
+          description: 'General contact type is mandatory for setting up the property.
+
+            Validation: ContactProfileType entries cannot be repeated within the same array.
+
+            General contact can have only 1 entry in total.
+
+            [Current Documentation: ContactInfo Root Object](/connectivity/docs/api-reference/contactinfo)'
+          items:
+            $ref: '#/components/schemas/Contact'
+      description: List of all contacts
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+    ObjectNode:
+      type: object
     ContactAddress:
       required:
       - country_code
@@ -353,13 +297,69 @@ components:
             [Current Documentation: Language](/connectivity/docs/api-reference/address)
 
             DataMapping: ContactInfo/Addresses/Language'
-    ObjectNode:
-      type: object
-    ResponseMeta:
+    ContactProfile:
+      required:
+      - type
       type: object
       properties:
-        ruid:
+        type:
           type: string
+          description: 'Type of Contact Profile. Each value corresponds with a similarly named heading on the Contacts page.
+
+            [Current Documentation](/connectivity/docs/api-reference/contactinfo/#contactprofiletype)
+
+            DataMapping: ContactInfo/ContactProfileType'
+          enum:
+          - general
+          - reservations
+          - invoices
+          - availability
+          - site_content
+          - parity
+          - requests
+          - central_reservations
+      description: One Single Contact Profile Object
+    ContactPhone:
+      required:
+      - phone_number
+      - phone_tech_type
+      type: object
+      properties:
+        phone_number:
+          type: string
+          description: 'The international phone number.
+
+            Validation: We validate for country specific formats for the number against the address provided.
+
+            [Current Documentation: PhoneNumber](/connectivity/docs/api-reference/phone/)
+
+            DataMapping: ContactInfo/Phones/PhoneNumber'
+        phone_tech_type:
+          type: integer
+          description: 'The type of phone line/device.
+
+            Validations: One of a valid value.
+
+            [Current Documentation: PhoneTechType](/connectivity/docs/api-reference/phone)
+
+            DataMapping: ContactInfo/Phones/PhoneTechType'
+          format: int32
+          enum:
+          - 1
+          - 3
+          - 5
+        extension:
+          type: string
+          description: 'The extension number that must be dialled in addition to the @PhoneNumber.
+
+            Validation: Only accepted when @PhoneTechType= "1".
+
+            [Current Documentation: Extension](/connectivity/docs/api-reference/phone/)
+
+            DataMapping: ContactInfo/Phones/Extension'
+      description: 'Phone number details for a contact person/point. Can be more than 1.
+
+        [Current Documentation](/connectivity/docs/api-reference/phone)'
 x-tagGroups:
 - name: API Endpoints
   tags:

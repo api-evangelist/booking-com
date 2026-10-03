@@ -83,6 +83,14 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
     UnauthorizedRequestResponse:
       type: object
       description: Response when the token is valid but does not have access to the requested resource.
@@ -104,6 +112,20 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
     InvalidTokenResponse:
       type: object
       description: Response when the authentication token is missing, invalid, or expired.
@@ -132,67 +154,6 @@ components:
                 - string
                 - 'null'
                 description: Additional error details
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
-    Warning:
-      type: object
-      description: Warning information
-      properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
-    AmountRefund:
-      description: Contains information on the amount to be refunded.
-      properties:
-        currency:
-          type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Amount to be refunded.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
-    AccommodationVCCRefundResponse:
-      description: Response having information regarding VCC refunds associated with an accommodation reservations
-      properties:
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-        data:
-          type: array
-          description: Data containing required information
-          items:
-            $ref: '#/components/schemas/VCCRefundInformation'
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
     PaginationMeta:
       description: Metadata for the response
       properties:
@@ -235,6 +196,19 @@ components:
           - string
           - 'null'
           description: Additional comments for the refund
+    AmountRefund:
+      description: Contains information on the amount to be refunded.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Amount to be refunded.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
     InternalServerErrorResponse:
       type: object
       description: Response when the request failed with an internal reason
@@ -256,6 +230,32 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    AccommodationVCCRefundResponse:
+      description: Response having information regarding VCC refunds associated with an accommodation reservations
+      properties:
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+        data:
+          type: array
+          description: Data containing required information
+          items:
+            $ref: '#/components/schemas/VCCRefundInformation'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
     BadRequestErrorResponse:
       type: object
       description: Response when the request doesn't have valid parameters

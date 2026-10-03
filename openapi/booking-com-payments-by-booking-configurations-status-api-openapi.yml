@@ -246,14 +246,14 @@ paths:
                     warnings: []
 components:
   schemas:
-    PBBConfigurationUpdateStatusLookupDetails:
-      description: Information regarding accepted Payments by Booking configuration update request status for properties
+    Warning:
+      type: object
+      description: Warning information
       properties:
-        config_update_details:
-          type: array
-          description: Status information for accepted Payments by Booking configuration change requests for properties
-          items:
-            $ref: '#/components/schemas/PBBConfigurationUpdateStatusLookupDetail'
+        message:
+          type: string
+          description: Warning message
+          example: string
     UnauthorizedRequestResponse:
       type: object
       description: Response when the token is valid but does not have access to the requested resource.
@@ -277,6 +277,25 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type:
+          - string
+          - 'null'
+          description: Detailed debug message for the error
     Action:
       description: Pending actions to be performed by the partner
       properties:
@@ -307,25 +326,6 @@ components:
           description: List of warnings for the response
           maxItems: 0
           items: {}
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-        debug_message:
-          type:
-          - string
-          - 'null'
-          description: Detailed debug message for the error
     PBBConfigurationUpdateStatusRequest:
       properties:
         property_ids:
@@ -346,6 +346,37 @@ components:
       - property_ids
       - request_id
       - kyc_callback_url
+    PBBConfigurationUpdateStatusLookupDetails:
+      description: Information regarding accepted Payments by Booking configuration update request status for properties
+      properties:
+        config_update_details:
+          type: array
+          description: Status information for accepted Payments by Booking configuration change requests for properties
+          items:
+            $ref: '#/components/schemas/PBBConfigurationUpdateStatusLookupDetail'
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type:
+          - object
+          - 'null'
+          description: Response data (null for error responses)
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
     DefaultMeta:
       type: object
       description: Metadata for the response
@@ -354,14 +385,24 @@ components:
           type: string
           description: Request unique identifier
           example: string
-    Warning:
-      type: object
-      description: Warning information
+    PBBConfigUpdateRequestDataNotFoundErrorResponse:
+      description: Response when the requested resource doesn't exist
       properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
     PBBConfigurationUpdateStatusLookupResponse:
       description: Response of Payments by Booking configurations update request with property-level processing status of accepted configuration change request.
       properties:
@@ -400,47 +441,6 @@ components:
           description: Pending actions to be performed by the partner
           items:
             $ref: '#/components/schemas/Action'
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type:
-          - object
-          - 'null'
-          description: Response data (null for error responses)
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    PBBConfigUpdateRequestDataNotFoundErrorResponse:
-      description: Response when the requested resource doesn't exist
-      properties:
-        meta:
-          $ref: '#/components/schemas/DefaultMeta'
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
     BadRequestErrorResponse:
       type: object
       description: Response when the request doesn't have valid parameters

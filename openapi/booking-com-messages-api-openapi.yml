@@ -270,64 +270,9 @@ components:
       required: true
       description: Include here your Affiliate identifier number
   schemas:
-    timestamp:
-      description: 'The timestamp in ISO-8601 format from which the message is sent. Format: YYYY-MM-DDTHH:mm:ss+00:00'
+    common_reservation:
       type: string
-      format: date-time
-    send_output:
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: object
-          properties:
-            message:
-              $ref: '#/components/schemas/message'
-    common_accommodation:
-      type: string
-      description: The unique identifier of the property
-    message:
-      description: A unique identifier for the message.
-      type: string
-    requestId:
-      description: Uniquely identifies the request. Please provide this identifier when contacting support.
-      type: string
-    confirm_output:
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        confirmedMessages:
-          type: array
-          items:
-            $ref: '#/components/schemas/message'
-    confirm_input:
-      title: ConfirmMessageReceiptRequest
-      type: object
-      properties:
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/message'
-    conversation:
-      description: A unique identifier for the conversation thread.
-      type: string
-    latest_conversation:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the conversation
-          $ref: '#/components/schemas/conversation'
-        accommodation:
-          type: string
-          description: The unique identifier of the property
-          $ref: '#/components/schemas/common_accommodation'
-        reservation:
-          type: string
-          description: The unique identifier of the reservation
-          $ref: '#/components/schemas/common_reservation'
+      description: The unique identifier of the reservation
     metadata_output:
       type: object
       properties:
@@ -338,47 +283,23 @@ components:
           properties:
             metadata:
               $ref: '#/components/schemas/metadata_metadata'
-    sender:
+    metadata_metadata:
       type: object
       properties:
-        participant:
-          description: A unique identifier for the conversation participant.
+        file_size:
+          description: The size of the attachment (up to 1MB)
+          type: integer
+          format: int64
+          maximum: 1048576
+        file_name:
+          description: The original file name.
           type: string
-        metadata:
-          type: object
-          $ref: '#/components/schemas/latest_metadata'
-    latest_message:
-      type: object
-      properties:
-        conversation:
-          type: object
-          $ref: '#/components/schemas/latest_conversation'
-        content:
+        file_type:
+          description: 'The MIME type of the attachment. Note only the following image formats are supported: PNG, JPEG, and JPG.'
           type: string
-          description: The body of the message.
-        id:
-          $ref: '#/components/schemas/message'
-        sender:
-          type: object
-          $ref: '#/components/schemas/sender'
-        attachments:
-          type: array
-          items:
-            $ref: '#/components/schemas/attachment'
-        timestamp:
-          $ref: '#/components/schemas/timestamp'
-    latest_metadata:
-      type: object
-      properties:
-        type:
-          description: Specifies the conversation participant type.
-          type: string
-          enum:
-          - guest
-          - property
-        name:
-          description: The display name of the participant (e.g., guest or property name).
-          type: string
+    message:
+      description: A unique identifier for the message.
+      type: string
     metadata_input:
       type: object
       properties:
@@ -394,21 +315,43 @@ components:
           type: string
           description: The unique identifier of the attachment
           $ref: '#/components/schemas/attachment'
-    latest_input: {}
-    metadata_metadata:
+    attachment:
+      type: string
+      description: The unique identifier of the attachment
+    latest_conversation:
       type: object
       properties:
-        file_size:
-          description: The size of the attachment (up to 1MB)
-          type: integer
-          format: int64
-          maximum: 1048576
-        file_name:
-          description: The original file name.
+        id:
           type: string
-        file_type:
-          description: 'The MIME type of the attachment. Note only the following image formats are supported: PNG, JPEG, and JPG.'
+          description: The unique identifier of the conversation
+          $ref: '#/components/schemas/conversation'
+        accommodation:
           type: string
+          description: The unique identifier of the property
+          $ref: '#/components/schemas/common_accommodation'
+        reservation:
+          type: string
+          description: The unique identifier of the reservation
+          $ref: '#/components/schemas/common_reservation'
+    confirm_output:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        confirmedMessages:
+          type: array
+          items:
+            $ref: '#/components/schemas/message'
+    send_output:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: object
+          properties:
+            message:
+              $ref: '#/components/schemas/message'
     send_input:
       type: object
       required:
@@ -431,9 +374,41 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/attachment'
-    attachment:
+    latest_input: {}
+    conversation:
+      description: A unique identifier for the conversation thread.
       type: string
-      description: The unique identifier of the attachment
+    latest_message:
+      type: object
+      properties:
+        conversation:
+          type: object
+          $ref: '#/components/schemas/latest_conversation'
+        content:
+          type: string
+          description: The body of the message.
+        id:
+          $ref: '#/components/schemas/message'
+        sender:
+          type: object
+          $ref: '#/components/schemas/sender'
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/attachment'
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
+    confirm_input:
+      title: ConfirmMessageReceiptRequest
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/message'
     latest_output:
       type: object
       properties:
@@ -447,9 +422,34 @@ components:
               description: List of recent messages in reverse chronological order.
               items:
                 $ref: '#/components/schemas/latest_message'
-    common_reservation:
+    common_accommodation:
       type: string
-      description: The unique identifier of the reservation
+      description: The unique identifier of the property
+    timestamp:
+      description: 'The timestamp in ISO-8601 format from which the message is sent. Format: YYYY-MM-DDTHH:mm:ss+00:00'
+      type: string
+      format: date-time
+    latest_metadata:
+      type: object
+      properties:
+        type:
+          description: Specifies the conversation participant type.
+          type: string
+          enum:
+          - guest
+          - property
+        name:
+          description: The display name of the participant (e.g., guest or property name).
+          type: string
+    sender:
+      type: object
+      properties:
+        participant:
+          description: A unique identifier for the conversation participant.
+          type: string
+        metadata:
+          type: object
+          $ref: '#/components/schemas/latest_metadata'
   securitySchemes:
     BearerAuth:
       type: http

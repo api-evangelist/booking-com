@@ -108,44 +108,6 @@ paths:
         description: Production server
 components:
   schemas:
-    AttributeXML:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the attribute.
-          example: CurrencyCode
-        dataType:
-          type: string
-          description: Data type of the attribute (e.g., string, double).
-          example: string
-        description:
-          type: string
-          description: Detailed description of the attribute.
-          example: Specifies the currency code for the selected amount.
-        required:
-          type: string
-          description: Indicates if the attribute is required (true/false).
-          example: false
-    Attribute:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the attribute.
-          example: CurrencyCode
-        dataType:
-          type: string
-          description: Data type of the attribute (e.g., string, double).
-          example: string
-        description:
-          type: string
-          description: Detailed description of the attribute.
-          example: Specifies the currency code for the selected amount.
-        required:
-          type: boolean
-          description: Indicates if the attribute is required.
-          example: false
     ValueAddXML:
       type: object
       properties:
@@ -193,6 +155,44 @@ components:
           description: List of dynamic attributes for the value add.
           items:
             $ref: '#/components/schemas/Attribute'
+    Attribute:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the attribute.
+          example: CurrencyCode
+        dataType:
+          type: string
+          description: Data type of the attribute (e.g., string, double).
+          example: string
+        description:
+          type: string
+          description: Detailed description of the attribute.
+          example: Specifies the currency code for the selected amount.
+        required:
+          type: boolean
+          description: Indicates if the attribute is required.
+          example: false
+    AttributeXML:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the attribute.
+          example: CurrencyCode
+        dataType:
+          type: string
+          description: Data type of the attribute (e.g., string, double).
+          example: string
+        description:
+          type: string
+          description: Detailed description of the attribute.
+          example: Specifies the currency code for the selected amount.
+        required:
+          type: string
+          description: Indicates if the attribute is required (true/false).
+          example: false
 x-tagGroups:
 - name: API Endpoints
   tags:
