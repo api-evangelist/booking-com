@@ -134,6 +134,8 @@ apis:
   humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
   baseURL: https://demandapi.booking.com/3.2
   tags:
+  - Accommodation
+  tags_raw:
   - Accommodations
   properties:
   - type: OpenAPI
@@ -1271,6 +1273,8 @@ apis:
   humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
   baseURL: https://demandapi.booking.com/3.2
   tags:
+  - Message
+  tags_raw:
   - Messages
   properties:
   - type: OpenAPI
@@ -1329,6 +1333,8 @@ apis:
   humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
   baseURL: https://demandapi.booking.com/3.2
   tags:
+  - Meta
+  tags_raw:
   - meta
   properties:
   - type: OpenAPI
@@ -1475,6 +1481,8 @@ apis:
   humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
   baseURL: https://demandapi.booking.com/3.2
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
@@ -1939,6 +1947,8 @@ apis:
   humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
   baseURL: https://demandapi.booking.com/3.2
   tags:
+  - Reconciliation Reports
+  tags_raw:
   - Reconciliation reports
   properties:
   - type: OpenAPI
@@ -2232,6 +2242,8 @@ apis:
   humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
   baseURL: https://demandapi.booking.com/3.2
   tags:
+  - Request Access
+  tags_raw:
   - Request access
   properties:
   - type: OpenAPI
