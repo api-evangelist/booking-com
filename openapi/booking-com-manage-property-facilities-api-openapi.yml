@@ -419,397 +419,40 @@ paths:
     - url: https://supply-xml.booking.com/facilities-api/
 components:
   schemas:
-    MealDetailsResponse:
+    AgeLimitDetails:
       type: object
       properties:
-        breakfast_types:
-          type: array
-          items:
-            type: string
-            enum:
-            - CONTINENTAL
-            - ITALIAN
-            - FULL_ENGLISH
-            - VEGETARIAN
-            - VEGAN
-            - HALAL
-            - GLUTEN_FREE
-            - KOSHER
-            - ASIAN
-            - AMERICAN
-            - BUFFET
-            - A_LA_CARTE
-            - BREAKFAST_TO_GO
-        breakfast_food_item_types:
-          type: array
-          items:
-            type: string
-            enum:
-            - BREAD
-            - PASTRIES
-            - PANCAKES
-            - BUTTER
-            - CHEESE
-            - COLD_MEAT
-            - EGGS
-            - YOGURT
-            - FRUITS
-            - COFFEE
-            - TEA
-            - HOT_CHOCOLATE
-            - CHAMPAGNE
-            - A_LA_CARTE
-            - LOCAL_SPECIALITY
-            - COOKED_MEAL
-            - JUICE
-            - JAM
-            - CEREAL
-        price:
-          maximum: 99999999999999.98
-          minimum: 0.1
-          type: number
-    ApiError:
+        age_limit:
+          type: string
+          description: Minimum age allowed
+          enum:
+          - AGE_1
+          - AGE_2
+          - AGE_3
+          - AGE_4
+          - AGE_5
+          - AGE_6
+          - AGE_7
+          - AGE_8
+          - AGE_9
+          - AGE_10
+          - AGE_11
+          - AGE_12
+          - NO_RESTRICTION
+    SuccessObject:
       type: object
       properties:
-        message:
-          type: string
-        code:
-          type: integer
-          description: Error code
-        description:
-          type: string
-          description: Detailed error description
-        details:
-          type: object
-          description: Additional error context
-    Daytime:
-      type: object
-      properties:
-        hours:
-          maximum: 23
-          minimum: 0
-          type: integer
-          description: Hours, in 24h format
-          format: int32
-        minutes:
-          maximum: 59
-          minimum: 0
-          type: integer
-          description: Minutes
-          format: int32
-      description: Definition of a time in the day
-    ParkingDetailsResponse:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name
-        parking_type:
-          type: string
-          description: 'Type of parking. Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingType'
-          default: UNKNOWN_PARKING_TYPE
-          enum:
-          - UNKNOWN_PARKING_TYPE
-          - PARKING_GARAGE
-          - PARKING_LOT
-          - STREET_PARKING
-        parking_location:
-          type: string
-          description: Where is this parking located?
-          enum:
-          - ON_SITE
-          - NEARBY
-        parking_access:
-          type: string
-          description: 'Who can park here? Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingProperty'
-          enum:
-          - ONLY_GUESTS
-          - GENERAL_PUBLIC
-        parking_reservation:
-          type: string
-          description: Is reservation possible/required?
-          enum:
-          - NEEDED
-          - NOT_NEEDED
-          - NOT_POSSIBLE
-        max_height_m:
-          maximum: 200
-          minimum: 0
-          type: number
-          description: 'Height limit for cars. Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingReservation'
-          format: double
-        has_valet_service:
-          type: string
-          description: Valet service available
-          default: NOT_SPECIFIED
-          enum:
-          - NOT_SPECIFIED
-          - PRESENT
-          - MISSING
-        has_onsite_staff:
-          type: string
-          description: Staff at the parking area
-          default: NOT_SPECIFIED
-          enum:
-          - NOT_SPECIFIED
-          - PRESENT
-          - MISSING
-        has_gated_parking:
-          type: string
-          description: Gate at the entrance / exit
-          default: NOT_SPECIFIED
-          enum:
-          - NOT_SPECIFIED
-          - PRESENT
-          - MISSING
-        has_security_cameras:
-          type: string
-          description: Security camera
-          default: NOT_SPECIFIED
-          enum:
-          - NOT_SPECIFIED
-          - PRESENT
-          - MISSING
-        has_ev_charging_station:
-          type: string
-          description: Electric vehicle charging station
-          default: NOT_SPECIFIED
-          enum:
-          - NOT_SPECIFIED
-          - PRESENT
-          - MISSING
-        has_accessible_parking_spots:
-          type: string
-          description: Accessible parking
-          default: NOT_SPECIFIED
-          enum:
-          - NOT_SPECIFIED
-          - PRESENT
-          - MISSING
-      description: Parking Details
-    StartTimestamp:
-      type: object
-      properties:
-        epoch_seconds:
-          type: integer
-          format: int64
-          description: Unix timestamp in seconds since epoch
-      description: Start date
-    PaymentDetailsResponse:
-      type: object
-      properties:
-        charge_mode:
-          type: string
-          description: Charge mode
-          enum:
-          - UNKNOWN_CHARGE_MODE
-          - FREE
-          - PAID
-          - CHARGES_MAY_APPLY
-        charge_details:
-          $ref: '#/components/schemas/ChargeDetails'
-      description: Payment Details
-    OnsiteDetails:
-      type: object
-      properties:
-        onsite_type:
-          type: string
-          description: Facility location
-          enum:
-          - DEFAULT
-          - ONSITE
-          - OFFSITE
-      description: Facility location details
-    PropertyFacilityRequest:
-      required:
-      - facility_id
-      - state
-      type: object
-      properties:
-        facility_id:
-          type: integer
-          description: Property Facility ID
-          format: int32
-        instances:
-          type: array
-          description: Array of instances
-          items:
-            $ref: '#/components/schemas/InstanceRequest'
-        state:
-          type: string
-          description: Is facility Present/Missing?
-          enum:
-          - MISSING
-          - PRESENT
-      description: Property Facility object
-    KidsPoolDetails:
-      type: object
-      properties:
-        swimming_pool_dimensions:
-          $ref: '#/components/schemas/SwimmingPoolDimensions'
-        has_shallow_end:
+        success:
           type: boolean
-          description: Is there a shallow end?
-          default: false
-    ParkingDetailsRequest:
+    SwimmingPoolDetailsRequest:
       required:
       - name
-      - parking_access
-      - parking_location
-      - parking_reservation
+      - swimming_pool_type
       type: object
       properties:
         name:
           type: string
-          description: Name of this parking instance. Must be unique across all instances of PARKING (facility_id 2) for the same property. Providing a duplicate name returns a 400 error.
-        parking_type:
-          type: string
-          description: 'Type of parking. Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingType'
-          default: UNKNOWN_PARKING_TYPE
-          enum:
-          - UNKNOWN_PARKING_TYPE
-          - PARKING_GARAGE
-          - PARKING_LOT
-          - STREET_PARKING
-        parking_location:
-          type: string
-          description: Where is this parking located?
-          enum:
-          - ON_SITE
-          - NEARBY
-        parking_access:
-          type: string
-          description: 'Who can park here? Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingProperty'
-          enum:
-          - ONLY_GUESTS
-          - GENERAL_PUBLIC
-        parking_reservation:
-          type: string
-          description: Is reservation possible/required?
-          enum:
-          - NEEDED
-          - NOT_NEEDED
-          - NOT_POSSIBLE
-        max_height_m:
-          maximum: 200
-          minimum: 0
-          type: number
-          description: 'Height limit for cars. Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingReservation'
-          format: double
-        has_valet_service:
-          type: string
-          description: Valet service available
-          default: NOT_SPECIFIED
-          enum:
-          - NOT_SPECIFIED
-          - PRESENT
-          - MISSING
-        has_onsite_staff:
-          type: string
-          description: Staff at the parking area
-          default: NOT_SPECIFIED
-          enum:
-          - NOT_SPECIFIED
-          - PRESENT
-          - MISSING
-        has_gated_parking:
-          type: string
-          description: Gate at the entrance / exit
-          default: NOT_SPECIFIED
-          enum:
-          - NOT_SPECIFIED
-          - PRESENT
-          - MISSING
-        has_security_cameras:
-          type: string
-          description: Security camera
-          default: NOT_SPECIFIED
-          enum:
-          - NOT_SPECIFIED
-          - PRESENT
-          - MISSING
-        has_ev_charging_station:
-          type: string
-          description: Electric vehicle charging station
-          default: NOT_SPECIFIED
-          enum:
-          - NOT_SPECIFIED
-          - PRESENT
-          - MISSING
-        has_accessible_parking_spots:
-          type: string
-          description: Accessible parking
-          default: NOT_SPECIFIED
-          enum:
-          - NOT_SPECIFIED
-          - PRESENT
-          - MISSING
-      description: Parking Details
-    PropertyFacilityResponse:
-      type: object
-      properties:
-        facility_id:
-          type: integer
-          description: Property Facility ID
-          format: int32
-        instances:
-          type: array
-          description: Array of instances
-          items:
-            $ref: '#/components/schemas/InstanceResponse'
-        state:
-          type: string
-          description: Is facility Present/Missing?
-          enum:
-          - MISSING
-          - PRESENT
-        property_facility_meta:
-          allOf:
-          - $ref: '#/components/schemas/PropertyFacilityMetaSummary'
-          description: Present only when `debugInfo=true` is passed. Contains the facility name, OTA codes, and allowed/required detail types for this facility.
-      description: Property Facility object
-    EndTimestamp:
-      type: object
-      properties:
-        epoch_seconds:
-          type: integer
-          format: int64
-          description: Unix timestamp in seconds since epoch
-      description: End date
-    PropertyFacilityMetaSummary:
-      type: object
-      properties:
-        facility_id:
-          type: integer
-          description: Booking.com Facility ID
-          format: int32
-        ota_hotel_amenity_type:
-          type: integer
-          description: OTA HAC (HotelAmenityCode)
-          format: int32
-        booking_extended_legacy_code:
-          type: integer
-          description: '[Legacy] Booking.com Extended HAC Facility Code'
-          format: int32
-        facility_name:
-          type: string
-          description: Name
-        allowed_details_list:
-          type: array
-          description: List of applicable detail type names
-          items:
-            $ref: '#/components/schemas/DetailsType'
-        required_details_list:
-          type: array
-          description: List of required detail type names
-          items:
-            $ref: '#/components/schemas/DetailsType'
-      description: Property Facility meta summary with detail type names
-    SwimmingPoolDetailsResponse:
-      type: object
-      properties:
-        name:
-          type: string
+          description: Name of this swimming pool instance. Must be unique across all instances of SWIMMING_POOL (facility_id 433) for the same property. Providing a duplicate name returns a 400 error.
         swimming_pool_type:
           type: string
           description: Swimming Pool Type
@@ -887,14 +530,56 @@ components:
         is_plunge_pool:
           type: boolean
           description: Is a plunge pool?
-    ScheduleDetailsResponse:
+    TemporarilyClosedDetails:
       type: object
       properties:
-        schedule:
+        closed:
           type: array
           items:
-            $ref: '#/components/schemas/WeekTimeEntryResponse'
-      description: 'Defines a schedule for a Facility. Corresponding legacy object in HDCN: OperationTimes'
+            $ref: '#/components/schemas/TemporarilyClosedEntry'
+      description: Temporarily Closed Facility Details
+    InternetDetailsRequest:
+      required:
+      - area
+      - type
+      type: object
+      properties:
+        area:
+          type: string
+          description: Connection location
+          default: PUBLIC_AREAS
+          enum:
+          - UNKNOWN_COVERAGE
+          - ALL_ROOMS
+          - SOME_ROOMS
+          - PUBLIC_AREAS
+          - BUSINESS_CENTER
+          - ENTIRE_PROPERTY
+        type:
+          type: string
+          description: Connection type
+          default: WIFI
+          enum:
+          - NONE
+          - WIRED
+          - WIFI
+        wifi_info:
+          $ref: '#/components/schemas/WifiInfo'
+      description: Defines details of the Internet connection
+    PaymentDetailsResponse:
+      type: object
+      properties:
+        charge_mode:
+          type: string
+          description: Charge mode
+          enum:
+          - UNKNOWN_CHARGE_MODE
+          - FREE
+          - PAID
+          - CHARGES_MAY_APPLY
+        charge_details:
+          $ref: '#/components/schemas/ChargeDetails'
+      description: Payment Details
     SwimmingPoolDimensions:
       type: object
       properties:
@@ -919,6 +604,28 @@ components:
           description: Measurement unit
           enum:
           - METER
+    StartTimestamp:
+      type: object
+      properties:
+        epoch_seconds:
+          type: integer
+          format: int64
+          description: Unix timestamp in seconds since epoch
+      description: Start date
+    ApiError:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          description: Error code
+        description:
+          type: string
+          description: Detailed error description
+        details:
+          type: object
+          description: Additional error context
     SurchargeDetails:
       type: object
       properties:
@@ -930,6 +637,56 @@ components:
           - FREE
           - PAID
       description: Surcharge Details
+    ApiResponseListPropertyFacility:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyFacilityResponse'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    WeekTimeEntryResponse:
+      type: object
+      properties:
+        from:
+          $ref: '#/components/schemas/Daytime'
+        to:
+          $ref: '#/components/schemas/Daytime'
+        day_of_week:
+          type: string
+          description: 'Day of the week. Corresponding legacy object in HDCN: OperationTimes/OperationTime/'
+          enum:
+          - UNKNOWN_DAY
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          - SATURDAY
+          - SUNDAY
+      description: Describes opening times on a certain day of week
+    ScheduleDetailsResponse:
+      type: object
+      properties:
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeekTimeEntryResponse'
+      description: 'Defines a schedule for a Facility. Corresponding legacy object in HDCN: OperationTimes'
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
     WeekTimeEntryRequest:
       required:
       - day_of_week
@@ -954,152 +711,6 @@ components:
           - SATURDAY
           - SUNDAY
       description: Describes opening times on a certain day of week
-    RestaurantDetailsResponse:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name
-        guests_only:
-          type: boolean
-          description: Open only to guests staying at the property
-        accept_reservations:
-          type: boolean
-          description: Reservations welcomed
-        outdoor_seating:
-          type: boolean
-          description: Outdoor seating
-        meal_types_list:
-          type: array
-          description: 'Dietary options. Corresponding legacy object in HDCN: Restaurant/TPA_Extensions/@DietaryOption'
-          items:
-            type: string
-            enum:
-            - UNKNOWN_MEAL_TYPE
-            - HALAL
-            - KOSHER
-            - VEGETARIAN
-            - VEGAN
-            - GLUTEN_FREE
-            - DAIRY_FREE
-        ambiances_list:
-          type: array
-          description: 'Ambiance types. Corresponding legacy object in HDCN: Restaurant/TPA_Extensions/@Ambiance'
-          items:
-            type: string
-            enum:
-            - UNKNOWN_AMBIANCE
-            - FAMILY_KIDS_FRIENDLY
-            - TRADITIONAL
-            - MODERN
-            - ROMANTIC
-        open_for_meals_list:
-          type: array
-          description: 'Open for which meals? Corresponding legacy object in HDCN: Restaurant/ @OfferBreakfast,  @OfferBrunch, @OfferLunch, @OfferDinner'
-          items:
-            type: string
-            enum:
-            - UNKNOWN_OPEN_FOR_MEALS
-            - BREAKFAST
-            - BRUNCH
-            - LUNCH
-            - DINNER
-            - HIGH_TEA
-            - COCKTAIL_HOUR
-        cuisines_list:
-          type: array
-          description: 'Cuisine. Corresponding legacy object in HDCN: Restaurant/CuisineCodes'
-          items:
-            type: string
-            enum:
-            - UNKNOWN_CUISINE
-            - AFRICAN
-            - AMERICAN
-            - ARGENTINIAN
-            - BELGIAN
-            - BRAZILIAN
-            - CAJUN_CREOLE
-            - CAMBODIAN
-            - CANTONESE
-            - CARIBBEAN
-            - CATALAN
-            - CHINESE
-            - DUTCH
-            - BRITISH
-            - ETHIOPIAN
-            - FRENCH
-            - GREEK
-            - INDIAN
-            - INDONESIAN
-            - IRISH
-            - ITALIAN
-            - JAPANESE
-            - KOREAN
-            - MALAYSIAN
-            - MEDITERRANEAN
-            - MEXICAN
-            - MIDDLE_EASTERN
-            - MOROCCAN
-            - NEPALESE
-            - PERUVIAN
-            - PIZZA
-            - POLISH
-            - PORTUGUESE
-            - SCOTTISH
-            - SEAFOOD
-            - SICHUAN
-            - SINGAPOREAN
-            - SPANISH
-            - STEAKHOUSE
-            - SUSHI
-            - TEXMEX
-            - THAI
-            - TURKISH
-            - VIETNAMESE
-            - AUSTRIAN
-            - AUSTRALIAN
-            - GERMAN
-            - RUSSIAN
-            - LOCAL
-            - ASIAN
-            - INTERNATIONAL
-            - LATIN_AMERICAN
-            - EUROPEAN
-            - CROATIAN
-            - HUNGARIAN
-            - GRILL_BBQ
-            - SOUTH_AFRICAN
-        is_buffet:
-          type: boolean
-          description: Buffet menu
-        is_alacarte:
-          type: boolean
-          description: A la carte menu
-    ResponseMeta:
-      type: object
-      properties:
-        ruid:
-          type: string
-    AgeLimitDetails:
-      type: object
-      properties:
-        age_limit:
-          type: string
-          description: Minimum age allowed
-          enum:
-          - AGE_1
-          - AGE_2
-          - AGE_3
-          - AGE_4
-          - AGE_5
-          - AGE_6
-          - AGE_7
-          - AGE_8
-          - AGE_9
-          - AGE_10
-          - AGE_11
-          - AGE_12
-          - NO_RESTRICTION
     InstanceResponse:
       description: A property facility instance. The shape depends on the parent facility_id — see GET /facilities-api/meta for the allowed_details_list per facility.
       anyOf:
@@ -1235,39 +846,211 @@ components:
             allOf:
             - $ref: '#/components/schemas/TemporarilyClosedDetails'
             description: 'Applicable to: BAR (7), SAUNA (10), SPA_AND_WELLNESS_CENTRE (54), HOT_TUB (63), FITNESS (253).'
-    InternetDetailsRequest:
+    WifiInfo:
+      type: object
+      properties:
+        network_name:
+          type: string
+          description: Wi-fi network name (SSID)
+        speed_download:
+          type: number
+          description: Download speed, mbps
+          format: double
+        speed_upload:
+          type: number
+          description: Upload speed, mbps
+          format: double
+      description: Provides information about Wi-Fi connection
+    PropertyFacilityMetaSummary:
+      type: object
+      properties:
+        facility_id:
+          type: integer
+          description: Booking.com Facility ID
+          format: int32
+        ota_hotel_amenity_type:
+          type: integer
+          description: OTA HAC (HotelAmenityCode)
+          format: int32
+        booking_extended_legacy_code:
+          type: integer
+          description: '[Legacy] Booking.com Extended HAC Facility Code'
+          format: int32
+        facility_name:
+          type: string
+          description: Name
+        allowed_details_list:
+          type: array
+          description: List of applicable detail type names
+          items:
+            $ref: '#/components/schemas/DetailsType'
+        required_details_list:
+          type: array
+          description: List of required detail type names
+          items:
+            $ref: '#/components/schemas/DetailsType'
+      description: Property Facility meta summary with detail type names
+    ScheduleDetailsRequest:
+      type: object
+      properties:
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeekTimeEntryRequest'
+      description: 'Defines a schedule for a Facility. Corresponding legacy object in HDCN: OperationTimes'
+    ParkingDetailsRequest:
       required:
-      - area
-      - type
+      - name
+      - parking_access
+      - parking_location
+      - parking_reservation
       type: object
       properties:
-        area:
+        name:
           type: string
-          description: Connection location
-          default: PUBLIC_AREAS
-          enum:
-          - UNKNOWN_COVERAGE
-          - ALL_ROOMS
-          - SOME_ROOMS
-          - PUBLIC_AREAS
-          - BUSINESS_CENTER
-          - ENTIRE_PROPERTY
-        type:
+          description: Name of this parking instance. Must be unique across all instances of PARKING (facility_id 2) for the same property. Providing a duplicate name returns a 400 error.
+        parking_type:
           type: string
-          description: Connection type
-          default: WIFI
+          description: 'Type of parking. Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingType'
+          default: UNKNOWN_PARKING_TYPE
           enum:
-          - NONE
-          - WIRED
-          - WIFI
-        wifi_info:
-          $ref: '#/components/schemas/WifiInfo'
-      description: Defines details of the Internet connection
-    SuccessObject:
+          - UNKNOWN_PARKING_TYPE
+          - PARKING_GARAGE
+          - PARKING_LOT
+          - STREET_PARKING
+        parking_location:
+          type: string
+          description: Where is this parking located?
+          enum:
+          - ON_SITE
+          - NEARBY
+        parking_access:
+          type: string
+          description: 'Who can park here? Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingProperty'
+          enum:
+          - ONLY_GUESTS
+          - GENERAL_PUBLIC
+        parking_reservation:
+          type: string
+          description: Is reservation possible/required?
+          enum:
+          - NEEDED
+          - NOT_NEEDED
+          - NOT_POSSIBLE
+        max_height_m:
+          maximum: 200
+          minimum: 0
+          type: number
+          description: 'Height limit for cars. Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingReservation'
+          format: double
+        has_valet_service:
+          type: string
+          description: Valet service available
+          default: NOT_SPECIFIED
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_onsite_staff:
+          type: string
+          description: Staff at the parking area
+          default: NOT_SPECIFIED
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_gated_parking:
+          type: string
+          description: Gate at the entrance / exit
+          default: NOT_SPECIFIED
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_security_cameras:
+          type: string
+          description: Security camera
+          default: NOT_SPECIFIED
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_ev_charging_station:
+          type: string
+          description: Electric vehicle charging station
+          default: NOT_SPECIFIED
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_accessible_parking_spots:
+          type: string
+          description: Accessible parking
+          default: NOT_SPECIFIED
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+      description: Parking Details
+    TemporarilyClosedEntry:
       type: object
       properties:
-        success:
-          type: boolean
+        start_date:
+          $ref: '#/components/schemas/StartTimestamp'
+        end_date:
+          $ref: '#/components/schemas/EndTimestamp'
+      description: A range of dates
+    MealDetailsRequest:
+      required:
+      - price
+      type: object
+      properties:
+        breakfast_types:
+          type: array
+          items:
+            type: string
+            enum:
+            - CONTINENTAL
+            - ITALIAN
+            - FULL_ENGLISH
+            - VEGETARIAN
+            - VEGAN
+            - HALAL
+            - GLUTEN_FREE
+            - KOSHER
+            - ASIAN
+            - AMERICAN
+            - BUFFET
+            - A_LA_CARTE
+            - BREAKFAST_TO_GO
+        breakfast_food_item_types:
+          type: array
+          items:
+            type: string
+            enum:
+            - BREAD
+            - PASTRIES
+            - PANCAKES
+            - BUTTER
+            - CHEESE
+            - COLD_MEAT
+            - EGGS
+            - YOGURT
+            - FRUITS
+            - COFFEE
+            - TEA
+            - HOT_CHOCOLATE
+            - CHAMPAGNE
+            - A_LA_CARTE
+            - LOCAL_SPECIALITY
+            - COOKED_MEAL
+            - JUICE
+            - JAM
+            - CEREAL
+        price:
+          maximum: 99999999999999.98
+          minimum: 0.1
+          type: number
     InstanceRequest:
       type: object
       properties:
@@ -1323,108 +1106,6 @@ components:
           - $ref: '#/components/schemas/MealDetailsRequest'
           description: 'Applicable to meal facilities. Required by: BREAKFAST (9111), LUNCH_AVAILABLE (9114), DINNER_AVAILABLE (9115).'
       description: A property facility instance. The valid detail objects for a given instance depend on the parent facility_id — only detail types listed in that facility's allowed_details_list (from GET /facilities-api/meta) will be present. Multiple compatible detail types (e.g. swimming_pool_details + surcharge_details) can appear in the same instance.
-    MealDetailsRequest:
-      required:
-      - price
-      type: object
-      properties:
-        breakfast_types:
-          type: array
-          items:
-            type: string
-            enum:
-            - CONTINENTAL
-            - ITALIAN
-            - FULL_ENGLISH
-            - VEGETARIAN
-            - VEGAN
-            - HALAL
-            - GLUTEN_FREE
-            - KOSHER
-            - ASIAN
-            - AMERICAN
-            - BUFFET
-            - A_LA_CARTE
-            - BREAKFAST_TO_GO
-        breakfast_food_item_types:
-          type: array
-          items:
-            type: string
-            enum:
-            - BREAD
-            - PASTRIES
-            - PANCAKES
-            - BUTTER
-            - CHEESE
-            - COLD_MEAT
-            - EGGS
-            - YOGURT
-            - FRUITS
-            - COFFEE
-            - TEA
-            - HOT_CHOCOLATE
-            - CHAMPAGNE
-            - A_LA_CARTE
-            - LOCAL_SPECIALITY
-            - COOKED_MEAL
-            - JUICE
-            - JAM
-            - CEREAL
-        price:
-          maximum: 99999999999999.98
-          minimum: 0.1
-          type: number
-    WifiInfo:
-      type: object
-      properties:
-        network_name:
-          type: string
-          description: Wi-fi network name (SSID)
-        speed_download:
-          type: number
-          description: Download speed, mbps
-          format: double
-        speed_upload:
-          type: number
-          description: Upload speed, mbps
-          format: double
-      description: Provides information about Wi-Fi connection
-    PaymentDetailsRequest:
-      required:
-      - charge_mode
-      type: object
-      properties:
-        charge_mode:
-          type: string
-          description: Charge mode
-          enum:
-          - UNKNOWN_CHARGE_MODE
-          - FREE
-          - PAID
-          - CHARGES_MAY_APPLY
-        charge_details:
-          $ref: '#/components/schemas/ChargeDetails'
-      description: Payment Details
-    WeekTimeEntryResponse:
-      type: object
-      properties:
-        from:
-          $ref: '#/components/schemas/Daytime'
-        to:
-          $ref: '#/components/schemas/Daytime'
-        day_of_week:
-          type: string
-          description: 'Day of the week. Corresponding legacy object in HDCN: OperationTimes/OperationTime/'
-          enum:
-          - UNKNOWN_DAY
-          - MONDAY
-          - TUESDAY
-          - WEDNESDAY
-          - THURSDAY
-          - FRIDAY
-          - SATURDAY
-          - SUNDAY
-      description: Describes opening times on a certain day of week
     RestaurantDetailsRequest:
       required:
       - name
@@ -1548,56 +1229,205 @@ components:
         is_alacarte:
           type: boolean
           description: A la carte menu
-    InternetDetailsResponse:
+    MealDetailsResponse:
       type: object
       properties:
-        area:
-          type: string
-          description: Connection location
-          default: PUBLIC_AREAS
-          enum:
-          - UNKNOWN_COVERAGE
-          - ALL_ROOMS
-          - SOME_ROOMS
-          - PUBLIC_AREAS
-          - BUSINESS_CENTER
-          - ENTIRE_PROPERTY
-        type:
-          type: string
-          description: Connection type
-          default: WIFI
-          enum:
-          - NONE
-          - WIRED
-          - WIFI
-        wifi_info:
-          $ref: '#/components/schemas/WifiInfo'
-      description: Defines details of the Internet connection
-    ApiResponseSuccessObject:
+        breakfast_types:
+          type: array
+          items:
+            type: string
+            enum:
+            - CONTINENTAL
+            - ITALIAN
+            - FULL_ENGLISH
+            - VEGETARIAN
+            - VEGAN
+            - HALAL
+            - GLUTEN_FREE
+            - KOSHER
+            - ASIAN
+            - AMERICAN
+            - BUFFET
+            - A_LA_CARTE
+            - BREAKFAST_TO_GO
+        breakfast_food_item_types:
+          type: array
+          items:
+            type: string
+            enum:
+            - BREAD
+            - PASTRIES
+            - PANCAKES
+            - BUTTER
+            - CHEESE
+            - COLD_MEAT
+            - EGGS
+            - YOGURT
+            - FRUITS
+            - COFFEE
+            - TEA
+            - HOT_CHOCOLATE
+            - CHAMPAGNE
+            - A_LA_CARTE
+            - LOCAL_SPECIALITY
+            - COOKED_MEAL
+            - JUICE
+            - JAM
+            - CEREAL
+        price:
+          maximum: 99999999999999.98
+          minimum: 0.1
+          type: number
+    EndTimestamp:
       type: object
       properties:
-        data:
-          allOf:
-          - $ref: '#/components/schemas/SuccessObject'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
-    SwimmingPoolDetailsRequest:
-      required:
-      - name
-      - swimming_pool_type
+        epoch_seconds:
+          type: integer
+          format: int64
+          description: Unix timestamp in seconds since epoch
+      description: End date
+    RestaurantDetailsResponse:
       type: object
       properties:
         name:
           type: string
-          description: Name of this swimming pool instance. Must be unique across all instances of SWIMMING_POOL (facility_id 433) for the same property. Providing a duplicate name returns a 400 error.
+          description: Name
+        guests_only:
+          type: boolean
+          description: Open only to guests staying at the property
+        accept_reservations:
+          type: boolean
+          description: Reservations welcomed
+        outdoor_seating:
+          type: boolean
+          description: Outdoor seating
+        meal_types_list:
+          type: array
+          description: 'Dietary options. Corresponding legacy object in HDCN: Restaurant/TPA_Extensions/@DietaryOption'
+          items:
+            type: string
+            enum:
+            - UNKNOWN_MEAL_TYPE
+            - HALAL
+            - KOSHER
+            - VEGETARIAN
+            - VEGAN
+            - GLUTEN_FREE
+            - DAIRY_FREE
+        ambiances_list:
+          type: array
+          description: 'Ambiance types. Corresponding legacy object in HDCN: Restaurant/TPA_Extensions/@Ambiance'
+          items:
+            type: string
+            enum:
+            - UNKNOWN_AMBIANCE
+            - FAMILY_KIDS_FRIENDLY
+            - TRADITIONAL
+            - MODERN
+            - ROMANTIC
+        open_for_meals_list:
+          type: array
+          description: 'Open for which meals? Corresponding legacy object in HDCN: Restaurant/ @OfferBreakfast,  @OfferBrunch, @OfferLunch, @OfferDinner'
+          items:
+            type: string
+            enum:
+            - UNKNOWN_OPEN_FOR_MEALS
+            - BREAKFAST
+            - BRUNCH
+            - LUNCH
+            - DINNER
+            - HIGH_TEA
+            - COCKTAIL_HOUR
+        cuisines_list:
+          type: array
+          description: 'Cuisine. Corresponding legacy object in HDCN: Restaurant/CuisineCodes'
+          items:
+            type: string
+            enum:
+            - UNKNOWN_CUISINE
+            - AFRICAN
+            - AMERICAN
+            - ARGENTINIAN
+            - BELGIAN
+            - BRAZILIAN
+            - CAJUN_CREOLE
+            - CAMBODIAN
+            - CANTONESE
+            - CARIBBEAN
+            - CATALAN
+            - CHINESE
+            - DUTCH
+            - BRITISH
+            - ETHIOPIAN
+            - FRENCH
+            - GREEK
+            - INDIAN
+            - INDONESIAN
+            - IRISH
+            - ITALIAN
+            - JAPANESE
+            - KOREAN
+            - MALAYSIAN
+            - MEDITERRANEAN
+            - MEXICAN
+            - MIDDLE_EASTERN
+            - MOROCCAN
+            - NEPALESE
+            - PERUVIAN
+            - PIZZA
+            - POLISH
+            - PORTUGUESE
+            - SCOTTISH
+            - SEAFOOD
+            - SICHUAN
+            - SINGAPOREAN
+            - SPANISH
+            - STEAKHOUSE
+            - SUSHI
+            - TEXMEX
+            - THAI
+            - TURKISH
+            - VIETNAMESE
+            - AUSTRIAN
+            - AUSTRALIAN
+            - GERMAN
+            - RUSSIAN
+            - LOCAL
+            - ASIAN
+            - INTERNATIONAL
+            - LATIN_AMERICAN
+            - EUROPEAN
+            - CROATIAN
+            - HUNGARIAN
+            - GRILL_BBQ
+            - SOUTH_AFRICAN
+        is_buffet:
+          type: boolean
+          description: Buffet menu
+        is_alacarte:
+          type: boolean
+          description: A la carte menu
+    Daytime:
+      type: object
+      properties:
+        hours:
+          maximum: 23
+          minimum: 0
+          type: integer
+          description: Hours, in 24h format
+          format: int32
+        minutes:
+          maximum: 59
+          minimum: 0
+          type: integer
+          description: Minutes
+          format: int32
+      description: Definition of a time in the day
+    SwimmingPoolDetailsResponse:
+      type: object
+      properties:
+        name:
+          type: string
         swimming_pool_type:
           type: string
           description: Swimming Pool Type
@@ -1712,39 +1542,53 @@ components:
       - SurchargeDetails
       - SwimmingPoolDetails
       - TemporarilyClosedDetails
-    ScheduleDetailsRequest:
+    InternetDetailsResponse:
       type: object
       properties:
-        schedule:
-          type: array
-          items:
-            $ref: '#/components/schemas/WeekTimeEntryRequest'
-      description: 'Defines a schedule for a Facility. Corresponding legacy object in HDCN: OperationTimes'
-    TemporarilyClosedEntry:
+        area:
+          type: string
+          description: Connection location
+          default: PUBLIC_AREAS
+          enum:
+          - UNKNOWN_COVERAGE
+          - ALL_ROOMS
+          - SOME_ROOMS
+          - PUBLIC_AREAS
+          - BUSINESS_CENTER
+          - ENTIRE_PROPERTY
+        type:
+          type: string
+          description: Connection type
+          default: WIFI
+          enum:
+          - NONE
+          - WIRED
+          - WIFI
+        wifi_info:
+          $ref: '#/components/schemas/WifiInfo'
+      description: Defines details of the Internet connection
+    PropertyFacilityRequest:
+      required:
+      - facility_id
+      - state
       type: object
       properties:
-        start_date:
-          $ref: '#/components/schemas/StartTimestamp'
-        end_date:
-          $ref: '#/components/schemas/EndTimestamp'
-      description: A range of dates
-    ApiResponseListPropertyFacility:
-      type: object
-      properties:
-        data:
+        facility_id:
+          type: integer
+          description: Property Facility ID
+          format: int32
+        instances:
           type: array
+          description: Array of instances
           items:
-            $ref: '#/components/schemas/PropertyFacilityResponse'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
+            $ref: '#/components/schemas/InstanceRequest'
+        state:
+          type: string
+          description: Is facility Present/Missing?
+          enum:
+          - MISSING
+          - PRESENT
+      description: Property Facility object
     ApiResponseSuccess:
       type: object
       description: Successful response with empty warnings and errors
@@ -1759,127 +1603,27 @@ components:
           maxItems: 0
         meta:
           $ref: '#/components/schemas/ResponseMeta'
-    TemporarilyClosedDetails:
+    KidsPoolDetails:
       type: object
       properties:
-        closed:
-          type: array
-          items:
-            $ref: '#/components/schemas/TemporarilyClosedEntry'
-      description: Temporarily Closed Facility Details
-    ApiError_2:
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-        details:
-          type: object
-    Daytime_2:
-      description: Definition of a time in the day
-      properties:
-        hours:
-          type: integer
-          format: int32
-          description: Hours, in 24h format
-          maximum: 23
-          minimum: 0
-        minutes:
-          type: integer
-          format: int32
-          description: Minutes
-          maximum: 59
-          minimum: 0
-    KidsPoolDetails_2:
-      properties:
         swimming_pool_dimensions:
-          $ref: '#/components/schemas/SwimmingPoolDimensions_2'
+          $ref: '#/components/schemas/SwimmingPoolDimensions'
         has_shallow_end:
           type: boolean
-          default: false
           description: Is there a shallow end?
-    OnSiteDetails:
-      description: Facility location details
-      properties:
-        onsite_type:
-          type: string
-          description: Facility location
-          enum:
-          - DEFAULT
-          - ONSITE
-          - OFFSITE
-    Instance:
-      description: Property Facility Instance
-      properties:
-        restaurant_details:
-          $ref: '#/components/schemas/RestaurantDetails'
-        parking_details:
-          $ref: '#/components/schemas/ParkingDetails'
-        payment_details:
-          $ref: '#/components/schemas/PaymentDetails'
-        swimming_pool_details:
-          $ref: '#/components/schemas/SwimmingPoolDetails'
-        internet_details:
-          $ref: '#/components/schemas/InternetDetails'
-        kids_pool_details:
-          $ref: '#/components/schemas/KidsPoolDetails_2'
-        on_site_details:
-          $ref: '#/components/schemas/OnSiteDetails'
-        age_limit_details:
-          $ref: '#/components/schemas/AgeLimitDetails_2'
-        schedule_details:
-          $ref: '#/components/schemas/ScheduleDetails'
-        temporarily_closed_details:
-          $ref: '#/components/schemas/TemporarilyClosedDetails_2'
-        surcharge_details:
-          $ref: '#/components/schemas/SurchargeDetails_2'
-        meal_details:
-          $ref: '#/components/schemas/MealDetails'
-    SwimmingPoolDimensions_2:
-      properties:
-        length:
-          type: number
-          format: double
-          description: Pool length
-        width:
-          type: number
-          format: double
-          description: Pool width
-        depth_min:
-          type: number
-          format: double
-          description: Pool minimal depth
-        depth_max:
-          type: number
-          format: double
-          description: Pool maximal depth
-        unit:
-          type: string
-          description: Measurement unit
-          enum:
-          - METER
-    SurchargeDetails_2:
-      description: Surcharge Details
-      properties:
-        surcharge_type:
-          type: string
-          description: Surcharge type (free/paid)
-          enum:
-          - DEFAULT
-          - FREE
-          - PAID
-    PropertyFacility:
-      description: Property Facility object
+          default: false
+    PropertyFacilityResponse:
+      type: object
       properties:
         facility_id:
           type: integer
-          format: int32
           description: Property Facility ID
+          format: int32
         instances:
           type: array
           description: Array of instances
           items:
-            $ref: '#/components/schemas/Instance'
+            $ref: '#/components/schemas/InstanceResponse'
         state:
           type: string
           description: Is facility Present/Missing?
@@ -1887,106 +1631,20 @@ components:
           - MISSING
           - PRESENT
         property_facility_meta:
-          $ref: '#/components/schemas/PropertyFacilityMeta'
-        facilityMetaType:
-          $ref: '#/components/schemas/PropertyFacilityMeta'
-      required:
-      - facility_id
-      - state
-    ResponseMeta_2:
-      properties:
-        ruid:
-          type: string
-    AgeLimitDetails_2:
-      properties:
-        age_limit:
-          type: string
-          description: Minimum age allowed
-          enum:
-          - AGE_1
-          - AGE_2
-          - AGE_3
-          - AGE_4
-          - AGE_5
-          - AGE_6
-          - AGE_7
-          - AGE_8
-          - AGE_9
-          - AGE_10
-          - AGE_11
-          - AGE_12
-          - NO_RESTRICTION
-    Timestamp:
-      description: End date when facility are temporarily closed hotel timezone
-      properties:
-        epoch_seconds:
-          type: integer
-          format: int64
-          description: Unix timestamp in seconds since epoch
-    MealDetails:
-      properties:
-        breakfast_types:
-          type: array
-          items:
-            type: string
-            enum:
-            - CONTINENTAL
-            - ITALIAN
-            - FULL_ENGLISH
-            - VEGETARIAN
-            - VEGAN
-            - HALAL
-            - GLUTEN_FREE
-            - KOSHER
-            - ASIAN
-            - AMERICAN
-            - BUFFET
-            - A_LA_CARTE
-            - BREAKFAST_TO_GO
-        breakfast_food_item_types:
-          type: array
-          items:
-            type: string
-            enum:
-            - BREAD
-            - PASTRIES
-            - PANCAKES
-            - BUTTER
-            - CHEESE
-            - COLD_MEAT
-            - EGGS
-            - YOGURT
-            - FRUITS
-            - COFFEE
-            - TEA
-            - HOT_CHOCOLATE
-            - CHAMPAGNE
-            - A_LA_CARTE
-            - LOCAL_SPECIALITY
-            - COOKED_MEAL
-            - JUICE
-            - JAM
-            - CEREAL
-        price:
-          type: number
-          maximum: 99999999999999.98
-          minimum: 0.1
-      required:
-      - price
-    SuccessObject_2:
-      properties:
-        success:
-          type: boolean
-    ParkingDetails:
-      description: Parking Details
+          allOf:
+          - $ref: '#/components/schemas/PropertyFacilityMetaSummary'
+          description: Present only when `debugInfo=true` is passed. Contains the facility name, OTA codes, and allowed/required detail types for this facility.
+      description: Property Facility object
+    ParkingDetailsResponse:
+      type: object
       properties:
         name:
           type: string
           description: Name
         parking_type:
           type: string
-          default: UNKNOWN_PARKING_TYPE
           description: 'Type of parking. Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingType'
+          default: UNKNOWN_PARKING_TYPE
           enum:
           - UNKNOWN_PARKING_TYPE
           - PARKING_GARAGE
@@ -2012,71 +1670,133 @@ components:
           - NOT_NEEDED
           - NOT_POSSIBLE
         max_height_m:
-          type: number
-          format: double
-          description: 'Height limit for cars. Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingReservation'
           maximum: 200
           minimum: 0
+          type: number
+          description: 'Height limit for cars. Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingReservation'
+          format: double
         has_valet_service:
           type: string
-          default: NOT_SPECIFIED
           description: Valet service available
+          default: NOT_SPECIFIED
           enum:
           - NOT_SPECIFIED
           - PRESENT
           - MISSING
         has_onsite_staff:
           type: string
-          default: NOT_SPECIFIED
           description: Staff at the parking area
+          default: NOT_SPECIFIED
           enum:
           - NOT_SPECIFIED
           - PRESENT
           - MISSING
         has_gated_parking:
           type: string
-          default: NOT_SPECIFIED
           description: Gate at the entrance / exit
+          default: NOT_SPECIFIED
           enum:
           - NOT_SPECIFIED
           - PRESENT
           - MISSING
         has_security_cameras:
           type: string
-          default: NOT_SPECIFIED
           description: Security camera
+          default: NOT_SPECIFIED
           enum:
           - NOT_SPECIFIED
           - PRESENT
           - MISSING
         has_ev_charging_station:
           type: string
-          default: NOT_SPECIFIED
           description: Electric vehicle charging station
+          default: NOT_SPECIFIED
           enum:
           - NOT_SPECIFIED
           - PRESENT
           - MISSING
         has_accessible_parking_spots:
           type: string
-          default: NOT_SPECIFIED
           description: Accessible parking
+          default: NOT_SPECIFIED
           enum:
           - NOT_SPECIFIED
           - PRESENT
           - MISSING
-      required:
-      - name
-      - parking_access
-      - parking_location
-      - parking_reservation
-    ScheduleDetails:
-      description: 'Defines a schedule for a Facility. Corresponding legacy object in HDCN: OperationTimes'
+      description: Parking Details
+    OnsiteDetails:
+      type: object
       properties:
-        schedule:
+        onsite_type:
+          type: string
+          description: Facility location
+          enum:
+          - DEFAULT
+          - ONSITE
+          - OFFSITE
+      description: Facility location details
+    PaymentDetailsRequest:
+      required:
+      - charge_mode
+      type: object
+      properties:
+        charge_mode:
+          type: string
+          description: Charge mode
+          enum:
+          - UNKNOWN_CHARGE_MODE
+          - FREE
+          - PAID
+          - CHARGES_MAY_APPLY
+        charge_details:
+          $ref: '#/components/schemas/ChargeDetails'
+      description: Payment Details
+    ApiResponseSuccessObject:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/SuccessObject'
+        warnings:
           type: array
           items:
-            $ref: '#/components/schemas/WeekTimeEntry'
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    AgeLimitDetails_2:
+      properties:
+        age_limit:
+          type: string
+          description: Minimum age allowed
+          enum:
+          - AGE_1
+          - AGE_2
+          - AGE_3
+          - AGE_4
+          - AGE_5
+          - AGE_6
+          - AGE_7
+          - AGE_8
+          - AGE_9
+          - AGE_10
+          - AGE_11
+          - AGE_12
+          - NO_RESTRICTION
+    SuccessObject_2:
+      properties:
+        success:
+          type: boolean
+    TemporarilyClosedDetails_2:
+      description: Temporarily Closed Facility Details
+      properties:
+        closed:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemporarilyClosedEntry_2'
     InternetDetails:
       description: Defines details of the Internet connection
       properties:
@@ -2104,249 +1824,6 @@ components:
       required:
       - area
       - type
-    SwimmingPoolDetails:
-      properties:
-        name:
-          type: string
-        swimming_pool_type:
-          type: string
-          default: UNKNOWN_AVAILABILITY
-          description: Swimming Pool Type
-          enum:
-          - UNKNOWN_POOL_TYPE
-          - INDOOR
-          - OUTDOOR
-          - INDOOR_AND_OUTDOOR
-        availability_type:
-          type: string
-          default: UNKNOWN_AVAILABILITY
-          description: Availability
-          enum:
-          - UNKNOWN_AVAILABILITY
-          - ALL_SEASON
-          - SEASONABLE
-        allowed_age_type:
-          type: string
-          default: UNKNOWN_AGE_TYPE
-          description: Age restrictions
-          enum:
-          - UNKNOWN_AGE_TYPE
-          - ALL_AGES
-          - KIDS_ONLY
-          - ADULTS_ONLY
-        has_loungers:
-          type: boolean
-          description: Loungers available
-        has_water_slide:
-          type: boolean
-          description: Water slide
-        has_pool_bar:
-          type: boolean
-          description: Pool bar
-        has_pool_cover:
-          type: boolean
-          description: Pool cover
-        has_free_towels:
-          type: boolean
-          description: Free towels
-        has_pool_toys:
-          type: boolean
-          description: Pool toys
-        has_sun_umbrellas:
-          type: boolean
-          description: Sun umbrellas
-        has_fence_around_pool:
-          type: boolean
-          description: Safety fence
-        has_snake_trap:
-          type: boolean
-          description: Has a snake trap
-        is_shared:
-          type: boolean
-          description: Is the swimming pool shared?
-        is_rooftop:
-          type: boolean
-          description: Is a rooftop pool?
-        is_shallow_end:
-          type: boolean
-          description: Is there a shallow end?
-        is_infinity:
-          type: boolean
-          description: Is an infinity pool?
-        is_heated:
-          type: boolean
-          description: Is a heated pool?
-        is_salt_water:
-          type: boolean
-          description: Is a salt water pool?
-        is_pool_with_view:
-          type: boolean
-          description: Scenic view
-        is_plunge_pool:
-          type: boolean
-          description: Is a plunge pool?
-      required:
-      - name
-      - swimming_pool_type
-    WifiInfo_2:
-      description: Provides information about Wi-Fi connection
-      properties:
-        network_name:
-          type: string
-          description: Wi-fi network name (SSID)
-        speed_download:
-          type: number
-          format: double
-          description: Download speed, mbps
-        speed_upload:
-          type: number
-          format: double
-          description: Upload speed, mbps
-    ApiResponseSuccessObject_2:
-      properties:
-        ruid:
-          type: string
-          writeOnly: true
-        data:
-          $ref: '#/components/schemas/SuccessObject_2'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError_2'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError_2'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta_2'
-    PropertyFacilityMeta:
-      description: DEBUG ONLY. Contains Property Facility meta
-      properties:
-        facility_id:
-          type: integer
-          format: int32
-          description: Booking.com Facility ID
-        ota_hotel_amenity_type:
-          type: integer
-          format: int32
-          description: OTA HAC (HotelAmenityCode)
-        booking_extended_legacy_code:
-          type: integer
-          format: int32
-          description: '[Legacy] Booking.com Extended HAC Facility Code'
-        facility_name:
-          type: string
-          description: Name
-        allowed_details_list:
-          type: array
-          description: List of applicable Details objects
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/AgeLimitDetails_2'
-            - $ref: '#/components/schemas/ChargeDetails_2'
-            - $ref: '#/components/schemas/InternetDetails'
-            - $ref: '#/components/schemas/KidsPoolDetails_2'
-            - $ref: '#/components/schemas/OnSiteDetails'
-            - $ref: '#/components/schemas/ParkingDetails'
-            - $ref: '#/components/schemas/PaymentDetails'
-            - $ref: '#/components/schemas/RestaurantDetails'
-            - $ref: '#/components/schemas/ScheduleDetails'
-            - $ref: '#/components/schemas/SurchargeDetails_2'
-            - $ref: '#/components/schemas/SwimmingPoolDetails'
-            - $ref: '#/components/schemas/TemporarilyClosedDetails_2'
-            description: List of applicable Details objects
-        required_details_list:
-          type: array
-          description: List of required Details objects
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/ParkingDetails'
-            - $ref: '#/components/schemas/PaymentDetails'
-            - $ref: '#/components/schemas/RestaurantDetails'
-            - $ref: '#/components/schemas/SwimmingPoolDetails'
-            description: List of required Details objects
-    ChargeDetails_2:
-      description: Charge details
-      properties:
-        price:
-          type: number
-          format: double
-          description: Price, in property's currency
-        frequency:
-          type: string
-          description: Charging frequency
-          enum:
-          - UNKNOWN_FREQUENCY
-          - PER_STAY
-          - PER_MINUTE
-          - PER_HALF_HOUR
-          - PER_HOUR
-          - PER_DAY
-          - PER_WEEK
-    WeekTimeEntry:
-      description: Describes opening times on a certain day of week
-      properties:
-        from:
-          $ref: '#/components/schemas/Daytime_2'
-        to:
-          $ref: '#/components/schemas/Daytime_2'
-        day_of_week:
-          type: string
-          description: 'Day of the week. Corresponding legacy object in HDCN: OperationTimes/OperationTime/'
-          enum:
-          - UNKNOWN_DAY
-          - MONDAY
-          - TUESDAY
-          - WEDNESDAY
-          - THURSDAY
-          - FRIDAY
-          - SATURDAY
-          - SUNDAY
-      required:
-      - day_of_week
-      - from
-      - to
-    TemporarilyClosedEntry_2:
-      description: A range of dates
-      properties:
-        start_date:
-          $ref: '#/components/schemas/Timestamp'
-        end_date:
-          $ref: '#/components/schemas/Timestamp'
-    ApiResponseListPropertyFacility_2:
-      properties:
-        ruid:
-          type: string
-          writeOnly: true
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PropertyFacility'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError_2'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError_2'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta_2'
-    PaymentDetails:
-      description: Payment Details
-      properties:
-        charge_mode:
-          type: string
-          description: Charge mode
-          enum:
-          - UNKNOWN_CHARGE_MODE
-          - FREE
-          - PAID
-          - CHARGES_MAY_APPLY
-        charge_details:
-          $ref: '#/components/schemas/ChargeDetails_2'
-      required:
-      - charge_mode
     RestaurantDetails:
       properties:
         name:
@@ -2461,13 +1938,536 @@ components:
           description: A la carte menu
       required:
       - name
-    TemporarilyClosedDetails_2:
-      description: Temporarily Closed Facility Details
+    SwimmingPoolDimensions_2:
       properties:
-        closed:
+        length:
+          type: number
+          format: double
+          description: Pool length
+        width:
+          type: number
+          format: double
+          description: Pool width
+        depth_min:
+          type: number
+          format: double
+          description: Pool minimal depth
+        depth_max:
+          type: number
+          format: double
+          description: Pool maximal depth
+        unit:
+          type: string
+          description: Measurement unit
+          enum:
+          - METER
+    ApiError_2:
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          type: object
+    SurchargeDetails_2:
+      description: Surcharge Details
+      properties:
+        surcharge_type:
+          type: string
+          description: Surcharge type (free/paid)
+          enum:
+          - DEFAULT
+          - FREE
+          - PAID
+    ApiResponseListPropertyFacility_2:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
           type: array
           items:
-            $ref: '#/components/schemas/TemporarilyClosedEntry_2'
+            $ref: '#/components/schemas/PropertyFacility'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta_2'
+    ResponseMeta_2:
+      properties:
+        ruid:
+          type: string
+    WeekTimeEntry:
+      description: Describes opening times on a certain day of week
+      properties:
+        from:
+          $ref: '#/components/schemas/Daytime_2'
+        to:
+          $ref: '#/components/schemas/Daytime_2'
+        day_of_week:
+          type: string
+          description: 'Day of the week. Corresponding legacy object in HDCN: OperationTimes/OperationTime/'
+          enum:
+          - UNKNOWN_DAY
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          - SATURDAY
+          - SUNDAY
+      required:
+      - day_of_week
+      - from
+      - to
+    SwimmingPoolDetails:
+      properties:
+        name:
+          type: string
+        swimming_pool_type:
+          type: string
+          default: UNKNOWN_AVAILABILITY
+          description: Swimming Pool Type
+          enum:
+          - UNKNOWN_POOL_TYPE
+          - INDOOR
+          - OUTDOOR
+          - INDOOR_AND_OUTDOOR
+        availability_type:
+          type: string
+          default: UNKNOWN_AVAILABILITY
+          description: Availability
+          enum:
+          - UNKNOWN_AVAILABILITY
+          - ALL_SEASON
+          - SEASONABLE
+        allowed_age_type:
+          type: string
+          default: UNKNOWN_AGE_TYPE
+          description: Age restrictions
+          enum:
+          - UNKNOWN_AGE_TYPE
+          - ALL_AGES
+          - KIDS_ONLY
+          - ADULTS_ONLY
+        has_loungers:
+          type: boolean
+          description: Loungers available
+        has_water_slide:
+          type: boolean
+          description: Water slide
+        has_pool_bar:
+          type: boolean
+          description: Pool bar
+        has_pool_cover:
+          type: boolean
+          description: Pool cover
+        has_free_towels:
+          type: boolean
+          description: Free towels
+        has_pool_toys:
+          type: boolean
+          description: Pool toys
+        has_sun_umbrellas:
+          type: boolean
+          description: Sun umbrellas
+        has_fence_around_pool:
+          type: boolean
+          description: Safety fence
+        has_snake_trap:
+          type: boolean
+          description: Has a snake trap
+        is_shared:
+          type: boolean
+          description: Is the swimming pool shared?
+        is_rooftop:
+          type: boolean
+          description: Is a rooftop pool?
+        is_shallow_end:
+          type: boolean
+          description: Is there a shallow end?
+        is_infinity:
+          type: boolean
+          description: Is an infinity pool?
+        is_heated:
+          type: boolean
+          description: Is a heated pool?
+        is_salt_water:
+          type: boolean
+          description: Is a salt water pool?
+        is_pool_with_view:
+          type: boolean
+          description: Scenic view
+        is_plunge_pool:
+          type: boolean
+          description: Is a plunge pool?
+      required:
+      - name
+      - swimming_pool_type
+    OnSiteDetails:
+      description: Facility location details
+      properties:
+        onsite_type:
+          type: string
+          description: Facility location
+          enum:
+          - DEFAULT
+          - ONSITE
+          - OFFSITE
+    PropertyFacilityMeta:
+      description: DEBUG ONLY. Contains Property Facility meta
+      properties:
+        facility_id:
+          type: integer
+          format: int32
+          description: Booking.com Facility ID
+        ota_hotel_amenity_type:
+          type: integer
+          format: int32
+          description: OTA HAC (HotelAmenityCode)
+        booking_extended_legacy_code:
+          type: integer
+          format: int32
+          description: '[Legacy] Booking.com Extended HAC Facility Code'
+        facility_name:
+          type: string
+          description: Name
+        allowed_details_list:
+          type: array
+          description: List of applicable Details objects
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/AgeLimitDetails_2'
+            - $ref: '#/components/schemas/ChargeDetails_2'
+            - $ref: '#/components/schemas/InternetDetails'
+            - $ref: '#/components/schemas/KidsPoolDetails_2'
+            - $ref: '#/components/schemas/OnSiteDetails'
+            - $ref: '#/components/schemas/ParkingDetails'
+            - $ref: '#/components/schemas/PaymentDetails'
+            - $ref: '#/components/schemas/RestaurantDetails'
+            - $ref: '#/components/schemas/ScheduleDetails'
+            - $ref: '#/components/schemas/SurchargeDetails_2'
+            - $ref: '#/components/schemas/SwimmingPoolDetails'
+            - $ref: '#/components/schemas/TemporarilyClosedDetails_2'
+            description: List of applicable Details objects
+        required_details_list:
+          type: array
+          description: List of required Details objects
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ParkingDetails'
+            - $ref: '#/components/schemas/PaymentDetails'
+            - $ref: '#/components/schemas/RestaurantDetails'
+            - $ref: '#/components/schemas/SwimmingPoolDetails'
+            description: List of required Details objects
+    WifiInfo_2:
+      description: Provides information about Wi-Fi connection
+      properties:
+        network_name:
+          type: string
+          description: Wi-fi network name (SSID)
+        speed_download:
+          type: number
+          format: double
+          description: Download speed, mbps
+        speed_upload:
+          type: number
+          format: double
+          description: Upload speed, mbps
+    PropertyFacility:
+      description: Property Facility object
+      properties:
+        facility_id:
+          type: integer
+          format: int32
+          description: Property Facility ID
+        instances:
+          type: array
+          description: Array of instances
+          items:
+            $ref: '#/components/schemas/Instance'
+        state:
+          type: string
+          description: Is facility Present/Missing?
+          enum:
+          - MISSING
+          - PRESENT
+        property_facility_meta:
+          $ref: '#/components/schemas/PropertyFacilityMeta'
+        facilityMetaType:
+          $ref: '#/components/schemas/PropertyFacilityMeta'
+      required:
+      - facility_id
+      - state
+    Timestamp:
+      description: End date when facility are temporarily closed hotel timezone
+      properties:
+        epoch_seconds:
+          type: integer
+          format: int64
+          description: Unix timestamp in seconds since epoch
+    ScheduleDetails:
+      description: 'Defines a schedule for a Facility. Corresponding legacy object in HDCN: OperationTimes'
+      properties:
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeekTimeEntry'
+    Instance:
+      description: Property Facility Instance
+      properties:
+        restaurant_details:
+          $ref: '#/components/schemas/RestaurantDetails'
+        parking_details:
+          $ref: '#/components/schemas/ParkingDetails'
+        payment_details:
+          $ref: '#/components/schemas/PaymentDetails'
+        swimming_pool_details:
+          $ref: '#/components/schemas/SwimmingPoolDetails'
+        internet_details:
+          $ref: '#/components/schemas/InternetDetails'
+        kids_pool_details:
+          $ref: '#/components/schemas/KidsPoolDetails_2'
+        on_site_details:
+          $ref: '#/components/schemas/OnSiteDetails'
+        age_limit_details:
+          $ref: '#/components/schemas/AgeLimitDetails_2'
+        schedule_details:
+          $ref: '#/components/schemas/ScheduleDetails'
+        temporarily_closed_details:
+          $ref: '#/components/schemas/TemporarilyClosedDetails_2'
+        surcharge_details:
+          $ref: '#/components/schemas/SurchargeDetails_2'
+        meal_details:
+          $ref: '#/components/schemas/MealDetails'
+    TemporarilyClosedEntry_2:
+      description: A range of dates
+      properties:
+        start_date:
+          $ref: '#/components/schemas/Timestamp'
+        end_date:
+          $ref: '#/components/schemas/Timestamp'
+    Daytime_2:
+      description: Definition of a time in the day
+      properties:
+        hours:
+          type: integer
+          format: int32
+          description: Hours, in 24h format
+          maximum: 23
+          minimum: 0
+        minutes:
+          type: integer
+          format: int32
+          description: Minutes
+          maximum: 59
+          minimum: 0
+    ChargeDetails_2:
+      description: Charge details
+      properties:
+        price:
+          type: number
+          format: double
+          description: Price, in property's currency
+        frequency:
+          type: string
+          description: Charging frequency
+          enum:
+          - UNKNOWN_FREQUENCY
+          - PER_STAY
+          - PER_MINUTE
+          - PER_HALF_HOUR
+          - PER_HOUR
+          - PER_DAY
+          - PER_WEEK
+    KidsPoolDetails_2:
+      properties:
+        swimming_pool_dimensions:
+          $ref: '#/components/schemas/SwimmingPoolDimensions_2'
+        has_shallow_end:
+          type: boolean
+          default: false
+          description: Is there a shallow end?
+    MealDetails:
+      properties:
+        breakfast_types:
+          type: array
+          items:
+            type: string
+            enum:
+            - CONTINENTAL
+            - ITALIAN
+            - FULL_ENGLISH
+            - VEGETARIAN
+            - VEGAN
+            - HALAL
+            - GLUTEN_FREE
+            - KOSHER
+            - ASIAN
+            - AMERICAN
+            - BUFFET
+            - A_LA_CARTE
+            - BREAKFAST_TO_GO
+        breakfast_food_item_types:
+          type: array
+          items:
+            type: string
+            enum:
+            - BREAD
+            - PASTRIES
+            - PANCAKES
+            - BUTTER
+            - CHEESE
+            - COLD_MEAT
+            - EGGS
+            - YOGURT
+            - FRUITS
+            - COFFEE
+            - TEA
+            - HOT_CHOCOLATE
+            - CHAMPAGNE
+            - A_LA_CARTE
+            - LOCAL_SPECIALITY
+            - COOKED_MEAL
+            - JUICE
+            - JAM
+            - CEREAL
+        price:
+          type: number
+          maximum: 99999999999999.98
+          minimum: 0.1
+      required:
+      - price
+    PaymentDetails:
+      description: Payment Details
+      properties:
+        charge_mode:
+          type: string
+          description: Charge mode
+          enum:
+          - UNKNOWN_CHARGE_MODE
+          - FREE
+          - PAID
+          - CHARGES_MAY_APPLY
+        charge_details:
+          $ref: '#/components/schemas/ChargeDetails_2'
+      required:
+      - charge_mode
+    ParkingDetails:
+      description: Parking Details
+      properties:
+        name:
+          type: string
+          description: Name
+        parking_type:
+          type: string
+          default: UNKNOWN_PARKING_TYPE
+          description: 'Type of parking. Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingType'
+          enum:
+          - UNKNOWN_PARKING_TYPE
+          - PARKING_GARAGE
+          - PARKING_LOT
+          - STREET_PARKING
+        parking_location:
+          type: string
+          description: Where is this parking located?
+          enum:
+          - ON_SITE
+          - NEARBY
+        parking_access:
+          type: string
+          description: 'Who can park here? Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingProperty'
+          enum:
+          - ONLY_GUESTS
+          - GENERAL_PUBLIC
+        parking_reservation:
+          type: string
+          description: Is reservation possible/required?
+          enum:
+          - NEEDED
+          - NOT_NEEDED
+          - NOT_POSSIBLE
+        max_height_m:
+          type: number
+          format: double
+          description: 'Height limit for cars. Corresponding legacy object in HDCN: ParkingFeePolicy/@ParkingReservation'
+          maximum: 200
+          minimum: 0
+        has_valet_service:
+          type: string
+          default: NOT_SPECIFIED
+          description: Valet service available
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_onsite_staff:
+          type: string
+          default: NOT_SPECIFIED
+          description: Staff at the parking area
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_gated_parking:
+          type: string
+          default: NOT_SPECIFIED
+          description: Gate at the entrance / exit
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_security_cameras:
+          type: string
+          default: NOT_SPECIFIED
+          description: Security camera
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_ev_charging_station:
+          type: string
+          default: NOT_SPECIFIED
+          description: Electric vehicle charging station
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+        has_accessible_parking_spots:
+          type: string
+          default: NOT_SPECIFIED
+          description: Accessible parking
+          enum:
+          - NOT_SPECIFIED
+          - PRESENT
+          - MISSING
+      required:
+      - name
+      - parking_access
+      - parking_location
+      - parking_reservation
+    ApiResponseSuccessObject_2:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          $ref: '#/components/schemas/SuccessObject_2'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta_2'
 x-refined-from:
 - booking-com-facilities-api-openapi.yml
 - booking-com-facilities-api-remote-sync-openapi.yml

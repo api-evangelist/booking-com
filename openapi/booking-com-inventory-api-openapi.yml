@@ -101,29 +101,6 @@ paths:
                       message: Parameter 'languages' is invalid. Only one language per request is supported (got 2)
 components:
   schemas:
-    Policies:
-      description: Check-in/check-out times and bookability policies.
-      properties:
-        check_in_start_time:
-          type: string
-          description: Earliest check-in time, local to the property (HH:mm).
-          example: '15:00'
-        check_in_end_time:
-          type: string
-          description: Latest check-in time, local to the property (HH:mm).
-          example: '23:00'
-        check_out_start_time:
-          type: string
-          description: Earliest check-out time, local to the property (HH:mm).
-          example: 07:00
-        check_out_end_time:
-          type: string
-          description: Latest check-out time, local to the property (HH:mm).
-          example: '11:00'
-        is_instant_bookable:
-          type: boolean
-          description: Whether the property can be booked instantly (no host confirmation).
-          example: true
     Ratings:
       description: Star rating and guest review aggregates.
       properties:
@@ -235,33 +212,38 @@ components:
           $ref: '#/components/schemas/Links'
         status:
           $ref: '#/components/schemas/Status'
-    Image:
-      description: 'A single property image: its CDN URL and image type (e.g. "main").'
+    PropertyStreamRequest:
       properties:
-        url:
+        languages:
+          type: array
+          description: Exactly one BCP-47 language code. Localizable fields are returned in this language. More than one language is not currently supported and returns HTTP 400.
+          example:
+          - en-gb
+          items:
+            type: string
+            description: Exactly one BCP-47 language code. Localizable fields are returned in this language. More than one language is not currently supported and returns HTTP 400.
+            example: '["en-gb"]'
+        updated_since:
           type: string
-          description: Image URL on the Booking.com image CDN, with the requested image_size applied.
-          example: https://q-xx.bstatic.com/xdata/images/hotel/max500/681992303.jpg?k=<sig>&o=
-        type:
+          description: Optional ISO-8601 UTC timestamp with millisecond precision. When set, only properties changed at or after this instant are returned (delta sync); when omitted, the full inventory is returned.
+          example: '2026-04-20T00:00:00.000Z'
+        image_size:
           type: string
-          description: Image type. Currently always "main".
-          example: main
-    ErrorDetail:
-      type: object
-      description: Details of a single error.
-      properties:
-        id:
-          type: string
-          description: Machine-readable error identifier.
-          example: invalid_parameter
-        name:
-          type: string
-          description: Human-readable error name.
-          example: Invalid Value
-        message:
-          type: string
-          description: Detailed error message explaining what went wrong.
-          example: The request contains an invalid parameter.
+          default: standard
+          description: 'Size token applied to every image URL:
+
+            - `thumbnail`: 100×100, square, center-cropped
+
+            - `thumbnail_large`: 300×300, square, center-cropped
+
+            - `standard`: up to 500px on the longest side (default)
+
+            - `large`: up to 1280px on the longest side'
+          enum:
+          - thumbnail
+          - thumbnail_large
+          - standard
+          - large
     Location:
       description: Geographic location of the property.
       properties:
@@ -310,38 +292,45 @@ components:
           format: date
           description: Date the property was last active in the feed, as an ISO date (YYYY-MM-DD).
           example: '2026-07-07'
-    PropertyStreamRequest:
+    Policies:
+      description: Check-in/check-out times and bookability policies.
       properties:
-        languages:
-          type: array
-          description: Exactly one BCP-47 language code. Localizable fields are returned in this language. More than one language is not currently supported and returns HTTP 400.
-          example:
-          - en-gb
-          items:
-            type: string
-            description: Exactly one BCP-47 language code. Localizable fields are returned in this language. More than one language is not currently supported and returns HTTP 400.
-            example: '["en-gb"]'
-        updated_since:
+        check_in_start_time:
           type: string
-          description: Optional ISO-8601 UTC timestamp with millisecond precision. When set, only properties changed at or after this instant are returned (delta sync); when omitted, the full inventory is returned.
-          example: '2026-04-20T00:00:00.000Z'
-        image_size:
+          description: Earliest check-in time, local to the property (HH:mm).
+          example: '15:00'
+        check_in_end_time:
           type: string
-          default: standard
-          description: 'Size token applied to every image URL:
-
-            - `thumbnail`: 100×100, square, center-cropped
-
-            - `thumbnail_large`: 300×300, square, center-cropped
-
-            - `standard`: up to 500px on the longest side (default)
-
-            - `large`: up to 1280px on the longest side'
-          enum:
-          - thumbnail
-          - thumbnail_large
-          - standard
-          - large
+          description: Latest check-in time, local to the property (HH:mm).
+          example: '23:00'
+        check_out_start_time:
+          type: string
+          description: Earliest check-out time, local to the property (HH:mm).
+          example: 07:00
+        check_out_end_time:
+          type: string
+          description: Latest check-out time, local to the property (HH:mm).
+          example: '11:00'
+        is_instant_bookable:
+          type: boolean
+          description: Whether the property can be booked instantly (no host confirmation).
+          example: true
+    ErrorDetail:
+      type: object
+      description: Details of a single error.
+      properties:
+        id:
+          type: string
+          description: Machine-readable error identifier.
+          example: invalid_parameter
+        name:
+          type: string
+          description: Human-readable error name.
+          example: Invalid Value
+        message:
+          type: string
+          description: Detailed error message explaining what went wrong.
+          example: The request contains an invalid parameter.
     ErrorResponse:
       type: object
       description: Standard error response format for API errors.
@@ -359,6 +348,17 @@ components:
           type: string
           description: Account ID that triggered request, useful for debugging and support.
           example: '1234654'
+    Image:
+      description: 'A single property image: its CDN URL and image type (e.g. "main").'
+      properties:
+        url:
+          type: string
+          description: Image URL on the Booking.com image CDN, with the requested image_size applied.
+          example: https://q-xx.bstatic.com/xdata/images/hotel/max500/681992303.jpg?k=<sig>&o=
+        type:
+          type: string
+          description: Image type. Currently always "main".
+          example: main
   securitySchemes:
     BearerAuth:
       type: http

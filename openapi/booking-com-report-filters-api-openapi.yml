@@ -105,14 +105,73 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
-    Warning:
+    InvalidTokenResponse:
       type: object
-      description: Warning information
+      description: Response when the authentication token is missing, invalid, or expired.
       properties:
-        message:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          maxItems: 0
+          items: {}
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              code:
+                type: string
+                description: Error code
+              details:
+                type:
+                - string
+                - 'null'
+                description: Additional error details
+    RateLimitErrorResponse:
+      type: object
+      description: Response when the rate limit has been exceeded
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    ReconReportFiltersData:
+      type: object
+      description: Available filter and configuration options for reconciliation report generation.
+      properties:
+        data_available_from_date:
           type: string
-          description: Warning message
-          example: string
+          format: date
+          description: The earliest date for which reconciliation report data is available, in `YYYY-MM-DD` format.
+          example: '2019-01-01'
+        report_configurations:
+          type: array
+          description: Available report configuration options, such as output format and locale.
+          items:
+            $ref: '#/components/schemas/ReportConfigurationOption'
+        report_filters:
+          type: array
+          description: Available report filters, such as bank accounts and payout types.
+          items:
+            $ref: '#/components/schemas/ReportFilterOption'
     ReportConfigurationOption:
       type: object
       description: An available report configuration option with all supported values and the default.
@@ -134,29 +193,9 @@ components:
           type: string
           description: The default value applied when this configuration key is not specified in the report generation request.
           example: CSV
-    RateLimitErrorResponse:
+    InternalServerErrorResponse:
       type: object
-      description: Response when the rate limit has been exceeded
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    UnauthorizedRequestResponse:
-      type: object
-      description: Response when the token is valid but does not have access to the requested resource.
+      description: Response when the request failed with an internal reason
       properties:
         meta:
           allOf:
@@ -191,37 +230,9 @@ components:
         debug_message:
           type: string
           description: Detailed debug message for the error
-    InvalidTokenResponse:
+    BadRequestErrorResponse:
       type: object
-      description: Response when the authentication token is missing, invalid, or expired.
-      properties:
-        meta:
-          $ref: '#/components/schemas/DefaultMeta'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          maxItems: 0
-          items: {}
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-                description: Error message
-              code:
-                type: string
-                description: Error code
-              details:
-                type:
-                - string
-                - 'null'
-                description: Additional error details
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
+      description: Response when the request doesn't have valid parameters
       properties:
         meta:
           allOf:
@@ -239,6 +250,14 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
     ReconReportFiltersResponse:
       type: object
       description: Response containing available filter and configuration options for reconciliation report generation.
@@ -257,14 +276,6 @@ components:
           type: array
           maxItems: 0
           items: {}
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
     ReportFilterOption:
       type: object
       description: An available report filter with all supported values.
@@ -278,28 +289,17 @@ components:
           description: All supported filter values for this filter key. An empty array indicates the filter is available but has no pre-defined values.
           items:
             type: string
-    ReconReportFiltersData:
+    Warning:
       type: object
-      description: Available filter and configuration options for reconciliation report generation.
+      description: Warning information
       properties:
-        data_available_from_date:
+        message:
           type: string
-          format: date
-          description: The earliest date for which reconciliation report data is available, in `YYYY-MM-DD` format.
-          example: '2019-01-01'
-        report_configurations:
-          type: array
-          description: Available report configuration options, such as output format and locale.
-          items:
-            $ref: '#/components/schemas/ReportConfigurationOption'
-        report_filters:
-          type: array
-          description: Available report filters, such as bank accounts and payout types.
-          items:
-            $ref: '#/components/schemas/ReportFilterOption'
-    BadRequestErrorResponse:
+          description: Warning message
+          example: string
+    UnauthorizedRequestResponse:
       type: object
-      description: Response when the request doesn't have valid parameters
+      description: Response when the token is valid but does not have access to the requested resource.
       properties:
         meta:
           allOf:

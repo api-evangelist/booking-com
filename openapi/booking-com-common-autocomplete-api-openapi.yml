@@ -64,7 +64,99 @@ paths:
         '500':
           description: Internal server error.
 components:
+  parameters:
+    AffiliateIdHeader:
+      in: header
+      name: X-Affiliate-Id
+      schema:
+        type: integer
+      required: true
+      description: Include here your Affiliate identifier number
   schemas:
+    translatedString:
+      title: TranslatedString
+      description: A string localised in multiple languages.
+      type: object
+      patternProperties:
+        ^[a-z]{2}(-[a-z]{2})$:
+          description: The content localised in this language.
+          type:
+          - string
+          - 'null'
+    autoCompleteFilters:
+      title: AutoCompleteFilters
+      description: Filters to restrict autocomplete results.
+      type: object
+      properties:
+        types:
+          description: Restricts results to the specified destination types. If omitted, all destination types are considered.
+          type: array
+          items:
+            $ref: '#/components/schemas/destinationType'
+    countryId:
+      description: 'A two-letter code that uniquely identifies a country. This code is defined by the ISO 3166-1 alpha-2 standard (ISO2) as described here: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/countries" target="_blank">common/locations/countries</a>.'
+      type: string
+      pattern: ^[a-z]{2}$
+      example: nl
+    autoCompleteOutput:
+      title: AutoCompleteOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/autoCompleteResult'
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
+    error_response:
+      title: ErrorResponse
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              message:
+                type: string
+            required:
+            - id
+            - message
+      required:
+      - request_id
+      - errors
+    autoCompleteLocation:
+      title: AutoCompleteLocation
+      description: Geographic context of the suggestion, including city, country and coordinates.
+      type: object
+      properties:
+        city:
+          $ref: '#/components/schemas/cityId'
+        city_name:
+          $ref: '#/components/schemas/translatedString'
+        coordinates:
+          $ref: '#/components/schemas/dataTypes_coordinates'
+        country:
+          $ref: '#/components/schemas/countryId'
+        country_name:
+          $ref: '#/components/schemas/translatedString'
+    dataTypes_coordinates:
+      title: Coordinates
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
     autoCompleteResult:
       title: AutoCompleteResultOutput
       description: Represents a single ranked autocomplete suggestion with a display name in the requested language and geographic context.
@@ -80,24 +172,14 @@ components:
           type: string
         location:
           $ref: '#/components/schemas/autoCompleteLocation'
+    cityId:
+      description: A signed integer number that uniquely identifies a city. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/cities" target="_blank">common/locations/cities</a>.
+      type: integer
     languageId:
       description: 'A [IETF language tag code](https://en.wikipedia.org/wiki/IETF_language_tag) that uniquely identifies a supported human language or dialect. **Note:** Demand API only accepts lowercase for the language codes. Examples: "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.'
       type: string
       pattern: ^[a-z]{2}(-[a-z]{2})?$
       example: en-us
-    cityId:
-      description: A signed integer number that uniquely identifies a city. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/cities" target="_blank">common/locations/cities</a>.
-      type: integer
-    autoCompleteFilters:
-      title: AutoCompleteFilters
-      description: Filters to restrict autocomplete results.
-      type: object
-      properties:
-        types:
-          description: Restricts results to the specified destination types. If omitted, all destination types are considered.
-          type: array
-          items:
-            $ref: '#/components/schemas/destinationType'
     autoCompleteInput:
       title: AutoCompleteInput
       type: object
@@ -124,80 +206,6 @@ components:
         filters:
           description: Restricts results to the specified destination types. If omitted, all types are included. It should not be an empty object.
           $ref: '#/components/schemas/autoCompleteFilters'
-    autoCompleteLocation:
-      title: AutoCompleteLocation
-      description: Geographic context of the suggestion, including city, country and coordinates.
-      type: object
-      properties:
-        city:
-          $ref: '#/components/schemas/cityId'
-        city_name:
-          $ref: '#/components/schemas/translatedString'
-        coordinates:
-          $ref: '#/components/schemas/dataTypes_coordinates'
-        country:
-          $ref: '#/components/schemas/countryId'
-        country_name:
-          $ref: '#/components/schemas/translatedString'
-    translatedString:
-      title: TranslatedString
-      description: A string localised in multiple languages.
-      type: object
-      patternProperties:
-        ^[a-z]{2}(-[a-z]{2})$:
-          description: The content localised in this language.
-          type:
-          - string
-          - 'null'
-    requestId:
-      description: Uniquely identifies the request. Please provide this identifier when contacting support.
-      type: string
-    error_response:
-      title: ErrorResponse
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-              message:
-                type: string
-            required:
-            - id
-            - message
-      required:
-      - request_id
-      - errors
-    autoCompleteOutput:
-      title: AutoCompleteOutput
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/autoCompleteResult'
-    dataTypes_coordinates:
-      title: Coordinates
-      type: object
-      properties:
-        latitude:
-          type: number
-          format: double
-        longitude:
-          type: number
-          format: double
-    countryId:
-      description: 'A two-letter code that uniquely identifies a country. This code is defined by the ISO 3166-1 alpha-2 standard (ISO2) as described here: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/countries" target="_blank">common/locations/countries</a>.'
-      type: string
-      pattern: ^[a-z]{2}$
-      example: nl
     destinationType:
       description: The type of destination.
       type: string
@@ -210,6 +218,13 @@ components:
       - region
       - country
   examples:
+    input:
+      query: amsterdam
+      language: en-gb
+      country: nl
+      filters:
+        types:
+        - city
     output:
       request_id: 01khs9q981dta9fptx2edvq9r3
       data:
@@ -241,21 +256,6 @@ components:
           country: nl
           country_name:
             en-gb: Netherlands
-    input:
-      query: amsterdam
-      language: en-gb
-      country: nl
-      filters:
-        types:
-        - city
-  parameters:
-    AffiliateIdHeader:
-      in: header
-      name: X-Affiliate-Id
-      schema:
-        type: integer
-      required: true
-      description: Include here your Affiliate identifier number
   securitySchemes:
     BearerAuth:
       type: http

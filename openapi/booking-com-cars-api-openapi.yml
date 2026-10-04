@@ -2030,100 +2030,225 @@ components:
       required: true
       description: Include here your Affiliate identifier number
   schemas:
-    instructions:
-      description: Pickup or drop-off information.
-      type:
-      - object
-      - 'null'
-      properties:
-        instructions:
-          description: Translated pickup or drop-off instructions.
-          $ref: '#/components/schemas/translatedString'
-        working_hours:
-          description: Depot working hours.
-          $ref: '#/components/schemas/workingHours'
-    cars_details_output:
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/details'
-        metadata:
-          description: Metadata about the request.
-          type: object
-          properties:
-            next_page:
-              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
-              type: string
-              nullable: true
-    depots_contact:
-      description: Contact information of the depot. Returns `null` when unavailable.
-      type: object
-      properties:
-        email:
-          description: Email address of the depot. Returns `null` when unavailable.
-          example: depot@test.booking.com
-          type:
-          - string
-          - 'null'
-        telephone:
-          description: Telephone number of the depot. Returns `null` when unavailable.
-          example: '+31882847620'
-          type:
-          - string
-          - 'null'
-    carMonetaryAmountWithTiming:
-      description: A monetary amount with currency code and the timing of payment. Use timing to indicate whether the amount is paid online now, partially online, or at pickup.
-      type: object
-      properties:
-        value:
-          description: The numeric value of the amount.
-          type: number
-          format: double
-        currency:
-          description: The currency code.
-          $ref: '#/components/schemas/currencyId'
-        timing:
-          description: The payment timing.
-          type: string
-          enum:
-          - pay_online_now
-          - pay_partial_online_now
-          - pay_at_pickup
+    chargeTypeIdOutput:
+      description: The type of this charge.
+      type: string
     page:
       description: Pagination token used to retrieve the next page of results. Obtained from `next_page`.
       type: string
-    cars_availability_input:
+    productPrice:
+      description: The price components of this product.
       type: object
       properties:
-        offer:
-          $ref: '#/components/schemas/offerId'
-        search_token:
-          type: string
-          description: The encoded search token obtained from the search results. This token is car-specific and essential for maintaining state between search and availability checks.
         currency:
           $ref: '#/components/schemas/currencyId'
-        language:
-          description: "Optional IETF language tag (e.g., 'en-gb', 'fr'). Controls the language of legal insurance documents (IPID and policy document).\nDefaults to 'en-gb' if the requested language is unavailable or not specified.\n\n Note: If mandatory insurance documents are unavailable in English, the insurance object is omitted."
-          $ref: '#/components/schemas/languageId'
-      required:
-      - offer
-      - search_token
-      - currency
-    availability_paymentOutput:
-      description: The payment policy that applies to this product.
+        credit_card_required:
+          description: 'Indicates whether a credit card is required as a guarantee for this vehicle.
+
+
+            - true: A credit card must be provided and will be passed to the supplier for guarantee purposes. Applies to vehicles with ''payment.timing = pay_at_pickup''.
+
+            - false: A credit card is explicitly not required.
+
+            - null: Information not available or not applicable (for example, pay-online-now vehicles where credit card requirements are currently unknown).'
+          type:
+          - boolean
+          - 'null'
+        extra_charges:
+          title: CarsProductExtraCharges
+          description: The charge breakdown. Includes taxes and fees included in the drive away price.
+          type: array
+          items:
+            $ref: '#/components/schemas/charge'
+        total:
+          description: The total price. Includes all extra charges.
+          $ref: '#/components/schemas/monetaryAmount'
+    metadata:
+      title: MetadataOutput
+      description: Metadata about the request.
       type: object
       properties:
-        timing:
-          description: The applied payment timing. For example 'pay_online_now'.
+        next_page:
+          description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
+          type: string
+          nullable: true
+        total_results:
+          description: The total number of results available.
+          type: integer
+          minimum: 0
+    depot:
+      description: Static information about the car rental depot.
+      type: object
+      properties:
+        id:
+          description: Unique depot's ID.
+          $ref: '#/components/schemas/depots_depotId'
+        contact:
+          $ref: '#/components/schemas/depots_contact'
+        city:
+          description: Unique identifier of the city. If the city ID is not included in the list returned by /common/locations/cities, call that endpoint using the city filter.
+          $ref: '#/components/schemas/city'
+        pickup:
+          description: Pickup information for the depot.
+          $ref: '#/components/schemas/instructions'
+        location:
+          $ref: '#/components/schemas/location'
+        dropoff:
+          description: Drop-off information for the depot.
+          $ref: '#/components/schemas/instructions'
+        services:
+          description: List of services provided by the depot.
+          type: array
+          items:
+            type: string
+            enum:
+            - shuttle
+            - meet_greet
+            - unknown
+        supplier:
+          description: Unique identifier of the vehicle supplier. You can see the full list of supplier IDs calling /cars/suppliers.
+          $ref: '#/components/schemas/vehicleSupplierId'
+        ratings:
+          description: Number of reviews and average score for the depot.
+          $ref: '#/components/schemas/ratings'
+    productOutput:
+      description: Detailed information about optional extras available for the vehicle, including pricing, availability, and calculation rules.
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the product.
+        type:
+          type: string
+          description: Specifies the type of optional extra or service associated with the vehicle. For example, gps for a navigation system, baby_seat for a child seat, or wifi_router for mobile internet. Some values may represent similar extras because suppliers use different naming conventions for the same or comparable products.
+          enum:
+          - additional_driver
+          - baby_seat
+          - bluetooth_handsfree_kit
+          - booster_seat
+          - child_booster_seat
+          - child_seat
+          - child_seat_isofix
+          - etc_card_electronic_toll_collection_card
+          - excess_protection
+          - fast_track
+          - gps
+          - infant_seat
+          - luggage_rack
+          - personal_travel_assistant
+          - queue_jump
+          - roof_rack
+          - ski_box
+          - ski_rack
+          - skierized_equipment
+          - snow_chains
+          - snow_tyres
+          - wifi_mobile
+          - wifi_router
+          x-enumDescriptions:
+            additional_driver: Authorises an additional person to drive the vehicle.
+            baby_seat: Baby seat for infants up to around 12 months or 9 kg/20 lbs.
+            bluetooth_handsfree_kit: Bluetooth device for hands-free phone calls while driving.
+            booster_seat: Booster seat for children around 4–11 years old, up to 45 kg/100 lbs.
+            child_booster_seat: Booster seat for children around 4–11 years old, up to 45 kg/100 lbs.
+            child_seat: Child seat for children around 1–3 years old, up to 18 kg/40 lbs.
+            child_seat_isofix: Child safety seat compatible with ISOFIX anchor points.
+            etc_card_electronic_toll_collection_card: Electronic toll collection card for automatic toll payments.
+            excess_protection: Covers the excess payable in the event of damage or theft.
+            fast_track: Equivalent to `queue_jump`.
+            gps: Satellite navigation device.
+            infant_seat: Infant seat for babies or young children.
+            luggage_rack: Additional luggage storage.
+            personal_travel_assistant: Travel assistance service.
+            queue_jump: Allows travellers to skip the standard queue at pickup.
+            roof_rack: Roof-mounted rack for carrying additional luggage or equipment.
+            ski_box: Roof-mounted enclosed storage box for skis or luggage.
+            ski_rack: Roof-mounted rack designed to transport skis.
+            skierized_equipment: Winter sports equipment.
+            snow_chains: Tyre chains for snow.
+            snow_tyres: Winter tyres.
+            wifi_mobile: Mobile WiFi hotspot providing internet access during the rental.
+            wifi_router: Portable WiFi router providing internet access.
+        maximum_available:
+          type: number
+          format: integer
+          description: Maximum number of units of this product that can be selected per booking.
+        mode:
+          type: string
+          description: Defines how the product price is calculated. This determines whether pricing is applied per unit, per day, or for the full rental period.
+          enum:
+          - each_per_day
+          - each_per_rental
+          - per_day
+          - per_rental
+          x-enumDescriptions:
+            each_per_day: The price is charged per unit of the product, per day of the rental period. Total cost = unit price × quantity × number of rental days.
+            per_day: The price is charged once per day for the product, regardless of quantity. Total cost = daily price × number of rental days.
+            each_per_rental: The price is charged per unit for the full rental period. Total cost = unit price × quantity.
+            per_rental: The price is charged once for the entire rental period, regardless of quantity or duration.
+        price:
+          $ref: '#/components/schemas/productPriceOutput'
+    insuranceDocument:
+      title: InsuranceDocument
+      description: A single insurance document.
+      type: object
+      properties:
+        name:
+          description: The insurance document type.
           type: string
           enum:
-          - pay_online_now
-          - pay_partial_online_now
-          - pay_at_pickup
+          - policy_document
+          - ipid
+          x-enumDescriptions:
+            policy_document: 'Full legal insurance contract: terms and conditions of cover, exclusions, eligibility, claim conditions, and cancellation terms.'
+            ipid: 'Insurance Product Information Document (IPID): a short, compliance-focused summary of the key coverage information to help the traveller understand the insurance product before purchase.'
+        url:
+          description: URL of the insurance document.
+          type: string
+          format: uri
+          examples:
+          - https://staging.rentalcover.com/en/pds
+      required:
+      - name
+      - url
+    numberOfReviews:
+      description: Number of validated reviews for the depot.
+      type: integer
+      example: 125
+      minimum: 0
+    availability_mileageOutput:
+      description: The mileage policy that applies to this product.
+      type: object
+      properties:
+        distance_limit:
+          description: The maximum distance allowed before additional charges apply.
+          type:
+          - number
+          - 'null'
+          format: double
+          minimum: 0
+        distance_unit:
+          description: The unit of measurement for the distance limit. For example 'km' or 'miles'.
+          type: string
+          enum:
+          - kilometers
+          - miles
+        amount:
+          description: The amount that must be paid if the distance limit is exceeded.
+          anyOf:
+          - $ref: '#/components/schemas/monetaryAmount'
+          - type: 'null'
+        currency:
+          description: The currency of the amount that must be paid if the distance limit is exceeded.
+          anyOf:
+          - $ref: '#/components/schemas/currencyId'
+          - type: 'null'
+        type:
+          description: The type of mileage policy applied.
+          type: string
+          enum:
+          - limited
+          - unlimited
     policiesOutput:
       description: The policies that apply to this product.
       type: object
@@ -2188,17 +2313,371 @@ components:
               format: double
             currency:
               $ref: '#/components/schemas/currencyId'
-    chargeTypeIdOutput:
-      description: The type of this charge.
-      type: string
+    cars_suppliers_output:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/supplier'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    schemas-booker:
+      description: Defines the booker context.
+      type: object
+      properties:
+        country:
+          description: The booker country for showing the best price for that user and obeying laws regarding the display of taxes and fees.
+          $ref: '#/components/schemas/countryId'
+      required:
+      - country
+    priceOutput:
+      description: The price that applies to this vehicle.
+      type: object
+      properties:
+        base:
+          description: The base price of the vehicle.
+          $ref: '#/components/schemas/monetaryAmount'
+        credit_card_required:
+          description: 'Indicates whether a credit card is required as a guarantee for this vehicle.
+
+
+            - true: A credit card must be provided and will be passed to the supplier for guarantee purposes. Applies to vehicles with ''payment.timing = pay_at_pickup''.
+
+            - false: A credit card is explicitly not required.
+
+            - null: Information not available or not applicable (for example, pay-online-now vehicles where credit card requirements are currently unknown).'
+          type:
+          - boolean
+          - 'null'
+        total:
+          description: The total price of the vehicle.
+          $ref: '#/components/schemas/monetaryAmount'
+        extra_charges:
+          description: The charge breakdown. Includes taxes and fees included in the drive away price.
+          type: array
+          items:
+            $ref: '#/components/schemas/chargeOutput'
     cityId:
       description: A signed integer number that uniquely identifies a city. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/cities" target="_blank">common/locations/cities</a>.
       type: integer
+    translatedString:
+      title: TranslatedString
+      description: A string localised in multiple languages.
+      type: object
+      patternProperties:
+        ^[a-z]{2}(-[a-z]{2})$:
+          description: The content localised in this language.
+          type:
+          - string
+          - 'null'
+    maximumResults:
+      description: The maximum number of results to return.
+      type: integer
+      multipleOf: 10
+      minimum: 10
+      maximum: 100
+      default: 100
+    depots_reviewScore:
+      description: Current review score of the depot, in the range 1.0 to 10.0.
+      type: number
+      example: 8.7
+      multipleOf: 0.1
+      minimum: 1
+      maximum: 10
+    cars_terms_and_conditions_input:
+      properties:
+        offer:
+          $ref: '#/components/schemas/offerId'
+        currency:
+          description: The currency in ISO 4217 format (e.g., USD, EUR, GBP)
+          example: USD
+          type: string
+        language:
+          description: The language code (ISO 639-1 format) in which to return the terms and conditions.
+          $ref: '#/components/schemas/languageId'
+        search_token:
+          description: The pre-booking search_token used to fetch terms and conditions for a specific car rental offer. The search_token is returned by the search endpoint.
+          type: string
+      required:
+      - offer
+      - currency
+      - search_token
+      type: object
+    error_response:
+      title: ErrorResponse
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              message:
+                type: string
+            required:
+            - id
+            - message
+      required:
+      - request_id
+      - errors
+    dealsOutput:
+      title: Deal
+      description: This specifies the deal tagging for the product.
+      type:
+      - object
+      - 'null'
+      properties:
+        discount_percentage:
+          description: Discount percentage of the applied deals.
+          type: integer
+          minimum: 1
+        public_price:
+          description: Original price of this product, before applying any discounts.
+          $ref: '#/components/schemas/monetaryAmount'
+        tags:
+          description: The tags of all the applied deals.
+          type: array
+          items:
+            type: string
+            enum:
+            - black_friday
+            - getaway_deal
+            - mobile_rate
+    city:
+      description: Unique identifier of the city where the depot is located. If the city ID is not included in the list returned by /common/locations/cities, call that endpoint using the city filter.
+      type: integer
+      example: -1471393
+    monetaryAmount:
+      type: number
+      format: double
+      multipleOf: 0.01
+      exclusiveMinimum: 0
+    mileageOutput:
+      description: The mileage policy that applies to this product.
+      type: object
+      properties:
+        amount:
+          description: The amount that must be paid if the distance limit is exceeded.
+          type:
+          - number
+          - 'null'
+          format: double
+        currency:
+          $ref: '#/components/schemas/currencyId'
+        distance_limit:
+          description: The maximal distance limit allowed for this product before additional fees apply.
+          type:
+          - number
+          - 'null'
+          format: double
+          minimum: 0
+        distance_unit:
+          description: The unit of measurement for the distance limit. For example 'km' or 'miles'.
+          type: string
+          enum:
+          - kilometers
+          - miles
+        type:
+          description: The type of mileage policy applied.
+          type: string
+          enum:
+          - limited
+          - unlimited
+      required:
+      - type
+    dataTypes_coordinates:
+      title: Coordinates
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+    availability_routeOutput:
+      description: Defines the actual route associated with the product.
+      type: object
+      properties:
+        dropoff:
+          description: Defines the product drop off route point.
+          $ref: '#/components/schemas/availability_routePointOutput'
+        pickup:
+          description: Defines the product pick up route point.
+          $ref: '#/components/schemas/availability_routePointOutput'
+    cars_terms_and_conditions_output:
+      properties:
+        data:
+          type: object
+          description: Terms and conditions content translated in the requested language, if specified.
+          properties:
+            key_info:
+              type: object
+              description: High-level information about the car rental.
+              properties:
+                common:
+                  properties:
+                    credit_cards_allowed:
+                      description: Indicates whether the supplier accepts credit cards for the car rental deposit.
+                      type: boolean
+                    debit_cards_allowed:
+                      description: Indicates whether the supplier accepts debit cards for the car rental deposit.
+                      type: boolean
+                    driver_age:
+                      description: This is the driver age included in the car rental search request.
+                      type: integer
+                    insurance_available:
+                      description: Indicates whether insurance is available for the rental.
+                      type: boolean
+                    rental_duration:
+                      description: The duration of the rental in days.
+                      type: integer
+                      minimum: 1
+                  type: object
+                damage_excess:
+                  description: The damage excess section.
+                  properties:
+                    content:
+                      description: The content of the damage excess section.
+                      items:
+                        type: string
+                      type: array
+                    excess_value:
+                      description: The value of the damage excess.
+                      type: string
+                    subtitle:
+                      description: The subtitle of the damage excess section.
+                      type: string
+                    title:
+                      description: The title of the damage excess section.
+                      type: string
+                  type: object
+                deposit:
+                  description: General information about the deposit.
+                  properties:
+                    accepted_cards:
+                      description: The accepted cards for the deposit.
+                      items:
+                        properties:
+                          title:
+                            description: The title of the card.
+                            type: string
+                          type:
+                            description: The type of card.
+                            type: string
+                        type: object
+                      type: array
+                    accepted_cards_title:
+                      description: The title of the accepted cards section.
+                      type: string
+                    content:
+                      description: The content of the deposit section.
+                      items:
+                        type: string
+                      type: array
+                    subtitle:
+                      description: The subtitle of the deposit section.
+                      type: string
+                    title:
+                      description: The title of the deposit section.
+                      type: string
+                  type: object
+                disclaimers:
+                  description: The disclaimers section.
+                  items:
+                    type: string
+                  type: array
+                driver_and_license:
+                  description: The driver and license section.
+                  properties:
+                    needed_items:
+                      description: What you need in order to rent a car.
+                      items:
+                        type: string
+                      type: array
+                    title:
+                      description: The title of the driver and license section.
+                      type: string
+                    top_text:
+                      description: The top text of the driver and license section.
+                      type: string
+                  type: object
+                mileage:
+                  description: The mileage section.
+                  properties:
+                    content:
+                      description: The content of the mileage section.
+                      type: string
+                    subtitle:
+                      description: The subtitle of the mileage section.
+                      type: string
+                    title:
+                      description: The title of the mileage section.
+                      type: string
+                  type: object
+            terms:
+              $ref: '#/components/schemas/terms'
+        request_id:
+          $ref: '#/components/schemas/requestId'
+      type: object
+    currencyId:
+      description: A three-letter code that uniquely identifies a monetary currency as defined by the ISO 4217 standard. The full list can be obtained by calling <a href="/demand/docs/open-api/3.2/demand-api/commonpayments/common/payments/currencies" target="_blank">common/payments/currencies</a>.
+      type:
+      - string
+      - 'null'
+      pattern: ^[A-Z]{3}$
+      example: EUR
     depots_depotId:
       description: Unique identifier of a depot. Retrieve the full list by calling the (/cars/depots](#/cars/depots).
       type: integer
       minimum: 1
       example: 5944
+    cars_suppliers_input:
+      type: object
+      properties:
+        maximum_results:
+          $ref: '#/components/schemas/maximumResults'
+        page:
+          $ref: '#/components/schemas/page'
+        suppliers:
+          description: Defines the suppliers that should be returned. Without it all suppliers will be returned
+          type: array
+          items:
+            $ref: '#/components/schemas/vehicleSupplierId'
+          maxItems: 100
+    cancellationOutput:
+      description: The cancellation policy that applies to this product.
+      type: object
+      properties:
+        details:
+          description: "Provides the policy details if the cancellation is free. For example: \n 1. duration='PT48H' and context=before_pickup means 'Free cancellation is available up to 48 hrs before pick up'. \n 2. duration='P7D' and context=within_given_time_period_of_booking means 'Free cancellation is available within 7 days of booking'"
+          type:
+          - object
+          - 'null'
+          properties:
+            context:
+              description: The context in which the cancellation policy applies. For example 'before_pickup'
+              type: string
+              enum:
+              - before_pickup
+              - within_given_time_period_of_booking
+            duration:
+              description: The duration until which the cancellation is free. This is in ISO-8601/Duration format.
+              type: string
+              pattern: ^P(?:\dY)?(?:\dM)?(?:\dD)?(?:T(?:\dH)?(?:\dM)?(?:\dS)?)?$
+        type:
+          description: The type of cancellation present. For example 'free_cancellation' or 'non-refundable'.
+          type: string
+          enum:
+          - free_cancellation
+          - non-refundable
     supplier:
       description: All static information related to an vehicle supplier.
       type: object
@@ -2212,47 +2691,247 @@ components:
         name:
           description: Brand name of the vehicle supplier.
           type: string
-    categories:
-      description: The categories assigned to the car.
-      type: array
-      items:
-        type: string
-        enum:
-        - carriers
-        - compact_suv
-        - convertible
-        - estate
-        - large
-        - large_suv
-        - medium
-        - midsize_suv
-        - pickup
-        - premium
-        - small
-        - suvs
-        x-enumDescriptions:
-          carriers: Vans or minivans designed for carrying larger groups or luggage.
-          compact_suv: Compact SUVs offering a balance of SUV versatility and city-friendly dimensions.
-          convertible: Vehicles with a retractable or removable roof for open-air driving.
-          estate: Station wagons or estate cars offering extra luggage space.
-          large: Large vehicles offering ample interior space and comfort.
-          large_suv: Full-size SUVs with maximum passenger and cargo space.
-          medium: Mid-sized vehicles offering a balance of comfort and fuel efficiency.
-          midsize_suv: Midsize SUVs providing more interior room and capability than compact models.
-          pickup: Pickup trucks with an open cargo bed, suitable for hauling and off-road use.
-          premium: High-end or luxury vehicles with premium features.
-          small: Compact cars ideal for city driving and short distances.
-          suvs: Sport Utility Vehicles offering higher ground clearance and versatility.
-    carsPriceOutput:
-      description: Price object containing the amount shown to the traveller (display) and the actual payment amount (pay) with timing information.
+    maximumResultsCarsSearch:
+      description: The maximum number of results to return for car searches.
+      type: integer
+      multipleOf: 10
+      minimum: 10
+      maximum: 500
+      default: 500
+    languageId:
+      description: 'A [IETF language tag code](https://en.wikipedia.org/wiki/IETF_language_tag) that uniquely identifies a supported human language or dialect. **Note:** Demand API only accepts lowercase for the language codes. Examples: "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.'
+      type: string
+      pattern: ^[a-z]{2}(-[a-z]{2})?$
+      example: en-us
+    cars_depots_scores_output:
       type: object
       properties:
-        display:
-          description: The price displayed to the traveller, including applicable taxes or fees.
-          $ref: '#/components/schemas/carMonetaryAmount'
-        pay:
-          description: The actual payment amount and timing. Indicates whether the amount is paid online now, partially online, or at pickup.
-          $ref: '#/components/schemas/carMonetaryAmountWithTiming'
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/schemas-scores'
+        metadata:
+          description: Pagination metadata for the response.
+          type: object
+          properties:
+            next_page:
+              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
+              type:
+              - string
+              - 'null'
+    routeInput:
+      description: Defines the route context.
+      type: object
+      properties:
+        pickup:
+          description: Pick up location and time.
+          $ref: '#/components/schemas/routePointInput'
+        dropoff:
+          description: Drop off location and time.
+          $ref: '#/components/schemas/routePointInput'
+      required:
+      - pickup
+      - dropoff
+    productPriceOutput:
+      description: Pricing information for the product, including display price and payment details.
+      type: object
+      properties:
+        unit_amount:
+          description: The price for a single unit of this product. Use mode to determine if it’s per day or per rental.
+          $ref: '#/components/schemas/carsPriceOutput'
+    carId:
+      description: Uniquely identifies a car specification. The full list can be obtained by calling [/cars/suppliers](#/cars/details).
+      type: integer
+      minimum: 1
+    paymentInput:
+      type: object
+      properties:
+        timings:
+          description: Filters the results to include only car rentals that offer the specified payment timings. Use this parameter to search for cars based on the timing of payment (e.g., payment upfront, partial payment, or payment at the depot).
+          type: array
+          items:
+            type: string
+            enum:
+            - pay_online_now
+            - pay_partial_online_now
+            - pay_at_pickup
+    urlOutput:
+      description: Urls to the relevant pages.
+      type: object
+      properties:
+        app:
+          description: URL for the related page on Booking App.
+          type: string
+          format: uri
+        web:
+          description: URL for the related page on cars.booking.com.
+          type: string
+          format: uri
+    workingHours:
+      description: Opening and closing times per day of the week. Days may be omitted if the depot is closed.
+      type: object
+      patternProperties:
+        ^(monday|tuesday|wednesday|thursday|friday|saturday|sunday)$:
+          description: Working hours for the day.
+          type: array
+          items:
+            $ref: '#/components/schemas/openingHoursRange'
+    routePointInput:
+      description: Defines the pickup or dropoff route point.
+      type: object
+      properties:
+        datetime:
+          description: Pickup / dropoff datetime. Must be a local datetime without timezone offset, in the format yyyy-MM-dd'T'HH:mm:ss.
+          example: '2026-11-01T11:05:00'
+          type: string
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$
+        location:
+          description: Defines the pickup or dropoff location. Provide exactly one of airport, coordinates, or city.
+          type: object
+          minProperties: 1
+          maxProperties: 1
+          additionalProperties: false
+          properties:
+            airport:
+              description: Search by airport using the airport's IATA code.
+              $ref: '#/components/schemas/airportId'
+            coordinates:
+              description: Search by geographic coordinates using latitude and longitude.
+              $ref: '#/components/schemas/dataTypes_coordinates'
+            city:
+              description: Search by city ID.
+              $ref: '#/components/schemas/cityId'
+      required:
+      - datetime
+      - location
+    cars_availability_input:
+      type: object
+      properties:
+        offer:
+          $ref: '#/components/schemas/offerId'
+        search_token:
+          type: string
+          description: The encoded search token obtained from the search results. This token is car-specific and essential for maintaining state between search and availability checks.
+        currency:
+          $ref: '#/components/schemas/currencyId'
+        language:
+          description: "Optional IETF language tag (e.g., 'en-gb', 'fr'). Controls the language of legal insurance documents (IPID and policy document).\nDefaults to 'en-gb' if the requested language is unavailable or not specified.\n\n Note: If mandatory insurance documents are unavailable in English, the insurance object is omitted."
+          $ref: '#/components/schemas/languageId'
+      required:
+      - offer
+      - search_token
+      - currency
+    routeOutput:
+      description: Defines the actual route associated with the product.
+      type: object
+      properties:
+        pickup:
+          description: Defines the product pickup route point.
+          $ref: '#/components/schemas/routePointOutput'
+        dropoff:
+          description: Defines the product dropoff route point.
+          $ref: '#/components/schemas/routePointOutput'
+    schemas-scores:
+      description: Review scores, rating breakdown, and review volume information for a depot.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/depots_depotId'
+        breakdown:
+          $ref: '#/components/schemas/schemas-breakdown'
+        number_of_reviews:
+          anyOf:
+          - $ref: '#/components/schemas/numberOfReviews'
+          - type: 'null'
+        score:
+          anyOf:
+          - $ref: '#/components/schemas/depots_reviewScore'
+          - type: 'null'
+    offerId:
+      description: This ID identifies the car rental offer and its associated policies. Include it when calling the /cars/availability endpoint.
+      type: integer
+      minimum: 1
+    driver:
+      description: Defines the driver context.
+      type: object
+      properties:
+        age:
+          description: Driver age. Affects the availability and price of the products.
+          type: integer
+          minimum: 18
+          maximum: 99
+      required:
+      - age
+    paymentOutput:
+      description: The payment policy that applies to this product.
+      type: object
+      properties:
+        timing:
+          description: The applied payment timing. For example 'pay_online_now'.
+          type: string
+          enum:
+          - pay_online_now
+          - pay_partial_online_now
+          - pay_at_pickup
+      required:
+      - timing
+    depots_contact:
+      description: Contact information of the depot. Returns `null` when unavailable.
+      type: object
+      properties:
+        email:
+          description: Email address of the depot. Returns `null` when unavailable.
+          example: depot@test.booking.com
+          type:
+          - string
+          - 'null'
+        telephone:
+          description: Telephone number of the depot. Returns `null` when unavailable.
+          example: '+31882847620'
+          type:
+          - string
+          - 'null'
+    carMonetaryAmount:
+      description: A monetary amount with currency code.
+      type: object
+      properties:
+        value:
+          description: The numeric value of the amount.
+          type: number
+          format: double
+        currency:
+          description: The currency code.
+          $ref: '#/components/schemas/currencyId'
+    charge:
+      title: CarsCharge
+      description: Defines the charge, including the type of charge and its total amount.
+      type: object
+      properties:
+        charge:
+          $ref: '#/components/schemas/schemas-chargeTypeId'
+        total_amount:
+          description: The total price for this charge.
+          $ref: '#/components/schemas/monetaryAmount'
+    carMonetaryAmountWithTiming:
+      description: A monetary amount with currency code and the timing of payment. Use timing to indicate whether the amount is paid online now, partially online, or at pickup.
+      type: object
+      properties:
+        value:
+          description: The numeric value of the amount.
+          type: number
+          format: double
+        currency:
+          description: The currency code.
+          $ref: '#/components/schemas/currencyId'
+        timing:
+          description: The payment timing.
+          type: string
+          enum:
+          - pay_online_now
+          - pay_partial_online_now
+          - pay_at_pickup
     schemas-filters:
       description: Defines the filtering criteria for refining the request results. It allows you to specify various parameters to narrow down the available car rental options based on specific attributes.
       type: object
@@ -2369,99 +3048,314 @@ components:
           enum:
           - automatic
           - manual
-    availability_mileageOutput:
-      description: The mileage policy that applies to this product.
+    cars_constants_output:
+      title: CarsConstantsOutput
       type: object
       properties:
-        distance_limit:
-          description: The maximum distance allowed before additional charges apply.
-          type:
-          - number
-          - 'null'
-          format: double
-          minimum: 0
-        distance_unit:
-          description: The unit of measurement for the distance limit. For example 'km' or 'miles'.
-          type: string
-          enum:
-          - kilometers
-          - miles
-        amount:
-          description: The amount that must be paid if the distance limit is exceeded.
-          anyOf:
-          - $ref: '#/components/schemas/monetaryAmount'
-          - type: 'null'
-        currency:
-          description: The currency of the amount that must be paid if the distance limit is exceeded.
-          anyOf:
-          - $ref: '#/components/schemas/currencyId'
-          - type: 'null'
-        type:
-          description: The type of mileage policy applied.
-          type: string
-          enum:
-          - limited
-          - unlimited
-    workingHours:
-      description: Opening and closing times per day of the week. Days may be omitted if the depot is closed.
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          title: ConstantsDataOutput
+          description: Contains constant groups keyed by constant type. Each group includes a list of constant identifiers and their translated names.
+          type: object
+          properties:
+            car_categories:
+              $ref: '#/components/schemas/carsConstant'
+            customer_services:
+              description: Customer service contact details per language. For each requested language, the API returns the corresponding customer support email address. English uses the default address, while other languages include a language-specific suffix.
+              $ref: '#/components/schemas/carsConstant'
+            depot_services:
+              $ref: '#/components/schemas/carsConstant'
+            depot_types:
+              $ref: '#/components/schemas/carsConstant'
+            extras:
+              description: List of available extra products. Each item represents an optional add-on. Some extras may be bundled packages rather than individual items. For example, `skierized_equipment` refers to a winter sports package that typically includes a ski rack, ice scraper, and winter or all-season tyres.
+              $ref: '#/components/schemas/carsConstant'
+            special_offers:
+              $ref: '#/components/schemas/carsConstant'
+            fuel_policies:
+              $ref: '#/components/schemas/carsConstant'
+            fuel_types:
+              $ref: '#/components/schemas/carsConstant'
+            general:
+              $ref: '#/components/schemas/carsConstant'
+            payment_timings:
+              $ref: '#/components/schemas/carsConstant'
+            protection_levels:
+              $ref: '#/components/schemas/carsConstant'
+            review_scores:
+              $ref: '#/components/schemas/carsConstant'
+            transmission:
+              $ref: '#/components/schemas/carsConstant'
+    schemas-product:
+      description: Detailed information about car rental product.
       type: object
-      patternProperties:
-        ^(monday|tuesday|wednesday|thursday|friday|saturday|sunday)$:
-          description: Working hours for the day.
-          type: array
-          items:
-            $ref: '#/components/schemas/openingHoursRange'
-    dealsOutput:
-      title: Deal
-      description: This specifies the deal tagging for the product.
+      properties:
+        car:
+          $ref: '#/components/schemas/carFleetId'
+        categories:
+          $ref: '#/components/schemas/categories'
+        deal:
+          $ref: '#/components/schemas/dealsOutput'
+        offer:
+          $ref: '#/components/schemas/offerId'
+        policies:
+          $ref: '#/components/schemas/policiesOutput'
+        price:
+          $ref: '#/components/schemas/productPrice'
+        route:
+          $ref: '#/components/schemas/routeOutput'
+        special_offer:
+          description: The special offer included with this product, if any. This can be an additional service, a free upgrade, or a promotional feature provided by the supplier. If no special offer applies, the value will be null.
+          type:
+          - string
+          - 'null'
+          examples:
+          - upgrade
+          enum:
+          - one_additional_driver
+          - two_additional_drivers
+          - three_additional_drivers
+          - all_additional_drivers
+          - gps
+          - baby_or_child_seat
+          - priority_pickup
+          - wifi_device
+          - sim_card
+          - upgrade
+          - black_friday
+          - getaway_deal
+          - mobile_rate
+        insurance:
+          $ref: '#/components/schemas/insuranceOutput'
+        supplier:
+          description: Related supplier id.
+          $ref: '#/components/schemas/vehicleSupplierId'
+        url:
+          $ref: '#/components/schemas/urlOutput'
+        estimated_commission:
+          title: EstimatedCommissionOutput
+          description: Estimated commission the partner may earn if the traveller books this car. Expressed in the selected currency and based on predictive modelling at search time. Only returned when the predicted commission feature is enabled for the partner. Omitted when the feature is unavailable or when a reliable estimate cannot be produced.
+          type:
+          - object
+          - 'null'
+          properties:
+            amount:
+              description: Estimated commission amount in the currency below.
+              $ref: '#/components/schemas/monetaryAmount'
+            currency:
+              $ref: '#/components/schemas/currencyId'
+    availability_cancellationOutput:
+      description: The cancellation policy that applies to this product.
+      type: object
+      properties:
+        details:
+          description: "Provides the policy details if the cancellation is free. For example: \n 1. duration='PT48H' and context=BEFORE_PICKUP means 'Free cancellation is available up to 48 hrs before pick up'. \n 2. duration='P7D' and context=WITHIN_GIVEN_TIME_PERIOD_OF_BOOKING means 'Free cancellation is available within 7 days of booking'"
+          type:
+          - object
+          - 'null'
+          properties:
+            context:
+              description: The context in which the cancellation policy applies. For example 'before_pickup'
+              type: string
+              enum:
+              - before_pickup
+              - within_given_time_period_of_booking
+            duration:
+              description: The duration until which the cancellation is free. This is in ISO-8601/Duration format.
+              type: string
+              pattern: ^P(?:\dY)?(?:\dM)?(?:\dD)?(?:T(?:\dH)?(?:\dM)?(?:\dS)?)?$
+        type:
+          description: The type of cancellation present. For example 'free_cancellation' or 'non-refundable'.
+          type: string
+          enum:
+          - free_cancellation
+          - non-refundable
+    schemas-breakdown_schema:
+      description: Review score information for a specific evaluation category.
+      type: object
+      properties:
+        score:
+          anyOf:
+          - $ref: '#/components/schemas/score'
+          - type: 'null'
+    schemas-supplierId:
+      description: Supplier id.
+      type: integer
+    cars_details_input:
+      type: object
+      properties:
+        last_modified:
+          description: The last modified date-time, only returns depots newer than this timestamp. The value should be within last 7 days
+          example: '2023-11-01T11:05:00+00:00'
+          format: date-time
+          type: string
+        maximum_results:
+          $ref: '#/components/schemas/maximumResults'
+        page:
+          $ref: '#/components/schemas/page'
+    cars_availability_output:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: object
+          properties:
+            offer:
+              $ref: '#/components/schemas/offerId'
+            currency:
+              $ref: '#/components/schemas/currencyId'
+            policies:
+              $ref: '#/components/schemas/availability_policiesOutput'
+            price:
+              $ref: '#/components/schemas/priceOutput'
+            products:
+              type: array
+              description: A list of optional extras (e.g. child seats, GPS) available for this vehicle.
+              items:
+                $ref: '#/components/schemas/productOutput'
+            deal:
+              $ref: '#/components/schemas/dealOutput'
+            special_offer:
+              description: The special offer included with this product, if any. This can be an additional service, a free upgrade, or a promotional feature provided by the supplier. If no special offer applies, the value is null.
+              type:
+              - string
+              - 'null'
+              examples:
+              - upgrade
+              enum:
+              - one_additional_driver
+              - two_additional_drivers
+              - three_additional_drivers
+              - all_additional_drivers
+              - gps
+              - baby_or_child_seat
+              - priority_pickup
+              - wifi_device
+              - sim_card
+              - upgrade
+              - black_friday
+              - getaway_deal
+              - mobile_rate
+            supplier:
+              type: number
+              format: integer
+              description: The unique identifier for the car rental supplier.
+            route:
+              $ref: '#/components/schemas/availability_routeOutput'
+            insurance:
+              $ref: '#/components/schemas/availability_insuranceOutput'
+            estimated_commission:
+              title: EstimatedCommissionOutput
+              description: Estimated commission the partner may earn if the traveller books this car. Expressed in the selected currency and based on predictive modelling at search time. Only returned when the predicted commission feature is enabled for the partner. Omitted when the feature is unavailable or when a reliable estimate cannot be produced.
+              type:
+              - object
+              - 'null'
+              properties:
+                amount:
+                  description: Estimated commission amount in the currency below.
+                  $ref: '#/components/schemas/monetaryAmount'
+                currency:
+                  $ref: '#/components/schemas/currencyId'
+    ratings:
+      description: Review count and average score for the depot.
       type:
       - object
       - 'null'
       properties:
-        discount_percentage:
-          description: Discount percentage of the applied deals.
-          type: integer
-          minimum: 1
-        public_price:
-          description: Original price of this product, before applying any discounts.
-          $ref: '#/components/schemas/monetaryAmount'
-        tags:
-          description: The tags of all the applied deals.
+        number_of_reviews:
+          $ref: '#/components/schemas/numberOfReviews'
+        score:
+          $ref: '#/components/schemas/depots_reviewScore'
+    schemas-breakdown:
+      description: Breakdown of review scores by evaluation category.
+      type: object
+      properties:
+        cleanliness:
+          $ref: '#/components/schemas/schemas-breakdown_schema'
+        condition:
+          $ref: '#/components/schemas/schemas-breakdown_schema'
+        drop_off_speed:
+          $ref: '#/components/schemas/schemas-breakdown_schema'
+        friendliness:
+          $ref: '#/components/schemas/schemas-breakdown_schema'
+        likeliness_rent_again:
+          allOf:
+          - $ref: '#/components/schemas/schemas-breakdown_schema'
+          deprecated: true
+          description: Deprecated. This field will be removed in a future version.
+        location:
+          $ref: '#/components/schemas/schemas-breakdown_schema'
+        pick_up_speed:
+          $ref: '#/components/schemas/schemas-breakdown_schema'
+        value_for_money:
+          $ref: '#/components/schemas/schemas-breakdown_schema'
+      additionalProperties: false
+    cars_details_output:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
           type: array
           items:
-            type: string
-            enum:
-            - black_friday
-            - getaway_deal
-            - mobile_rate
-    urlOutput:
-      description: Urls to the relevant pages.
+            $ref: '#/components/schemas/details'
+        metadata:
+          description: Metadata about the request.
+          type: object
+          properties:
+            next_page:
+              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
+              type: string
+              nullable: true
+    routePointOutput:
+      description: Defines the product pickup / dropoff route point.
       type: object
       properties:
-        app:
-          description: URL for the related page on Booking App.
-          type: string
-          format: uri
-        web:
-          description: URL for the related page on cars.booking.com.
-          type: string
-          format: uri
-    schemas-scores:
-      description: Review scores, rating breakdown, and review volume information for a depot.
-      type: object
-      properties:
-        id:
+        depot:
+          description: The identifier of the depot used for pickup or dropoff.
           $ref: '#/components/schemas/depots_depotId'
-        breakdown:
-          $ref: '#/components/schemas/schemas-breakdown'
-        number_of_reviews:
-          anyOf:
-          - $ref: '#/components/schemas/numberOfReviews'
-          - type: 'null'
-        score:
-          anyOf:
-          - $ref: '#/components/schemas/depots_reviewScore'
-          - type: 'null'
+        depot_location_type:
+          description: Type of depot location where the vehicle is picked up or dropped off. For example, 'shuttle_bus', 'in_terminal', etc.
+          type: string
+          enum:
+          - in_terminal
+          - car_rental_centre
+          - outside_terminal
+          - airport_hotel
+          - shuttle_bus
+          - meet_greet
+          - trainstation
+          - downtown
+    insuranceOutput:
+      description: Third-party insurance product for this car rental. Only present for eligible partner configurations. Null if not available.
+      type:
+      - object
+      - 'null'
+      properties:
+        name:
+          description: The display name of the insurance product.
+          type: string
+          examples:
+          - Full Protection
+        id:
+          description: The identifier for the type of insurance product.
+          type: string
+          examples:
+          - '999'
+        price:
+          description: The price of the insurance product for the full rental period.
+          type: object
+          properties:
+            amount:
+              description: The insurance price amount.
+              $ref: '#/components/schemas/monetaryAmount'
+            currency:
+              $ref: '#/components/schemas/currencyId'
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
     carsConstant:
       title: CarsConstant
       description: Represents a constant identifier and its translated display names for the requested languages.
@@ -2474,212 +3368,166 @@ components:
             type: string
           name:
             $ref: '#/components/schemas/translatedString'
-    maximumResultsCarsSearch:
-      description: The maximum number of results to return for car searches.
-      type: integer
-      multipleOf: 10
-      minimum: 10
-      maximum: 500
-      default: 500
-    cars_search_output:
-      type: object
-      required:
-      - request_id
-      - data
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/schemas-product'
-        metadata:
-          $ref: '#/components/schemas/metadata'
-        search_token:
-          description: 'Encoded string that must be passed in subsequent requests to identify the context of the car search. Note: It is specific to Car rentals and differs from other tokens used in booking flows.'
-          type: string
-    error_response:
-      title: ErrorResponse
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-              message:
-                type: string
-            required:
-            - id
-            - message
-      required:
-      - request_id
-      - errors
-    paymentInput:
-      type: object
-      properties:
-        timings:
-          description: Filters the results to include only car rentals that offer the specified payment timings. Use this parameter to search for cars based on the timing of payment (e.g., payment upfront, partial payment, or payment at the depot).
-          type: array
-          items:
-            type: string
-            enum:
-            - pay_online_now
-            - pay_partial_online_now
-            - pay_at_pickup
-    countryId:
-      description: 'A two-letter code that uniquely identifies a country. This code is defined by the ISO 3166-1 alpha-2 standard (ISO2) as described here: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/countries" target="_blank">common/locations/countries</a>.'
-      type: string
-      pattern: ^[a-z]{2}$
-      example: nl
-    productPrice:
-      description: The price components of this product.
-      type: object
-      properties:
-        currency:
-          $ref: '#/components/schemas/currencyId'
-        credit_card_required:
-          description: 'Indicates whether a credit card is required as a guarantee for this vehicle.
-
-
-            - true: A credit card must be provided and will be passed to the supplier for guarantee purposes. Applies to vehicles with ''payment.timing = pay_at_pickup''.
-
-            - false: A credit card is explicitly not required.
-
-            - null: Information not available or not applicable (for example, pay-online-now vehicles where credit card requirements are currently unknown).'
-          type:
-          - boolean
-          - 'null'
-        extra_charges:
-          title: CarsProductExtraCharges
-          description: The charge breakdown. Includes taxes and fees included in the drive away price.
-          type: array
-          items:
-            $ref: '#/components/schemas/charge'
-        total:
-          description: The total price. Includes all extra charges.
-          $ref: '#/components/schemas/monetaryAmount'
-    carFleetId:
-      description: This ID corresponds to a specific car model and supplier (fleet) combination, as returned by the /cars/details endpoint. Cache the details keyed by this ID and use it to match search results to your cached data.
-      type: integer
-      minimum: 1
-    availability_routeOutput:
-      description: Defines the actual route associated with the product.
-      type: object
-      properties:
-        dropoff:
-          description: Defines the product drop off route point.
-          $ref: '#/components/schemas/availability_routePointOutput'
-        pickup:
-          description: Defines the product pick up route point.
-          $ref: '#/components/schemas/availability_routePointOutput'
     schemas-chargeTypeId:
       description: The type of this charge.
       type: string
-    maximumResults:
-      description: The maximum number of results to return.
-      type: integer
-      multipleOf: 10
-      minimum: 10
-      maximum: 100
-      default: 100
-    routePointInput:
-      description: Defines the pickup or dropoff route point.
+    depots_input:
       type: object
       properties:
-        datetime:
-          description: Pickup / dropoff datetime. Must be a local datetime without timezone offset, in the format yyyy-MM-dd'T'HH:mm:ss.
-          example: '2026-11-01T11:05:00'
+        last_modified:
+          description: Returns depots modified after the specified timestamp (exclusive).
+          example: '2026-03-01T11:05:00+00:00'
+          format: date-time
           type: string
-          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$
-        location:
-          description: Defines the pickup or dropoff location. Provide exactly one of airport, coordinates, or city.
-          type: object
-          minProperties: 1
-          maxProperties: 1
-          additionalProperties: false
-          properties:
-            airport:
-              description: Search by airport using the airport's IATA code.
-              $ref: '#/components/schemas/airportId'
-            coordinates:
-              description: Search by geographic coordinates using latitude and longitude.
-              $ref: '#/components/schemas/dataTypes_coordinates'
-            city:
-              description: Search by city ID.
-              $ref: '#/components/schemas/cityId'
-      required:
-      - datetime
-      - location
-    ratings:
-      description: Review count and average score for the depot.
+        maximum_results:
+          $ref: '#/components/schemas/maximumResults'
+        languages:
+          description: List of language codes to return translated fields. If a translation is unavailable, the default language (`en-gb`) is returned.
+          type: array
+          items:
+            $ref: '#/components/schemas/languageId'
+          default:
+          - en-gb
+        page:
+          $ref: '#/components/schemas/page'
+    availability_insuranceOutput:
+      description: 'Detailed third-party insurance quote for this car rental. Returned only for eligible partner configurations (e.g., partners with a signed insurance contract), and when insurance is available for the selected offer (null if not available).
+
+        This object represents a bookable insurance product and includes pricing, coverage, and policy documentation.'
       type:
       - object
       - 'null'
       properties:
-        number_of_reviews:
-          $ref: '#/components/schemas/numberOfReviews'
-        score:
-          $ref: '#/components/schemas/depots_reviewScore'
-    schemas-sort:
-      description: Defines how the search results are sorted. If omitted, results are sorted by the recommended option.
-      type: object
+        quote_reference:
+          description: Unique reference for this insurance quote. Expires after 90 minutes.
+          type: string
+          examples:
+          - 38df45ef-a6fb-4e24-a1d2-66fc3af23d76#1t0juiba8h6n2
+        name:
+          description: The display name of the insurance product.
+          type: string
+          examples:
+          - Full Protection
+        id:
+          description: The identifier for the type of insurance product.
+          type: string
+          examples:
+          - '999'
+        price:
+          description: The price of the insurance product for the full rental period.
+          $ref: '#/components/schemas/carsPriceOutput'
+        coverage_amount:
+          description: The maximum coverage amount provided by the insurance product.
+          type: object
+          properties:
+            value:
+              description: The numeric value of the maximum coverage.
+              $ref: '#/components/schemas/monetaryAmount'
+            currency:
+              description: The currency of the coverage amount.
+              $ref: '#/components/schemas/currencyId'
+        documents:
+          description: Legal documents for this insurance product. Always returned when the insurance object is present, and always contains the `policy_document` entry. The `ipid` entry is only included when an IPID applies (EEA and UK countries) and is available in the requested language.
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/insuranceDocument'
       required:
-      - by
+      - quote_reference
+      - name
+      - id
+      - price
+      - documents
+    details:
+      description: All static information related to cars.
       properties:
-        by:
-          description: The criterion used to sort the search results.
+        id:
+          description: Unique car's ID.
+          $ref: '#/components/schemas/carId'
+        capacity:
+          $ref: '#/components/schemas/capacity'
+        country:
+          $ref: '#/components/schemas/countryId'
+        features:
+          description: List of possible car's features.
+          type: array
+          items:
+            type: string
+            enum:
+            - air_conditioning
+            - all_wheel_drive
+        image:
+          description: Car's image URL.
           type: string
-          enum:
-          - recommended
-          - price
-          - distance
-          - review_score
-          x-enumDescriptions:
-            recommended: Sort by the recommended order. This is the default when the sort parameter is omitted.
-            price: Sort by price in ascending order.
-            distance: Sort by distance in ascending order. Available only when both the pickup and dropoff locations are specified using latitude and longitude coordinates. Otherwise, the recommended sort order is applied.
-            review_score: Sort by review score in descending order.
-        direction:
-          description: Deprecated. Specifies the sort direction. This field is no longer used and will be removed in a future version.
+        make:
+          description: Car's maker/brand.
           type: string
-          enum:
-          - ascending
-          - descending
-          deprecated: true
-    monetaryAmount:
-      type: number
-      format: double
-      multipleOf: 0.01
-      exclusiveMinimum: 0
-    paymentOutput:
-      description: The payment policy that applies to this product.
+        model:
+          description: Car's model.
+          type: string
+        specification:
+          description: Car's specification.
+          $ref: '#/components/schemas/specification'
+        supplier:
+          description: Related supplier id.
+          $ref: '#/components/schemas/vehicleSupplierId'
+      type: object
+    availability_routePointOutput:
+      description: Defines the product pick up / drop off route point.
       type: object
       properties:
-        timing:
-          description: The applied payment timing. For example 'pay_online_now'.
+        depot:
+          description: The identifier of the depot used for pick up or drop off.
+          $ref: '#/components/schemas/depots_depotId'
+        depot_location_type:
+          description: The type of location for the depot.
           type: string
           enum:
-          - pay_online_now
-          - pay_partial_online_now
-          - pay_at_pickup
-      required:
-      - timing
-    numberOfReviews:
-      description: Number of validated reviews for the depot.
-      type: integer
-      example: 125
-      minimum: 0
-    score:
-      description: A decimal number indicating the review score of this criteria, in the range 1..10.
-      type: number
-      multipleOf: 0.1
-      minimum: 1
-      maximum: 10
+          - in_terminal
+          - car_rental_centre
+          - outside_terminal
+          - airport_hotel
+          - shuttle_bus
+          - meet_greet
+          - trainstation
+          - downtown
+    capacity:
+      description: Car's capacity
+      type: object
+      properties:
+        bags:
+          description: Car's Baggage Capacity.
+          type: object
+          properties:
+            large:
+              description: Number of large bags.
+              type: number
+              minimum: 0
+            small:
+              description: Number of small bags.
+              type: number
+              minimum: 0
+          nullable: true
+        doors:
+          description: Number of doors in the car.
+          type: string
+        seats:
+          description: Number of seats in the car.
+          type: string
+    openingHoursRange:
+      description: Depot opening hours range.
+      type: object
+      properties:
+        closing_time:
+          description: Depot closing time
+          example: '21:00:00'
+          format: time
+          type: string
+        opening_time:
+          description: Depot opening time.
+          example: 07:00:00
+          format: time
+          type: string
     specification:
       properties:
         code:
@@ -2708,108 +3556,162 @@ components:
           enum:
           - automatic
           - manual
-    dealOutput:
-      description: This specifies the deal tagging for the product.
-      type:
-      - object
-      - 'null'
+    carFleetId:
+      description: This ID corresponds to a specific car model and supplier (fleet) combination, as returned by the /cars/details endpoint. Cache the details keyed by this ID and use it to match search results to your cached data.
+      type: integer
+      minimum: 1
+    airportId:
+      description: A three-letter code that uniquely identifies an airport as defined by the International Air Transport Association (IATA). The full list can be obtained by calling  <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/airports" target="_blank">common/locations/airports</a>.
+      type: string
+      pattern: ^[A-Z]{3}$
+      example: AMS
+    cars_constants_input:
+      title: CarsConstantsInput
+      type: object
       properties:
-        discount_percentage:
-          description: Discount percentage of the applied deals.
-          type: integer
-          minimum: 1
-        public_price:
-          description: Original price of this product, before applying any discounts.
-          $ref: '#/components/schemas/monetaryAmount'
-        tags:
-          description: The tags of all the applied deals.
+        constants:
+          description: Use this field to limit the response to specific categories, such as fuel_policies, depot_services, customer_services, etc. If omitted, all constants are returned.
           type: array
           items:
             type: string
             enum:
-            - black_friday
-            - getaway_deal
-            - mobile_rate
-    carMonetaryAmount:
-      description: A monetary amount with currency code.
+            - car_categories
+            - customer_services
+            - depot_services
+            - depot_types
+            - extras
+            - special_offers
+            - fuel_policies
+            - fuel_types
+            - general
+            - payment_timings
+            - protection_levels
+            - review_scores
+            - transmission
+            x-enumDescriptions:
+              car_categories: Vehicle categories used to group rental cars by size and type, such as economy, SUV, or premium.
+              customer_services: Customer support contact details per language.
+              depot_services: Services available at the car pick-up location.
+              depot_types: Types of car rental locations, such as airport, downtown, or train station.
+              extras: Optional add-ons such as child seats, GPS, or winter equipment.
+              special_offers: Included benefits or promotions bundled with the rental.
+              fuel_policies: Fuel handling policies for the rental.
+              fuel_types: Types of fuel supported by the vehicle.
+              general: General attributes and labels used across the Cars API.
+              payment_timings: When the traveller is charged for the booking.
+              protection_levels: Levels of insurance or protection coverage applied to the rental, affecting the traveller's financial liability.
+              review_scores: Categories used to evaluate customer reviews of rental experiences, such as cleanliness or pick-up speed.
+              transmission: Vehicle transmission types.
+        languages:
+          type: array
+          description: List of language codes used to localise constant names. Each constant name is returned as a translated object keyed by language. If not provided, en-gb is used by default.
+          items:
+            $ref: '#/components/schemas/languageId'
+          default:
+          - en-gb
+    cars_depots_scores_input:
       type: object
       properties:
-        value:
-          description: The numeric value of the amount.
-          type: number
-          format: double
-        currency:
-          description: The currency code.
-          $ref: '#/components/schemas/currencyId'
+        maximum_results:
+          $ref: '#/components/schemas/maximumResults'
+        page:
+          $ref: '#/components/schemas/page'
+    countryId:
+      description: 'A two-letter code that uniquely identifies a country. This code is defined by the ISO 3166-1 alpha-2 standard (ISO2) as described here: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/countries" target="_blank">common/locations/countries</a>.'
+      type: string
+      pattern: ^[a-z]{2}$
+      example: nl
     vehicleSupplierId:
       description: Uniquely identifies a vehicle supplier. The full list can be obtained by calling [/cars/suppliers](#/cars/suppliers).
       type: integer
       minimum: 1
-    languageId:
-      description: 'A [IETF language tag code](https://en.wikipedia.org/wiki/IETF_language_tag) that uniquely identifies a supported human language or dialect. **Note:** Demand API only accepts lowercase for the language codes. Examples: "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.'
-      type: string
-      pattern: ^[a-z]{2}(-[a-z]{2})?$
-      example: en-us
-    offerId:
-      description: This ID identifies the car rental offer and its associated policies. Include it when calling the /cars/availability endpoint.
-      type: integer
+    categories:
+      description: The categories assigned to the car.
+      type: array
+      items:
+        type: string
+        enum:
+        - carriers
+        - compact_suv
+        - convertible
+        - estate
+        - large
+        - large_suv
+        - medium
+        - midsize_suv
+        - pickup
+        - premium
+        - small
+        - suvs
+        x-enumDescriptions:
+          carriers: Vans or minivans designed for carrying larger groups or luggage.
+          compact_suv: Compact SUVs offering a balance of SUV versatility and city-friendly dimensions.
+          convertible: Vehicles with a retractable or removable roof for open-air driving.
+          estate: Station wagons or estate cars offering extra luggage space.
+          large: Large vehicles offering ample interior space and comfort.
+          large_suv: Full-size SUVs with maximum passenger and cargo space.
+          medium: Mid-sized vehicles offering a balance of comfort and fuel efficiency.
+          midsize_suv: Midsize SUVs providing more interior room and capability than compact models.
+          pickup: Pickup trucks with an open cargo bed, suitable for hauling and off-road use.
+          premium: High-end or luxury vehicles with premium features.
+          small: Compact cars ideal for city driving and short distances.
+          suvs: Sport Utility Vehicles offering higher ground clearance and versatility.
+    score:
+      description: A decimal number indicating the review score of this criteria, in the range 1..10.
+      type: number
+      multipleOf: 0.1
       minimum: 1
-    routeOutput:
-      description: Defines the actual route associated with the product.
+      maximum: 10
+    depots_output:
       type: object
       properties:
-        pickup:
-          description: Defines the product pickup route point.
-          $ref: '#/components/schemas/routePointOutput'
-        dropoff:
-          description: Defines the product dropoff route point.
-          $ref: '#/components/schemas/routePointOutput'
-    insuranceDocument:
-      title: InsuranceDocument
-      description: A single insurance document.
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/depot'
+        metadata:
+          description: Metadata about the request.
+          type: object
+          properties:
+            next_page:
+              description: Indicates that more results are available. Pass this token to the `page` parameter to retrieve the next page of results.
+              type:
+              - string
+              - 'null'
+    chargeOutput:
+      description: Defines the charge, including the type of charge and its total amount.
       type: object
       properties:
-        name:
-          description: The insurance document type.
+        charge:
+          $ref: '#/components/schemas/chargeTypeIdOutput'
+        total_amount:
+          description: The total price for this charge.
+          $ref: '#/components/schemas/monetaryAmount'
+    availability_paymentOutput:
+      description: The payment policy that applies to this product.
+      type: object
+      properties:
+        timing:
+          description: The applied payment timing. For example 'pay_online_now'.
           type: string
           enum:
-          - policy_document
-          - ipid
-          x-enumDescriptions:
-            policy_document: 'Full legal insurance contract: terms and conditions of cover, exclusions, eligibility, claim conditions, and cancellation terms.'
-            ipid: 'Insurance Product Information Document (IPID): a short, compliance-focused summary of the key coverage information to help the traveller understand the insurance product before purchase.'
-        url:
-          description: URL of the insurance document.
-          type: string
-          format: uri
-          examples:
-          - https://staging.rentalcover.com/en/pds
-      required:
-      - name
-      - url
-    routeInput:
-      description: Defines the route context.
-      type: object
+          - pay_online_now
+          - pay_partial_online_now
+          - pay_at_pickup
+    instructions:
+      description: Pickup or drop-off information.
+      type:
+      - object
+      - 'null'
       properties:
-        pickup:
-          description: Pick up location and time.
-          $ref: '#/components/schemas/routePointInput'
-        dropoff:
-          description: Drop off location and time.
-          $ref: '#/components/schemas/routePointInput'
-      required:
-      - pickup
-      - dropoff
-    dataTypes_coordinates:
-      title: Coordinates
-      type: object
-      properties:
-        latitude:
-          type: number
-          format: double
-        longitude:
-          type: number
-          format: double
+        instructions:
+          description: Translated pickup or drop-off instructions.
+          $ref: '#/components/schemas/translatedString'
+        working_hours:
+          description: Depot working hours.
+          $ref: '#/components/schemas/workingHours'
     terms:
       description: The terms and conditions section.
       type:
@@ -2884,85 +3786,58 @@ components:
                                     enum:
                                     - clause_option
                                     type: string
-    cars_constants_output:
-      title: CarsConstantsOutput
+    availability_policiesOutput:
+      description: The policies that apply to this product.
       type: object
       properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          title: ConstantsDataOutput
-          description: Contains constant groups keyed by constant type. Each group includes a list of constant identifiers and their translated names.
+        cancellation:
+          $ref: '#/components/schemas/availability_cancellationOutput'
+        damage_excess:
           type: object
           properties:
-            car_categories:
-              $ref: '#/components/schemas/carsConstant'
-            customer_services:
-              description: Customer service contact details per language. For each requested language, the API returns the corresponding customer support email address. English uses the default address, while other languages include a language-specific suffix.
-              $ref: '#/components/schemas/carsConstant'
-            depot_services:
-              $ref: '#/components/schemas/carsConstant'
-            depot_types:
-              $ref: '#/components/schemas/carsConstant'
-            extras:
-              description: List of available extra products. Each item represents an optional add-on. Some extras may be bundled packages rather than individual items. For example, `skierized_equipment` refers to a winter sports package that typically includes a ski rack, ice scraper, and winter or all-season tyres.
-              $ref: '#/components/schemas/carsConstant'
-            special_offers:
-              $ref: '#/components/schemas/carsConstant'
-            fuel_policies:
-              $ref: '#/components/schemas/carsConstant'
-            fuel_types:
-              $ref: '#/components/schemas/carsConstant'
-            general:
-              $ref: '#/components/schemas/carsConstant'
-            payment_timings:
-              $ref: '#/components/schemas/carsConstant'
-            protection_levels:
-              $ref: '#/components/schemas/carsConstant'
-            review_scores:
-              $ref: '#/components/schemas/carsConstant'
-            transmission:
-              $ref: '#/components/schemas/carsConstant'
-    cars_depots_scores_output:
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/schemas-scores'
-        metadata:
-          description: Pagination metadata for the response.
+            amount:
+              description: The maximum amount a traveller may be charged for damages to the car during the rental period, as specified by the rental agreement.
+              anyOf:
+              - $ref: '#/components/schemas/monetaryAmount'
+              - type: 'null'
+        deposit:
           type: object
           properties:
-            next_page:
-              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
-              type:
-              - string
-              - 'null'
-    requestId:
-      description: Uniquely identifies the request. Please provide this identifier when contacting support.
-      type: string
-    cars_terms_and_conditions_input:
-      properties:
-        offer:
-          $ref: '#/components/schemas/offerId'
-        currency:
-          description: The currency in ISO 4217 format (e.g., USD, EUR, GBP)
-          example: USD
+            amount:
+              description: The amount of money that will be temporarily pre-authorised or blocked on the traveller’s credit card at the rental location as a security deposit, to cover potential damage or extra charges.
+              anyOf:
+              - $ref: '#/components/schemas/monetaryAmount'
+              - type: 'null'
+        insurance_package:
+          description: The supplier insurance package that applies to this product.
           type: string
-        language:
-          description: The language code (ISO 639-1 format) in which to return the terms and conditions.
-          $ref: '#/components/schemas/languageId'
-        search_token:
-          description: The pre-booking search_token used to fetch terms and conditions for a specific car rental offer. The search_token is returned by the search endpoint.
+          enum:
+          - basic
+          - inclusive
+          - zero_excess
+        fuel:
+          description: The fuel policy that applies to this product. Maps to the `fuel_policies` constant returned by the /cars/constants endpoint.
           type: string
-      required:
-      - offer
-      - currency
-      - search_token
-      type: object
+          enum:
+          - return_same
+          - return_same_or_prepay_no_refunds
+          - return_same_preauth
+          - free_tank
+          - prepay_no_refunds
+          - prepay_part_refunds
+          - prepay_refunds
+        mileage:
+          $ref: '#/components/schemas/availability_mileageOutput'
+        payment:
+          $ref: '#/components/schemas/availability_paymentOutput'
+        theft_excess:
+          type: object
+          properties:
+            amount:
+              description: The maximum amount a traveller may be charged in the event of car theft during the rental period, as outlined in the rental agreement.
+              anyOf:
+              - $ref: '#/components/schemas/monetaryAmount'
+              - type: 'null'
     location:
       description: Depot location information.
       type: object
@@ -3018,634 +3893,81 @@ components:
           type:
           - string
           - 'null'
-    productOutput:
-      description: Detailed information about optional extras available for the vehicle, including pricing, availability, and calculation rules.
+    carsPriceOutput:
+      description: Price object containing the amount shown to the traveller (display) and the actual payment amount (pay) with timing information.
       type: object
       properties:
-        id:
-          type: string
-          description: Unique identifier of the product.
-        type:
-          type: string
-          description: Specifies the type of optional extra or service associated with the vehicle. For example, gps for a navigation system, baby_seat for a child seat, or wifi_router for mobile internet. Some values may represent similar extras because suppliers use different naming conventions for the same or comparable products.
-          enum:
-          - additional_driver
-          - baby_seat
-          - bluetooth_handsfree_kit
-          - booster_seat
-          - child_booster_seat
-          - child_seat
-          - child_seat_isofix
-          - etc_card_electronic_toll_collection_card
-          - excess_protection
-          - fast_track
-          - gps
-          - infant_seat
-          - luggage_rack
-          - personal_travel_assistant
-          - queue_jump
-          - roof_rack
-          - ski_box
-          - ski_rack
-          - skierized_equipment
-          - snow_chains
-          - snow_tyres
-          - wifi_mobile
-          - wifi_router
-          x-enumDescriptions:
-            additional_driver: Authorises an additional person to drive the vehicle.
-            baby_seat: Baby seat for infants up to around 12 months or 9 kg/20 lbs.
-            bluetooth_handsfree_kit: Bluetooth device for hands-free phone calls while driving.
-            booster_seat: Booster seat for children around 4–11 years old, up to 45 kg/100 lbs.
-            child_booster_seat: Booster seat for children around 4–11 years old, up to 45 kg/100 lbs.
-            child_seat: Child seat for children around 1–3 years old, up to 18 kg/40 lbs.
-            child_seat_isofix: Child safety seat compatible with ISOFIX anchor points.
-            etc_card_electronic_toll_collection_card: Electronic toll collection card for automatic toll payments.
-            excess_protection: Covers the excess payable in the event of damage or theft.
-            fast_track: Equivalent to `queue_jump`.
-            gps: Satellite navigation device.
-            infant_seat: Infant seat for babies or young children.
-            luggage_rack: Additional luggage storage.
-            personal_travel_assistant: Travel assistance service.
-            queue_jump: Allows travellers to skip the standard queue at pickup.
-            roof_rack: Roof-mounted rack for carrying additional luggage or equipment.
-            ski_box: Roof-mounted enclosed storage box for skis or luggage.
-            ski_rack: Roof-mounted rack designed to transport skis.
-            skierized_equipment: Winter sports equipment.
-            snow_chains: Tyre chains for snow.
-            snow_tyres: Winter tyres.
-            wifi_mobile: Mobile WiFi hotspot providing internet access during the rental.
-            wifi_router: Portable WiFi router providing internet access.
-        maximum_available:
-          type: number
-          format: integer
-          description: Maximum number of units of this product that can be selected per booking.
-        mode:
-          type: string
-          description: Defines how the product price is calculated. This determines whether pricing is applied per unit, per day, or for the full rental period.
-          enum:
-          - each_per_day
-          - each_per_rental
-          - per_day
-          - per_rental
-          x-enumDescriptions:
-            each_per_day: The price is charged per unit of the product, per day of the rental period. Total cost = unit price × quantity × number of rental days.
-            per_day: The price is charged once per day for the product, regardless of quantity. Total cost = daily price × number of rental days.
-            each_per_rental: The price is charged per unit for the full rental period. Total cost = unit price × quantity.
-            per_rental: The price is charged once for the entire rental period, regardless of quantity or duration.
-        price:
-          $ref: '#/components/schemas/productPriceOutput'
-    cars_availability_output:
-      type: object
+        display:
+          description: The price displayed to the traveller, including applicable taxes or fees.
+          $ref: '#/components/schemas/carMonetaryAmount'
+        pay:
+          description: The actual payment amount and timing. Indicates whether the amount is paid online now, partially online, or at pickup.
+          $ref: '#/components/schemas/carMonetaryAmountWithTiming'
+    dealOutput:
+      description: This specifies the deal tagging for the product.
+      type:
+      - object
+      - 'null'
       properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: object
-          properties:
-            offer:
-              $ref: '#/components/schemas/offerId'
-            currency:
-              $ref: '#/components/schemas/currencyId'
-            policies:
-              $ref: '#/components/schemas/availability_policiesOutput'
-            price:
-              $ref: '#/components/schemas/priceOutput'
-            products:
-              type: array
-              description: A list of optional extras (e.g. child seats, GPS) available for this vehicle.
-              items:
-                $ref: '#/components/schemas/productOutput'
-            deal:
-              $ref: '#/components/schemas/dealOutput'
-            special_offer:
-              description: The special offer included with this product, if any. This can be an additional service, a free upgrade, or a promotional feature provided by the supplier. If no special offer applies, the value is null.
-              type:
-              - string
-              - 'null'
-              examples:
-              - upgrade
-              enum:
-              - one_additional_driver
-              - two_additional_drivers
-              - three_additional_drivers
-              - all_additional_drivers
-              - gps
-              - baby_or_child_seat
-              - priority_pickup
-              - wifi_device
-              - sim_card
-              - upgrade
-              - black_friday
-              - getaway_deal
-              - mobile_rate
-            supplier:
-              type: number
-              format: integer
-              description: The unique identifier for the car rental supplier.
-            route:
-              $ref: '#/components/schemas/availability_routeOutput'
-            insurance:
-              $ref: '#/components/schemas/availability_insuranceOutput'
-            estimated_commission:
-              title: EstimatedCommissionOutput
-              description: Estimated commission the partner may earn if the traveller books this car. Expressed in the selected currency and based on predictive modelling at search time. Only returned when the predicted commission feature is enabled for the partner. Omitted when the feature is unavailable or when a reliable estimate cannot be produced.
-              type:
-              - object
-              - 'null'
-              properties:
-                amount:
-                  description: Estimated commission amount in the currency below.
-                  $ref: '#/components/schemas/monetaryAmount'
-                currency:
-                  $ref: '#/components/schemas/currencyId'
-    airportId:
-      description: A three-letter code that uniquely identifies an airport as defined by the International Air Transport Association (IATA). The full list can be obtained by calling  <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/airports" target="_blank">common/locations/airports</a>.
-      type: string
-      pattern: ^[A-Z]{3}$
-      example: AMS
-    capacity:
-      description: Car's capacity
-      type: object
-      properties:
-        bags:
-          description: Car's Baggage Capacity.
-          type: object
-          properties:
-            large:
-              description: Number of large bags.
-              type: number
-              minimum: 0
-            small:
-              description: Number of small bags.
-              type: number
-              minimum: 0
-          nullable: true
-        doors:
-          description: Number of doors in the car.
-          type: string
-        seats:
-          description: Number of seats in the car.
-          type: string
-    cars_constants_input:
-      title: CarsConstantsInput
-      type: object
-      properties:
-        constants:
-          description: Use this field to limit the response to specific categories, such as fuel_policies, depot_services, customer_services, etc. If omitted, all constants are returned.
+        discount_percentage:
+          description: Discount percentage of the applied deals.
+          type: integer
+          minimum: 1
+        public_price:
+          description: Original price of this product, before applying any discounts.
+          $ref: '#/components/schemas/monetaryAmount'
+        tags:
+          description: The tags of all the applied deals.
           type: array
           items:
             type: string
             enum:
-            - car_categories
-            - customer_services
-            - depot_services
-            - depot_types
-            - extras
-            - special_offers
-            - fuel_policies
-            - fuel_types
-            - general
-            - payment_timings
-            - protection_levels
-            - review_scores
-            - transmission
-            x-enumDescriptions:
-              car_categories: Vehicle categories used to group rental cars by size and type, such as economy, SUV, or premium.
-              customer_services: Customer support contact details per language.
-              depot_services: Services available at the car pick-up location.
-              depot_types: Types of car rental locations, such as airport, downtown, or train station.
-              extras: Optional add-ons such as child seats, GPS, or winter equipment.
-              special_offers: Included benefits or promotions bundled with the rental.
-              fuel_policies: Fuel handling policies for the rental.
-              fuel_types: Types of fuel supported by the vehicle.
-              general: General attributes and labels used across the Cars API.
-              payment_timings: When the traveller is charged for the booking.
-              protection_levels: Levels of insurance or protection coverage applied to the rental, affecting the traveller's financial liability.
-              review_scores: Categories used to evaluate customer reviews of rental experiences, such as cleanliness or pick-up speed.
-              transmission: Vehicle transmission types.
-        languages:
-          type: array
-          description: List of language codes used to localise constant names. Each constant name is returned as a translated object keyed by language. If not provided, en-gb is used by default.
-          items:
-            $ref: '#/components/schemas/languageId'
-          default:
-          - en-gb
-    cars_suppliers_output:
+            - black_friday
+            - getaway_deal
+            - mobile_rate
+    cars_search_output:
       type: object
+      required:
+      - request_id
+      - data
       properties:
         request_id:
           $ref: '#/components/schemas/requestId'
         data:
           type: array
           items:
-            $ref: '#/components/schemas/supplier'
+            $ref: '#/components/schemas/schemas-product'
         metadata:
           $ref: '#/components/schemas/metadata'
-    cars_depots_scores_input:
-      type: object
-      properties:
-        maximum_results:
-          $ref: '#/components/schemas/maximumResults'
-        page:
-          $ref: '#/components/schemas/page'
-    schemas-breakdown:
-      description: Breakdown of review scores by evaluation category.
-      type: object
-      properties:
-        cleanliness:
-          $ref: '#/components/schemas/schemas-breakdown_schema'
-        condition:
-          $ref: '#/components/schemas/schemas-breakdown_schema'
-        drop_off_speed:
-          $ref: '#/components/schemas/schemas-breakdown_schema'
-        friendliness:
-          $ref: '#/components/schemas/schemas-breakdown_schema'
-        likeliness_rent_again:
-          allOf:
-          - $ref: '#/components/schemas/schemas-breakdown_schema'
-          deprecated: true
-          description: Deprecated. This field will be removed in a future version.
-        location:
-          $ref: '#/components/schemas/schemas-breakdown_schema'
-        pick_up_speed:
-          $ref: '#/components/schemas/schemas-breakdown_schema'
-        value_for_money:
-          $ref: '#/components/schemas/schemas-breakdown_schema'
-      additionalProperties: false
-    cars_details_input:
-      type: object
-      properties:
-        last_modified:
-          description: The last modified date-time, only returns depots newer than this timestamp. The value should be within last 7 days
-          example: '2023-11-01T11:05:00+00:00'
-          format: date-time
+        search_token:
+          description: 'Encoded string that must be passed in subsequent requests to identify the context of the car search. Note: It is specific to Car rentals and differs from other tokens used in booking flows.'
           type: string
-        maximum_results:
-          $ref: '#/components/schemas/maximumResults'
-        page:
-          $ref: '#/components/schemas/page'
-    schemas-breakdown_schema:
-      description: Review score information for a specific evaluation category.
+    schemas-sort:
+      description: Defines how the search results are sorted. If omitted, results are sorted by the recommended option.
       type: object
-      properties:
-        score:
-          anyOf:
-          - $ref: '#/components/schemas/score'
-          - type: 'null'
-    details:
-      description: All static information related to cars.
-      properties:
-        id:
-          description: Unique car's ID.
-          $ref: '#/components/schemas/carId'
-        capacity:
-          $ref: '#/components/schemas/capacity'
-        country:
-          $ref: '#/components/schemas/countryId'
-        features:
-          description: List of possible car's features.
-          type: array
-          items:
-            type: string
-            enum:
-            - air_conditioning
-            - all_wheel_drive
-        image:
-          description: Car's image URL.
-          type: string
-        make:
-          description: Car's maker/brand.
-          type: string
-        model:
-          description: Car's model.
-          type: string
-        specification:
-          description: Car's specification.
-          $ref: '#/components/schemas/specification'
-        supplier:
-          description: Related supplier id.
-          $ref: '#/components/schemas/vehicleSupplierId'
-      type: object
-    schemas-product:
-      description: Detailed information about car rental product.
-      type: object
-      properties:
-        car:
-          $ref: '#/components/schemas/carFleetId'
-        categories:
-          $ref: '#/components/schemas/categories'
-        deal:
-          $ref: '#/components/schemas/dealsOutput'
-        offer:
-          $ref: '#/components/schemas/offerId'
-        policies:
-          $ref: '#/components/schemas/policiesOutput'
-        price:
-          $ref: '#/components/schemas/productPrice'
-        route:
-          $ref: '#/components/schemas/routeOutput'
-        special_offer:
-          description: The special offer included with this product, if any. This can be an additional service, a free upgrade, or a promotional feature provided by the supplier. If no special offer applies, the value will be null.
-          type:
-          - string
-          - 'null'
-          examples:
-          - upgrade
-          enum:
-          - one_additional_driver
-          - two_additional_drivers
-          - three_additional_drivers
-          - all_additional_drivers
-          - gps
-          - baby_or_child_seat
-          - priority_pickup
-          - wifi_device
-          - sim_card
-          - upgrade
-          - black_friday
-          - getaway_deal
-          - mobile_rate
-        insurance:
-          $ref: '#/components/schemas/insuranceOutput'
-        supplier:
-          description: Related supplier id.
-          $ref: '#/components/schemas/vehicleSupplierId'
-        url:
-          $ref: '#/components/schemas/urlOutput'
-        estimated_commission:
-          title: EstimatedCommissionOutput
-          description: Estimated commission the partner may earn if the traveller books this car. Expressed in the selected currency and based on predictive modelling at search time. Only returned when the predicted commission feature is enabled for the partner. Omitted when the feature is unavailable or when a reliable estimate cannot be produced.
-          type:
-          - object
-          - 'null'
-          properties:
-            amount:
-              description: Estimated commission amount in the currency below.
-              $ref: '#/components/schemas/monetaryAmount'
-            currency:
-              $ref: '#/components/schemas/currencyId'
-    cars_terms_and_conditions_output:
-      properties:
-        data:
-          type: object
-          description: Terms and conditions content translated in the requested language, if specified.
-          properties:
-            key_info:
-              type: object
-              description: High-level information about the car rental.
-              properties:
-                common:
-                  properties:
-                    credit_cards_allowed:
-                      description: Indicates whether the supplier accepts credit cards for the car rental deposit.
-                      type: boolean
-                    debit_cards_allowed:
-                      description: Indicates whether the supplier accepts debit cards for the car rental deposit.
-                      type: boolean
-                    driver_age:
-                      description: This is the driver age included in the car rental search request.
-                      type: integer
-                    insurance_available:
-                      description: Indicates whether insurance is available for the rental.
-                      type: boolean
-                    rental_duration:
-                      description: The duration of the rental in days.
-                      type: integer
-                      minimum: 1
-                  type: object
-                damage_excess:
-                  description: The damage excess section.
-                  properties:
-                    content:
-                      description: The content of the damage excess section.
-                      items:
-                        type: string
-                      type: array
-                    excess_value:
-                      description: The value of the damage excess.
-                      type: string
-                    subtitle:
-                      description: The subtitle of the damage excess section.
-                      type: string
-                    title:
-                      description: The title of the damage excess section.
-                      type: string
-                  type: object
-                deposit:
-                  description: General information about the deposit.
-                  properties:
-                    accepted_cards:
-                      description: The accepted cards for the deposit.
-                      items:
-                        properties:
-                          title:
-                            description: The title of the card.
-                            type: string
-                          type:
-                            description: The type of card.
-                            type: string
-                        type: object
-                      type: array
-                    accepted_cards_title:
-                      description: The title of the accepted cards section.
-                      type: string
-                    content:
-                      description: The content of the deposit section.
-                      items:
-                        type: string
-                      type: array
-                    subtitle:
-                      description: The subtitle of the deposit section.
-                      type: string
-                    title:
-                      description: The title of the deposit section.
-                      type: string
-                  type: object
-                disclaimers:
-                  description: The disclaimers section.
-                  items:
-                    type: string
-                  type: array
-                driver_and_license:
-                  description: The driver and license section.
-                  properties:
-                    needed_items:
-                      description: What you need in order to rent a car.
-                      items:
-                        type: string
-                      type: array
-                    title:
-                      description: The title of the driver and license section.
-                      type: string
-                    top_text:
-                      description: The top text of the driver and license section.
-                      type: string
-                  type: object
-                mileage:
-                  description: The mileage section.
-                  properties:
-                    content:
-                      description: The content of the mileage section.
-                      type: string
-                    subtitle:
-                      description: The subtitle of the mileage section.
-                      type: string
-                    title:
-                      description: The title of the mileage section.
-                      type: string
-                  type: object
-            terms:
-              $ref: '#/components/schemas/terms'
-        request_id:
-          $ref: '#/components/schemas/requestId'
-      type: object
-    mileageOutput:
-      description: The mileage policy that applies to this product.
-      type: object
-      properties:
-        amount:
-          description: The amount that must be paid if the distance limit is exceeded.
-          type:
-          - number
-          - 'null'
-          format: double
-        currency:
-          $ref: '#/components/schemas/currencyId'
-        distance_limit:
-          description: The maximal distance limit allowed for this product before additional fees apply.
-          type:
-          - number
-          - 'null'
-          format: double
-          minimum: 0
-        distance_unit:
-          description: The unit of measurement for the distance limit. For example 'km' or 'miles'.
-          type: string
-          enum:
-          - kilometers
-          - miles
-        type:
-          description: The type of mileage policy applied.
-          type: string
-          enum:
-          - limited
-          - unlimited
       required:
-      - type
-    availability_routePointOutput:
-      description: Defines the product pick up / drop off route point.
-      type: object
+      - by
       properties:
-        depot:
-          description: The identifier of the depot used for pick up or drop off.
-          $ref: '#/components/schemas/depots_depotId'
-        depot_location_type:
-          description: The type of location for the depot.
+        by:
+          description: The criterion used to sort the search results.
           type: string
           enum:
-          - in_terminal
-          - car_rental_centre
-          - outside_terminal
-          - airport_hotel
-          - shuttle_bus
-          - meet_greet
-          - trainstation
-          - downtown
-    availability_policiesOutput:
-      description: The policies that apply to this product.
-      type: object
-      properties:
-        cancellation:
-          $ref: '#/components/schemas/availability_cancellationOutput'
-        damage_excess:
-          type: object
-          properties:
-            amount:
-              description: The maximum amount a traveller may be charged for damages to the car during the rental period, as specified by the rental agreement.
-              anyOf:
-              - $ref: '#/components/schemas/monetaryAmount'
-              - type: 'null'
-        deposit:
-          type: object
-          properties:
-            amount:
-              description: The amount of money that will be temporarily pre-authorised or blocked on the traveller’s credit card at the rental location as a security deposit, to cover potential damage or extra charges.
-              anyOf:
-              - $ref: '#/components/schemas/monetaryAmount'
-              - type: 'null'
-        insurance_package:
-          description: The supplier insurance package that applies to this product.
+          - recommended
+          - price
+          - distance
+          - review_score
+          x-enumDescriptions:
+            recommended: Sort by the recommended order. This is the default when the sort parameter is omitted.
+            price: Sort by price in ascending order.
+            distance: Sort by distance in ascending order. Available only when both the pickup and dropoff locations are specified using latitude and longitude coordinates. Otherwise, the recommended sort order is applied.
+            review_score: Sort by review score in descending order.
+        direction:
+          description: Deprecated. Specifies the sort direction. This field is no longer used and will be removed in a future version.
           type: string
           enum:
-          - basic
-          - inclusive
-          - zero_excess
-        fuel:
-          description: The fuel policy that applies to this product. Maps to the `fuel_policies` constant returned by the /cars/constants endpoint.
-          type: string
-          enum:
-          - return_same
-          - return_same_or_prepay_no_refunds
-          - return_same_preauth
-          - free_tank
-          - prepay_no_refunds
-          - prepay_part_refunds
-          - prepay_refunds
-        mileage:
-          $ref: '#/components/schemas/availability_mileageOutput'
-        payment:
-          $ref: '#/components/schemas/availability_paymentOutput'
-        theft_excess:
-          type: object
-          properties:
-            amount:
-              description: The maximum amount a traveller may be charged in the event of car theft during the rental period, as outlined in the rental agreement.
-              anyOf:
-              - $ref: '#/components/schemas/monetaryAmount'
-              - type: 'null'
-    charge:
-      title: CarsCharge
-      description: Defines the charge, including the type of charge and its total amount.
-      type: object
-      properties:
-        charge:
-          $ref: '#/components/schemas/schemas-chargeTypeId'
-        total_amount:
-          description: The total price for this charge.
-          $ref: '#/components/schemas/monetaryAmount'
-    openingHoursRange:
-      description: Depot opening hours range.
-      type: object
-      properties:
-        closing_time:
-          description: Depot closing time
-          example: '21:00:00'
-          format: time
-          type: string
-        opening_time:
-          description: Depot opening time.
-          example: 07:00:00
-          format: time
-          type: string
-    currencyId:
-      description: A three-letter code that uniquely identifies a monetary currency as defined by the ISO 4217 standard. The full list can be obtained by calling <a href="/demand/docs/open-api/3.2/demand-api/commonpayments/common/payments/currencies" target="_blank">common/payments/currencies</a>.
-      type:
-      - string
-      - 'null'
-      pattern: ^[A-Z]{3}$
-      example: EUR
-    depots_reviewScore:
-      description: Current review score of the depot, in the range 1.0 to 10.0.
-      type: number
-      example: 8.7
-      multipleOf: 0.1
-      minimum: 1
-      maximum: 10
-    city:
-      description: Unique identifier of the city where the depot is located. If the city ID is not included in the list returned by /common/locations/cities, call that endpoint using the city filter.
-      type: integer
-      example: -1471393
+          - ascending
+          - descending
+          deprecated: true
     cars_search_input:
       type: object
       properties:
@@ -3678,345 +4000,7 @@ components:
       - currency
       - driver
       - route
-    translatedString:
-      title: TranslatedString
-      description: A string localised in multiple languages.
-      type: object
-      patternProperties:
-        ^[a-z]{2}(-[a-z]{2})$:
-          description: The content localised in this language.
-          type:
-          - string
-          - 'null'
-    schemas-supplierId:
-      description: Supplier id.
-      type: integer
-    driver:
-      description: Defines the driver context.
-      type: object
-      properties:
-        age:
-          description: Driver age. Affects the availability and price of the products.
-          type: integer
-          minimum: 18
-          maximum: 99
-      required:
-      - age
-    depots_input:
-      type: object
-      properties:
-        last_modified:
-          description: Returns depots modified after the specified timestamp (exclusive).
-          example: '2026-03-01T11:05:00+00:00'
-          format: date-time
-          type: string
-        maximum_results:
-          $ref: '#/components/schemas/maximumResults'
-        languages:
-          description: List of language codes to return translated fields. If a translation is unavailable, the default language (`en-gb`) is returned.
-          type: array
-          items:
-            $ref: '#/components/schemas/languageId'
-          default:
-          - en-gb
-        page:
-          $ref: '#/components/schemas/page'
-    cancellationOutput:
-      description: The cancellation policy that applies to this product.
-      type: object
-      properties:
-        details:
-          description: "Provides the policy details if the cancellation is free. For example: \n 1. duration='PT48H' and context=before_pickup means 'Free cancellation is available up to 48 hrs before pick up'. \n 2. duration='P7D' and context=within_given_time_period_of_booking means 'Free cancellation is available within 7 days of booking'"
-          type:
-          - object
-          - 'null'
-          properties:
-            context:
-              description: The context in which the cancellation policy applies. For example 'before_pickup'
-              type: string
-              enum:
-              - before_pickup
-              - within_given_time_period_of_booking
-            duration:
-              description: The duration until which the cancellation is free. This is in ISO-8601/Duration format.
-              type: string
-              pattern: ^P(?:\dY)?(?:\dM)?(?:\dD)?(?:T(?:\dH)?(?:\dM)?(?:\dS)?)?$
-        type:
-          description: The type of cancellation present. For example 'free_cancellation' or 'non-refundable'.
-          type: string
-          enum:
-          - free_cancellation
-          - non-refundable
-    priceOutput:
-      description: The price that applies to this vehicle.
-      type: object
-      properties:
-        base:
-          description: The base price of the vehicle.
-          $ref: '#/components/schemas/monetaryAmount'
-        credit_card_required:
-          description: 'Indicates whether a credit card is required as a guarantee for this vehicle.
-
-
-            - true: A credit card must be provided and will be passed to the supplier for guarantee purposes. Applies to vehicles with ''payment.timing = pay_at_pickup''.
-
-            - false: A credit card is explicitly not required.
-
-            - null: Information not available or not applicable (for example, pay-online-now vehicles where credit card requirements are currently unknown).'
-          type:
-          - boolean
-          - 'null'
-        total:
-          description: The total price of the vehicle.
-          $ref: '#/components/schemas/monetaryAmount'
-        extra_charges:
-          description: The charge breakdown. Includes taxes and fees included in the drive away price.
-          type: array
-          items:
-            $ref: '#/components/schemas/chargeOutput'
-    cars_suppliers_input:
-      type: object
-      properties:
-        maximum_results:
-          $ref: '#/components/schemas/maximumResults'
-        page:
-          $ref: '#/components/schemas/page'
-        suppliers:
-          description: Defines the suppliers that should be returned. Without it all suppliers will be returned
-          type: array
-          items:
-            $ref: '#/components/schemas/vehicleSupplierId'
-          maxItems: 100
-    availability_insuranceOutput:
-      description: 'Detailed third-party insurance quote for this car rental. Returned only for eligible partner configurations (e.g., partners with a signed insurance contract), and when insurance is available for the selected offer (null if not available).
-
-        This object represents a bookable insurance product and includes pricing, coverage, and policy documentation.'
-      type:
-      - object
-      - 'null'
-      properties:
-        quote_reference:
-          description: Unique reference for this insurance quote. Expires after 90 minutes.
-          type: string
-          examples:
-          - 38df45ef-a6fb-4e24-a1d2-66fc3af23d76#1t0juiba8h6n2
-        name:
-          description: The display name of the insurance product.
-          type: string
-          examples:
-          - Full Protection
-        id:
-          description: The identifier for the type of insurance product.
-          type: string
-          examples:
-          - '999'
-        price:
-          description: The price of the insurance product for the full rental period.
-          $ref: '#/components/schemas/carsPriceOutput'
-        coverage_amount:
-          description: The maximum coverage amount provided by the insurance product.
-          type: object
-          properties:
-            value:
-              description: The numeric value of the maximum coverage.
-              $ref: '#/components/schemas/monetaryAmount'
-            currency:
-              description: The currency of the coverage amount.
-              $ref: '#/components/schemas/currencyId'
-        documents:
-          description: Legal documents for this insurance product. Always returned when the insurance object is present, and always contains the `policy_document` entry. The `ipid` entry is only included when an IPID applies (EEA and UK countries) and is available in the requested language.
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/insuranceDocument'
-      required:
-      - quote_reference
-      - name
-      - id
-      - price
-      - documents
-    chargeOutput:
-      description: Defines the charge, including the type of charge and its total amount.
-      type: object
-      properties:
-        charge:
-          $ref: '#/components/schemas/chargeTypeIdOutput'
-        total_amount:
-          description: The total price for this charge.
-          $ref: '#/components/schemas/monetaryAmount'
-    metadata:
-      title: MetadataOutput
-      description: Metadata about the request.
-      type: object
-      properties:
-        next_page:
-          description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
-          type: string
-          nullable: true
-        total_results:
-          description: The total number of results available.
-          type: integer
-          minimum: 0
-    insuranceOutput:
-      description: Third-party insurance product for this car rental. Only present for eligible partner configurations. Null if not available.
-      type:
-      - object
-      - 'null'
-      properties:
-        name:
-          description: The display name of the insurance product.
-          type: string
-          examples:
-          - Full Protection
-        id:
-          description: The identifier for the type of insurance product.
-          type: string
-          examples:
-          - '999'
-        price:
-          description: The price of the insurance product for the full rental period.
-          type: object
-          properties:
-            amount:
-              description: The insurance price amount.
-              $ref: '#/components/schemas/monetaryAmount'
-            currency:
-              $ref: '#/components/schemas/currencyId'
-    productPriceOutput:
-      description: Pricing information for the product, including display price and payment details.
-      type: object
-      properties:
-        unit_amount:
-          description: The price for a single unit of this product. Use mode to determine if it’s per day or per rental.
-          $ref: '#/components/schemas/carsPriceOutput'
-    routePointOutput:
-      description: Defines the product pickup / dropoff route point.
-      type: object
-      properties:
-        depot:
-          description: The identifier of the depot used for pickup or dropoff.
-          $ref: '#/components/schemas/depots_depotId'
-        depot_location_type:
-          description: Type of depot location where the vehicle is picked up or dropped off. For example, 'shuttle_bus', 'in_terminal', etc.
-          type: string
-          enum:
-          - in_terminal
-          - car_rental_centre
-          - outside_terminal
-          - airport_hotel
-          - shuttle_bus
-          - meet_greet
-          - trainstation
-          - downtown
-    depots_output:
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/depot'
-        metadata:
-          description: Metadata about the request.
-          type: object
-          properties:
-            next_page:
-              description: Indicates that more results are available. Pass this token to the `page` parameter to retrieve the next page of results.
-              type:
-              - string
-              - 'null'
-    schemas-booker:
-      description: Defines the booker context.
-      type: object
-      properties:
-        country:
-          description: The booker country for showing the best price for that user and obeying laws regarding the display of taxes and fees.
-          $ref: '#/components/schemas/countryId'
-      required:
-      - country
-    depot:
-      description: Static information about the car rental depot.
-      type: object
-      properties:
-        id:
-          description: Unique depot's ID.
-          $ref: '#/components/schemas/depots_depotId'
-        contact:
-          $ref: '#/components/schemas/depots_contact'
-        city:
-          description: Unique identifier of the city. If the city ID is not included in the list returned by /common/locations/cities, call that endpoint using the city filter.
-          $ref: '#/components/schemas/city'
-        pickup:
-          description: Pickup information for the depot.
-          $ref: '#/components/schemas/instructions'
-        location:
-          $ref: '#/components/schemas/location'
-        dropoff:
-          description: Drop-off information for the depot.
-          $ref: '#/components/schemas/instructions'
-        services:
-          description: List of services provided by the depot.
-          type: array
-          items:
-            type: string
-            enum:
-            - shuttle
-            - meet_greet
-            - unknown
-        supplier:
-          description: Unique identifier of the vehicle supplier. You can see the full list of supplier IDs calling /cars/suppliers.
-          $ref: '#/components/schemas/vehicleSupplierId'
-        ratings:
-          description: Number of reviews and average score for the depot.
-          $ref: '#/components/schemas/ratings'
-    carId:
-      description: Uniquely identifies a car specification. The full list can be obtained by calling [/cars/suppliers](#/cars/details).
-      type: integer
-      minimum: 1
-    availability_cancellationOutput:
-      description: The cancellation policy that applies to this product.
-      type: object
-      properties:
-        details:
-          description: "Provides the policy details if the cancellation is free. For example: \n 1. duration='PT48H' and context=BEFORE_PICKUP means 'Free cancellation is available up to 48 hrs before pick up'. \n 2. duration='P7D' and context=WITHIN_GIVEN_TIME_PERIOD_OF_BOOKING means 'Free cancellation is available within 7 days of booking'"
-          type:
-          - object
-          - 'null'
-          properties:
-            context:
-              description: The context in which the cancellation policy applies. For example 'before_pickup'
-              type: string
-              enum:
-              - before_pickup
-              - within_given_time_period_of_booking
-            duration:
-              description: The duration until which the cancellation is free. This is in ISO-8601/Duration format.
-              type: string
-              pattern: ^P(?:\dY)?(?:\dM)?(?:\dD)?(?:T(?:\dH)?(?:\dM)?(?:\dS)?)?$
-        type:
-          description: The type of cancellation present. For example 'free_cancellation' or 'non-refundable'.
-          type: string
-          enum:
-          - free_cancellation
-          - non-refundable
   examples:
-    inputAll:
-      summary: Example request for all constants
-      value:
-        languages:
-        - de
-        - en-gb
-    inputSomeConstants:
-      summary: Example request for specific constants
-      value:
-        constants:
-        - customer_services
-        - fuel_policies
-        languages:
-        - en-gb
-        - fr
-        - de
     searchByAirport:
       summary: Search by airport
       value:
@@ -4046,6 +4030,32 @@ components:
             datetime: '2026-11-10T11:05:00'
             location:
               airport: AMS
+    inputAll:
+      summary: Example request for all constants
+      value:
+        languages:
+        - de
+        - en-gb
+    searchByPayment:
+      summary: Search by payment
+      value:
+        booker:
+          country: nl
+        currency: EUR
+        driver:
+          age: 36
+        payment:
+          timings:
+          - pay_online_now
+        route:
+          pickup:
+            datetime: '2026-11-05T11:05:00'
+            location:
+              city: -2140479
+          dropoff:
+            datetime: '2026-11-10T11:05:00'
+            location:
+              city: -2140479
     searchByCoordinatesWithResponseLimit:
       summary: Search by coordinates with a maximum of 10 results
       value:
@@ -4080,6 +4090,16 @@ components:
               coordinates:
                 latitude: 52.309456
                 longitude: 4.762266
+    inputSomeConstants:
+      summary: Example request for specific constants
+      value:
+        constants:
+        - customer_services
+        - fuel_policies
+        languages:
+        - en-gb
+        - fr
+        - de
     searchByCityIdWithSorting:
       summary: Search by city ID, sorted by price
       value:
@@ -4111,26 +4131,6 @@ components:
               city: -2140479
         sort:
           by: price
-    searchByPayment:
-      summary: Search by payment
-      value:
-        booker:
-          country: nl
-        currency: EUR
-        driver:
-          age: 36
-        payment:
-          timings:
-          - pay_online_now
-        route:
-          pickup:
-            datetime: '2026-11-05T11:05:00'
-            location:
-              city: -2140479
-          dropoff:
-            datetime: '2026-11-10T11:05:00'
-            location:
-              city: -2140479
   securitySchemes:
     BearerAuth:
       type: http

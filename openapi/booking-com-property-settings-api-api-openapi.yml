@@ -134,208 +134,6 @@ paths:
                 $ref: '#/components/schemas/ApiResponseDamageProgrammeTerms'
 components:
   schemas:
-    accepted_payment_types:
-      type: object
-      properties:
-        codes:
-          type: array
-          items:
-            type: integer
-            format: int32
-      description: List of payment methods. For more information, see the [full list of payment codes.](/connectivity/docs/codes-bcpt)
-    children_policies:
-      type: object
-      properties:
-        allow_children:
-          type: boolean
-          description: Specifies whether the property admits adults and children, or only adults.
-        min_age:
-          type: integer
-          description: Specifies the minimum age that children are allowed (in case allow_children = true).
-          format: int32
-        policy_rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/policy_rules'
-      description: 'You can indicate whether a property accepts children and specify: price, occupancy and what age children are welcome'
-    AdvanceCancellation:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        before_check_in:
-          type: string
-          enum:
-          - WEEKS_4
-          - WEEKS_8
-          - WEEKS_12
-    property_settings:
-      type: object
-      properties:
-        require_cvc:
-          type: boolean
-          description: Specify whether guest needs to provide CVC for booking.
-        curfew:
-          $ref: '#/components/schemas/curfew'
-        require_booker_address:
-          type: boolean
-          description: Specifies whether guests must provide an address.
-        require_booker_phone_number:
-          type: boolean
-          description: Specifies whether guests must provide a contact telephone number.
-        age_restriction:
-          $ref: '#/components/schemas/age_restriction'
-        auto_replenish:
-          type: boolean
-          description: Specify if property enabled to auto-replenish hotel's inventory after cancellations
-        replenish_closed_rooms:
-          type: boolean
-          description: Reopen closed rooms after a cancellation with the rooms to.
-        long_stay:
-          $ref: '#/components/schemas/long_stay'
-        pricing_type:
-          type: string
-          description: Specifies the pricing type for the product.
-          default: Standard
-          enum:
-          - STANDARD
-          - LOS
-          - OBP
-        allow_smoking:
-          type: boolean
-          description: Specifies whether properties allow smoking option.
-        view_cc_details:
-          type: boolean
-          description: Specify whether trusted properties can view the guest's credit card details
-      description: Contains multiple various settings related to the property
-    InvoiceSettings:
-      type: object
-      properties:
-        legal_name:
-          type: string
-        contact_person:
-          type: string
-        address:
-          type: string
-        state:
-          type: string
-        notification_channel:
-          type: string
-        country_code:
-          type: string
-        city:
-          type: string
-        postal_code:
-          type: string
-        brazil_tax_details:
-          $ref: '#/components/schemas/BrazilTaxDetails'
-    AcceptedPaymentTypes:
-      type: object
-      properties:
-        codes:
-          type: array
-          items:
-            type: integer
-            format: int32
-    advance_cancellation:
-      required:
-      - enabled
-      type: object
-      properties:
-        enabled:
-          type: boolean
-          description: Specifies whether properties have advance cancellation enabled
-        before_check_in:
-          type: string
-          description: Amount of weeks before check-in when free cancellation is available
-          enum:
-          - WEEKS_4
-          - WEEKS_8
-          - WEEKS_12
-    BrazilTaxDetails:
-      type: object
-      properties:
-        tax_payer_number_type:
-          type: string
-        tax_payer_number:
-          type: string
-        city_hall_id:
-          type: string
-        email:
-          type: string
-    PropertySettingsReadOutputData:
-      type: object
-      properties:
-        property_settings:
-          $ref: '#/components/schemas/PropertySettings'
-        pets:
-          $ref: '#/components/schemas/Pets'
-        damage_policy:
-          $ref: '#/components/schemas/damage_policy'
-        standard_phrases:
-          type: array
-          items:
-            $ref: '#/components/schemas/StandardPhraseData'
-        quiet_hours:
-          $ref: '#/components/schemas/QuietHours'
-        renovation:
-          $ref: '#/components/schemas/Renovation'
-        bed_linen_policy:
-          $ref: '#/components/schemas/HotelChainBedLinen'
-        accepted_payment_types:
-          $ref: '#/components/schemas/AcceptedPaymentTypes'
-        french_tax_details:
-          $ref: '#/components/schemas/FrenchTaxDetails'
-        cancellation_exceptions:
-          $ref: '#/components/schemas/CancellationExceptions'
-        age_buckets:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgeBucket'
-        children_policies:
-          $ref: '#/components/schemas/ChildPolicies'
-        invoice_settings:
-          $ref: '#/components/schemas/InvoiceSettings'
-        booking_model:
-          $ref: '#/components/schemas/BookingModel'
-        land_registration_numbers:
-          type: array
-          items:
-            type: string
-    PropertySettingsCreateOutputData:
-      type: object
-      properties:
-        success:
-          type: boolean
-    PropertySettings:
-      type: object
-      properties:
-        require_cvc:
-          type: boolean
-        curfew:
-          $ref: '#/components/schemas/curfew'
-        require_booker_address:
-          type: boolean
-        require_booker_phone_number:
-          type: boolean
-        age_restriction:
-          $ref: '#/components/schemas/age_restriction'
-        auto_replenish:
-          type: boolean
-        replenish_closed_rooms:
-          type: boolean
-        long_stay:
-          $ref: '#/components/schemas/long_stay'
-        pricing_type:
-          type: string
-          enum:
-          - Standard
-          - OBP
-          - LOS
-        allow_smoking:
-          type: boolean
-        view_cc_details:
-          type: boolean
     PropertySettingsCreateInput:
       type: object
       properties:
@@ -376,242 +174,6 @@ components:
           type: array
           items:
             type: string
-    GracePeriod:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        after_booking:
-          type: string
-          enum:
-          - HOURS_1
-          - HOURS_4
-          - HOURS_24
-    ChildPolicies:
-      type: object
-      properties:
-        allow_children:
-          type: boolean
-        min_age:
-          type: integer
-          format: int32
-        policy_rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChildAndBedPolicyRuleData'
-    DamageProgrammeTerms:
-      type: object
-      properties:
-        raw_full_text:
-          type: string
-    renovation:
-      required:
-      - enabled
-      type: object
-      properties:
-        enabled:
-          type: boolean
-          description: Specifies whether renovation dates are enabled
-        start:
-          pattern: ^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
-          type: string
-          description: Date when renovation start
-          format: yyyy-mm-dd
-        end:
-          pattern: ^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
-          type: string
-          description: Date when renovation until.
-          format: yyyy-mm-dd
-    ObjectNode:
-      type: object
-    ResponseMeta:
-      type: object
-      properties:
-        ruid:
-          type: string
-    AgeBucket:
-      type: object
-      properties:
-        min_age:
-          type: integer
-          format: int32
-        max_age:
-          type: integer
-          format: int32
-    BookingModel:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - IB
-          - RTB
-        rtb_eligible:
-          type: boolean
-    QuietHours:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        start:
-          type: string
-        end:
-          type: string
-    invoice_settings:
-      type: object
-      properties:
-        legal_name:
-          type: string
-        contact_person:
-          type: string
-        address:
-          maxLength: 255
-          minLength: 1
-          type: string
-        country_code:
-          type: string
-        city:
-          type: string
-        postal_code:
-          type: string
-        state:
-          maxLength: 2
-          minLength: 2
-          type: string
-        notification_channel:
-          type: string
-          description: The channel how company should be notified invoice related mails.
-          enum:
-          - POSTAL_MAIL
-          - EMAIL
-        brazil_tax_details:
-          $ref: '#/components/schemas/brazil_tax_details'
-    ApiResponsePropertySettingsReadOutputData:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/PropertySettingsReadOutputData'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorOTA'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorOTA'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
-    curfew:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        start:
-          type: string
-        end:
-          type: string
-    hotel_chain_bed_linen:
-      required:
-      - enabled
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        amount:
-          type: number
-          format: double
-    long_stay:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        max_length_of_stay:
-          type: integer
-          format: int32
-    ApiErrorOTA:
-      type: object
-      properties:
-        message:
-          type: string
-        code:
-          type: integer
-          format: int32
-        details:
-          $ref: '#/components/schemas/ObjectNode'
-        description:
-          type: string
-    HotelChainBedLinen:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        amount:
-          type: number
-          format: double
-    cancellation_exceptions:
-      type: object
-      properties:
-        grace_period:
-          $ref: '#/components/schemas/grace_period'
-        advance_cancellation:
-          $ref: '#/components/schemas/advance_cancellation'
-    FrenchTaxDetails:
-      type: object
-      properties:
-        category_id:
-          type: integer
-          format: int32
-        nature_id:
-          type: integer
-          format: int32
-        declare_revenue:
-          type: boolean
-        has_vat:
-          type: boolean
-        registered_in_rcs:
-          type: boolean
-    ApiResponseMapStringPropertySettingsCreateOutputData:
-      type: object
-      properties:
-        data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/PropertySettingsCreateOutputData'
-          example:
-            property_setting_1:
-              success: true
-            property_setting_2:
-              success: true
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorOTA'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorOTA'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
-    Renovation:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        start:
-          type: string
-        end:
-          type: string
-    age_restriction:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        min:
-          type: integer
-          format: int32
-        max:
-          type: integer
-          format: int32
     damage_policy:
       required:
       - policy_type
@@ -666,31 +228,38 @@ components:
           - ON_CHECKOUT
           - WITHIN_7_DAYS
           - WITHIN_14_DAYS
-    brazil_tax_details:
+    quiet_hours:
       required:
-      - city_hall_id
-      - email
-      - tax_payer_number
-      - tax_payer_number_type
+      - enabled
       type: object
       properties:
-        tax_payer_number_type:
+        enabled:
+          type: boolean
+          description: Specifies whether properties have quiet hours enabled
+        start:
+          pattern: ^(?:[01]\d|2[0-3]):[03]0$
           type: string
-          description: Specifies whether the identifying number belongs to a company or a private individual.
-          enum:
-          - CNPJ
-          - CPF
-        tax_payer_number:
+          description: Time when quiet hours start.
+          format: HH:MM
+        end:
+          pattern: ^(?:[01]\d|2[0-3]):[03]0$
           type: string
-          description: The identifying number. CNPJ = 14 digits. CPF = 11 digits.
-        city_hall_id:
-          type: string
-          description: The 8-digit ID for the city hall which issued the CNPJ or CPF number
-        email:
-          type: string
-    booking_model:
-      required:
-      - type
+          description: Time when quiet hours ends.
+          format: HH:MM
+    ApiErrorResponse:
+      type: object
+      properties:
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    BookingModel:
       type: object
       properties:
         type:
@@ -698,7 +267,8 @@ components:
           enum:
           - IB
           - RTB
-      description: 'Specify if properties have request to book option enabled. Currently available only for: fr, au, us, it, de, gb, es'
+        rtb_eligible:
+          type: boolean
     ApiResponseDamageProgrammeTerms:
       type: object
       properties:
@@ -714,6 +284,67 @@ components:
             $ref: '#/components/schemas/ApiErrorOTA'
         meta:
           $ref: '#/components/schemas/ResponseMeta'
+    curfew:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        start:
+          type: string
+        end:
+          type: string
+    Pets:
+      type: object
+      properties:
+        pets_allowed:
+          type: string
+          enum:
+          - PETS_NOT_ALLOWED
+          - PETS_ALLOWED
+          - PETS_ALLOWED_ON_REQUEST
+        pets_price_type:
+          type: string
+          enum:
+          - FREE
+          - CHARGES_MAY_APPLY
+    ChildPolicies:
+      type: object
+      properties:
+        allow_children:
+          type: boolean
+        min_age:
+          type: integer
+          format: int32
+        policy_rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChildAndBedPolicyRuleData'
+    BrazilTaxDetails:
+      type: object
+      properties:
+        tax_payer_number_type:
+          type: string
+        tax_payer_number:
+          type: string
+        city_hall_id:
+          type: string
+        email:
+          type: string
+    cancellation_exceptions:
+      type: object
+      properties:
+        grace_period:
+          $ref: '#/components/schemas/grace_period'
+        advance_cancellation:
+          $ref: '#/components/schemas/advance_cancellation'
+    long_stay:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        max_length_of_stay:
+          type: integer
+          format: int32
     french_tax_details:
       required:
       - declare_revenue
@@ -736,6 +367,228 @@ components:
         registered_in_rcs:
           type: boolean
           description: Are you registered as a professional at the trade commercial register (Registre du Commerce et des Sociétés)?
+    booking_model:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - IB
+          - RTB
+      description: 'Specify if properties have request to book option enabled. Currently available only for: fr, au, us, it, de, gb, es'
+    children_policies:
+      type: object
+      properties:
+        allow_children:
+          type: boolean
+          description: Specifies whether the property admits adults and children, or only adults.
+        min_age:
+          type: integer
+          description: Specifies the minimum age that children are allowed (in case allow_children = true).
+          format: int32
+        policy_rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/policy_rules'
+      description: 'You can indicate whether a property accepts children and specify: price, occupancy and what age children are welcome'
+    brazil_tax_details:
+      required:
+      - city_hall_id
+      - email
+      - tax_payer_number
+      - tax_payer_number_type
+      type: object
+      properties:
+        tax_payer_number_type:
+          type: string
+          description: Specifies whether the identifying number belongs to a company or a private individual.
+          enum:
+          - CNPJ
+          - CPF
+        tax_payer_number:
+          type: string
+          description: The identifying number. CNPJ = 14 digits. CPF = 11 digits.
+        city_hall_id:
+          type: string
+          description: The 8-digit ID for the city hall which issued the CNPJ or CPF number
+        email:
+          type: string
+    pets:
+      required:
+      - pets_allowed
+      type: object
+      properties:
+        pets_allowed:
+          type: string
+          description: Specifies pets allowed option for the properties.
+          enum:
+          - PETS_NOT_ALLOWED
+          - PETS_ALLOWED
+          - PETS_ALLOWED_ON_REQUEST
+        pets_price_type:
+          type: string
+          description: Specifies pets price type option for the properties.
+          enum:
+          - FREE
+          - CHARGES_MAY_APPLY
+      description: Contains settings related to the pets allowance
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+    DamageProgrammeTerms:
+      type: object
+      properties:
+        raw_full_text:
+          type: string
+    FrenchTaxDetails:
+      type: object
+      properties:
+        category_id:
+          type: integer
+          format: int32
+        nature_id:
+          type: integer
+          format: int32
+        declare_revenue:
+          type: boolean
+        has_vat:
+          type: boolean
+        registered_in_rcs:
+          type: boolean
+    AdvanceCancellation:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        before_check_in:
+          type: string
+          enum:
+          - WEEKS_4
+          - WEEKS_8
+          - WEEKS_12
+    ObjectNode:
+      type: object
+    QuietHours:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        start:
+          type: string
+        end:
+          type: string
+    PropertySettingsCreateOutputData:
+      type: object
+      properties:
+        success:
+          type: boolean
+    policy_rules:
+      required:
+      - price_mode
+      - price_type
+      - rule_type
+      type: object
+      properties:
+        rule_type:
+          type: string
+          enum:
+          - EXISTING_BED
+          - EXTRA_BED
+          - CRIB
+          - EXTRA_BED_FOR_ADULT
+        from_age:
+          type: integer
+          format: int64
+        to_age:
+          type: integer
+          format: int64
+        price_type:
+          type: string
+          enum:
+          - FIXED
+          - FREE
+          - ADULT_PERCENTAGE
+        price_mode:
+          type: string
+          enum:
+          - PER_STAY
+          - PER_NIGHT
+        price:
+          type: number
+          format: double
+    hotel_chain_bed_linen:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        amount:
+          type: number
+          format: double
+    grace_period:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Specifies whether properties have grace period enabled
+        after_booking:
+          type: string
+          description: Grace period - amount of hours after booking when free cancellation is available.
+          enum:
+          - HOURS_1
+          - HOURS_4
+          - HOURS_24
+    ApiResponsePropertySettingsReadOutputData:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PropertySettingsReadOutputData'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    PropertySettings:
+      type: object
+      properties:
+        require_cvc:
+          type: boolean
+        curfew:
+          $ref: '#/components/schemas/curfew'
+        require_booker_address:
+          type: boolean
+        require_booker_phone_number:
+          type: boolean
+        age_restriction:
+          $ref: '#/components/schemas/age_restriction'
+        auto_replenish:
+          type: boolean
+        replenish_closed_rooms:
+          type: boolean
+        long_stay:
+          $ref: '#/components/schemas/long_stay'
+        pricing_type:
+          type: string
+          enum:
+          - Standard
+          - OBP
+          - LOS
+        allow_smoking:
+          type: boolean
+        view_cc_details:
+          type: boolean
     StandardPhraseData:
       required:
       - enabled
@@ -798,24 +651,171 @@ components:
           - GuestUnder18
         enabled:
           type: boolean
-    grace_period:
+    property_settings:
+      type: object
+      properties:
+        require_cvc:
+          type: boolean
+          description: Specify whether guest needs to provide CVC for booking.
+        curfew:
+          $ref: '#/components/schemas/curfew'
+        require_booker_address:
+          type: boolean
+          description: Specifies whether guests must provide an address.
+        require_booker_phone_number:
+          type: boolean
+          description: Specifies whether guests must provide a contact telephone number.
+        age_restriction:
+          $ref: '#/components/schemas/age_restriction'
+        auto_replenish:
+          type: boolean
+          description: Specify if property enabled to auto-replenish hotel's inventory after cancellations
+        replenish_closed_rooms:
+          type: boolean
+          description: Reopen closed rooms after a cancellation with the rooms to.
+        long_stay:
+          $ref: '#/components/schemas/long_stay'
+        pricing_type:
+          type: string
+          description: Specifies the pricing type for the product.
+          default: Standard
+          enum:
+          - STANDARD
+          - LOS
+          - OBP
+        allow_smoking:
+          type: boolean
+          description: Specifies whether properties allow smoking option.
+        view_cc_details:
+          type: boolean
+          description: Specify whether trusted properties can view the guest's credit card details
+      description: Contains multiple various settings related to the property
+    AgeBucketData:
+      required:
+      - max_age
+      - min_age
+      type: object
+      properties:
+        min_age:
+          maximum: 17
+          minimum: 0
+          type: integer
+          format: int32
+        max_age:
+          maximum: 17
+          minimum: 0
+          type: integer
+          format: int32
+      description: An age bucket is a category for children prices that specifies the age range to which the eventual price applies to. You must at least create one, but can create up to three age buckets per property. Each age bucket exists of a minimum and maximum age, where the maximum age is inclusive.
+    age_restriction:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        min:
+          type: integer
+          format: int32
+        max:
+          type: integer
+          format: int32
+    AcceptedPaymentTypes:
+      type: object
+      properties:
+        codes:
+          type: array
+          items:
+            type: integer
+            format: int32
+    accepted_payment_types:
+      type: object
+      properties:
+        codes:
+          type: array
+          items:
+            type: integer
+            format: int32
+      description: List of payment methods. For more information, see the [full list of payment codes.](/connectivity/docs/codes-bcpt)
+    renovation:
       required:
       - enabled
       type: object
       properties:
         enabled:
           type: boolean
-          description: Specifies whether properties have grace period enabled
-        after_booking:
+          description: Specifies whether renovation dates are enabled
+        start:
+          pattern: ^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
           type: string
-          description: Grace period - amount of hours after booking when free cancellation is available.
-          enum:
-          - HOURS_1
-          - HOURS_4
-          - HOURS_24
-    ApiErrorResponse:
+          description: Date when renovation start
+          format: yyyy-mm-dd
+        end:
+          pattern: ^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
+          type: string
+          description: Date when renovation until.
+          format: yyyy-mm-dd
+    CancellationExceptions:
       type: object
       properties:
+        grace_period:
+          $ref: '#/components/schemas/GracePeriod'
+        advance_cancellation:
+          $ref: '#/components/schemas/AdvanceCancellation'
+    HotelChainBedLinen:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        amount:
+          type: number
+          format: double
+    InvoiceSettings:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        contact_person:
+          type: string
+        address:
+          type: string
+        state:
+          type: string
+        notification_channel:
+          type: string
+        country_code:
+          type: string
+        city:
+          type: string
+        postal_code:
+          type: string
+        brazil_tax_details:
+          $ref: '#/components/schemas/BrazilTaxDetails'
+    advance_cancellation:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Specifies whether properties have advance cancellation enabled
+        before_check_in:
+          type: string
+          description: Amount of weeks before check-in when free cancellation is available
+          enum:
+          - WEEKS_4
+          - WEEKS_8
+          - WEEKS_12
+    ApiResponseMapStringPropertySettingsCreateOutputData:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PropertySettingsCreateOutputData'
+          example:
+            property_setting_1:
+              success: true
+            property_setting_2:
+              success: true
         warnings:
           type: array
           items:
@@ -826,80 +826,56 @@ components:
             $ref: '#/components/schemas/ApiErrorOTA'
         meta:
           $ref: '#/components/schemas/ResponseMeta'
-    policy_rules:
-      required:
-      - price_mode
-      - price_type
-      - rule_type
+    AgeBucket:
       type: object
       properties:
-        rule_type:
-          type: string
-          enum:
-          - EXISTING_BED
-          - EXTRA_BED
-          - CRIB
-          - EXTRA_BED_FOR_ADULT
-        from_age:
+        min_age:
           type: integer
-          format: int64
-        to_age:
+          format: int32
+        max_age:
           type: integer
-          format: int64
-        price_type:
-          type: string
-          enum:
-          - FIXED
-          - FREE
-          - ADULT_PERCENTAGE
-        price_mode:
-          type: string
-          enum:
-          - PER_STAY
-          - PER_NIGHT
-        price:
-          type: number
-          format: double
-    pets:
-      required:
-      - pets_allowed
+          format: int32
+    ApiErrorOTA:
       type: object
       properties:
-        pets_allowed:
+        message:
           type: string
-          description: Specifies pets allowed option for the properties.
-          enum:
-          - PETS_NOT_ALLOWED
-          - PETS_ALLOWED
-          - PETS_ALLOWED_ON_REQUEST
-        pets_price_type:
+        code:
+          type: integer
+          format: int32
+        details:
+          $ref: '#/components/schemas/ObjectNode'
+        description:
           type: string
-          description: Specifies pets price type option for the properties.
-          enum:
-          - FREE
-          - CHARGES_MAY_APPLY
-      description: Contains settings related to the pets allowance
-    CancellationExceptions:
+    invoice_settings:
       type: object
       properties:
-        grace_period:
-          $ref: '#/components/schemas/GracePeriod'
-        advance_cancellation:
-          $ref: '#/components/schemas/AdvanceCancellation'
-    Pets:
-      type: object
-      properties:
-        pets_allowed:
+        legal_name:
           type: string
-          enum:
-          - PETS_NOT_ALLOWED
-          - PETS_ALLOWED
-          - PETS_ALLOWED_ON_REQUEST
-        pets_price_type:
+        contact_person:
           type: string
+        address:
+          maxLength: 255
+          minLength: 1
+          type: string
+        country_code:
+          type: string
+        city:
+          type: string
+        postal_code:
+          type: string
+        state:
+          maxLength: 2
+          minLength: 2
+          type: string
+        notification_channel:
+          type: string
+          description: The channel how company should be notified invoice related mails.
           enum:
-          - FREE
-          - CHARGES_MAY_APPLY
+          - POSTAL_MAIL
+          - EMAIL
+        brazil_tax_details:
+          $ref: '#/components/schemas/brazil_tax_details'
     ChildAndBedPolicyRuleData:
       type: object
       properties:
@@ -935,41 +911,65 @@ components:
         price:
           type: number
           format: double
-    quiet_hours:
-      required:
-      - enabled
+    GracePeriod:
       type: object
       properties:
         enabled:
           type: boolean
-          description: Specifies whether properties have quiet hours enabled
-        start:
-          pattern: ^(?:[01]\d|2[0-3]):[03]0$
+        after_booking:
           type: string
-          description: Time when quiet hours start.
-          format: HH:MM
-        end:
-          pattern: ^(?:[01]\d|2[0-3]):[03]0$
-          type: string
-          description: Time when quiet hours ends.
-          format: HH:MM
-    AgeBucketData:
-      required:
-      - max_age
-      - min_age
+          enum:
+          - HOURS_1
+          - HOURS_4
+          - HOURS_24
+    Renovation:
       type: object
       properties:
-        min_age:
-          maximum: 17
-          minimum: 0
-          type: integer
-          format: int32
-        max_age:
-          maximum: 17
-          minimum: 0
-          type: integer
-          format: int32
-      description: An age bucket is a category for children prices that specifies the age range to which the eventual price applies to. You must at least create one, but can create up to three age buckets per property. Each age bucket exists of a minimum and maximum age, where the maximum age is inclusive.
+        enabled:
+          type: boolean
+        start:
+          type: string
+        end:
+          type: string
+    PropertySettingsReadOutputData:
+      type: object
+      properties:
+        property_settings:
+          $ref: '#/components/schemas/PropertySettings'
+        pets:
+          $ref: '#/components/schemas/Pets'
+        damage_policy:
+          $ref: '#/components/schemas/damage_policy'
+        standard_phrases:
+          type: array
+          items:
+            $ref: '#/components/schemas/StandardPhraseData'
+        quiet_hours:
+          $ref: '#/components/schemas/QuietHours'
+        renovation:
+          $ref: '#/components/schemas/Renovation'
+        bed_linen_policy:
+          $ref: '#/components/schemas/HotelChainBedLinen'
+        accepted_payment_types:
+          $ref: '#/components/schemas/AcceptedPaymentTypes'
+        french_tax_details:
+          $ref: '#/components/schemas/FrenchTaxDetails'
+        cancellation_exceptions:
+          $ref: '#/components/schemas/CancellationExceptions'
+        age_buckets:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgeBucket'
+        children_policies:
+          $ref: '#/components/schemas/ChildPolicies'
+        invoice_settings:
+          $ref: '#/components/schemas/InvoiceSettings'
+        booking_model:
+          $ref: '#/components/schemas/BookingModel'
+        land_registration_numbers:
+          type: array
+          items:
+            type: string
 x-tagGroups:
 - name: API Endpoints
   tags:

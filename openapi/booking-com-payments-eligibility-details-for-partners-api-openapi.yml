@@ -460,91 +460,6 @@ paths:
                     warnings: []
 components:
   schemas:
-    Warning:
-      type: object
-      description: Warning information
-      properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
-    PaymentsEligibilityModel:
-      description: Data containing required information
-      properties:
-        payout_configurations:
-          type: array
-          description: Details about payout configurations for property_ids
-          items:
-            $ref: '#/components/schemas/PaymentsEligibility'
-    UnauthorizedRequestResponse:
-      type: object
-      description: Response when the token is valid but does not have access to the requested resource.
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type:
-          - object
-          - 'null'
-          description: Response data (null for error responses)
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    PaymentsEligibilityRequest:
-      properties:
-        property_ids:
-          description: <=10 property IDs per request.
-          type: array
-          maxItems: 10
-          items:
-            type: integer
-      required:
-      - property_ids
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-        debug_message:
-          type:
-          - string
-          - 'null'
-          description: Detailed debug message for the error
-    CurrentPayoutOption:
-      description: Current payout configuration for a property
-      properties:
-        payin_collection_strategy:
-          type: string
-          description: 'Payin collection strategy. Possible values: PARTIAL, ALL.'
-        payout_method:
-          type: string
-          description: 'The method by which Booking.com remits payments to the partner for this property. Possible values: VCC, BT, STRIPE.'
-        payout_frequency:
-          type:
-          - string
-          - 'null'
-          description: 'How often payouts are executed to the partner for this property, as per the current configuration. Applies mainly when payout_method is ''BT''. Possible values: DAILY, WEEKLY, MONTHLY. For VCC, null is returned.'
-        payout_netting:
-          type: string
-          description: 'Defines how commissions or payment-related costs are deducted directly from each payout. Possible values: GROSS, NET.'
     InvalidTokenResponse:
       type: object
       description: Response when the authentication token is missing, invalid, or expired.
@@ -566,21 +481,47 @@ components:
           description: List of warnings for the response
           maxItems: 0
           items: {}
-    PaymentsEligibilityResponse:
-      description: Response containing payments eligibility information for the specified property IDs
+    PaymentsEligibility:
+      description: Payout configuration for a property
       properties:
-        meta:
-          $ref: '#/components/schemas/DefaultMeta'
-        data:
-          $ref: '#/components/schemas/PaymentsEligibilityModel'
-        errors:
+        property_id:
+          type: string
+          description: Property identifier
+        legal_entity_id:
+          type: string
+          description: Legal entity identifier
+        current_payout_configuration:
+          $ref: '#/components/schemas/CurrentPayoutOption'
+        payout_configuration_options:
           type: array
-          maxItems: 0
-          items: {}
-        warnings:
+          description: List of other payout configuration options
+          items:
+            $ref: '#/components/schemas/PayoutOption'
+        vcc_activation_policy_code:
+          type: string
+          description: VCC activation policy code
+        bt_payout_cost_information:
+          $ref: '#/components/schemas/BTPayoutCostInformation'
+        is_config_update_supported_by_api:
+          type: boolean
+          description: Indicates whether the property can be onboarded to Payments by Booking via the Payments Configuration API.
+    PaymentsEligibilityModel:
+      description: Data containing required information
+      properties:
+        payout_configurations:
           type: array
-          maxItems: 0
-          items: {}
+          description: Details about payout configurations for property_ids
+          items:
+            $ref: '#/components/schemas/PaymentsEligibility'
+    AdditionalRequirement:
+      description: Additional requirement to be met for a property to be eligible for Payments by Booking
+      properties:
+        name:
+          type: string
+          description: Name of the requirement
+        action:
+          type: string
+          description: Action needed to complete the requirement
     PayoutOption:
       description: A payout option for the property
       properties:
@@ -610,30 +551,23 @@ components:
           description: List of additional requirements for this payout option
           items:
             $ref: '#/components/schemas/AdditionalRequirement'
-    PaymentsEligibility:
-      description: Payout configuration for a property
+    CurrentPayoutOption:
+      description: Current payout configuration for a property
       properties:
-        property_id:
+        payin_collection_strategy:
           type: string
-          description: Property identifier
-        legal_entity_id:
+          description: 'Payin collection strategy. Possible values: PARTIAL, ALL.'
+        payout_method:
           type: string
-          description: Legal entity identifier
-        current_payout_configuration:
-          $ref: '#/components/schemas/CurrentPayoutOption'
-        payout_configuration_options:
-          type: array
-          description: List of other payout configuration options
-          items:
-            $ref: '#/components/schemas/PayoutOption'
-        vcc_activation_policy_code:
+          description: 'The method by which Booking.com remits payments to the partner for this property. Possible values: VCC, BT, STRIPE.'
+        payout_frequency:
+          type:
+          - string
+          - 'null'
+          description: 'How often payouts are executed to the partner for this property, as per the current configuration. Applies mainly when payout_method is ''BT''. Possible values: DAILY, WEEKLY, MONTHLY. For VCC, null is returned.'
+        payout_netting:
           type: string
-          description: VCC activation policy code
-        bt_payout_cost_information:
-          $ref: '#/components/schemas/BTPayoutCostInformation'
-        is_config_update_supported_by_api:
-          type: boolean
-          description: Indicates whether the property can be onboarded to Payments by Booking via the Payments Configuration API.
+          description: 'Defines how commissions or payment-related costs are deducted directly from each payout. Possible values: GROSS, NET.'
     InternalServerErrorResponse:
       type: object
       description: Response when the request failed with an internal reason
@@ -657,6 +591,35 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type:
+          - string
+          - 'null'
+          description: Detailed debug message for the error
+    PaymentsEligibilityRequest:
+      properties:
+        property_ids:
+          description: <=10 property IDs per request.
+          type: array
+          maxItems: 10
+          items:
+            type: integer
+      required:
+      - property_ids
     DefaultMeta:
       type: object
       description: Metadata for the response
@@ -665,16 +628,6 @@ components:
           type: string
           description: Request unique identifier
           example: string
-    BTPayoutCostInformation:
-      description: Bank transfer payout cost information
-      properties:
-        value:
-          type: string
-        type:
-          type: string
-        decimals:
-          type: integer
-          format: int32
     BadRequestErrorResponse:
       type: object
       description: Response when the request doesn't have valid parameters
@@ -696,15 +649,62 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    AdditionalRequirement:
-      description: Additional requirement to be met for a property to be eligible for Payments by Booking
+    PaymentsEligibilityResponse:
+      description: Response containing payments eligibility information for the specified property IDs
       properties:
-        name:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        data:
+          $ref: '#/components/schemas/PaymentsEligibilityModel'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
           type: string
-          description: Name of the requirement
-        action:
+          description: Warning message
+          example: string
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type:
+          - object
+          - 'null'
+          description: Response data (null for error responses)
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    BTPayoutCostInformation:
+      description: Bank transfer payout cost information
+      properties:
+        value:
           type: string
-          description: Action needed to complete the requirement
+        type:
+          type: string
+        decimals:
+          type: integer
+          format: int32
   headers:
     ApiVersion:
       description: The response includes the API version used. Either the version requested, or the default if none was specified in the request.

@@ -333,26 +333,6 @@ paths:
                 type: object
 components:
   schemas:
-    DiagnosisList:
-      items:
-        properties:
-          code:
-            description: Alphanumeric identifier for warning/error.
-            type: string
-          details:
-            additionalProperties:
-              type: string
-            description: Additional details of warning/error.
-            type: object
-          message:
-            description: English-language description of warning/error.
-            type: string
-        required:
-        - code
-        - details
-        - message
-        type: object
-      type: array
     PartnerDetailsObject:
       properties:
         city:
@@ -414,6 +394,26 @@ components:
       - legal_entity_id
       - total_number_of_properties
       type: object
+    DiagnosisList:
+      items:
+        properties:
+          code:
+            description: Alphanumeric identifier for warning/error.
+            type: string
+          details:
+            additionalProperties:
+              type: string
+            description: Additional details of warning/error.
+            type: object
+          message:
+            description: English-language description of warning/error.
+            type: string
+        required:
+        - code
+        - details
+        - message
+        type: object
+      type: array
 x-tagGroups:
 - name: API Endpoints
   tags:

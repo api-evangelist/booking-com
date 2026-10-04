@@ -108,29 +108,6 @@ paths:
         description: Production server
 components:
   schemas:
-    ValueAddXML:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the value add.
-          example: 2001
-        category:
-          type: string
-          description: Category of the value add (e.g., Food and Beverage, Spa).
-          example: Food and Beverage (F&B)
-        type:
-          type: string
-          description: Type of value add, such as Credit or Discount.
-          example: Credit or discount
-        name:
-          type: string
-          description: Name of the value add.
-          example: Daily Credit Per adult - No Daily Accrual
-        attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributeXML'
     ValueAdd:
       type: object
       properties:
@@ -155,25 +132,6 @@ components:
           description: List of dynamic attributes for the value add.
           items:
             $ref: '#/components/schemas/Attribute'
-    Attribute:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the attribute.
-          example: CurrencyCode
-        dataType:
-          type: string
-          description: Data type of the attribute (e.g., string, double).
-          example: string
-        description:
-          type: string
-          description: Detailed description of the attribute.
-          example: Specifies the currency code for the selected amount.
-        required:
-          type: boolean
-          description: Indicates if the attribute is required.
-          example: false
     AttributeXML:
       type: object
       properties:
@@ -192,6 +150,48 @@ components:
         required:
           type: string
           description: Indicates if the attribute is required (true/false).
+          example: false
+    ValueAddXML:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the value add.
+          example: 2001
+        category:
+          type: string
+          description: Category of the value add (e.g., Food and Beverage, Spa).
+          example: Food and Beverage (F&B)
+        type:
+          type: string
+          description: Type of value add, such as Credit or Discount.
+          example: Credit or discount
+        name:
+          type: string
+          description: Name of the value add.
+          example: Daily Credit Per adult - No Daily Accrual
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeXML'
+    Attribute:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the attribute.
+          example: CurrencyCode
+        dataType:
+          type: string
+          description: Data type of the attribute (e.g., string, double).
+          example: string
+        description:
+          type: string
+          description: Detailed description of the attribute.
+          example: Specifies the currency code for the selected amount.
+        required:
+          type: boolean
+          description: Indicates if the attribute is required.
           example: false
 x-tagGroups:
 - name: API Endpoints

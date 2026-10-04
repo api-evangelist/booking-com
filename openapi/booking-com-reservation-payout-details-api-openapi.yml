@@ -88,14 +88,30 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
-    Warning:
+    VCCCardDetails:
       type: object
-      description: Warning information
+      description: Card details for a virtual credit card
       properties:
-        message:
+        cvc:
           type: string
-          description: Warning message
-          example: string
+          description: Card verification code
+        card_name:
+          type: string
+          description: Name on the card
+        card_number:
+          type: string
+          description: Card number
+        card_type:
+          type: string
+          description: Type of the VCC
+        card_expiry:
+          type: string
+          description: Card expiry date (MM/YY)
+      required:
+      - cvc
+      - card_name
+      - card_number
+      - card_expiry
     AmountCommissionsAndCharges:
       description: Contains information on the total amount of commissions and other charges such as fees.
       properties:
@@ -141,28 +157,28 @@ components:
                   type: integer
                   format: int32
                   description: Number of decimals in the amount.
-    AmountCommissionable:
-      description: Contains information on the total commissionable price.
+    AmountPayout:
+      description: Contains information on the total amount to be paid out to the partner.
       properties:
         currency:
           type: string
           description: Currency of the amount.
         value:
           type: string
-          description: Total commissionable price.
+          description: Total payout amount.
         decimals:
           type: integer
           format: int32
           description: Number of decimals in the amount.
-    AmountPaid:
-      description: Contains information on the total amount the guest paid to Booking.com.
+    AmountCharges:
+      description: Contains information on the total amount of all charges.
       properties:
         currency:
           type: string
           description: Currency of the amount.
         value:
           type: string
-          description: Amount paid by the guest.
+          description: Total amount of all charges.
         decimals:
           type: integer
           format: int32
@@ -188,9 +204,29 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    UnauthorizedRequestResponse:
+    PayoutDetailsResponse:
       type: object
-      description: Response when the token is valid but does not have access to the requested resource.
+      description: Response containing detailed payout information for a reservation
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: Response metadata
+        data:
+          allOf:
+          - $ref: '#/components/schemas/PayoutDetails'
+          description: Payout details
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    BadRequestErrorResponse:
+      type: object
+      description: Response when the request doesn't have valid parameters
       properties:
         meta:
           allOf:
@@ -209,28 +245,32 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    Error:
-      type: object
-      description: Error response containing details about the error
+    AmountToCollect:
+      description: Contains information on the estimated amount the partner needs to collect from the guest at checkin.
       properties:
-        description:
+        currency:
           type: string
-          description: Description of the error
-        message:
+          description: Currency of the amount.
+        value:
           type: string
-          description: Error message
-        status_code:
+          description: Estimated amount to be collected from the guest at checkin.
+        decimals:
           type: integer
           format: int32
-          description: HTTP status code for the error
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
+          description: Number of decimals in the amount.
+    AmountVCCBalance:
+      description: Contains information on the current balance of the VCC.
       properties:
-        ruid:
+        currency:
           type: string
-          description: Request unique identifier
-          example: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Current balance of the VCC.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
     PayoutDetails:
       type: object
       description: Detailed payout information for a reservation
@@ -361,9 +401,9 @@ components:
                       description: The type of applicable rate.
                       items:
                         type: string
-    BadRequestErrorResponse:
+    UnauthorizedRequestResponse:
       type: object
-      description: Response when the request doesn't have valid parameters
+      description: Response when the token is valid but does not have access to the requested resource.
       properties:
         meta:
           allOf:
@@ -382,32 +422,6 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    AmountVCCBalance:
-      description: Contains information on the current balance of the VCC.
-      properties:
-        currency:
-          type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Current balance of the VCC.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
-    AmountCharges:
-      description: Contains information on the total amount of all charges.
-      properties:
-        currency:
-          type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Total amount of all charges.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
     InvalidTokenResponse:
       type: object
       description: Response when the authentication token is missing, invalid, or expired.
@@ -436,30 +450,96 @@ components:
                 - string
                 - 'null'
                 description: Additional error details
-    VCCCardDetails:
+    Error:
       type: object
-      description: Card details for a virtual credit card
+      description: Error response containing details about the error
       properties:
-        cvc:
+        description:
           type: string
-          description: Card verification code
-        card_name:
+          description: Description of the error
+        message:
           type: string
-          description: Name on the card
-        card_number:
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
           type: string
-          description: Card number
-        card_type:
+          description: Request unique identifier
+          example: string
+    AmountPaid:
+      description: Contains information on the total amount the guest paid to Booking.com.
+      properties:
+        currency:
           type: string
-          description: Type of the VCC
-        card_expiry:
+          description: Currency of the amount.
+        value:
           type: string
-          description: Card expiry date (MM/YY)
-      required:
-      - cvc
-      - card_name
-      - card_number
-      - card_expiry
+          description: Amount paid by the guest.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    AmountCommissionable:
+      description: Contains information on the total commissionable price.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Total commissionable price.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
+    ReservationDataNotFoundErrorResponse:
+      type: object
+      description: Response when the reservation data is not found
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
     PayoutVCC:
       type: object
       description: Virtual credit card included in the payout
@@ -487,94 +567,14 @@ components:
       - status
       - current_balance
       - card_details
-    PayoutDetailsResponse:
+    Warning:
       type: object
-      description: Response containing detailed payout information for a reservation
+      description: Warning information
       properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: Response metadata
-        data:
-          allOf:
-          - $ref: '#/components/schemas/PayoutDetails'
-          description: Payout details
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
-    ReservationDataNotFoundErrorResponse:
-      type: object
-      description: Response when the reservation data is not found
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    AmountPayout:
-      description: Contains information on the total amount to be paid out to the partner.
-      properties:
-        currency:
+        message:
           type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Total payout amount.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
-    AmountToCollect:
-      description: Contains information on the estimated amount the partner needs to collect from the guest at checkin.
-      properties:
-        currency:
-          type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Estimated amount to be collected from the guest at checkin.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
+          description: Warning message
+          example: string
   securitySchemes:
     bearerAuth:
       type: http

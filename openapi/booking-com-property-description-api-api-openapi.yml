@@ -80,11 +80,16 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
 components:
   schemas:
-    ApiResponsePropertyDescription:
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+    ApiResponse:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/PropertyDescription'
+          type: object
         warnings:
           type: array
           items:
@@ -107,21 +112,6 @@ components:
           $ref: '#/components/schemas/ObjectNode'
         description:
           type: string
-    ApiResponse:
-      type: object
-      properties:
-        data:
-          type: object
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorOTA'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorOTA'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
     PropertyDescription:
       required:
       - text
@@ -135,13 +125,23 @@ components:
           type: string
         last_update:
           type: string
-    ObjectNode:
-      type: object
-    ResponseMeta:
+    ApiResponsePropertyDescription:
       type: object
       properties:
-        ruid:
-          type: string
+        data:
+          $ref: '#/components/schemas/PropertyDescription'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ObjectNode:
+      type: object
 x-tagGroups:
 - name: API Endpoints
   tags:

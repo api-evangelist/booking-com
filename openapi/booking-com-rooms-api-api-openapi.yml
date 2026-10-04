@@ -405,40 +405,9 @@ paths:
                 $ref: '#/components/schemas/ApiResponseListUnit'
 components:
   schemas:
-    ApiResponseUnit:
+    ResponseMeta:
       properties:
         ruid:
-          type: string
-          writeOnly: true
-        data:
-          $ref: '#/components/schemas/Unit'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
-    ApiError:
-      properties:
-        message:
-          type: string
-        code:
-          type: integer
-          format: int32
-          description: ''
-        details:
-          type: object
-          properties:
-            fields:
-              type: array
-              description: ''
-              items:
-                type: string
-        description:
           type: string
     ExtraBedsConfiguration:
       description: Extra bed & crib options
@@ -462,178 +431,6 @@ components:
       - cribs
       - extra_beds
       - is_crib_and_extra_bed_allowed
-    ApiResponseObject:
-      properties:
-        ruid:
-          type: string
-          writeOnly: true
-        data:
-          type: 'null'
-          description: ''
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
-    Room:
-      properties:
-        type:
-          type: string
-          description: '<ul>
-
-            <li>For multi-room units you must add one or more <code>BEDROOM_SUBROOM</code> or <code>LIVING_ROOM_SUBROOM</code>, at least one of the rooms must have beds</li>
-
-            <li>For single-room units you must add exactly one <code>GUEST_ROOM</code></li>
-
-            </ul>
-
-            '
-          enum:
-          - BEDROOM_SUBROOM
-          - LIVING_ROOM_SUBROOM
-          - GUEST_ROOM
-        bed_configurations:
-          type: array
-          items:
-            $ref: '#/components/schemas/BedConfiguration'
-      required:
-      - type
-    Size:
-      properties:
-        value:
-          type: number
-          format: double
-          description: Must be a value between 1 and 9999.99
-        unit:
-          type: string
-          description: SQM (square meters) or SQFT (square feet)
-          enum:
-          - SQM
-          - SQFT
-      required:
-      - unit
-      - value
-    ExtraBedsConfigurationCreate:
-      description: Extra bed & crib options
-      properties:
-        extra_beds:
-          type: integer
-          format: int32
-          default: 0
-          description: Number of extra beds you can provide
-          maximum: 100
-          minimum: 0
-        cribs:
-          type: integer
-          format: int32
-          default: 0
-          description: Number of cribs you can provide
-          maximum: 100
-          minimum: 0
-        is_crib_and_extra_bed_allowed:
-          type: boolean
-          default: false
-          description: Both extra beds and cribs can be provided (<code>true</code>) or only one of the options (<code>false</code>)?
-    BedConfiguration:
-      description: '<ul>
-
-        <li>For multi-room unit you must add exactly one bed configuration</li>
-
-        <li>For single-room unit you must add at least one bed configuration, others are optional</li>
-
-        <li>Bed type ID provided must exist and be active in meta (see <code>$.bed_types[*].is_active</code>)</li>
-
-        <li>Same bed type ID must be repeated within a single bed configuration</li>
-
-        </ul>
-
-        '
-      properties:
-        beds:
-          type: array
-          items:
-            $ref: '#/components/schemas/Bed'
-          minItems: 1
-        is_default_configuration:
-          type: boolean
-          description: Exactly one default bed configuration is mandatory for each room provided
-      required:
-      - beds
-      - is_default_configuration
-    OccupancyCreate:
-      deprecated: true
-      properties:
-        max_guests:
-          type: integer
-          format: int32
-          default: 1
-          description: Maximum number of guests
-          maximum: 50
-          minimum: 1
-        max_adults:
-          type: integer
-          format: int32
-          default: 1
-          description: Maximum number of adults
-          maximum: 50
-          minimum: 1
-        max_children:
-          type: integer
-          format: int32
-          default: 0
-          description: Maximum number of children (0-17 years old)
-          maximum: 49
-          minimum: 0
-    Configuration:
-      properties:
-        unit_type_id:
-          type: integer
-          format: int32
-          description: '<ul>
-
-            <li>Must exist and be active in meta (see <code>$.unit_type[*].id</code> and <code>$.unit_type[*].is_active</code>) for unit creation/update</li>
-
-            <li>Must be valid for property''s category in meta (see <code>$.unit_type[*].valid_property_categories</code>)</li>
-
-            </ul>
-
-            '
-        rooms:
-          type: array
-          items:
-            $ref: '#/components/schemas/Room'
-          minItems: 1
-      required:
-      - rooms
-      - unit_type_id
-    ApiResponseListUnit:
-      properties:
-        ruid:
-          type: string
-          writeOnly: true
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Unit'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
-    ResponseMeta:
-      properties:
-        ruid:
-          type: string
     OccupancyDetails:
       properties:
         max_guests:
@@ -672,6 +469,21 @@ components:
       - max_guests
       - max_infants
       - max_infants_on_top
+    Size:
+      properties:
+        value:
+          type: number
+          format: double
+          description: Must be a value between 1 and 9999.99
+        unit:
+          type: string
+          description: SQM (square meters) or SQFT (square feet)
+          enum:
+          - SQM
+          - SQFT
+      required:
+      - unit
+      - value
     Bed:
       properties:
         bed_type_id:
@@ -683,6 +495,32 @@ components:
       required:
       - bed_count
       - bed_type_id
+    BedConfiguration:
+      description: '<ul>
+
+        <li>For multi-room unit you must add exactly one bed configuration</li>
+
+        <li>For single-room unit you must add at least one bed configuration, others are optional</li>
+
+        <li>Bed type ID provided must exist and be active in meta (see <code>$.bed_types[*].is_active</code>)</li>
+
+        <li>Same bed type ID must be repeated within a single bed configuration</li>
+
+        </ul>
+
+        '
+      properties:
+        beds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bed'
+          minItems: 1
+        is_default_configuration:
+          type: boolean
+          description: Exactly one default bed configuration is mandatory for each room provided
+      required:
+      - beds
+      - is_default_configuration
     Unit:
       description: Unit schema; use meta endpoint for fetching relevant meta data
       properties:
@@ -735,6 +573,191 @@ components:
         unit_name_fallback:
           type: string
           description: Contains unit name (<code>EN_GB</code> locale) for any unit name ID, including those missing in meta (for debug purposes only; read only)
+    Room:
+      properties:
+        type:
+          type: string
+          description: '<ul>
+
+            <li>For multi-room units you must add one or more <code>BEDROOM_SUBROOM</code> or <code>LIVING_ROOM_SUBROOM</code>, at least one of the rooms must have beds</li>
+
+            <li>For single-room units you must add exactly one <code>GUEST_ROOM</code></li>
+
+            </ul>
+
+            '
+          enum:
+          - BEDROOM_SUBROOM
+          - LIVING_ROOM_SUBROOM
+          - GUEST_ROOM
+        bed_configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/BedConfiguration'
+      required:
+      - type
+    ApiResponseObject:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          type: 'null'
+          description: ''
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    OccupancyCreate:
+      deprecated: true
+      properties:
+        max_guests:
+          type: integer
+          format: int32
+          default: 1
+          description: Maximum number of guests
+          maximum: 50
+          minimum: 1
+        max_adults:
+          type: integer
+          format: int32
+          default: 1
+          description: Maximum number of adults
+          maximum: 50
+          minimum: 1
+        max_children:
+          type: integer
+          format: int32
+          default: 0
+          description: Maximum number of children (0-17 years old)
+          maximum: 49
+          minimum: 0
+    Occupancy:
+      deprecated: true
+      properties:
+        max_guests:
+          type: integer
+          format: int32
+          description: Maximum number of guests
+          maximum: 50
+          minimum: 1
+        max_adults:
+          type: integer
+          format: int32
+          description: Maximum number of adults
+          maximum: 50
+          minimum: 1
+        max_children:
+          type: integer
+          format: int32
+          description: Maximum number of children (0-17 years old)
+          maximum: 49
+          minimum: 0
+      required:
+      - max_adults
+      - max_children
+      - max_guests
+    OccupancyDetailsCreate:
+      properties:
+        max_guests:
+          type: integer
+          format: int32
+          default: 1
+          description: Maximum number of guests
+          maximum: 50
+          minimum: 1
+        max_adults:
+          type: integer
+          format: int32
+          default: 1
+          description: Maximum number of adults
+          maximum: 50
+          minimum: 1
+        max_children:
+          type: integer
+          format: int32
+          default: 0
+          description: Maximum number of children excluding infants (3-17 years old)
+          maximum: 49
+          minimum: 0
+        max_infants:
+          type: integer
+          format: int32
+          default: 0
+          description: Maximum number of infants (0-2 years old)
+          maximum: 49
+          minimum: 0
+        max_infants_on_top:
+          type: integer
+          format: int32
+          default: 0
+          description: Maximum number of infants (0-2 years old) on top of maximum number of guests
+          maximum: 49
+          minimum: 0
+    ApiResponseListUnit:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Unit'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ExtraBedsConfigurationCreate:
+      description: Extra bed & crib options
+      properties:
+        extra_beds:
+          type: integer
+          format: int32
+          default: 0
+          description: Number of extra beds you can provide
+          maximum: 100
+          minimum: 0
+        cribs:
+          type: integer
+          format: int32
+          default: 0
+          description: Number of cribs you can provide
+          maximum: 100
+          minimum: 0
+        is_crib_and_extra_bed_allowed:
+          type: boolean
+          default: false
+          description: Both extra beds and cribs can be provided (<code>true</code>) or only one of the options (<code>false</code>)?
+    ApiError:
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32
+          description: ''
+        details:
+          type: object
+          properties:
+            fields:
+              type: array
+              description: ''
+              items:
+                type: string
+        description:
+          type: string
     UnitCreate:
       description: Unit creation schema; use meta endpoint for fetching relevant meta data
       properties:
@@ -784,68 +807,45 @@ components:
           $ref: '#/components/schemas/ExtraBedsConfigurationCreate'
       required:
       - configuration
-    OccupancyDetailsCreate:
+    Configuration:
       properties:
-        max_guests:
+        unit_type_id:
           type: integer
           format: int32
-          default: 1
-          description: Maximum number of guests
-          maximum: 50
-          minimum: 1
-        max_adults:
-          type: integer
-          format: int32
-          default: 1
-          description: Maximum number of adults
-          maximum: 50
-          minimum: 1
-        max_children:
-          type: integer
-          format: int32
-          default: 0
-          description: Maximum number of children excluding infants (3-17 years old)
-          maximum: 49
-          minimum: 0
-        max_infants:
-          type: integer
-          format: int32
-          default: 0
-          description: Maximum number of infants (0-2 years old)
-          maximum: 49
-          minimum: 0
-        max_infants_on_top:
-          type: integer
-          format: int32
-          default: 0
-          description: Maximum number of infants (0-2 years old) on top of maximum number of guests
-          maximum: 49
-          minimum: 0
-    Occupancy:
-      deprecated: true
-      properties:
-        max_guests:
-          type: integer
-          format: int32
-          description: Maximum number of guests
-          maximum: 50
-          minimum: 1
-        max_adults:
-          type: integer
-          format: int32
-          description: Maximum number of adults
-          maximum: 50
-          minimum: 1
-        max_children:
-          type: integer
-          format: int32
-          description: Maximum number of children (0-17 years old)
-          maximum: 49
-          minimum: 0
+          description: '<ul>
+
+            <li>Must exist and be active in meta (see <code>$.unit_type[*].id</code> and <code>$.unit_type[*].is_active</code>) for unit creation/update</li>
+
+            <li>Must be valid for property''s category in meta (see <code>$.unit_type[*].valid_property_categories</code>)</li>
+
+            </ul>
+
+            '
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Room'
+          minItems: 1
       required:
-      - max_adults
-      - max_children
-      - max_guests
+      - rooms
+      - unit_type_id
+    ApiResponseUnit:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          $ref: '#/components/schemas/Unit'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
 x-tagGroups:
 - name: API Endpoints
   tags:

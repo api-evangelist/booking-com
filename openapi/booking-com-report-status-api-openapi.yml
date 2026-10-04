@@ -105,17 +105,37 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
-    Warning:
+    InvalidTokenResponse:
       type: object
-      description: Warning information
+      description: Response when the authentication token is missing, invalid, or expired.
       properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
-    UnauthorizedRequestResponse:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          maxItems: 0
+          items: {}
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              code:
+                type: string
+                description: Error code
+              details:
+                type:
+                - string
+                - 'null'
+                description: Additional error details
+    RateLimitErrorResponse:
       type: object
-      description: Response when the token is valid but does not have access to the requested resource.
+      description: Response when the rate limit has been exceeded
       properties:
         meta:
           allOf:
@@ -133,9 +153,9 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    RateLimitErrorResponse:
+    InternalServerErrorResponse:
       type: object
-      description: Response when the rate limit has been exceeded
+      description: Response when the request failed with an internal reason
       properties:
         meta:
           allOf:
@@ -170,55 +190,9 @@ components:
         debug_message:
           type: string
           description: Detailed debug message for the error
-    ReconReportStatusResponse:
+    BadRequestErrorResponse:
       type: object
-      description: Response containing the current status of a reconciliation report generation request.
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-        data:
-          allOf:
-          - $ref: '#/components/schemas/ReconReportStatusData'
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
-    InvalidTokenResponse:
-      type: object
-      description: Response when the authentication token is missing, invalid, or expired.
-      properties:
-        meta:
-          $ref: '#/components/schemas/DefaultMeta'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          maxItems: 0
-          items: {}
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-                description: Error message
-              code:
-                type: string
-                description: Error code
-              details:
-                type:
-                - string
-                - 'null'
-                description: Additional error details
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
+      description: Response when the request doesn't have valid parameters
       properties:
         meta:
           allOf:
@@ -244,6 +218,72 @@ components:
           type: string
           description: Request unique identifier
           example: string
+    NotFoundErrorResponse:
+      type: object
+      description: Response when the requested resource is not found
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    ReconReportStatusResponse:
+      type: object
+      description: Response containing the current status of a reconciliation report generation request.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          allOf:
+          - $ref: '#/components/schemas/ReconReportStatusData'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
     ReconReportStatusData:
       type: object
       description: Status and download details for a reconciliation report generation request.
@@ -281,46 +321,6 @@ components:
           format: uri
           description: Pre-signed URL for downloading the generated report. Only present when `status` is `READY`. This URL is valid for approximately 15 minutes and expires at `download_url_expires_at`. To obtain a new download URL after expiry, call the generate report endpoint again.
           example: https://example.com/path
-    BadRequestErrorResponse:
-      type: object
-      description: Response when the request doesn't have valid parameters
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    NotFoundErrorResponse:
-      type: object
-      description: Response when the requested resource is not found
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
   securitySchemes:
     bearerAuth:
       type: http

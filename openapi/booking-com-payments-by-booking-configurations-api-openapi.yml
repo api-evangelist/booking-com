@@ -358,80 +358,6 @@ paths:
                     warnings: []
 components:
   schemas:
-    Warning:
-      type: object
-      description: Warning information
-      properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
-    PBBConfigurationUpdateStatusDetails:
-      description: Information regarding Payments by Booking configuration change request for properties
-      properties:
-        config_update_details:
-          type: array
-          description: Status information for Payments by Booking configuration change requested for properties
-          items:
-            $ref: '#/components/schemas/PBBConfigurationUpdateStatusDetail'
-    PBBConfigurationUpdateStatusDetail:
-      description: Status information regarding validated Payments by Booking configuration change request for a property (update response)
-      properties:
-        property_id:
-          type: string
-          description: Property identifier
-        request_id:
-          type:
-          - string
-          - 'null'
-          description: Idempotency key of the latest accepted Payments by Booking configuration change request. Null when status is REJECTED.
-        status:
-          type: string
-          description: Payments by Booking configuration change status for property
-        rejection_reason:
-          type:
-          - string
-          - 'null'
-          description: Reason for rejection of Payments by Booking configuration change request. Null when request is accepted.
-        requested_at:
-          type:
-          - string
-          - 'null'
-          description: Payments by Booking configuration change requested at. Null when status is REJECTED.
-    PBBConfigurationUpdateStatusResponse:
-      description: Response of Payments by Booking configurations update request with property-level processing status of accepted configuration change request.
-      properties:
-        meta:
-          $ref: '#/components/schemas/DefaultMeta'
-        data:
-          $ref: '#/components/schemas/PBBConfigurationUpdateStatusDetails'
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-        debug_message:
-          type:
-          - string
-          - 'null'
-          description: Detailed debug message for the error
     PBBConfigurationUpdateRequest:
       properties:
         payout_configurations:
@@ -459,29 +385,6 @@ components:
           description: List of warnings for the response
           maxItems: 0
           items: {}
-    UnauthorizedRequestResponse:
-      type: object
-      description: Response when the token is valid but does not have access to the requested resource.
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type:
-          - object
-          - 'null'
-          description: Response data (null for error responses)
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
     InternalServerErrorResponse:
       type: object
       description: Response when the request failed with an internal reason
@@ -505,6 +408,69 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    PBBConfigurationUpdateStatusResponse:
+      description: Response of Payments by Booking configurations update request with property-level processing status of accepted configuration change request.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        data:
+          $ref: '#/components/schemas/PBBConfigurationUpdateStatusDetails'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    PBBConfigurationUpdateStatusDetails:
+      description: Information regarding Payments by Booking configuration change request for properties
+      properties:
+        config_update_details:
+          type: array
+          description: Status information for Payments by Booking configuration change requested for properties
+          items:
+            $ref: '#/components/schemas/PBBConfigurationUpdateStatusDetail'
+    BadRequestErrorResponse:
+      type: object
+      description: Response when the request doesn't have valid parameters
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type:
+          - string
+          - 'null'
+          description: Detailed debug message for the error
     DefaultMeta:
       type: object
       description: Metadata for the response
@@ -513,6 +479,30 @@ components:
           type: string
           description: Request unique identifier
           example: string
+    PBBConfigurationUpdateStatusDetail:
+      description: Status information regarding validated Payments by Booking configuration change request for a property (update response)
+      properties:
+        property_id:
+          type: string
+          description: Property identifier
+        request_id:
+          type:
+          - string
+          - 'null'
+          description: Idempotency key of the latest accepted Payments by Booking configuration change request. Null when status is REJECTED.
+        status:
+          type: string
+          description: Payments by Booking configuration change status for property
+        rejection_reason:
+          type:
+          - string
+          - 'null'
+          description: Reason for rejection of Payments by Booking configuration change request. Null when request is accepted.
+        requested_at:
+          type:
+          - string
+          - 'null'
+          description: Payments by Booking configuration change requested at. Null when status is REJECTED.
     PayoutConfiguration:
       required:
       - legal_entity_id
@@ -543,17 +533,27 @@ components:
         payin_collection_strategy:
           type: string
           description: 'Payin collection strategy. Possible values: PARTIAL, ALL.'
-    BadRequestErrorResponse:
+    Warning:
       type: object
-      description: Response when the request doesn't have valid parameters
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
       properties:
         meta:
           allOf:
           - $ref: '#/components/schemas/DefaultMeta'
           description: The meta
         data:
-          type: object
-          description: Data containing required information
+          type:
+          - object
+          - 'null'
+          description: Response data (null for error responses)
         errors:
           type: array
           description: List of errors for the response

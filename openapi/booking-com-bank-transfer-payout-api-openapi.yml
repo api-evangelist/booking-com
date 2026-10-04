@@ -88,6 +88,160 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
+    InvalidTokenResponse:
+      type: object
+      description: Response when the authentication token is missing, invalid, or expired.
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          maxItems: 0
+          items: {}
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              code:
+                type: string
+                description: Error code
+              details:
+                type:
+                - string
+                - 'null'
+                description: Additional error details
+    CheckoutDateTooOldErrorResponse:
+      type: object
+      description: Response when the checkout date is older than the allowed 18-months window
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+    AccommodationReservationBTPayoutResponse:
+      type: object
+      description: Response having information of the Bank Transfer payouts associated with respective accommodation reservation
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          allOf:
+          - $ref: '#/components/schemas/BTPayoutResponse'
+          description: The data
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    ReservationDataNotFoundErrorResponse:
+      type: object
+      description: Response when the reservation data is not found
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    BadRequestErrorResponse:
+      type: object
+      description: Response when the request doesn't have valid parameters
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
     Warning:
       type: object
       description: Warning information
@@ -96,6 +250,27 @@ components:
           type: string
           description: Warning message
           example: string
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
     BTPayoutResponse:
       type: object
       description: Bank transfer payout data for a reservation
@@ -142,181 +317,6 @@ components:
                   bank_transfer_reference:
                     type: string
                     description: Identifier of the bank transfer payout.
-    CheckoutDateTooOldErrorResponse:
-      type: object
-      description: Response when the checkout date is older than the allowed 18-months window
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    UnauthorizedRequestResponse:
-      type: object
-      description: Response when the token is valid but does not have access to the requested resource.
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-    InvalidTokenResponse:
-      type: object
-      description: Response when the authentication token is missing, invalid, or expired.
-      properties:
-        meta:
-          $ref: '#/components/schemas/DefaultMeta'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          maxItems: 0
-          items: {}
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-                description: Error message
-              code:
-                type: string
-                description: Error code
-              details:
-                type:
-                - string
-                - 'null'
-                description: Additional error details
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
-    ReservationDataNotFoundErrorResponse:
-      type: object
-      description: Response when the reservation data is not found
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    AccommodationReservationBTPayoutResponse:
-      type: object
-      description: Response having information of the Bank Transfer payouts associated with respective accommodation reservation
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          allOf:
-          - $ref: '#/components/schemas/BTPayoutResponse'
-          description: The data
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
-    BadRequestErrorResponse:
-      type: object
-      description: Response when the request doesn't have valid parameters
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
   securitySchemes:
     bearerAuth:
       type: http

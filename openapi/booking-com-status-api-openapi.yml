@@ -153,17 +153,6 @@ paths:
       - Status
 components:
   schemas:
-    status_response:
-      type: object
-      description: The current operational status of the monitored Demand API endpoint groups.
-      properties:
-        data:
-          type: array
-          description: The operational status of each monitored endpoint group.
-          items:
-            $ref: '#/components/schemas/group_status'
-      required:
-      - data
     operational_status:
       type: string
       description: 'The current operational status of a monitored Demand API endpoint or
@@ -178,22 +167,6 @@ components:
         major_outage: Experiencing significant disruption or unavailability.
         minor_outage: Experiencing degraded operation or partial disruption.
         up: Operating normally.
-    error_response:
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Identifier for the request. Provide this value when contacting support.
-          example: 01kjan7r7yvff5yg95gxy1cjhy
-        errors:
-          type: array
-          description: Errors that occurred while processing the request.
-          items:
-            $ref: '#/components/schemas/error'
-          minItems: 1
-      required:
-      - errors
-      - request_id
     error:
       type: object
       properties:
@@ -244,6 +217,33 @@ components:
       - endpoint
       - status
       - updated_at
+    error_response:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Identifier for the request. Provide this value when contacting support.
+          example: 01kjan7r7yvff5yg95gxy1cjhy
+        errors:
+          type: array
+          description: Errors that occurred while processing the request.
+          items:
+            $ref: '#/components/schemas/error'
+          minItems: 1
+      required:
+      - errors
+      - request_id
+    status_response:
+      type: object
+      description: The current operational status of the monitored Demand API endpoint groups.
+      properties:
+        data:
+          type: array
+          description: The operational status of each monitored endpoint group.
+          items:
+            $ref: '#/components/schemas/group_status'
+      required:
+      - data
     group_status:
       type: object
       description: The current operational status of a group of related Demand API endpoints.

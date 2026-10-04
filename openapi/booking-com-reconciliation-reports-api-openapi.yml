@@ -102,89 +102,24 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
-    Warning:
+    ReconReportGenerationResponse:
       type: object
-      description: Warning information
-      properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
-    UnauthorizedRequestResponse:
-      type: object
-      description: Response when the token is valid but does not have access to the requested resource.
+      description: Response returned when a reconciliation report generation request is accepted.
       properties:
         meta:
           allOf:
           - $ref: '#/components/schemas/DefaultMeta'
         data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    RateLimitErrorResponse:
-      type: object
-      description: Response when the rate limit has been exceeded
-      properties:
-        meta:
           allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-        data:
-          type: object
-          description: Data containing required information
+          - $ref: '#/components/schemas/ReconReportGenerationData'
         errors:
           type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
+          maxItems: 0
+          items: {}
         warnings:
           type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-        debug_message:
-          type: string
-          description: Detailed debug message for the error
-    PropertySelection:
-      type: object
-      description: A legal entity and its associated property IDs to include in the reconciliation report.
-      required:
-      - legal_entity_id
-      - property_ids
-      properties:
-        legal_entity_id:
-          type: string
-          description: The legal entity identifier.
-          example: '1234567'
-        property_ids:
-          type: array
-          description: List of property IDs belonging to the legal entity to include in the report.
-          items:
-            type: string
-          example:
-          - '123456'
+          maxItems: 0
+          items: {}
     InvalidTokenResponse:
       type: object
       description: Response when the authentication token is missing, invalid, or expired.
@@ -213,9 +148,27 @@ components:
                 - string
                 - 'null'
                 description: Additional error details
-    InternalServerErrorResponse:
+    PropertySelection:
       type: object
-      description: Response when the request failed with an internal reason
+      description: A legal entity and its associated property IDs to include in the reconciliation report.
+      required:
+      - legal_entity_id
+      - property_ids
+      properties:
+        legal_entity_id:
+          type: string
+          description: The legal entity identifier.
+          example: '1234567'
+        property_ids:
+          type: array
+          description: List of property IDs belonging to the legal entity to include in the report.
+          items:
+            type: string
+          example:
+          - '123456'
+    RateLimitErrorResponse:
+      type: object
+      description: Response when the rate limit has been exceeded
       properties:
         meta:
           allOf:
@@ -233,14 +186,6 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
     ReportFilterInput:
       type: object
       description: A single report filter with one or more selected values. Use the [report filters endpoint](#tag/Report-filters) to retrieve available `filter_key` and `filter_values` options.
@@ -274,36 +219,26 @@ components:
           type: string
           description: The selected configuration value for the given `config_key`. For example, `CSV`, `XLS`, or `JSON` for `format_type`.
           example: CSV
-    ReconReportGenerationResponse:
+    InternalServerErrorResponse:
       type: object
-      description: Response returned when a reconciliation report generation request is accepted.
+      description: Response when the request failed with an internal reason
       properties:
         meta:
           allOf:
           - $ref: '#/components/schemas/DefaultMeta'
         data:
-          allOf:
-          - $ref: '#/components/schemas/ReconReportGenerationData'
+          type: object
+          description: Data containing required information
         errors:
           type: array
-          maxItems: 0
-          items: {}
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
         warnings:
           type: array
-          maxItems: 0
-          items: {}
-    ReconReportGenerationData:
-      type: object
-      description: Data returned when a reconciliation report generation request is accepted.
-      properties:
-        request_id:
-          type: string
-          description: Unique identifier for the report generation request. Use this value to poll the report status endpoint.
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        report_status:
-          type: string
-          description: 'Current status of the report generation. Possible values: `GENERATING`.'
-          example: GENERATING
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
     ReconReportRequest:
       type: object
       description: Request body for generating a reconciliation report.
@@ -340,6 +275,71 @@ components:
     BadRequestErrorResponse:
       type: object
       description: Response when the request doesn't have valid parameters
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type: string
+          description: Detailed debug message for the error
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    ReconReportGenerationData:
+      type: object
+      description: Data returned when a reconciliation report generation request is accepted.
+      properties:
+        request_id:
+          type: string
+          description: Unique identifier for the report generation request. Use this value to poll the report status endpoint.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        report_status:
+          type: string
+          description: 'Current status of the report generation. Possible values: `GENERATING`.'
+          example: GENERATING
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
       properties:
         meta:
           allOf:

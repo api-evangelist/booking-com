@@ -165,22 +165,19 @@ components:
           type: boolean
           description: Indicates whether random page access is supported. If false, only sequential pagination is available.
           example: false
-    ErrorDetail:
+    ConversionsResponse:
       type: object
-      description: Details of a single error.
+      description: Response object containing conversion data, pagination info, and metadata.
       properties:
-        id:
-          type: string
-          description: Machine-readable error identifier.
-          example: invalid_parameter
-        name:
-          type: string
-          description: Human-readable error name.
-          example: Invalid Value
-        message:
-          type: string
-          description: Detailed error message explaining what went wrong.
-          example: The request contains an invalid parameter.
+        conversions:
+          type: array
+          description: List of conversion records matching the search criteria.
+          items:
+            $ref: '#/components/schemas/Conversion'
+        pagination:
+          $ref: '#/components/schemas/ConversionsPagination'
+        metadata:
+          $ref: '#/components/schemas/ConversionsMetadata'
     DateRange:
       type: object
       description: Date range for filtering conversions. Both 'from' and 'to' dates are required.
@@ -198,6 +195,72 @@ components:
           format: date
           description: End date of the range in ISO-8601 format (YYYY-MM-DD). Must be equal to or after the 'from' date.
           example: '2025-01-31'
+    ConversionsRequest:
+      type: object
+      description: 'Request object for retrieving conversion data.
+
+
+        **Important:** Exactly one date filter must be provided. The date filters are mutually exclusive -
+
+        specifying more than one will result in a 400 Bad Request error with `conflicting_parameters`.
+
+
+        Available date filters (choose exactly one):
+
+        - `booking_date_range`: Filter by when the booking was made
+
+        - `cancellation_date_range`: Filter by when the booking was cancelled
+
+        - `checkout_date_range`: Filter by the checkout date
+
+        '
+      oneOf:
+      - required:
+        - booking_date_range
+        properties:
+          booking_date_range:
+            allOf:
+            - $ref: '#/components/schemas/DateRange'
+            - description: 'Filter conversions by the date the booking was made.
+
+                **Mutually exclusive** with cancellation_date_range and checkout_date_range.
+
+                '
+      - required:
+        - cancellation_date_range
+        properties:
+          cancellation_date_range:
+            allOf:
+            - $ref: '#/components/schemas/DateRange'
+            - description: 'Filter conversions by the date the booking was cancelled. Only returns cancelled bookings.
+
+                **Mutually exclusive** with booking_date_range and checkout_date_range.
+
+                '
+      - required:
+        - checkout_date_range
+        properties:
+          checkout_date_range:
+            allOf:
+            - $ref: '#/components/schemas/DateRange'
+            - description: 'Filter conversions by the checkout date of the booking.
+
+                **Mutually exclusive** with booking_date_range and cancellation_date_range.
+
+                '
+      properties:
+        page_size:
+          type: integer
+          format: int32
+          description: Number of results per page. Default is 100, maximum is 1000.
+          default: 100
+          minimum: 1
+          maximum: 1000
+          example: 100
+        page_token:
+          type: string
+          description: Token for retrieving the next page of results. Obtained from the previous response's pagination.next_page_token.
+          example: ''
     ConversionsMetadata:
       type: object
       description: Metadata about the conversions response.
@@ -271,6 +334,22 @@ components:
           enum:
           - desktop
           - mobile
+    ErrorDetail:
+      type: object
+      description: Details of a single error.
+      properties:
+        id:
+          type: string
+          description: Machine-readable error identifier.
+          example: invalid_parameter
+        name:
+          type: string
+          description: Human-readable error name.
+          example: Invalid Value
+        message:
+          type: string
+          description: Detailed error message explaining what went wrong.
+          example: The request contains an invalid parameter.
     ErrorResponse:
       type: object
       description: Standard error response format for API errors.
@@ -288,85 +367,6 @@ components:
           type: string
           description: Account ID that triggered request, useful for debugging and support.
           example: '1234654'
-    ConversionsRequest:
-      type: object
-      description: 'Request object for retrieving conversion data.
-
-
-        **Important:** Exactly one date filter must be provided. The date filters are mutually exclusive -
-
-        specifying more than one will result in a 400 Bad Request error with `conflicting_parameters`.
-
-
-        Available date filters (choose exactly one):
-
-        - `booking_date_range`: Filter by when the booking was made
-
-        - `cancellation_date_range`: Filter by when the booking was cancelled
-
-        - `checkout_date_range`: Filter by the checkout date
-
-        '
-      oneOf:
-      - required:
-        - booking_date_range
-        properties:
-          booking_date_range:
-            allOf:
-            - $ref: '#/components/schemas/DateRange'
-            - description: 'Filter conversions by the date the booking was made.
-
-                **Mutually exclusive** with cancellation_date_range and checkout_date_range.
-
-                '
-      - required:
-        - cancellation_date_range
-        properties:
-          cancellation_date_range:
-            allOf:
-            - $ref: '#/components/schemas/DateRange'
-            - description: 'Filter conversions by the date the booking was cancelled. Only returns cancelled bookings.
-
-                **Mutually exclusive** with booking_date_range and checkout_date_range.
-
-                '
-      - required:
-        - checkout_date_range
-        properties:
-          checkout_date_range:
-            allOf:
-            - $ref: '#/components/schemas/DateRange'
-            - description: 'Filter conversions by the checkout date of the booking.
-
-                **Mutually exclusive** with booking_date_range and cancellation_date_range.
-
-                '
-      properties:
-        page_size:
-          type: integer
-          format: int32
-          description: Number of results per page. Default is 100, maximum is 1000.
-          default: 100
-          minimum: 1
-          maximum: 1000
-          example: 100
-        page_token:
-          type: string
-          description: Token for retrieving the next page of results. Obtained from the previous response's pagination.next_page_token.
-          example: ''
-    ConversionsResponse:
-      type: object
-      description: Response object containing conversion data, pagination info, and metadata.
-      properties:
-        conversions:
-          type: array
-          description: List of conversion records matching the search criteria.
-          items:
-            $ref: '#/components/schemas/Conversion'
-        pagination:
-          $ref: '#/components/schemas/ConversionsPagination'
-        metadata:
-          $ref: '#/components/schemas/ConversionsMetadata'
   securitySchemes:
     BearerAuth:
       type: http

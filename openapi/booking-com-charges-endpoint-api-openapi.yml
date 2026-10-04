@@ -101,6 +101,56 @@ paths:
                   ruid: 59dd3156-d175-412d-834f-bce976502bf3
 components:
   schemas:
+    RoomCharges:
+      required:
+      - charges
+      - room_id
+      type: object
+      properties:
+        room_id:
+          maximum: 4294967295
+          type: integer
+          description: 'The Room ID the charges apply to.
+
+
+            HDCN: FeePolicy->InvCode
+
+            '
+          format: int64
+        charges:
+          type: array
+          description: List of charges for the room.
+          items:
+            $ref: '#/components/schemas/Charge'
+      description: Room specific charges. Will override the same charge specified at the property level. Update requests must contain at least one charge between property and room arrays.
+    ChargePeriod:
+      required:
+      - applicable
+      type: object
+      properties:
+        applicable:
+          $ref: '#/components/schemas/ApplicableWindow'
+        configuration:
+          $ref: '#/components/schemas/ChargeConfiguration'
+      description: Contains the timeline of various configurations for the charge through time.
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+    Charges:
+      type: object
+      properties:
+        property_charges:
+          type: array
+          description: Charges that apply across the property. Update requests must contain at least one charge between property and room arrays.
+          items:
+            $ref: '#/components/schemas/Charge'
+        room_charges:
+          type: array
+          description: Room specific charges. Will override the same charge specified at the property level. Update requests must contain at least one charge between property and room arrays.
+          items:
+            $ref: '#/components/schemas/RoomCharges'
     AgeMultiplier:
       required:
       - lte
@@ -133,17 +183,142 @@ components:
         If multiple modifiers are configured, only the most specific age multiplier that matches the child''s age is applied. For example, if a .50 multiplier is configured for children under 8 years old, and a .80 multiplier is configured for children under 12 years old, a 7 year old child would get a .50 discount.
 
         '
-    ApiError:
+    ApiResponseCharges:
       type: object
       properties:
-        message:
+        data:
+          $ref: '#/components/schemas/Charges'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    Charge:
+      required:
+      - charge_key
+      - charge_periods
+      type: object
+      properties:
+        charge_key:
+          $ref: '#/components/schemas/ChargeKey'
+        charge_periods:
+          type: array
+          description: Contains the timeline of various configurations for the charge through time.
+          items:
+            $ref: '#/components/schemas/ChargePeriod'
+      description: List of charges for the room.
+    ApiResponseObject:
+      type: object
+      properties:
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    Amount:
+      required:
+      - mode
+      type: object
+      properties:
+        value:
+          type: number
+          description: 'Value of the charge.
+
+
+            Required unless mode is `INCALCULABLE`, in which case any value passed is ignored.
+
+
+            Interpreted as an absolute value or percentage depending on mode. Absolute values are in the property''s configured currency.
+
+
+            HDCN:FeePolicy->Amount AND FeePolicy->Percent
+
+            '
+        base:
+          type: array
+          description: 'Specifies what value the percentage applies to. For example, 10% of NET_ROOM_PRICE + PROPERTY_CHARGES.
+
+
+            Required when mode is PERCENTAGE (otherwise rejected).
+
+
+            To know what charge types fall into each base category please use the meta endpoint.
+
+
+            Currently we only accept the following combinations:
+
+            - ["NET_ROOM_PRICE"]
+
+            - ["NET_ROOM_PRICE", "PROPERTY_CHARGES"]
+
+            - ["NET_ROOM_PRICE", "LOCALITY_CHARGES"]
+
+            - ["NET_ROOM_PRICE", "LOCALITY_CHARGES", "PROPERTY_CHARGES"]
+
+
+            HDCN: N/A
+
+            '
+          items:
+            type: string
+            description: 'Specifies what value the percentage applies to. For example, 10% of NET_ROOM_PRICE + PROPERTY_CHARGES.
+
+
+              Required when mode is PERCENTAGE (otherwise rejected).
+
+
+              To know what charge types fall into each base category please use the meta endpoint.
+
+
+              Currently we only accept the following combinations:
+
+              - ["NET_ROOM_PRICE"]
+
+              - ["NET_ROOM_PRICE", "PROPERTY_CHARGES"]
+
+              - ["NET_ROOM_PRICE", "LOCALITY_CHARGES"]
+
+              - ["NET_ROOM_PRICE", "LOCALITY_CHARGES", "PROPERTY_CHARGES"]
+
+
+              HDCN: N/A
+
+              '
+            enum:
+            - NET_ROOM_PRICE
+            - TAXES
+            - LOCALITY_CHARGES
+            - PROPERTY_CHARGES
+            - FACILITY_CHARGES
+        mode:
           type: string
-        code:
-          type: integer
-        details:
-          type: object
-        description:
-          type: string
+          description: 'The mode used for this charge.
+
+
+            Reference the meta endpoint to understand which charge modes are supported for the charge type.
+
+
+            HDCN:FeePolicy->ChargeFrequency AND FeePolicy->Percent in the case of `PERCENTAGE`
+
+            '
+          enum:
+          - PER_NIGHT
+          - PER_STAY
+          - PER_PERSON_PER_NIGHT
+          - PER_PERSON_PER_STAY
+          - PERCENTAGE
+          - INCALCULABLE
+      description: Contains details about the charge price.
     ChargeKey:
       required:
       - guest_origin
@@ -254,114 +429,17 @@ components:
 
 
         If you change an attribute in the charge key, you are modifying a different charge with its own charge periods.'
-    Amount:
-      required:
-      - mode
+    ApiError:
       type: object
       properties:
-        value:
-          type: number
-          description: 'Value of the charge.
-
-
-            Required unless mode is `INCALCULABLE`, in which case any value passed is ignored.
-
-
-            Interpreted as an absolute value or percentage depending on mode. Absolute values are in the property''s configured currency.
-
-
-            HDCN:FeePolicy->Amount AND FeePolicy->Percent
-
-            '
-        base:
-          type: array
-          description: 'Specifies what value the percentage applies to. For example, 10% of NET_ROOM_PRICE + PROPERTY_CHARGES.
-
-
-            Required when mode is PERCENTAGE (otherwise rejected).
-
-
-            To know what charge types fall into each base category please use the meta endpoint.
-
-
-            Currently we only accept the following combinations:
-
-            - ["NET_ROOM_PRICE"]
-
-            - ["NET_ROOM_PRICE", "PROPERTY_CHARGES"]
-
-            - ["NET_ROOM_PRICE", "LOCALITY_CHARGES"]
-
-            - ["NET_ROOM_PRICE", "LOCALITY_CHARGES", "PROPERTY_CHARGES"]
-
-
-            HDCN: N/A
-
-            '
-          items:
-            type: string
-            description: 'Specifies what value the percentage applies to. For example, 10% of NET_ROOM_PRICE + PROPERTY_CHARGES.
-
-
-              Required when mode is PERCENTAGE (otherwise rejected).
-
-
-              To know what charge types fall into each base category please use the meta endpoint.
-
-
-              Currently we only accept the following combinations:
-
-              - ["NET_ROOM_PRICE"]
-
-              - ["NET_ROOM_PRICE", "PROPERTY_CHARGES"]
-
-              - ["NET_ROOM_PRICE", "LOCALITY_CHARGES"]
-
-              - ["NET_ROOM_PRICE", "LOCALITY_CHARGES", "PROPERTY_CHARGES"]
-
-
-              HDCN: N/A
-
-              '
-            enum:
-            - NET_ROOM_PRICE
-            - TAXES
-            - LOCALITY_CHARGES
-            - PROPERTY_CHARGES
-            - FACILITY_CHARGES
-        mode:
+        message:
           type: string
-          description: 'The mode used for this charge.
-
-
-            Reference the meta endpoint to understand which charge modes are supported for the charge type.
-
-
-            HDCN:FeePolicy->ChargeFrequency AND FeePolicy->Percent in the case of `PERCENTAGE`
-
-            '
-          enum:
-          - PER_NIGHT
-          - PER_STAY
-          - PER_PERSON_PER_NIGHT
-          - PER_PERSON_PER_STAY
-          - PERCENTAGE
-          - INCALCULABLE
-      description: Contains details about the charge price.
-    Charge:
-      required:
-      - charge_key
-      - charge_periods
-      type: object
-      properties:
-        charge_key:
-          $ref: '#/components/schemas/ChargeKey'
-        charge_periods:
-          type: array
-          description: Contains the timeline of various configurations for the charge through time.
-          items:
-            $ref: '#/components/schemas/ChargePeriod'
-      description: List of charges for the room.
+        code:
+          type: integer
+        details:
+          type: object
+        description:
+          type: string
     ChargeConfiguration:
       required:
       - amount
@@ -398,16 +476,6 @@ components:
 
 
         If specified as `null` it clears the charge for the specific period. This field cannot be omitted.'
-    ChargePeriod:
-      required:
-      - applicable
-      type: object
-      properties:
-        applicable:
-          $ref: '#/components/schemas/ApplicableWindow'
-        configuration:
-          $ref: '#/components/schemas/ChargeConfiguration'
-      description: Contains the timeline of various configurations for the charge through time.
     ApplicableWindow:
       required:
       - from
@@ -442,74 +510,6 @@ components:
 
             '
       description: The date range for this charge period. Dates are inclusive and must not overlap.
-    Charges:
-      type: object
-      properties:
-        property_charges:
-          type: array
-          description: Charges that apply across the property. Update requests must contain at least one charge between property and room arrays.
-          items:
-            $ref: '#/components/schemas/Charge'
-        room_charges:
-          type: array
-          description: Room specific charges. Will override the same charge specified at the property level. Update requests must contain at least one charge between property and room arrays.
-          items:
-            $ref: '#/components/schemas/RoomCharges'
-    ResponseMeta:
-      type: object
-      properties:
-        ruid:
-          type: string
-    ApiResponseCharges:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Charges'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
-    ApiResponseObject:
-      type: object
-      properties:
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
-    RoomCharges:
-      required:
-      - charges
-      - room_id
-      type: object
-      properties:
-        room_id:
-          maximum: 4294967295
-          type: integer
-          description: 'The Room ID the charges apply to.
-
-
-            HDCN: FeePolicy->InvCode
-
-            '
-          format: int64
-        charges:
-          type: array
-          description: List of charges for the room.
-          items:
-            $ref: '#/components/schemas/Charge'
-      description: Room specific charges. Will override the same charge specified at the property level. Update requests must contain at least one charge between property and room arrays.
 x-tagGroups:
 - name: API Endpoints
   tags:

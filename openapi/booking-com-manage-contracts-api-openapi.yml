@@ -738,21 +738,6 @@ paths:
                   le_id: 14379109
 components:
   schemas:
-    ReInviteObject:
-      properties:
-        status:
-          description: Status message indicating whether the invitation email was resent successfully.
-          example: Invitation sent to Partner.
-          type: string
-        success:
-          description: A flag that indicates if the operation finished successfully.
-          example: 1
-          format: int32
-          type: integer
-      required:
-      - status
-      - success
-      type: object
     InvitedPartnerObject:
       properties:
         legal_entity_id:
@@ -763,11 +748,11 @@ components:
       required:
       - legal_entity_id
       type: object
-    AddendumObject:
+    ReInviteObject:
       properties:
         status:
-          description: Status message indicating whether the addendum email was sent successfully.
-          example: Addendum invitation sent to Partner.
+          description: Status message indicating whether the invitation email was resent successfully.
+          example: Invitation sent to Partner.
           type: string
         success:
           description: A flag that indicates if the operation finished successfully.
@@ -798,6 +783,21 @@ components:
         - message
         type: object
       type: array
+    AddendumObject:
+      properties:
+        status:
+          description: Status message indicating whether the addendum email was sent successfully.
+          example: Addendum invitation sent to Partner.
+          type: string
+        success:
+          description: A flag that indicates if the operation finished successfully.
+          example: 1
+          format: int32
+          type: integer
+      required:
+      - status
+      - success
+      type: object
 x-tagGroups:
 - name: API Endpoints
   tags:

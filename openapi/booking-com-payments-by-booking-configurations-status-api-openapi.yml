@@ -246,65 +246,14 @@ paths:
                     warnings: []
 components:
   schemas:
-    Warning:
-      type: object
-      description: Warning information
+    PBBConfigurationUpdateStatusLookupDetails:
+      description: Information regarding accepted Payments by Booking configuration update request status for properties
       properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
-    UnauthorizedRequestResponse:
-      type: object
-      description: Response when the token is valid but does not have access to the requested resource.
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type:
-          - object
-          - 'null'
-          description: Response data (null for error responses)
-        errors:
+        config_update_details:
           type: array
-          description: List of errors for the response
+          description: Status information for accepted Payments by Booking configuration change requests for properties
           items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-        debug_message:
-          type:
-          - string
-          - 'null'
-          description: Detailed debug message for the error
-    Action:
-      description: Pending actions to be performed by the partner
-      properties:
-        reference:
-          type: string
-          description: Reference to the action to be taken
-        type:
-          type: string
-          description: 'Type of action to be taken. Possible values: SUBMIT_KYC.'
+            $ref: '#/components/schemas/PBBConfigurationUpdateStatusLookupDetail'
     InvalidTokenResponse:
       type: object
       description: Response when the authentication token is missing, invalid, or expired.
@@ -326,65 +275,6 @@ components:
           description: List of warnings for the response
           maxItems: 0
           items: {}
-    PBBConfigurationUpdateStatusRequest:
-      properties:
-        property_ids:
-          description: <=10 property IDs per request. All `property_ids` in a request should belong to a common legal entity ID. Required if `request_id` is not provided. Set to empty array if using `request_id`.
-          type: array
-          maxItems: 10
-          items:
-            type: integer
-        request_id:
-          description: Identifier of the accepted configuration request. Required if `property_ids` is not provided. Set to null if using `property_ids`.
-          type:
-          - string
-          - 'null'
-        kyc_callback_url:
-          description: Callback URL where the user is redirected after completing pending actions (e.g. KYC submission).
-          type: string
-      required:
-      - property_ids
-      - request_id
-      - kyc_callback_url
-    PBBConfigurationUpdateStatusLookupDetails:
-      description: Information regarding accepted Payments by Booking configuration update request status for properties
-      properties:
-        config_update_details:
-          type: array
-          description: Status information for accepted Payments by Booking configuration change requests for properties
-          items:
-            $ref: '#/components/schemas/PBBConfigurationUpdateStatusLookupDetail'
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type:
-          - object
-          - 'null'
-          description: Response data (null for error responses)
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
     PBBConfigUpdateRequestDataNotFoundErrorResponse:
       description: Response when the requested resource doesn't exist
       properties:
@@ -441,6 +331,49 @@ components:
           description: Pending actions to be performed by the partner
           items:
             $ref: '#/components/schemas/Action'
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type:
+          - object
+          - 'null'
+          description: Response data (null for error responses)
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    PBBConfigurationUpdateStatusRequest:
+      properties:
+        property_ids:
+          description: <=10 property IDs per request. All `property_ids` in a request should belong to a common legal entity ID. Required if `request_id` is not provided. Set to empty array if using `request_id`.
+          type: array
+          maxItems: 10
+          items:
+            type: integer
+        request_id:
+          description: Identifier of the accepted configuration request. Required if `property_ids` is not provided. Set to null if using `property_ids`.
+          type:
+          - string
+          - 'null'
+        kyc_callback_url:
+          description: Callback URL where the user is redirected after completing pending actions (e.g. KYC submission).
+          type: string
+      required:
+      - property_ids
+      - request_id
+      - kyc_callback_url
     BadRequestErrorResponse:
       type: object
       description: Response when the request doesn't have valid parameters
@@ -452,6 +385,73 @@ components:
         data:
           type: object
           description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type:
+          - string
+          - 'null'
+          description: Detailed debug message for the error
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    Action:
+      description: Pending actions to be performed by the partner
+      properties:
+        reference:
+          type: string
+          description: Reference to the action to be taken
+        type:
+          type: string
+          description: 'Type of action to be taken. Possible values: SUBMIT_KYC.'
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type:
+          - object
+          - 'null'
+          description: Response data (null for error responses)
         errors:
           type: array
           description: List of errors for the response

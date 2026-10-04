@@ -222,18 +222,62 @@ components:
       required: true
       description: Include here your Affiliate identifier number
   schemas:
-    conversation:
-      description: A unique identifier for the conversation thread.
-      type: string
-    requestId:
-      description: Uniquely identifies the request. Please provide this identifier when contacting support.
-      type: string
-    common_accommodation:
-      type: string
-      description: The unique identifier of the property
+    download_output:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: object
+          properties:
+            conversation:
+              type: string
+              description: The unique identifier of the conversation
+              $ref: '#/components/schemas/conversation'
+            file_content:
+              type: string
+              description: The content of the attachment
+              contentEncoding: base64
+            attachment:
+              type: string
+              description: The unique identifier of the attachment
+              $ref: '#/components/schemas/attachment'
     attachment:
       type: string
       description: The unique identifier of the attachment
+    conversation:
+      description: A unique identifier for the conversation thread.
+      type: string
+    upload_output:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: object
+          properties:
+            attachment:
+              type: string
+              description: The unique identifier of the attachment
+              $ref: '#/components/schemas/attachment'
+    common_accommodation:
+      type: string
+      description: The unique identifier of the property
+    download_input:
+      type: object
+      properties:
+        conversation:
+          type: string
+          description: The unique identifier of the conversation
+          $ref: '#/components/schemas/conversation'
+        accommodation:
+          type: string
+          description: The unique identifier of the property
+          $ref: '#/components/schemas/common_accommodation'
+        attachment:
+          type: string
+          description: The unique identifier of the attachment
+          $ref: '#/components/schemas/attachment'
     upload_input:
       type: object
       required:
@@ -267,53 +311,9 @@ components:
           description: Base64-encoded content of the attachment.
           type: string
           contentEncoding: base64
-    download_output:
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: object
-          properties:
-            conversation:
-              type: string
-              description: The unique identifier of the conversation
-              $ref: '#/components/schemas/conversation'
-            file_content:
-              type: string
-              description: The content of the attachment
-              contentEncoding: base64
-            attachment:
-              type: string
-              description: The unique identifier of the attachment
-              $ref: '#/components/schemas/attachment'
-    download_input:
-      type: object
-      properties:
-        conversation:
-          type: string
-          description: The unique identifier of the conversation
-          $ref: '#/components/schemas/conversation'
-        accommodation:
-          type: string
-          description: The unique identifier of the property
-          $ref: '#/components/schemas/common_accommodation'
-        attachment:
-          type: string
-          description: The unique identifier of the attachment
-          $ref: '#/components/schemas/attachment'
-    upload_output:
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: object
-          properties:
-            attachment:
-              type: string
-              description: The unique identifier of the attachment
-              $ref: '#/components/schemas/attachment'
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
   securitySchemes:
     BearerAuth:
       type: http

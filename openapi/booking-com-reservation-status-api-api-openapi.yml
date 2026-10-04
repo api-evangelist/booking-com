@@ -77,27 +77,34 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
-    Warning:
+    InvalidTokenResponse:
       type: object
-      description: Warning information
+      description: Response when the authentication token is missing, invalid, or expired.
       properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
-    ReservationStatusData:
-      type: object
-      description: Reservation status information
-      properties:
-        reservationId:
-          type: string
-          description: Accommodation reservation identifier
-        payoutType:
-          type: string
-          description: 'Type of payout: GROSS, NET, or UNKNOWN.'
-        propertyId:
-          type: string
-          description: Property identifier
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          maxItems: 0
+          items: {}
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              code:
+                type: string
+                description: Error code
+              details:
+                type:
+                - string
+                - 'null'
+                description: Additional error details
     CheckoutDateTooOldErrorResponse:
       type: object
       description: Response when the checkout date is older than the allowed 18-months window
@@ -119,9 +126,22 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    UnauthorizedRequestResponse:
+    ReservationStatusData:
       type: object
-      description: Response when the token is valid but does not have access to the requested resource.
+      description: Reservation status information
+      properties:
+        reservationId:
+          type: string
+          description: Accommodation reservation identifier
+        payoutType:
+          type: string
+          description: 'Type of payout: GROSS, NET, or UNKNOWN.'
+        propertyId:
+          type: string
+          description: Property identifier
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
       properties:
         meta:
           allOf:
@@ -154,57 +174,9 @@ components:
           type: integer
           format: int32
           description: HTTP status code for the error
-    InvalidTokenResponse:
+    BadRequestErrorResponse:
       type: object
-      description: Response when the authentication token is missing, invalid, or expired.
-      properties:
-        meta:
-          $ref: '#/components/schemas/DefaultMeta'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          maxItems: 0
-          items: {}
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-                description: Error message
-              code:
-                type: string
-                description: Error code
-              details:
-                type:
-                - string
-                - 'null'
-                description: Additional error details
-    ReservationStatusResponse:
-      type: object
-      description: Response containing reservation status information
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: Response metadata
-        data:
-          allOf:
-          - $ref: '#/components/schemas/ReservationStatusData'
-          description: Reservation status data
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
+      description: Response when the request doesn't have valid parameters
       properties:
         meta:
           allOf:
@@ -231,9 +203,37 @@ components:
           type: string
           description: Request unique identifier
           example: string
-    BadRequestErrorResponse:
+    ReservationStatusResponse:
       type: object
-      description: Response when the request doesn't have valid parameters
+      description: Response containing reservation status information
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: Response metadata
+        data:
+          allOf:
+          - $ref: '#/components/schemas/ReservationStatusData'
+          description: Reservation status data
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
       properties:
         meta:
           allOf:

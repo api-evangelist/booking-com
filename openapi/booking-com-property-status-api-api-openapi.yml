@@ -43,33 +43,6 @@ paths:
                 $ref: '#/components/schemas/ApiResponsePropertyStatusOutput'
 components:
   schemas:
-    ApiResponsePropertyStatusOutput:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/PropertyStatusOutput'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorOTA'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorOTA'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
-    ApiErrorOTA:
-      type: object
-      properties:
-        message:
-          type: string
-        code:
-          type: integer
-          format: int32
-        details:
-          $ref: '#/components/schemas/ObjectNode'
-        description:
-          type: string
     PropertyStatusOutput:
       type: object
       properties:
@@ -88,6 +61,23 @@ components:
           - CLOSE
         reason:
           $ref: '#/components/schemas/Reason'
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+    ApiErrorOTA:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32
+        details:
+          $ref: '#/components/schemas/ObjectNode'
+        description:
+          type: string
     Reason:
       type: object
       properties:
@@ -106,11 +96,21 @@ components:
           type: string
     ObjectNode:
       type: object
-    ResponseMeta:
+    ApiResponsePropertyStatusOutput:
       type: object
       properties:
-        ruid:
-          type: string
+        data:
+          $ref: '#/components/schemas/PropertyStatusOutput'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
 x-tagGroups:
 - name: API Endpoints
   tags:

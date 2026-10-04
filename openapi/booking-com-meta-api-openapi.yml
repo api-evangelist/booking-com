@@ -143,6 +143,53 @@ paths:
                 $ref: '#/components/schemas/ApiResponseUnitMeta'
 components:
   schemas:
+    BedType:
+      properties:
+        bed_type_id:
+          type: integer
+          format: int32
+        bed_type_name:
+          type: string
+        bed_type_description:
+          type: string
+        bed_type_description_imperial:
+          type: string
+        is_active:
+          type: boolean
+    ResponseMeta:
+      properties:
+        ruid:
+          type: string
+    ApiResponseUnitMeta:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          $ref: '#/components/schemas/UnitMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    PropertyCategory:
+      properties:
+        code:
+          type: integer
+          format: int32
+        name:
+          type: string
+        code_ota:
+          type: integer
+          format: int32
+        code_booking_extended:
+          type: integer
+          format: int32
     UnitType:
       properties:
         unit_type_id:
@@ -163,54 +210,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UnitName'
-    ApiError:
-      properties:
-        message:
-          type: string
-        code:
-          type: integer
-          format: int32
-          description: ''
-        details:
-          type: object
-          properties:
-            fields:
-              type: array
-              description: ''
-              items:
-                type: string
-        description:
-          type: string
-    BedType:
-      properties:
-        bed_type_id:
-          type: integer
-          format: int32
-        bed_type_name:
-          type: string
-        bed_type_description:
-          type: string
-        bed_type_description_imperial:
-          type: string
-        is_active:
-          type: boolean
-    ApiResponseUnitMeta:
-      properties:
-        ruid:
-          type: string
-          writeOnly: true
-        data:
-          $ref: '#/components/schemas/UnitMeta'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
     UnitMeta:
       properties:
         language_code:
@@ -283,29 +282,23 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UnitCategory'
-    ResponseMeta:
+    ApiError:
       properties:
-        ruid:
+        message:
           type: string
-    PropertyCategory:
-      properties:
         code:
           type: integer
           format: int32
-        name:
-          type: string
-        code_ota:
-          type: integer
-          format: int32
-        code_booking_extended:
-          type: integer
-          format: int32
-    UnitName:
-      properties:
-        unit_name_id:
-          type: integer
-          format: int32
-        unit_name:
+          description: ''
+        details:
+          type: object
+          properties:
+            fields:
+              type: array
+              description: ''
+              items:
+                type: string
+        description:
           type: string
     UnitCategory:
       properties:
@@ -313,6 +306,13 @@ components:
           type: integer
           format: int32
         category_name:
+          type: string
+    UnitName:
+      properties:
+        unit_name_id:
+          type: integer
+          format: int32
+        unit_name:
           type: string
 x-tagGroups:
 - name: API Endpoints
