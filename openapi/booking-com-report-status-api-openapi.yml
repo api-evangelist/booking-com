@@ -105,6 +105,43 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
+    ReconReportStatusData:
+      type: object
+      description: Status and download details for a reconciliation report generation request.
+      properties:
+        request_id:
+          type: string
+          description: Unique identifier of the report generation request.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        status:
+          type: string
+          description: 'Current status of the report. Possible values: `GENERATING`, `READY`, `EMPTY`, `ERROR`.'
+          example: READY
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp of the most recent status update, in ISO 8601 format.
+          example: '2026-06-10T08:50:48Z'
+        download_url_expires_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Timestamp at which the `download_url` expires, in ISO 8601 format. Only present when `status` is `READY`. Download the report before this time.
+          example: '2026-06-11T08:50:48Z'
+        filename:
+          type:
+          - string
+          - 'null'
+          description: Name of the generated report file. Only present when `status` is `READY`.
+          example: reconciliation-report.csv
+        download_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: Pre-signed URL for downloading the generated report. Only present when `status` is `READY`. This URL is valid for approximately 15 minutes and expires at `download_url_expires_at`. To obtain a new download URL after expiry, call the generate report endpoint again.
+          example: https://example.com/path
     InvalidTokenResponse:
       type: object
       description: Response when the authentication token is missing, invalid, or expired.
@@ -153,6 +190,49 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type: string
+          description: Detailed debug message for the error
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    ReconReportStatusResponse:
+      type: object
+      description: Response containing the current status of a reconciliation report generation request.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          allOf:
+          - $ref: '#/components/schemas/ReconReportStatusData'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
     InternalServerErrorResponse:
       type: object
       description: Response when the request failed with an internal reason
@@ -173,89 +253,6 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-        debug_message:
-          type: string
-          description: Detailed debug message for the error
-    BadRequestErrorResponse:
-      type: object
-      description: Response when the request doesn't have valid parameters
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
-    NotFoundErrorResponse:
-      type: object
-      description: Response when the requested resource is not found
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    ReconReportStatusResponse:
-      type: object
-      description: Response containing the current status of a reconciliation report generation request.
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-        data:
-          allOf:
-          - $ref: '#/components/schemas/ReconReportStatusData'
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
     Warning:
       type: object
       description: Warning information
@@ -284,43 +281,46 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    ReconReportStatusData:
+    BadRequestErrorResponse:
       type: object
-      description: Status and download details for a reconciliation report generation request.
+      description: Response when the request doesn't have valid parameters
       properties:
-        request_id:
-          type: string
-          description: Unique identifier of the report generation request.
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        status:
-          type: string
-          description: 'Current status of the report. Possible values: `GENERATING`, `READY`, `EMPTY`, `ERROR`.'
-          example: READY
-        updated_at:
-          type: string
-          format: date-time
-          description: Timestamp of the most recent status update, in ISO 8601 format.
-          example: '2026-06-10T08:50:48Z'
-        download_url_expires_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: Timestamp at which the `download_url` expires, in ISO 8601 format. Only present when `status` is `READY`. Download the report before this time.
-          example: '2026-06-11T08:50:48Z'
-        filename:
-          type:
-          - string
-          - 'null'
-          description: Name of the generated report file. Only present when `status` is `READY`.
-          example: reconciliation-report.csv
-        download_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: Pre-signed URL for downloading the generated report. Only present when `status` is `READY`. This URL is valid for approximately 15 minutes and expires at `download_url_expires_at`. To obtain a new download URL after expiry, call the generate report endpoint again.
-          example: https://example.com/path
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    NotFoundErrorResponse:
+      type: object
+      description: Response when the requested resource is not found
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
   securitySchemes:
     bearerAuth:
       type: http

@@ -111,63 +111,28 @@ components:
                 - string
                 - 'null'
                 description: Additional error details
-    AmountRefund:
-      description: Contains information on the amount to be refunded.
+    Error:
+      type: object
+      description: Error response containing details about the error
       properties:
-        currency:
+        description:
           type: string
-          description: Currency of the amount.
-        value:
+          description: Description of the error
+        message:
           type: string
-          description: Amount to be refunded.
-        decimals:
+          description: Error message
+        status_code:
           type: integer
           format: int32
-          description: Number of decimals in the amount.
-    VCCRefundInformation:
-      description: Information regarding refund associated with an accommodation reservation
+          description: HTTP status code for the error
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
       properties:
-        reservation_id:
-          type: integer
-          description: Accommodation reservation identifier
-        refund_status:
+        ruid:
           type: string
-          description: Refund status
-          example: REFUNDABLE
-        vcc_id:
-          type: string
-          description: VCC identifier
-        refund_amount:
-          $ref: '#/components/schemas/AmountRefund'
-        refund_due_date:
-          type: string
-          description: Due date for the refund
-        reason:
-          type: string
-          description: Reason for the refund
-        comment:
-          type:
-          - string
-          - 'null'
-          description: Additional comments for the refund
-    AccommodationVCCRefundResponse:
-      description: Response having information regarding VCC refunds associated with an accommodation reservations
-      properties:
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-        data:
-          type: array
-          description: Data containing required information
-          items:
-            $ref: '#/components/schemas/VCCRefundInformation'
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
+          description: Request unique identifier
+          example: string
     InternalServerErrorResponse:
       type: object
       description: Response when the request failed with an internal reason
@@ -205,49 +170,6 @@ components:
       - ruid
       - total_count
       - next_page
-    BadRequestErrorResponse:
-      type: object
-      description: Response when the request doesn't have valid parameters
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
     Warning:
       type: object
       description: Warning information
@@ -256,6 +178,24 @@ components:
           type: string
           description: Warning message
           example: string
+    AccommodationVCCRefundResponse:
+      description: Response having information regarding VCC refunds associated with an accommodation reservations
+      properties:
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+        data:
+          type: array
+          description: Data containing required information
+          items:
+            $ref: '#/components/schemas/VCCRefundInformation'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
     UnauthorizedRequestResponse:
       type: object
       description: Response when the token is valid but does not have access to the requested resource.
@@ -277,6 +217,66 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    VCCRefundInformation:
+      description: Information regarding refund associated with an accommodation reservation
+      properties:
+        reservation_id:
+          type: integer
+          description: Accommodation reservation identifier
+        refund_status:
+          type: string
+          description: Refund status
+          example: REFUNDABLE
+        vcc_id:
+          type: string
+          description: VCC identifier
+        refund_amount:
+          $ref: '#/components/schemas/AmountRefund'
+        refund_due_date:
+          type: string
+          description: Due date for the refund
+        reason:
+          type: string
+          description: Reason for the refund
+        comment:
+          type:
+          - string
+          - 'null'
+          description: Additional comments for the refund
+    BadRequestErrorResponse:
+      type: object
+      description: Response when the request doesn't have valid parameters
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    AmountRefund:
+      description: Contains information on the amount to be refunded.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Amount to be refunded.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
   securitySchemes:
     bearerAuth:
       type: http

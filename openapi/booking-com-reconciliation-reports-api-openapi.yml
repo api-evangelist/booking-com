@@ -148,6 +148,78 @@ components:
                 - string
                 - 'null'
                 description: Additional error details
+    RateLimitErrorResponse:
+      type: object
+      description: Response when the rate limit has been exceeded
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    ReconReportGenerationData:
+      type: object
+      description: Data returned when a reconciliation report generation request is accepted.
+      properties:
+        request_id:
+          type: string
+          description: Unique identifier for the report generation request. Use this value to poll the report status endpoint.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        report_status:
+          type: string
+          description: 'Current status of the report generation. Possible values: `GENERATING`.'
+          example: GENERATING
+    ReportConfigurationInput:
+      type: object
+      description: A single report configuration key-value pair. Use the [report filters endpoint](#tag/Report-filters) to retrieve available `config_key` and `config_value` options.
+      required:
+      - config_key
+      - config_value
+      properties:
+        config_key:
+          type: string
+          description: 'The configuration key. Possible values: `format_type`, `locale`.'
+          example: format_type
+        config_value:
+          type: string
+          description: The selected configuration value for the given `config_key`. For example, `CSV`, `XLS`, or `JSON` for `format_type`.
+          example: CSV
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type: string
+          description: Detailed debug message for the error
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
     PropertySelection:
       type: object
       description: A legal entity and its associated property IDs to include in the reconciliation report.
@@ -166,9 +238,9 @@ components:
             type: string
           example:
           - '123456'
-    RateLimitErrorResponse:
+    InternalServerErrorResponse:
       type: object
-      description: Response when the rate limit has been exceeded
+      description: Response when the request failed with an internal reason
       properties:
         meta:
           allOf:
@@ -204,41 +276,14 @@ components:
             type: string
           example:
           - DE123456789
-    ReportConfigurationInput:
+    Warning:
       type: object
-      description: A single report configuration key-value pair. Use the [report filters endpoint](#tag/Report-filters) to retrieve available `config_key` and `config_value` options.
-      required:
-      - config_key
-      - config_value
+      description: Warning information
       properties:
-        config_key:
+        message:
           type: string
-          description: 'The configuration key. Possible values: `format_type`, `locale`.'
-          example: format_type
-        config_value:
-          type: string
-          description: The selected configuration value for the given `config_key`. For example, `CSV`, `XLS`, or `JSON` for `format_type`.
-          example: CSV
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
+          description: Warning message
+          example: string
     ReconReportRequest:
       type: object
       description: Request body for generating a reconciliation report.
@@ -272,9 +317,9 @@ components:
           description: Optional list of filters to narrow down the report data, such as specific bank accounts or payout types. Use the [report filters endpoint](#tag/Report-filters) to retrieve available options.
           items:
             $ref: '#/components/schemas/ReportFilterInput'
-    BadRequestErrorResponse:
+    UnauthorizedRequestResponse:
       type: object
-      description: Response when the request doesn't have valid parameters
+      description: Response when the token is valid but does not have access to the requested resource.
       properties:
         meta:
           allOf:
@@ -292,54 +337,9 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    Error:
+    BadRequestErrorResponse:
       type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-        debug_message:
-          type: string
-          description: Detailed debug message for the error
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
-    ReconReportGenerationData:
-      type: object
-      description: Data returned when a reconciliation report generation request is accepted.
-      properties:
-        request_id:
-          type: string
-          description: Unique identifier for the report generation request. Use this value to poll the report status endpoint.
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        report_status:
-          type: string
-          description: 'Current status of the report generation. Possible values: `GENERATING`.'
-          example: GENERATING
-    Warning:
-      type: object
-      description: Warning information
-      properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
-    UnauthorizedRequestResponse:
-      type: object
-      description: Response when the token is valid but does not have access to the requested resource.
+      description: Response when the request doesn't have valid parameters
       properties:
         meta:
           allOf:

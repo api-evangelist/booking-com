@@ -246,14 +246,6 @@ paths:
                     warnings: []
 components:
   schemas:
-    PBBConfigurationUpdateStatusLookupDetails:
-      description: Information regarding accepted Payments by Booking configuration update request status for properties
-      properties:
-        config_update_details:
-          type: array
-          description: Status information for accepted Payments by Booking configuration change requests for properties
-          items:
-            $ref: '#/components/schemas/PBBConfigurationUpdateStatusLookupDetail'
     InvalidTokenResponse:
       type: object
       description: Response when the authentication token is missing, invalid, or expired.
@@ -275,11 +267,23 @@ components:
           description: List of warnings for the response
           maxItems: 0
           items: {}
-    PBBConfigUpdateRequestDataNotFoundErrorResponse:
-      description: Response when the requested resource doesn't exist
+    Action:
+      description: Pending actions to be performed by the partner
+      properties:
+        reference:
+          type: string
+          description: Reference to the action to be taken
+        type:
+          type: string
+          description: 'Type of action to be taken. Possible values: SUBMIT_KYC.'
+    BadRequestErrorResponse:
+      type: object
+      description: Response when the request doesn't have valid parameters
       properties:
         meta:
-          $ref: '#/components/schemas/DefaultMeta'
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
         data:
           type: object
           description: Data containing required information
@@ -308,93 +312,14 @@ components:
           type: array
           maxItems: 0
           items: {}
-    PBBConfigurationUpdateStatusLookupDetail:
-      description: Status information regarding accepted Payments by Booking configuration change request for a property
+    PBBConfigurationUpdateStatusLookupDetails:
+      description: Information regarding accepted Payments by Booking configuration update request status for properties
       properties:
-        property_id:
-          type: string
-          description: Property identifier
-        request_id:
-          type: string
-          description: Idempotency key of the latest accepted Payments by Booking configuration change request
-        status:
-          type: string
-          description: Payments by Booking configuration change status for property
-        rejection_reason:
-          type: string
-          description: Reason for rejection of Payments by Booking configuration change request
-        requested_at:
-          type: string
-          description: Payments by Booking configuration change requested at
-        actions:
+        config_update_details:
           type: array
-          description: Pending actions to be performed by the partner
+          description: Status information for accepted Payments by Booking configuration change requests for properties
           items:
-            $ref: '#/components/schemas/Action'
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type:
-          - object
-          - 'null'
-          description: Response data (null for error responses)
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    PBBConfigurationUpdateStatusRequest:
-      properties:
-        property_ids:
-          description: <=10 property IDs per request. All `property_ids` in a request should belong to a common legal entity ID. Required if `request_id` is not provided. Set to empty array if using `request_id`.
-          type: array
-          maxItems: 10
-          items:
-            type: integer
-        request_id:
-          description: Identifier of the accepted configuration request. Required if `property_ids` is not provided. Set to null if using `property_ids`.
-          type:
-          - string
-          - 'null'
-        kyc_callback_url:
-          description: Callback URL where the user is redirected after completing pending actions (e.g. KYC submission).
-          type: string
-      required:
-      - property_ids
-      - request_id
-      - kyc_callback_url
-    BadRequestErrorResponse:
-      type: object
-      description: Response when the request doesn't have valid parameters
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
+            $ref: '#/components/schemas/PBBConfigurationUpdateStatusLookupDetail'
     Error:
       type: object
       description: Error response containing details about the error
@@ -422,15 +347,52 @@ components:
           type: string
           description: Request unique identifier
           example: string
-    Action:
-      description: Pending actions to be performed by the partner
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
       properties:
-        reference:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type:
+          - object
+          - 'null'
+          description: Response data (null for error responses)
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    PBBConfigurationUpdateStatusLookupDetail:
+      description: Status information regarding accepted Payments by Booking configuration change request for a property
+      properties:
+        property_id:
           type: string
-          description: Reference to the action to be taken
-        type:
+          description: Property identifier
+        request_id:
           type: string
-          description: 'Type of action to be taken. Possible values: SUBMIT_KYC.'
+          description: Idempotency key of the latest accepted Payments by Booking configuration change request
+        status:
+          type: string
+          description: Payments by Booking configuration change status for property
+        rejection_reason:
+          type: string
+          description: Reason for rejection of Payments by Booking configuration change request
+        requested_at:
+          type: string
+          description: Payments by Booking configuration change requested at
+        actions:
+          type: array
+          description: Pending actions to be performed by the partner
+          items:
+            $ref: '#/components/schemas/Action'
     Warning:
       type: object
       description: Warning information
@@ -439,6 +401,26 @@ components:
           type: string
           description: Warning message
           example: string
+    PBBConfigurationUpdateStatusRequest:
+      properties:
+        property_ids:
+          description: <=10 property IDs per request. All `property_ids` in a request should belong to a common legal entity ID. Required if `request_id` is not provided. Set to empty array if using `request_id`.
+          type: array
+          maxItems: 10
+          items:
+            type: integer
+        request_id:
+          description: Identifier of the accepted configuration request. Required if `property_ids` is not provided. Set to null if using `property_ids`.
+          type:
+          - string
+          - 'null'
+        kyc_callback_url:
+          description: Callback URL where the user is redirected after completing pending actions (e.g. KYC submission).
+          type: string
+      required:
+      - property_ids
+      - request_id
+      - kyc_callback_url
     UnauthorizedRequestResponse:
       type: object
       description: Response when the token is valid but does not have access to the requested resource.
@@ -452,6 +434,24 @@ components:
           - object
           - 'null'
           description: Response data (null for error responses)
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    PBBConfigUpdateRequestDataNotFoundErrorResponse:
+      description: Response when the requested resource doesn't exist
+      properties:
+        meta:
+          $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
         errors:
           type: array
           description: List of errors for the response

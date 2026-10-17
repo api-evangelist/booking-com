@@ -129,64 +129,6 @@ components:
           type: array
           maxItems: 0
           items: {}
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    PaginationMeta:
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-        total_count:
-          type: integer
-          format: int32
-          description: Total number of records.
-        next_page:
-          type: boolean
-          description: Next page exists
-      required:
-      - ruid
-      - total_count
-      - next_page
-    BadRequestErrorResponse:
-      type: object
-      description: Response when the request doesn't have valid parameters
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
     Error:
       type: object
       description: Error response containing details about the error
@@ -209,19 +151,27 @@ components:
           type: string
           description: Request unique identifier
           example: string
-    AmountVCCBalance:
-      description: Contains information on the current balance of the VCC.
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
       properties:
-        currency:
-          type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Current balance of the VCC.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
     ChargeableVCCInformation:
       description: Information regarding VCC to be charged
       properties:
@@ -237,6 +187,22 @@ components:
           type: string
           description: VCC Status
           example: ACTIVE
+    PaginationMeta:
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+        total_count:
+          type: integer
+          format: int32
+          description: Total number of records.
+        next_page:
+          type: boolean
+          description: Next page exists
+      required:
+      - ruid
+      - total_count
+      - next_page
     Warning:
       type: object
       description: Warning information
@@ -245,9 +211,43 @@ components:
           type: string
           description: Warning message
           example: string
+    AmountVCCBalance:
+      description: Contains information on the current balance of the VCC.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Current balance of the VCC.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
     UnauthorizedRequestResponse:
       type: object
       description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    BadRequestErrorResponse:
+      type: object
+      description: Response when the request doesn't have valid parameters
       properties:
         meta:
           allOf:

@@ -101,6 +101,21 @@ paths:
                       message: Parameter 'languages' is invalid. Only one language per request is supported (got 2)
 components:
   schemas:
+    Status:
+      description: Lifecycle status of the property.
+      properties:
+        property_status:
+          type: string
+          description: 'Lifecycle status of the property: open (bookable) or closed (not bookable).'
+          enum:
+          - open
+          - closed
+          example: open
+        last_active_date:
+          type: string
+          format: date
+          description: Date the property was last active in the feed, as an ISO date (YYYY-MM-DD).
+          example: '2026-07-07'
     Ratings:
       description: Star rating and guest review aggregates.
       properties:
@@ -134,6 +149,83 @@ components:
           type: string
           description: Partner-attributed deep link that opens the property in the Booking.com app.
           example: https://www.booking.com/hotel/nl/grand-central.html?aid=343802&utm_medium=deeplink
+    Image:
+      description: 'A single property image: its CDN URL and image type (e.g. "main").'
+      properties:
+        url:
+          type: string
+          description: Image URL on the Booking.com image CDN, with the requested image_size applied.
+          example: https://q-xx.bstatic.com/xdata/images/hotel/max500/681992303.jpg?k=<sig>&o=
+        type:
+          type: string
+          description: Image type. Currently always "main".
+          example: main
+    ErrorDetail:
+      type: object
+      description: Details of a single error.
+      properties:
+        id:
+          type: string
+          description: Machine-readable error identifier.
+          example: invalid_parameter
+        name:
+          type: string
+          description: Human-readable error name.
+          example: Invalid Value
+        message:
+          type: string
+          description: Detailed error message explaining what went wrong.
+          example: The request contains an invalid parameter.
+    ErrorResponse:
+      type: object
+      description: Standard error response format for API errors.
+      properties:
+        errors:
+          type: array
+          description: List of errors that occurred during request processing.
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+        request_id:
+          type: string
+          description: Unique identifier for this request, useful for debugging and support.
+          example: req_abc123xyz
+        account_id:
+          type: string
+          description: Account ID that triggered request, useful for debugging and support.
+          example: '1234654'
+    Location:
+      description: Geographic location of the property.
+      properties:
+        country:
+          type: string
+          description: ISO 3166-1 alpha-2 country code.
+          example: nl
+        latitude:
+          type: number
+          format: double
+          description: Latitude in decimal degrees.
+          example: 52.3702
+        longitude:
+          type: number
+          format: double
+          description: Longitude in decimal degrees.
+          example: 4.8952
+        street_address:
+          type: string
+          description: Street address, localized to the requested language.
+          example: Prins Hendrikkade 59
+        city:
+          type: string
+          description: City name, localized to the requested language.
+          example: Amsterdam
+        postal_code:
+          type: string
+          description: Postal or ZIP code.
+          example: 1012 AD
+        province:
+          type: string
+          description: Province or state, localized to the requested language.
+          example: North Holland
     PropertyStreamRecord:
       description: One property record emitted as one line in the NDJSON property stream.
       properties:
@@ -212,6 +304,29 @@ components:
           $ref: '#/components/schemas/Links'
         status:
           $ref: '#/components/schemas/Status'
+    Policies:
+      description: Check-in/check-out times and bookability policies.
+      properties:
+        check_in_start_time:
+          type: string
+          description: Earliest check-in time, local to the property (HH:mm).
+          example: '15:00'
+        check_in_end_time:
+          type: string
+          description: Latest check-in time, local to the property (HH:mm).
+          example: '23:00'
+        check_out_start_time:
+          type: string
+          description: Earliest check-out time, local to the property (HH:mm).
+          example: 07:00
+        check_out_end_time:
+          type: string
+          description: Latest check-out time, local to the property (HH:mm).
+          example: '11:00'
+        is_instant_bookable:
+          type: boolean
+          description: Whether the property can be booked instantly (no host confirmation).
+          example: true
     PropertyStreamRequest:
       properties:
         languages:
@@ -244,121 +359,6 @@ components:
           - thumbnail_large
           - standard
           - large
-    Location:
-      description: Geographic location of the property.
-      properties:
-        country:
-          type: string
-          description: ISO 3166-1 alpha-2 country code.
-          example: nl
-        latitude:
-          type: number
-          format: double
-          description: Latitude in decimal degrees.
-          example: 52.3702
-        longitude:
-          type: number
-          format: double
-          description: Longitude in decimal degrees.
-          example: 4.8952
-        street_address:
-          type: string
-          description: Street address, localized to the requested language.
-          example: Prins Hendrikkade 59
-        city:
-          type: string
-          description: City name, localized to the requested language.
-          example: Amsterdam
-        postal_code:
-          type: string
-          description: Postal or ZIP code.
-          example: 1012 AD
-        province:
-          type: string
-          description: Province or state, localized to the requested language.
-          example: North Holland
-    Status:
-      description: Lifecycle status of the property.
-      properties:
-        property_status:
-          type: string
-          description: 'Lifecycle status of the property: open (bookable) or closed (not bookable).'
-          enum:
-          - open
-          - closed
-          example: open
-        last_active_date:
-          type: string
-          format: date
-          description: Date the property was last active in the feed, as an ISO date (YYYY-MM-DD).
-          example: '2026-07-07'
-    Policies:
-      description: Check-in/check-out times and bookability policies.
-      properties:
-        check_in_start_time:
-          type: string
-          description: Earliest check-in time, local to the property (HH:mm).
-          example: '15:00'
-        check_in_end_time:
-          type: string
-          description: Latest check-in time, local to the property (HH:mm).
-          example: '23:00'
-        check_out_start_time:
-          type: string
-          description: Earliest check-out time, local to the property (HH:mm).
-          example: 07:00
-        check_out_end_time:
-          type: string
-          description: Latest check-out time, local to the property (HH:mm).
-          example: '11:00'
-        is_instant_bookable:
-          type: boolean
-          description: Whether the property can be booked instantly (no host confirmation).
-          example: true
-    ErrorDetail:
-      type: object
-      description: Details of a single error.
-      properties:
-        id:
-          type: string
-          description: Machine-readable error identifier.
-          example: invalid_parameter
-        name:
-          type: string
-          description: Human-readable error name.
-          example: Invalid Value
-        message:
-          type: string
-          description: Detailed error message explaining what went wrong.
-          example: The request contains an invalid parameter.
-    ErrorResponse:
-      type: object
-      description: Standard error response format for API errors.
-      properties:
-        errors:
-          type: array
-          description: List of errors that occurred during request processing.
-          items:
-            $ref: '#/components/schemas/ErrorDetail'
-        request_id:
-          type: string
-          description: Unique identifier for this request, useful for debugging and support.
-          example: req_abc123xyz
-        account_id:
-          type: string
-          description: Account ID that triggered request, useful for debugging and support.
-          example: '1234654'
-    Image:
-      description: 'A single property image: its CDN URL and image type (e.g. "main").'
-      properties:
-        url:
-          type: string
-          description: Image URL on the Booking.com image CDN, with the requested image_size applied.
-          example: https://q-xx.bstatic.com/xdata/images/hotel/max500/681992303.jpg?k=<sig>&o=
-        type:
-          type: string
-          description: Image type. Currently always "main".
-          example: main
   securitySchemes:
     BearerAuth:
       type: http

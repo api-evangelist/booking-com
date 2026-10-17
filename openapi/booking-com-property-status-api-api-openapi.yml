@@ -43,24 +43,37 @@ paths:
                 $ref: '#/components/schemas/ApiResponsePropertyStatusOutput'
 components:
   schemas:
-    PropertyStatusOutput:
+    ApiResponsePropertyStatusOutput:
       type: object
       properties:
-        status:
-          type: string
-    PropertyStatusInput:
-      required:
-      - operation
+        data:
+          $ref: '#/components/schemas/PropertyStatusOutput'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorOTA'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    Reason:
       type: object
       properties:
-        operation:
+        type:
           type: string
           enum:
-          - CHECK
-          - OPEN
-          - CLOSE
-        reason:
-          $ref: '#/components/schemas/Reason'
+          - OTHER
+          - SEASON
+          - RENOVATION
+          - PROPERTY_NOT_AVAILABLE
+          - FULLY_BOOKED
+          - ISSUES_GUESTS
+          - ISSUES_BOOKING
+          - STRATEGY
+        description:
+          type: string
     ResponseMeta:
       type: object
       properties:
@@ -78,39 +91,26 @@ components:
           $ref: '#/components/schemas/ObjectNode'
         description:
           type: string
-    Reason:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - OTHER
-          - SEASON
-          - RENOVATION
-          - PROPERTY_NOT_AVAILABLE
-          - FULLY_BOOKED
-          - ISSUES_GUESTS
-          - ISSUES_BOOKING
-          - STRATEGY
-        description:
-          type: string
     ObjectNode:
       type: object
-    ApiResponsePropertyStatusOutput:
+    PropertyStatusInput:
+      required:
+      - operation
       type: object
       properties:
-        data:
-          $ref: '#/components/schemas/PropertyStatusOutput'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorOTA'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorOTA'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
+        operation:
+          type: string
+          enum:
+          - CHECK
+          - OPEN
+          - CLOSE
+        reason:
+          $ref: '#/components/schemas/Reason'
+    PropertyStatusOutput:
+      type: object
+      properties:
+        status:
+          type: string
 x-tagGroups:
 - name: API Endpoints
   tags:

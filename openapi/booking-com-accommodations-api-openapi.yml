@@ -4925,144 +4925,28 @@ components:
       required: true
       description: Include here your Affiliate identifier number
   schemas:
-    page:
-      description: Pagination token used to retrieve the next page of results. Obtained from `next_page`.
-      type: string
-    districtId:
-      description: A signed integer number that uniquely identifies a district. Typically, districts define known areas within a city. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/districts" target="_blank">common/locations/districts</a>.
-      type: integer
-      minimum: 1
-    priceV32:
-      title: AccommodationsProductPrice
-      description: Contains the price components of an accommodation product. The 'base', 'display', 'chargeable_online' prices, and 'charges' are returned only when explicitly requested using extras=extra_charges.
-      type: object
-      properties:
-        base:
-          $ref: '#/components/schemas/basePriceV32'
-        charges:
-          $ref: '#/components/schemas/chargeBreakdownV32'
-        chargeable_online:
-          $ref: '#/components/schemas/chargeableOnlinePriceV32'
-        display:
-          $ref: '#/components/schemas/displayPriceV32'
-        total:
-          $ref: '#/components/schemas/totalPriceV32'
-    reviewer:
-      title: AccommodationsReviewer
-      type: object
-      properties:
-        countries:
-          description: Limits reviews to those written by reviewer from the given country.
-          type: array
-          items:
-            $ref: '#/components/schemas/countryId'
-        travel_purposes:
-          description: Limits reviews to those written by specific travel purposes.
-          type: array
-          items:
-            $ref: '#/components/schemas/travel_purpose'
-        types:
-          description: Limits reviews to those written by specific reviewer type.
-          type: array
-          items:
-            $ref: '#/components/schemas/reviewer_type'
-    children:
-      description: The information about maximum number of children and their allowed ages for this room.
-      type: array
-      items:
-        title: AccommodationsChildren
-        type: object
-        properties:
-          total:
-            description: The maximum number of children for this room.
-            type: integer
-            minimum: 1
-          from_age:
-            description: The youngest age of the children allowed in this room.
-            type: integer
-            minimum: 0
-            maximum: 17
-          to_age:
-            description: The oldest age of the children allowed in this room.
-            type: integer
-            minimum: 0
-            maximum: 17
-          free_stay:
-            description: Whether children in this age bracket will be staying for free. False indicates their cost was already included in the price.
-            type: boolean
-    booker:
-      title: Booker
-      description: The booker's information.
-      type: object
-      properties:
-        country:
-          description: The booker country for showing the best price for that user and obeying laws regarding the display of taxes and fees.
-          type: string
-          pattern: ^[a-z]{2}$
-        platform:
-          description: The booker platform for showing the platform based deals and prices.
-          type: string
-          enum:
-          - android
-          - desktop
-          - ios
-          - mobile
-          - tablet
-        state:
-          description: The booker state for showing the best price for that user and obeying laws regarding the display of taxes and fees. Currently applicable only for country US.
-          type: string
-          pattern: ^[a-z]{2}$
-        travel_purpose:
-          description: The travel purpose of the booker.
-          type: string
-          enum:
-          - business
-          - leisure
-        user_groups:
-          description: The user groups that the booker is a member of.
-          type: array
-          items:
-            type: string
-            enum:
-            - authenticated
-      required:
-      - country
-      - platform
-    accommodationFacility:
-      title: AccommodationsFacilityOutput
-      description: 'A service, equipment or characteristic available at property level, like for example: "Swimming pool outdoor".'
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/accommodationFacilityId'
-        facility_type:
-          $ref: '#/components/schemas/facilityTypeId'
-        name:
-          $ref: '#/components/schemas/translatedString'
-      required:
-      - id
-      - facility_type
-      - name
-      additionalProperties: false
-    review_score:
-      description: A decimal number indicating the current review score of this accommodation property, in the range 1..10.
-      type: number
-      multipleOf: 0.1
-      minimum: 1
-      maximum: 10
-    paymentInputFilter:
-      description: Payment input information to filter results.
-      properties:
-        timing:
-          $ref: '#/components/schemas/paymentTimingFilter'
-    priceMultiCurrencyOutput:
-      title: AccommodationsPriceMultiCurrency
+    unitAmountV32:
+      description: The price per unit for this charge. Only applicable when 'mode' is 'per_day', 'per_night', 'per_person_per_day', 'per_person_per_night', or 'per_person_per_stay'.
       type: object
       properties:
         accommodation_currency:
           $ref: '#/components/schemas/monetaryAmount'
         booker_currency:
           $ref: '#/components/schemas/monetaryAmount'
+      nullable: true
+    accommodationType:
+      title: AccommodationsTypeOutput
+      description: The type of an accommodation. Examples of types are "Hotel", "Apartment", etc.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/accommodationTypeId'
+        name:
+          $ref: '#/components/schemas/translatedString'
+      required:
+      - id
+      - name
+      additionalProperties: false
     availabilityInput:
       title: AccommodationsAvailabilityInput
       type: object
@@ -5091,247 +4975,35 @@ components:
       - checkin
       - checkout
       - guests
-    swimmingPoolFacility:
-      title: AccommodationsSwimmingPoolFacilityOutput
-      description: Details about the swimming pool occupancy limits and options.
+    sustainability:
+      title: AccommodationsSustainability
+      description: Sustainability certifications associated with the property.
       type: object
       properties:
-        allowed_age_type:
-          type: string
-          description: The age group allowed to use the swimming pool (e.g., adults only, all ages, or kids only).
-          nullable: true
-          enum:
-          - adults_only
-          - all_ages
-          - kids_only
-        payment_type:
-          type: string
-          description: The payment model for pool access, either free or paid.
-          nullable: true
-          enum:
-          - free
-          - paid
-        type:
-          type: string
-          description: The type of swimming pool (indoor, outdoor, or a combination).
-          nullable: true
-          enum:
-          - indoor
-          - indoor_and_outdoor
-          - outdoor
-    valueAddType:
-      description: Identifies the type of value-added benefit included in the bundle, such as complimentary services, monetary credits, percentage discounts, or experiential amenities. Enum values encode how the benefit is applied, including time scope (per day or per stay) and unit scope (per room or per adult).
-      type: string
-      enum:
-      - parking
-      - food_drink_credit_per_day_per_room
-      - food_drink_credit_per_day_per_adult
-      - property_credit_per_day_per_room
-      - food_drink_credit_per_stay_per_adult
-      - food_drink_credit_per_stay_per_room
-      - property_credit_per_day_per_adult
-      - property_credit_per_stay_per_adult
-      - property_credit_per_stay_per_room
-      - food_drink_discount
-      - property_discount
-      - early_checkin
-      - late_checkout
-      - late_checkin
-      - spa_daily
-      - spa_hourly
-      - spa_massage
-      - high_speed_internet
-      - airport_transfer
-      - safari_game_drive
-      - safari_walk
-      - pets_stay
-      - bottle_of_wine
-      - bottle_of_champagne
-      - park_sleep_fly
-    bed:
-      title: AccommodationsBedOutput
-      description: Detail information about a type of bed and number of beds included in this configuration.
-      type: object
-      properties:
-        bed_type:
-          $ref: '#/components/schemas/bedTypeId'
-        number_of_beds:
-          description: Number of similar beds included in this configuration.
-          type: integer
-          minimum: 0
-    product:
-      title: AccommodationsSearchProductOutput
-      description: Details product information. It requires `{"extras":["products"]}`.
+        certifications:
+          description: The external sustainability certifications awarded to the property.
+          type: array
+          items:
+            $ref: '#/components/schemas/sustainabilityCertification'
+      nullable: true
+    roomFacility:
+      title: AccommodationsRoomFacilityOutput
+      description: 'A service, equipment or characteristic available at room level, like for example: "Coffee/Tea maker".'
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/productId'
-        bundle:
-          $ref: '#/components/schemas/bundleId'
-        children:
-          description: The ages of the children allocated to this product.
-          type: array
-          items:
-            type: integer
-            minimum: 0
-            maximum: 17
-        deal:
-          $ref: '#/components/schemas/dealV32'
-        inventory:
-          $ref: '#/components/schemas/inventoryOutput'
-        number_available:
-          description: Number of rooms available at this price.
-          type: integer
-          minimum: 1
-          nullable: true
-        number_of_adults:
-          description: The number of adults allocated to this product.
-          type: integer
-          minimum: 1
-        policies:
-          $ref: '#/components/schemas/productPoliciesSearch'
-        price:
-          $ref: '#/components/schemas/priceSearchV32'
-        room:
-          $ref: '#/components/schemas/roomIdString'
-    checkinMethod:
-      description: An enumeration that describes the conditions for the checkin process and for collecting the key to access the property. This is typically relevant for non-hotel accommodations (like houses or apartments) without a 24 hours front-desk.
-      type: string
-      enum:
-      - door_code
-      - lock_box
-      - reception
-      - secret_spot
-      - someone_will_meet
-      - unknown
-    extrasV32:
-      description: Input parameter to request for additional information about the accommodation property. It should be passed as a JSON array with one or more items.
-      type: array
-      items:
-        type: string
-        enum:
-        - bundles
-        - description
-        - facilities
-        - payment
-        - photos
-        - policies
-        - refuses_free_cancellation_requests
-        - rooms
-    referenceDate:
-      type: string
-      enum:
-      - checkin
-      - checkout
-    accommodationBrand:
-      title: AccommodationsChainsBrandDataOutput
-      description: Returns the internal code and name of an accommodation brand.
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/accommodationBrandId'
-        name:
-          description: Name of the accommodation brand.
-          type: string
-    dealV32:
-      title: Deal
-      description: This specifies the deal tagging for the product.
-      type:
-      - object
-      - 'null'
-      properties:
-        discount_percentage:
-          description: Discount percentage of the applied deal.
-          type: integer
-          minimum: 1
-        public_price:
-          description: Original price of this product, before applying any discounts.
-          $ref: '#/components/schemas/priceMultiCurrencyOutput'
-        tags:
-          description: The tags of all the applied deals.
-          type: array
-          items:
-            type: string
-            enum:
-            - black_friday
-            - limited_time_deal
-            - logged_in_deal
-            - mobile_rate
-            - seasonal_deal
-    chargeBreakdownSearchV32:
-      description: The charge breakdown. Includes taxes and fees.
-      type: array
-      items:
-        title: AccommodationsCharge
-        description: Detailed information about an individual charge, including where it is applied.
-        type: object
-        properties:
-          charge:
-            $ref: '#/components/schemas/chargeTypeId'
-          condition:
-            $ref: '#/components/schemas/conditionId'
-          included_in:
-            title: ChargeIncludedIn
-            description: Indicates where this charge is included
-            type: object
-            properties:
-              display:
-                $ref: '#/components/schemas/display'
-          mode:
-            $ref: '#/components/schemas/chargeMode'
-          percentage:
-            $ref: '#/components/schemas/chargePercentage'
-          total_amount:
-            $ref: '#/components/schemas/totalAmountV32'
-          unit_amount:
-            $ref: '#/components/schemas/unitAmountV32'
-    reviewScore:
-      title: AccommodationsReviewScoreOutput
-      description: Review score category name for each score interval.
-      type: object
-      properties:
+          $ref: '#/components/schemas/roomFacilityId'
+        facility_type:
+          $ref: '#/components/schemas/facilityTypeId'
         name:
           $ref: '#/components/schemas/translatedString'
-        minimum_score:
-          description: The minimum score of this review score category.
-          type: number
-          multipleOf: 0.1
-          minimum: 1
-          maximum: 10
-        maximum_score:
-          description: The maximum score of this review score category
-          type: number
-          multipleOf: 0.1
-          minimum: 1
-          maximum: 10
       required:
+      - id
+      - facility_type
       - name
-      - minimum_score
-      - maximum_score
       additionalProperties: false
-    accommodationSearch:
-      title: AccommodationsSearchDataOutput
-      description: ''
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/accommodationId'
-        commission:
-          $ref: '#/components/schemas/commission'
-        currency:
-          $ref: '#/components/schemas/currency'
-        deep_link_url:
-          $ref: '#/components/schemas/deepLinkUrl'
-        price:
-          $ref: '#/components/schemas/PriceSummarySearchV32'
-        products:
-          type: array
-          items:
-            $ref: '#/components/schemas/product'
-        url:
-          $ref: '#/components/schemas/url'
-    availabilityOutput:
-      title: AccommodationsAvailabilityOutput
+    output:
+      title: AccommodationsChainsBrandOutput
       type: object
       properties:
         request_id:
@@ -5339,118 +5011,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/availability'
-    cityId:
-      description: A signed integer number that uniquely identifies a city. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/cities" target="_blank">common/locations/cities</a>.
-      type: integer
-    regionId:
-      description: A signed integer number that uniquely identifies a geographical region. Regions usually define official administrative areas within a country, but may also include multiple countries and in some cases un-official but popular designations for geographical areas. An example of a region that crosses multiple countries is the Alps in Europe. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/regions" target="_blank">common/locations/regions</a>.
-      type: integer
-      minimum: 1
-    accommodationFacilityId:
-      description: 'A signed integer number that uniquely identifies an accommodation property facility. Examples of facilities are: Parking, Restaurant, Room service etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
-      type: integer
-      minimum: 1
-    translatedString:
-      title: TranslatedString
-      description: A string localised in multiple languages.
-      type: object
-      patternProperties:
-        ^[a-z]{2}(-[a-z]{2})$:
-          description: The content localised in this language.
-          type:
-          - string
-          - 'null'
-    basePriceV32:
-      description: The base price. It does not include any extra charges.
-      type: object
-      properties:
-        accommodation_currency:
-          $ref: '#/components/schemas/monetaryAmount'
-        booker_currency:
-          $ref: '#/components/schemas/monetaryAmount'
-    keyCollectionInformation:
-      title: AccommodationsKeyCollectionInformationOutput
-      type: object
-      properties:
-        checkin_method:
-          $ref: '#/components/schemas/checkinMethod'
-        key_location:
-          $ref: '#/components/schemas/keyLocation'
-    facilityTypeId:
-      description: A signed integer number that uniquely identifies the accommodation facility type. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.
-      type: integer
-      minimum: 1
-    sustainabilityCertification:
-      title: AccommodationsSustainabilityCertification
-      description: Details of a sustainability certification
-      type: object
-      properties:
-        name:
-          description: The name of the certification
-          type: string
-    maximumResults:
-      description: The maximum number of results to return.
-      type: integer
-      multipleOf: 10
-      minimum: 10
-      maximum: 100
-      default: 100
-    checkinCheckoutTimes:
-      title: AccommodationsCheckinCheckoutTimesOutput
-      type: object
-      properties:
-        checkin_from:
-          description: The time from when checkin starts at this property.
-          type:
-          - string
-          - 'null'
-          pattern: (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:00
-        checkin_to:
-          description: The time till when checkin can be done at this property.
-          type:
-          - string
-          - 'null'
-          pattern: (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:00
-        checkout_from:
-          description: The time from when checkout starts at this property.
-          type:
-          - string
-          - 'null'
-          pattern: (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:00
-        checkout_to:
-          description: The time till when checkout can be done at this property.
-          type:
-          - string
-          - 'null'
-          pattern: (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:00
-    deposit:
-      properties:
-        collect:
-          properties:
-            date:
-              $ref: '#/components/schemas/paymentCollectionDate'
-            payment_method:
-              $ref: '#/components/schemas/paymentMethod'
-        refund:
-          properties:
-            date:
-              $ref: '#/components/schemas/paymentRefundDate'
-            payment_method:
-              $ref: '#/components/schemas/paymentMethod'
-    traderAddress:
-      title: AccommodationsAddress
-      description: An address object.
-      type: object
-      properties:
-        address_line:
-          type: string
-        city:
-          type: string
-        country:
-          type: string
-        post_code:
-          type: string
+            $ref: '#/components/schemas/accommodationChain'
     error_response:
       title: ErrorResponse
       type: object
@@ -5472,6 +5033,40 @@ components:
       required:
       - request_id
       - errors
+    thirdPartySuppliers_output:
+      title: AccommodationsThirdPartySuppliersOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          description: List of third-party accommodation suppliers.
+          type: array
+          items:
+            $ref: '#/components/schemas/thirdPartySupplier'
+    display:
+      description: Indicates if this charge is included in the display price.
+      type: boolean
+    productPoliciesMultiCurrencyAvailability:
+      title: AccommodationsProductPolicies
+      description: The policies for this product.
+      type: object
+      properties:
+        cancellation:
+          $ref: '#/components/schemas/productCancellationPolicyAvailabilityMultiCurrency'
+        meal_plan:
+          $ref: '#/components/schemas/productMealPlanPolicy'
+        payment:
+          $ref: '#/components/schemas/productPaymentPolicyNew'
+    priceCurrencyOutput:
+      title: AccommodationsPriceCurrency
+      description: The price in both accommodation and booker currencies (booker might be null, if not requested)
+      type: object
+      properties:
+        accommodation_currency:
+          $ref: '#/components/schemas/monetaryAmount'
+        booker_currency:
+          $ref: '#/components/schemas/monetaryAmount'
     facility:
       title: AccommodationsFacilityOutput
       description: Facility information for the accommodation.
@@ -5487,625 +5082,60 @@ components:
             enum:
             - offsite
             - paid
-    valueAdds_bundlesTranslated:
-      title: BundlesTranslatedOutput
-      description: List of value-added bundles available for this accommodation. Each bundle groups one or more value-added benefits and includes localised descriptive text for display.
+    reviews:
       type: array
       items:
-        $ref: '#/components/schemas/bundleTranslated'
-    smartSearchInput:
-      title: AccommodationsSmartSearchInput
-      type: object
-      properties:
-        airport:
-          $ref: '#/components/schemas/airportId'
-        booker:
-          $ref: '#/components/schemas/booker'
-        checkin:
-          $ref: '#/components/schemas/checkin'
-        checkout:
-          $ref: '#/components/schemas/checkout'
-        city:
-          $ref: '#/components/schemas/cityId'
-        coordinates:
-          $ref: '#/components/schemas/coordinates'
-        country:
-          $ref: '#/components/schemas/countryId'
-        currency:
-          $ref: '#/components/schemas/currencyId'
-        district:
-          $ref: '#/components/schemas/districtId'
-        extras:
-          $ref: '#/components/schemas/extras'
-        guests:
-          $ref: '#/components/schemas/guests'
-        landmark:
-          $ref: '#/components/schemas/landmarkId'
-        page:
-          $ref: '#/components/schemas/page'
-        region:
-          $ref: '#/components/schemas/regionId'
-        rows:
-          $ref: '#/components/schemas/maximumResults'
-        search_query:
-          description: Natural language query describing the traveller’s accommodation preferences, intent, or desired experience. The query is interpreted semantically and may match accommodation features, amenities, location context, property types, traveller intent, or ranking signals.
-          type: string
-          minLength: 3
-          maxLength: 300
-        sort:
-          description: Controls how accommodation results are ordered in the response.
-          type: object
-          properties:
-            by:
-              description: Primary sorting strategy applied to the search results. Use `distance` together with `coordinates` to rank accommodations by proximity.
-              type: string
-              enum:
-              - distance
-              - price
-              - review_score
-              - stars
-            direction:
-              description: Sort direction applied to the selected sorting strategy. Descending order is not supported when sorting by `distance`.
-              type: string
-              enum:
-              - ascending
-              - descending
-      required:
-      - booker
-      - checkin
-      - checkout
-      - guests
-      - search_query
-    url:
-      description: Internet address for the property page on Booking.com.
-      type: string
-      format: url
-    cancellation_type_filter:
-      description: 'Filters the results by cancellation type. Currently, only ''free_cancellation'' is supported. This will return all products that can be cancelled without incurring any fees within a specified time frame. **⚠ DEPRECATED:** The ''non_refundable'' cancellation type filter is deprecated and will be removed in further versions. '
-      type: string
-      enum:
-      - free_cancellation
-      - non_refundable
-    totalPriceV32:
-      description: The total price. Includes all extra charges.
-      type: object
-      properties:
-        accommodation_currency:
-          $ref: '#/components/schemas/monetaryAmount'
-        booker_currency:
-          $ref: '#/components/schemas/monetaryAmount'
-    monetaryAmount:
-      type: number
-      format: double
-      multipleOf: 0.01
-      exclusiveMinimum: 0
-    chargeType:
-      title: AccommodationsChargeTypeOutput
-      description: These are additional charges, which may be included or excluded from the reservation price. If excluded, the amounts may be added by the property upon checkout. The exclusions depend on several factors like local legislation, and sometimes can only be indicated but not be calculated at the time of the reservation.
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/chargeTypeId'
-        name:
-          $ref: '#/components/schemas/translatedString'
-      required:
-      - id
-      - name
-      additionalProperties: false
-    chargeBreakdownV32:
-      description: The charge breakdown. Includes taxes and fees.
-      type: array
-      items:
-        title: AccommodationsChargeWithChargeableOnline
-        description: Detailed information about an individual charge, including where it is applied.
+        title: AccommodationsReviewOutput
         type: object
         properties:
-          charge:
-            $ref: '#/components/schemas/chargeTypeId'
-          condition:
-            $ref: '#/components/schemas/conditionId'
-          included_in:
-            title: ChargeIncludedIn
-            description: Indicates where this charge is included
+          id:
+            description: Unique identifier of the review.
+            type: integer
+          date:
+            description: 'The date when the review was last modified. Format: YYYY-MM-DD.'
+            type: string
+            format: date
+          language:
+            $ref: '#/components/schemas/languageId'
+          negative:
+            description: Negative comments from this review.
+            type:
+            - string
+            - 'null'
+          positive:
+            description: Positive comments from this review.
+            type:
+            - string
+            - 'null'
+          reviewer:
+            title: AccommodationsReviewerOutput
             type: object
             properties:
-              chargeable_online:
-                $ref: '#/components/schemas/chargeableOnline'
-              display:
-                $ref: '#/components/schemas/display'
-          mode:
-            $ref: '#/components/schemas/chargeMode'
-          percentage:
-            $ref: '#/components/schemas/chargePercentage'
-          total_amount:
-            $ref: '#/components/schemas/totalAmountV32'
-          unit_amount:
-            $ref: '#/components/schemas/unitAmountV32'
-    priceCurrencyOutput:
-      title: AccommodationsPriceCurrency
-      description: The price in both accommodation and booker currencies (booker might be null, if not requested)
-      type: object
-      properties:
-        accommodation_currency:
-          $ref: '#/components/schemas/monetaryAmount'
-        booker_currency:
-          $ref: '#/components/schemas/monetaryAmount'
-    productPaymentPolicyNew:
-      title: AccommodationsProductPaymentPolicyNew
-      description: Payment terms and conditions for this product.
-      type: object
-      properties:
-        prepayment_required:
-          description: Whether prepayment is required for this product.
-          type: boolean
-        timings:
-          $ref: '#/components/schemas/productPaymentTimings'
-    roomFacilityId:
-      description: 'A signed integer number that uniquely identifies an accommodation property room facility. Examples of facilities are: Coffee/Tea maker, TV, Airconditioning, etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
-      type: integer
-      minimum: 1
-    changesInput:
-      title: AccommodationsDetailsChangesInput
-      type: object
-      properties:
-        last_change:
-          description: 'The timestamp in ISO-8601 format from which changes to accommodations are returned (inclusive). Only UTC time zone is supported. We support changes for last 24 hours. Format: YYYY-MM-DDTHH:mm:ss+00:00'
-          type: string
-          format: date-time
-        filters:
-          description: parameter basis which filtering needs to be done. Only one of (countries or cities) must be provided.
-          type: object
-          properties:
-            countries:
-              description: Filter changes based on these countries. The valid full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/countries" target="_blank">common/locations/countries</a>.
-              type: array
-              items:
+              country:
                 $ref: '#/components/schemas/countryId'
-            cities:
-              description: Filter changes based on these cities. The valid full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/cities" target="_blank">common/locations/cities</a>.
-              type: array
-              items:
-                $ref: '#/components/schemas/cityId'
-      required:
-      - last_change
-    conditionId:
-      description: A signed integer number that uniquely identifies the condition ID. Find the full list in the <a href="/demand/docs/accommodations/prices-accommodations" target="_blank">Pricing guidelines</a>.
-      type:
-      - integer
-      - 'null'
-      minimum: 0
-    availability:
-      title: AccommodationsAvailabilityDataOutput,
-      description: ''
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/accommodationId'
-        currency:
-          $ref: '#/components/schemas/currency'
-        deep_link_url:
-          $ref: '#/components/schemas/deepLinkUrl'
-        products:
-          type: array
-          items:
-            $ref: '#/components/schemas/availabilityProduct'
-        recommendation:
-          $ref: '#/components/schemas/recommendation'
-        url:
-          $ref: '#/components/schemas/url'
-    currency:
-      type: object
-      properties:
-        accommodation:
-          $ref: '#/components/schemas/currencyId'
-        booker:
-          $ref: '#/components/schemas/currencyId'
-    currencyId:
-      description: A three-letter code that uniquely identifies a monetary currency as defined by the ISO 4217 standard. The full list can be obtained by calling <a href="/demand/docs/open-api/3.2/demand-api/commonpayments/common/payments/currencies" target="_blank">common/payments/currencies</a>.
-      type:
-      - string
-      - 'null'
-      pattern: ^[A-Z]{3}$
-      example: EUR
-    inventoryOutputType:
-      description: Type of inventory - either net or sell rates.
-      type: string
-      enum:
-      - net
-      - sell
-    accommodationTheme:
-      title: AccommodationsThemeOutput
-      description: 'Accommodations can be grouped in "themes" depending on their characteristics. For example: "Beach/Seaside".'
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/accommodationThemeId'
-        name:
-          $ref: '#/components/schemas/translatedString'
-      required:
-      - id
-      - name
-      additionalProperties: false
-    input:
-      title: AccommodationsConstantsInput
-      type: object
-      properties:
-        constants:
-          description: Allows to filter the results only for specific sections.
-          type: array
-          items:
-            type: string
-            enum:
-            - accommodation_facilities
-            - accommodation_themes
-            - accommodation_types
-            - bed_types
-            - charge_types
-            - facility_types
-            - review_scores
-            - room_facilities
-            - room_types
-        languages:
-          type: array
-          items:
-            $ref: '#/components/schemas/languageId'
-          default:
-          - en-gb
-    maximumOccupancy:
-      title: AccommodationsMaximumOccupancy
-      description: Information related to maximum number of occupancy inside the room.
-      type: object
-      properties:
-        adults:
-          description: The maximum number of adults for this room.
-          type: integer
-          minimum: 1
-        children:
-          $ref: '#/components/schemas/children'
-        total:
-          description: The maximum number of guests for this room.
-          type: integer
-          minimum: 1
-    smartSearchOutput:
-      title: AccommodationsSmartSearchOutput
-      description: Search results matching the traveller query and structured search criteria.
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/accommodationSearch'
-        metadata:
-          title: MetadataOutput
-          type: object
-          properties:
-            next_page:
-              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
+              name:
+                description: Name of the reviewer. If the value is null then the reviewer is anonymous.
+                type:
+                - string
+                - 'null'
+              travel_purpose:
+                $ref: '#/components/schemas/travel_purpose'
               type:
-              - string
-              - 'null'
-    searchInput:
-      title: AccommodationsSearchInput
-      type: object
-      properties:
-        accommodations:
-          type: array
-          items:
-            $ref: '#/components/schemas/accommodationId'
-          maxItems: 100
-        airport:
-          $ref: '#/components/schemas/airportId'
-        booker:
-          $ref: '#/components/schemas/booker'
-        checkin:
-          $ref: '#/components/schemas/checkin'
-        checkout:
-          $ref: '#/components/schemas/checkout'
-        city:
-          $ref: '#/components/schemas/cityId'
-        coordinates:
-          $ref: '#/components/schemas/coordinates'
-        country:
-          $ref: '#/components/schemas/countryId'
-        currency:
-          $ref: '#/components/schemas/currencyId'
-        district:
-          $ref: '#/components/schemas/districtId'
-        extras:
-          $ref: '#/components/schemas/extras'
-        filters:
-          description: Filter criteria for the search results
-          type: object
-          properties:
-            24_hour_reception:
-              description: Filter the result based if the front desk reception is available 24/7. When specified true, the result will filter the products where front desk is available 24/7.
-              type: boolean
-            accommodation_facilities:
-              type: array
-              items:
-                $ref: '#/components/schemas/accommodationFacilityId'
-            accommodation_types:
-              type: array
-              items:
-                $ref: '#/components/schemas/accommodationTypeId'
-            brands:
-              type: array
-              items:
-                $ref: '#/components/schemas/accommodationBrandId'
-            cancellation_type:
-              $ref: '#/components/schemas/cancellation_type_filter'
-            dormitories:
-              description: This parameter specifies if the results should include dormitory beds or rooms. The default behaviour will include the dormitory beds or rooms with other results. When this flag is set to 'only', the response will only include dormitory beds or rooms. When this flag is set to 'exclude', the response will exclude dormitory beds or rooms. When this flag is set to 'include', the response will include dormitory beds or rooms with other results.
-              type: string
-              default: include
-              enum:
-              - include
-              - exclude
-              - only
-            meal_plan:
-              $ref: '#/components/schemas/meal_plan_filter'
-            payment:
-              description: The payment filter for the request
-              type: object
-              properties:
-                credit_card_required:
-                  description: Filter to show accommodations which require credit card
-                  type: boolean
-                timing:
-                  $ref: '#/components/schemas/paymentTimingFilter'
-            price:
-              description: If specified, will return only results where the price *per night* falls in the specified range (inclusive). This filter requires that a currency is passed
-              type: object
-              properties:
-                maximum:
-                  description: Set the maximum price per night, in the specified currency, or omit to indicate no upper limit.
-                  type: number
-                  format: double
-                minimum:
-                  description: Set the minimum price per night, in the specified currency, or omit to indicate no lower limit.
-                  type: number
-                  format: double
-            rating:
-              description: The rating filter for the request
-              type: object
-              properties:
-                minimum_review_score:
-                  description: Show only hotels with review_score >= that. Review score should be in the range 1 to 10.
-                  type: integer
-                  minimum: 1
-                  maximum: 10
-                stars:
-                  description: Limit to accommodations with the given number(s) of stars. Stars should be in the range of 1 to 5.
-                  type: array
-                  items:
-                    type: number
-                    minimum: 1
-                    maximum: 5
-            room_facilities:
-              type: array
-              items:
-                $ref: '#/components/schemas/roomFacilityId'
-            sustainability_certification:
-              description: Filter the result based on if the property has sustainability certification. When specified true, the result will filter and return only the accommodations that have sustainability certification.
-              type: boolean
-            travel_proud:
-              description: Filter the result based on if the property is LGBTQ+ friendly. When specified true, the result will filter and return only the accommodations that are Proud Certified.
-              type: boolean
-        guests:
-          $ref: '#/components/schemas/guests'
-        landmark:
-          $ref: '#/components/schemas/landmarkId'
-        page:
-          $ref: '#/components/schemas/page'
-        region:
-          $ref: '#/components/schemas/regionId'
-        rows:
-          $ref: '#/components/schemas/maximumResults'
-        sort:
-          description: The sorting parameters for the response
-          type: object
-          properties:
-            by:
-              description: 'The way to sort your results. NOTE: When ordering by distance please make sure to specify the latitude and longitude!'
-              type: string
-              enum:
-              - distance
-              - price
-              - review_score
-              - stars
-            direction:
-              description: Specifies the sort direction. Please note that descending order is not supported when sorting by distance.
-              type: string
-              enum:
-              - ascending
-              - descending
-      required:
-      - booker
-      - checkin
-      - checkout
-      - guests
-    languageId:
-      description: 'A [IETF language tag code](https://en.wikipedia.org/wiki/IETF_language_tag) that uniquely identifies a supported human language or dialect. **Note:** Demand API only accepts lowercase for the language codes. Examples: "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.'
-      type: string
-      pattern: ^[a-z]{2}(-[a-z]{2})?$
-      example: en-us
-    reviewer_type:
-      description: The reviewer type.
-      type: string
-      enum:
-      - couple
-      - extended_group
-      - family_with_children
-      - solo_traveller
-    parkingFacility:
-      title: AccommodationsParkingFacilityOutput
-      description: Information about the parking facilities available at the accommodation, including pricing, type, location, and reservation requirements.
-      type: object
-      properties:
-        charge_mode:
-          type: string
-          description: The charging model for parking, such as per hour, per day, or free.
-          nullable: true
-          enum:
-          - free
-          - charges_are_applicable
-          - charges_may_apply
-          - per_hour
-          - per_day
-          - per_week
-          - per_stay
-        location:
-          type: string
-          description: The location of the parking facility relative to the accommodation (on-site or nearby).
-          nullable: true
-          enum:
-          - on_site
-          - nearby
-        price:
-          $ref: '#/components/schemas/monetaryAmount'
-          description: The price for using the parking facility, if applicable.
-          minimum: 0
-          nullable: true
-        reservation:
-          type: string
-          description: Indicates whether a reservation is required for parking at the accommodation.
-          nullable: true
-          enum:
-          - needed
-          - not_needed
-          - not_possible
-        type:
-          type: string
-          description: The type of parking available, either public or private.
-          nullable: true
-          enum:
-          - private
-          - public
-    bundleTranslated:
-      title: BundleTranslatedOutput
-      type: object
-      description: List of value-added services included in this bundle.
-      properties:
-        id:
-          type: integer
-          description: Bundle identifier
-        value_adds:
-          type: array
-          items:
-            $ref: '#/components/schemas/valueAddTranslated'
-    accommodationThemeId:
-      description: 'A signed integer number that uniquely identifies an accommodation property theme. Examples of themes are: Beach/Seaside, Ski/Wintersports, Luxury etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
-      type: integer
-      minimum: 1
-    availabilityInventoryOutput:
-      title: AccommodationsAvailabilityInventoryOutput
-      description: Inventory details for an accommodation product returned by `/accommodations/availability`.
-      type: object
-      properties:
-        third_party:
-          type: boolean
-          description: Indicates whether the product is facilitated by a third-party supplier.
-        third_party_supplier_id:
-          description: Unique identifier of the third-party supplier that facilitates this product. Returned only for third-party inventory (when `third_party` is `true`). The field may be omitted if the supplier information is unavailable. Use the [/accommodations/third-party-suppliers](#/accommodations/third-party-suppliers) endpoint to retrieve supplier details.
-          $ref: '#/components/schemas/thirdPartySupplierId'
-        type:
-          $ref: '#/components/schemas/inventoryOutputType'
-    valueAddTranslated:
-      title: ValueAddTranslatedOutput
-      type: object
-      description: Value-added service with its type and descriptive text localised in multiple languages.
-      properties:
-        type:
-          $ref: '#/components/schemas/valueAddType'
-        description:
-          title: TranslatedStringArray
-          description: List of descriptive text lines for the value-added service, localised in multiple languages.
-          type: object
-          patternProperties:
-            ^[a-z]{2}(-[a-z]{2})$:
-              description: The content localised in this language.
-              type: array
-              nullable: true
-              items:
-                $ref: '#/components/schemas/translatedString'
-    bedTypeId:
-      description: 'A signed integer number that uniquely identifies a bed type. Examples of bed types are: Single, Double etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
-      type: integer
-      minimum: 1
-    scores:
-      title: AccommodationsReviewsScoresOutput
-      description: ''
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/accommodationId'
-        breakdown:
-          $ref: '#/components/schemas/breakdown'
-        distribution:
-          $ref: '#/components/schemas/distribution'
-        number_of_reviews:
-          $ref: '#/components/schemas/number_of_reviews'
-        score:
-          $ref: '#/components/schemas/review_score'
-        url:
-          $ref: '#/components/schemas/url'
-    reviewsOutput:
-      title: AccommodationsReviewsOutput
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/accommodationReviews'
-        metadata:
-          title: MetadataOutput
-          type: object
-          properties:
-            next_page:
-              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
-              type:
-              - string
-              - 'null'
-    payment:
-      title: AccommodationsPaymentOutput
-      description: Payment information related to this property. Requires `{"extras":["payment"]}`.
-      type: object
-      properties:
-        methods:
-          $ref: '#/components/schemas/paymentMethods'
-        timings:
-          $ref: '#/components/schemas/productPaymentTimings'
-        cvc_required:
-          description: Whether cvc is mandatory for creating order for this accommodation.
-          type: boolean
-        domestic_no_cc:
-          description: Whether domestic bookers can book without credit card for products with free cancellation policies.
-          type: boolean
-        amex_cvc_required:
-          description: If amex card is used as payment method to create order for this accommodation, whether cvc is mandatory for that.
-          type: boolean
-    recommendation_priceV32:
-      title: AccommodationsRecommendationPrice
-      description: Contains the price components of the recommended accommodation product or selection of products. The 'base', 'display', 'chargeable_online' prices, and 'charges' are returned only when explicitly requested using extras=extra_charges.
-      type: object
-      properties:
-        base:
-          $ref: '#/components/schemas/basePriceV32'
-        charges:
-          description: The charge breakdown. Includes taxes and fees.
-          type: array
-          items:
-            $ref: '#/components/schemas/chargeSummaryV32'
-        chargeable_online:
-          $ref: '#/components/schemas/chargeableOnlinePriceV32'
-        display:
-          $ref: '#/components/schemas/displayPriceV32'
-        total:
-          $ref: '#/components/schemas/totalPriceV32'
+                $ref: '#/components/schemas/reviewer_type'
+          score:
+            description: The aggregated score of the review.
+            type: number
+            multipleOf: 0.1
+            minimum: 1
+            maximum: 10
+          summary:
+            description: The summary of the review.
+            type:
+            - string
+            - 'null'
+          text_meets_guidelines:
+            description: Set to true when review meets the guidelines. The review text will be removed if it doesn't meet guidelines.
+            type: boolean
     productPoliciesSearch:
       title: AccommodationsProductPolicies
       description: The policies for this product.
@@ -6117,251 +5147,6 @@ components:
           $ref: '#/components/schemas/productMealPlanPolicy'
         payment:
           $ref: '#/components/schemas/productPaymentPolicyNew'
-    paymentTimingFilter:
-      description: This parameter specifies that the results should only return accommodation and blocks that contain the specified payment timings.
-      type: string
-      enum:
-      - pay_at_the_property
-      - pay_online
-    bedConfiguration:
-      title: AccommodationsBedConfigurationOutput
-      description: List of all beds available for this configuration.
-      type: object
-      properties:
-        id:
-          description: Uniquely identifies this bed configuration.
-          type: string
-        configuration:
-          description: Detail list of all different types and number of beds included in this configuration.
-          type: array
-          items:
-            $ref: '#/components/schemas/bed'
-    petsPolicy:
-      title: AccommodationsPetsPolicyOutput
-      type: object
-      properties:
-        allowed:
-          description: An enumerated value describing if pets are allowed
-          type: string
-          enum:
-          - 'yes'
-          - 'no'
-          - upon_request
-        charge_mode:
-          description: An enumerated value describing the charge mode for pets
-          type: string
-          enum:
-          - free
-          - charges_may_apply
-    thirdPartySupplierId:
-      description: Unique identifier of a third-party accommodation supplier. Use the [/accommodations/third-party-suppliers](#/accommodations/third-party-suppliers) endpoint to retrieve the full list of suppliers and their details.
-      type: integer
-      minimum: 1
-    availability_extras:
-      description: Input parameter to request for additional information about this product.
-      type: array
-      items:
-        type: string
-        enum:
-        - extra_charges
-    chargeSummarySearchV32:
-      title: AccommodationsSearchChargeSummary
-      description: A charge summed across multiple products.
-      type: object
-      properties:
-        charge:
-          $ref: '#/components/schemas/chargeTypeId'
-        condition:
-          $ref: '#/components/schemas/conditionId'
-        included_in:
-          title: ChargeIncludedIn
-          description: Indicates where this charge is included
-          type: object
-          properties:
-            display:
-              $ref: '#/components/schemas/display'
-        total_amount:
-          $ref: '#/components/schemas/totalAmountV32'
-    accommodationLocation:
-      title: AccommodationsLocationOutput
-      description: All location related information of this accommodation property.
-      type: object
-      properties:
-        address:
-          description: Translated accommodation address.
-          $ref: '#/components/schemas/translatedString'
-        city:
-          $ref: '#/components/schemas/locations_cityId'
-        coordinates:
-          $ref: '#/components/schemas/locations_coordinates'
-        country:
-          $ref: '#/components/schemas/locations_countryId'
-        districts:
-          type: array
-          items:
-            $ref: '#/components/schemas/districtId'
-        postal_code:
-          type: string
-        regions:
-          type: array
-          items:
-            $ref: '#/components/schemas/regionId'
-    availabilityProduct:
-      title: AccommodationsAvailabilityProductOutput
-      description: ''
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/productId'
-        bundle:
-          $ref: '#/components/schemas/bundleId'
-        deal:
-          $ref: '#/components/schemas/dealV32'
-        inventory:
-          $ref: '#/components/schemas/availabilityInventoryOutput'
-        maximum_occupancy:
-          $ref: '#/components/schemas/maximumOccupancy'
-        number_available:
-          description: How many units of this product are still available.
-          type: integer
-          minimum: 1
-        policies:
-          $ref: '#/components/schemas/productPoliciesMultiCurrencyAvailability'
-        price:
-          $ref: '#/components/schemas/priceV32'
-        room:
-          $ref: '#/components/schemas/roomIdString'
-    chargeableOnlinePriceV32:
-      description: The amount collected by Booking.com from the Virtual Credit Cards (VCCs) when using online payment methods (e.g., pay_online_now, pay_online_later). Equivalent to `base + charges` where `included_in.chargeable_online=true`. Returns `null` for agency-model properties where Booking.com does not process payments.
-      type: object
-      properties:
-        accommodation_currency:
-          $ref: '#/components/schemas/monetaryAmount'
-        booker_currency:
-          $ref: '#/components/schemas/monetaryAmount'
-      nullable: true
-    accommodationReviews:
-      title: AccommodationsReviewsDataOutput
-      description: ''
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/accommodationId'
-        reviews:
-          $ref: '#/components/schemas/reviews'
-        url:
-          $ref: '#/components/schemas/url'
-    display:
-      description: Indicates if this charge is included in the display price.
-      type: boolean
-    productMealPlanPolicy:
-      title: AccommodationsProductMealPlanPolicy
-      description: The meal plan policy for this product.
-      type: object
-      properties:
-        meals:
-          description: The meals included in the meal plan.
-          type: array
-          items:
-            type: string
-            enum:
-            - breakfast
-            - dinner
-            - lunch
-        plan:
-          description: The meal plan included in this product.
-          type: string
-          enum:
-          - all_inclusive
-          - breakfast_included
-          - full_board
-          - half_board
-          - no_plan
-    displayPriceV32:
-      description: The display price that must be shown to the traveller in accordance with local booker protection laws. This price includes the base accommodation cost and all charges that are legally required to be part of the displayed amount. Equivalent to base + charges where included_in.display=true.
-      type: object
-      properties:
-        accommodation_currency:
-          $ref: '#/components/schemas/monetaryAmount'
-        booker_currency:
-          $ref: '#/components/schemas/monetaryAmount'
-    roomTypeId:
-      description: 'A signed integer number that uniquely identifies an accommodation property room type. Example of room types are: Suite, Apartment, Twin/Double etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
-      type: integer
-      minimum: 1
-    travel_purpose:
-      description: Defines if this was a leisure or business trip.
-      type: string
-      enum:
-      - business
-      - leisure
-    output:
-      title: AccommodationsChainsBrandOutput
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/accommodationChain'
-    unitAmountV32:
-      description: The price per unit for this charge. Only applicable when 'mode' is 'per_day', 'per_night', 'per_person_per_day', 'per_person_per_night', or 'per_person_per_stay'.
-      type: object
-      properties:
-        accommodation_currency:
-          $ref: '#/components/schemas/monetaryAmount'
-        booker_currency:
-          $ref: '#/components/schemas/monetaryAmount'
-      nullable: true
-    roomIdString:
-      description: A unique identifier for a specific room within an accommodation property. You can retrieve the full list of available room IDs by calling [accommodations/details](/demand/docs/open-api/demand-api/accommodations/accommodations/details).
-      type: string
-    travelProud:
-      description: Boolean value is "true" if property has travel proud badge and "false" otherwise.
-      type: boolean
-    reviewsScores_output:
-      title: AccommodationsReviewsOutput
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/scores'
-    number_of_reviews:
-      description: Number of validated reviews for this accommodation.
-      type: integer
-      minimum: 0
-    breakdown:
-      title: AccommodationsReviewsBreakdownOutput
-      description: 'Review scores breakdown for each criteria. List of criteria includes: cleanliness, comfort, facilities, free_wifi, location, staff, value_for_money.'
-      type: object
-      patternProperties:
-        ^(cleanliness|comfort|facilities|free_wifi|location|staff|value_for_money)$:
-          $ref: '#/components/schemas/breakdown_schema'
-    locations_cityId:
-      description: Uniquely identifies a city. The full list of cities can be retrieved from [/common/locations/cities](#/common/locations/cities).
-      type: integer
-    allocation:
-      description: The exact allocation of guests to rooms.
-      type: array
-      items:
-        properties:
-          children:
-            description: The children ages for this room.
-            type: array
-            items:
-              type: integer
-              minimum: 0
-              maximum: 17
-          number_of_adults:
-            description: The number of adults for this room.
-            type: integer
-            minimum: 1
-        required:
-        - number_of_adults
     guests:
       title: AccommodationsGuests
       description: The guest details for the request.
@@ -6387,56 +5172,40 @@ components:
       required:
       - number_of_adults
       - number_of_rooms
-    chargeSummaryV32:
-      title: AccommodationsChargeSummary
-      description: A charge summed across multiple products.
+    distribution_schema:
+      title: AccommodationsReviewsDistributionSchemaOutput
       type: object
       properties:
-        charge:
-          $ref: '#/components/schemas/chargeTypeId'
-        condition:
-          $ref: '#/components/schemas/conditionId'
-        included_in:
-          title: ChargeIncludedIn
-          description: Indicates where this charge is included
-          type: object
-          properties:
-            display:
-              $ref: '#/components/schemas/display'
-            chargeable_online:
-              $ref: '#/components/schemas/chargeableOnline'
-        total_amount:
-          $ref: '#/components/schemas/totalAmountV32'
-    changes:
-      description: The list of changed accommodations.
+        number_of_reviews:
+          description: Number of reviews with this score.
+          type: integer
+          minimum: 0
+        percentage:
+          description: Percent of score distribution for this score.
+          type: number
+          multipleOf: 0.01
+    accommodationPhoto:
+      title: AccommodationsPhotoOutput
       type: object
       properties:
-        changed:
-          description: 'Accommodations which have had relevant changes to their content since the given timestamp. Changes being tracked include: general information, standard phrase, photos, payments, facilities and rooms.'
+        main_photo:
+          description: Flags this as the main photo. Not returned otherwise.
+          type: boolean
+          example: true
+        tags:
           type: array
           items:
-            type: integer
-        closed:
-          description: Accommodations which have closed since the given timestamp. Note that these same accommodations may be re-opened shortly after.
-          type: object
-          properties:
-            fraud:
-              type: array
-              items:
-                type: integer
-            permanently:
-              type: array
-              items:
-                type: integer
-            temporarily:
-              type: array
-              items:
-                type: integer
-        opened:
-          description: Accommodations which have opened since the given timestamp. Note that sometimes accommodations may be closed again shortly after.
-          type: array
-          items:
-            type: integer
+            description: A list of tags associated with the photo. Manually generated.
+            type: string
+            example: Bathroom
+        url:
+          $ref: '#/components/schemas/photoUrl'
+    inventoryOutputType:
+      description: Type of inventory - either net or sell rates.
+      type: string
+      enum:
+      - net
+      - sell
     PriceSummarySearchV32:
       title: OrdersPreviewProductSumPriceOutput
       description: The price components of all the products selected summed.
@@ -6456,36 +5225,52 @@ components:
         total:
           description: The total sum price. Includes all extra charges of all products.
           $ref: '#/components/schemas/priceMultiCurrencyOutput'
-    locations_coordinates:
-      titles: Coordinates
+    rating:
+      title: AccommodationsDetailsRatingOutput
       type: object
       properties:
-        latitude:
-          description: The latitude.
-          $ref: '#/components/schemas/coordinate'
-        longitude:
-          description: The longitude.
-          $ref: '#/components/schemas/coordinate'
-    mealPrices:
-      title: MealPrices
-      description: Details regarding the meal pricing options offered at this accommodation.
+        number_of_reviews:
+          $ref: '#/components/schemas/number_of_reviews'
+        preferred:
+          description: Boolean value is "true" if this accommodation is in the Booking.com's preferred program and "false" otherwise.
+          type: boolean
+          example: true
+        review_score:
+          $ref: '#/components/schemas/review_score'
+          nullable: true
+        stars:
+          description: Number of stars of this accommodation property.
+          type: number
+          format: double
+          multipleOf: 0.1
+          nullable: true
+          minimum: 1
+          maximum: 5
+          example: 4
+        stars_type:
+          description: An enumerated value describing which type of stars this accommodation has.
+          type: string
+          nullable: true
+          enum:
+          - estimated_by_accommodation
+          - estimated_by_booking
+          - official
+    translatedString:
+      title: TranslatedString
+      description: A string localised in multiple languages.
       type: object
-      properties:
-        breakfast:
-          description: The price of breakfast per person, expressed in the accommodation's local currency. If the value is null, it indicates that breakfast pricing is not available.
-          type: number
-          minimum: 0
-          nullable: true
-        dinner:
-          description: The price of dinner per person, expressed in the accommodation's local currency. If the value is null, it indicates that dinner pricing is not available.
-          type: number
-          minimum: 0
-          nullable: true
-        lunch:
-          description: The price of lunch per person, expressed in the accommodation's local currency. If the value is null, it indicates that lunch pricing is not available.
-          type: number
-          minimum: 0
-          nullable: true
+      patternProperties:
+        ^[a-z]{2}(-[a-z]{2})$:
+          description: The content localised in this language.
+          type:
+          - string
+          - 'null'
+    paymentTimingFilter:
+      description: This parameter specifies that the results should only return accommodation and blocks that contain the specified payment timings.
+      type: string
+      enum:
+      - pay_at_the_property
+      - pay_online
     distribution:
       title: AccommodationsReviewsDistributionOutput
       description: Overall score distribution for each score (1-10).
@@ -6493,69 +5278,6 @@ components:
       patternProperties:
         ^[1-9]|10$:
           $ref: '#/components/schemas/distribution_schema'
-    contacts:
-      title: AccommodationsContactsOutput
-      description: Contact information of the accommodation.
-      type: object
-      properties:
-        general:
-          $ref: '#/components/schemas/contact'
-        reservations:
-          $ref: '#/components/schemas/contact'
-    detailsOutput:
-      title: AccommodationsDetailsOutput
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/accommodationDetail'
-        metadata:
-          title: MetadataOutput
-          type: object
-          properties:
-            next_page:
-              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
-              type:
-              - string
-              - 'null'
-    coordinate:
-      type: number
-      multipleOf: 1.0e-06
-    breakdown_schema:
-      title: AccommodationsReviewsBreakdownSchemaOutput
-      type: object
-      properties:
-        number_of_reviews:
-          description: Number of reviews for this criteria.
-          type: integer
-          minimum: 0
-        score:
-          $ref: '#/components/schemas/score'
-    bedType:
-      title: AccommodationsBedTypeOutput
-      description: ''
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/bedTypeId'
-        description:
-          description: Translated description of the bed size in metric.
-          $ref: '#/components/schemas/translatedString'
-        description_imperial:
-          description: Translated description of the bed size in imperial.
-          $ref: '#/components/schemas/translatedString'
-        name:
-          description: Translated name of the bed type.
-          $ref: '#/components/schemas/translatedString'
-      required:
-      - id
-      - description
-      - description_imperial
-      - name
-      additionalProperties: false
     priceSearchV32:
       title: AccommodationsSearchProductPrice
       description: Contains the price components of an accommodation product. The 'base', 'display', 'chargeable_online' prices, and 'charges' are returned only when explicitly requested using extras=extra_charges.
@@ -6569,8 +5291,112 @@ components:
           $ref: '#/components/schemas/displayPriceV32'
         total:
           $ref: '#/components/schemas/totalPriceV32'
-    searchOutput:
-      title: AccommodationsSearchOutput
+    chargeSummarySearchV32:
+      title: AccommodationsSearchChargeSummary
+      description: A charge summed across multiple products.
+      type: object
+      properties:
+        charge:
+          $ref: '#/components/schemas/chargeTypeId'
+        condition:
+          $ref: '#/components/schemas/conditionId'
+        included_in:
+          title: ChargeIncludedIn
+          description: Indicates where this charge is included
+          type: object
+          properties:
+            display:
+              $ref: '#/components/schemas/display'
+        total_amount:
+          $ref: '#/components/schemas/totalAmountV32'
+    locations_coordinates:
+      titles: Coordinates
+      type: object
+      properties:
+        latitude:
+          description: The latitude.
+          $ref: '#/components/schemas/coordinate'
+        longitude:
+          description: The longitude.
+          $ref: '#/components/schemas/coordinate'
+    deposit:
+      properties:
+        collect:
+          properties:
+            date:
+              $ref: '#/components/schemas/paymentCollectionDate'
+            payment_method:
+              $ref: '#/components/schemas/paymentMethod'
+        refund:
+          properties:
+            date:
+              $ref: '#/components/schemas/paymentRefundDate'
+            payment_method:
+              $ref: '#/components/schemas/paymentMethod'
+    reviewer:
+      title: AccommodationsReviewer
+      type: object
+      properties:
+        countries:
+          description: Limits reviews to those written by reviewer from the given country.
+          type: array
+          items:
+            $ref: '#/components/schemas/countryId'
+        travel_purposes:
+          description: Limits reviews to those written by specific travel purposes.
+          type: array
+          items:
+            $ref: '#/components/schemas/travel_purpose'
+        types:
+          description: Limits reviews to those written by specific reviewer type.
+          type: array
+          items:
+            $ref: '#/components/schemas/reviewer_type'
+    bedTypeId:
+      description: 'A signed integer number that uniquely identifies a bed type. Examples of bed types are: Single, Double etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
+      type: integer
+      minimum: 1
+    internetFacility:
+      title: AccommodationsInternetFacilityOutput
+      description: Information about the internet facilities available at the accommodation.
+      type: object
+      properties:
+        charge_mode:
+          type: string
+          description: The charging model for internet access at the accommodation.
+          nullable: true
+          enum:
+          - charges_are_applicable
+          - free
+          - per_day
+          - per_half_hour
+          - per_hour
+          - per_minute
+        connection_type:
+          type: string
+          description: The type of internet connection available, whether wireless (Wi-Fi) or wired.
+          nullable: true
+          enum:
+          - wifi
+          - wired
+        coverage:
+          type: string
+          description: The extent of the internet coverage within the accommodation, indicating the areas where internet access is available.
+          nullable: true
+          enum:
+          - all_rooms
+          - business_center
+          - entire_property
+          - public_areas
+          - some_rooms
+        price:
+          description: The price for using the internet facility, if applicable.
+          $ref: '#/components/schemas/monetaryAmount'
+          minimum: 0
+          nullable: true
+    smartSearchOutput:
+      title: AccommodationsSmartSearchOutput
+      description: Search results matching the traveller query and structured search criteria.
       type: object
       properties:
         request_id:
@@ -6585,177 +5411,85 @@ components:
           properties:
             next_page:
               description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
-              type: string
-              nullable: true
-    dataTypes_productCancellationType:
-      description: 'The cancellation policy applicable to this product: "free_cancellation" allows a period for free cancellation, "non_refundable" means immediate loss of total amount, "special_conditions" means partly refundable.'
-      type: string
-      enum:
-      - free_cancellation
-      - non_refundable
-      - special_conditions
-    chargePercentage:
-      description: The percentage of 'base' that this charge amounts to. Only applicable when 'mode' is 'percentage'.
-      type: number
-      multipleOf: 0.01
-      exclusiveMinimum: 0
+              type:
+              - string
+              - 'null'
+    number_of_reviews:
+      description: Number of validated reviews for this accommodation.
+      type: integer
+      minimum: 0
+    thirdPartySupplierId:
+      description: Unique identifier of a third-party accommodation supplier. Use the [/accommodations/third-party-suppliers](#/accommodations/third-party-suppliers) endpoint to retrieve the full list of suppliers and their details.
+      type: integer
+      minimum: 1
+    recommendation_priceV32:
+      title: AccommodationsRecommendationPrice
+      description: Contains the price components of the recommended accommodation product or selection of products. The 'base', 'display', 'chargeable_online' prices, and 'charges' are returned only when explicitly requested using extras=extra_charges.
+      type: object
+      properties:
+        base:
+          $ref: '#/components/schemas/basePriceV32'
+        charges:
+          description: The charge breakdown. Includes taxes and fees.
+          type: array
+          items:
+            $ref: '#/components/schemas/chargeSummaryV32'
+        chargeable_online:
+          $ref: '#/components/schemas/chargeableOnlinePriceV32'
+        display:
+          $ref: '#/components/schemas/displayPriceV32'
+        total:
+          $ref: '#/components/schemas/totalPriceV32'
+    chargeableOnlinePriceV32:
+      description: The amount collected by Booking.com from the Virtual Credit Cards (VCCs) when using online payment methods (e.g., pay_online_now, pay_online_later). Equivalent to `base + charges` where `included_in.chargeable_online=true`. Returns `null` for agency-model properties where Booking.com does not process payments.
+      type: object
+      properties:
+        accommodation_currency:
+          $ref: '#/components/schemas/monetaryAmount'
+        booker_currency:
+          $ref: '#/components/schemas/monetaryAmount'
       nullable: true
-    extras:
-      description: Input parameter to request for additional information about the products.
-      type: array
-      items:
-        type: string
-        enum:
-        - extra_charges
-        - products
-    detailsInput:
-      title: AccommodationsDetailsInput
-      type: object
-      properties:
-        accommodation_facilities:
-          type: array
-          items:
-            $ref: '#/components/schemas/accommodationFacilityId'
-        accommodation_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/accommodationTypeId'
-        accommodations:
-          type: array
-          items:
-            $ref: '#/components/schemas/accommodationId'
-          maxItems: 100
-        airport:
-          $ref: '#/components/schemas/airportId'
-        brands:
-          type: array
-          items:
-            $ref: '#/components/schemas/accommodationBrandId'
-        city:
-          $ref: '#/components/schemas/cityId'
-        country:
-          $ref: '#/components/schemas/countryId'
-        extras:
-          $ref: '#/components/schemas/extrasV32'
-        languages:
-          type: array
-          items:
-            $ref: '#/components/schemas/languageId'
-        page:
-          $ref: '#/components/schemas/page'
-        payment:
-          $ref: '#/components/schemas/paymentInputFilter'
-        region:
-          $ref: '#/components/schemas/regionId'
-        rows:
-          $ref: '#/components/schemas/maximumResults'
-          maximum: 1000
-    programmes:
-      title: AccommodationsProgrammes
-      description: Programmes and initiatives associated with the property.
-      type: object
-      properties:
-        travel_proud:
-          $ref: '#/components/schemas/travelProud'
-        sustainable_offerings:
-          $ref: '#/components/schemas/sustainability'
-    accommodationId:
-      description: A signed integer number that uniquely identifies an accommodation property. The full list can be obtained by calling [accommodations/details](/demand/docs/open-api/demand-api/accommodations/accommodations/details).
+    paymentCardId:
+      description: A signed integer number that uniquely identifies a payment type. Examples of payment types are the different credit and debit cards. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonpayments/common/payments/cards" target="_blank">common/payments/cards</a>.
       type: integer
       minimum: 1
-    thirdPartySuppliers_output:
-      title: AccommodationsThirdPartySuppliersOutput
+    paymentMethods:
+      title: AccommodationsDetailsPaymentMethodsOutput
+      description: Payment methods accepted by this property.
       type: object
       properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          description: List of third-party accommodation suppliers.
+        cards:
+          description: Credit cards accepted when paying at the property
           type: array
           items:
-            $ref: '#/components/schemas/thirdPartySupplier'
-    reviewsInput:
-      title: AccommodationsReviewsInput
-      type: object
-      properties:
-        accommodations:
+            $ref: '#/components/schemas/paymentCardId'
+        cash:
+          description: Whether this property accepts cash
+          type: boolean
+          example: true
+        virtual_cards:
+          description: Virtual credit cards accepted when paying at the property
           type: array
           items:
-            $ref: '#/components/schemas/accommodationId'
-          minItems: 1
-          maxItems: 100
-        languages:
-          description: Limits reviews to those written in this language.
-          type: array
-          items:
-            $ref: '#/components/schemas/languageId'
-        last_change:
-          description: 'Limits the reviews to those changed after the given date. Format: YYYY-MM-DD.'
-          type: string
-          format: date
-        page:
-          $ref: '#/components/schemas/page'
-        reviewer:
-          $ref: '#/components/schemas/reviewer'
-        rows:
-          $ref: '#/components/schemas/maximumResults'
-        score:
-          title: AccommodationsReviewScoreInput
-          type: object
-          properties:
-            maximum:
-              description: Limits the reviews to those having score lesser or equal to this value.
-              type: integer
-              minimum: 1
-              maximum: 10
-            minimum:
-              description: Limits the reviews to those having score greater or equal to this value.
-              type: integer
-              minimum: 1
-              maximum: 10
-      required:
-      - accommodations
-    damagePolicy:
-      type: object
-      description: DamagePolicy of the property
-      properties:
-        deposit:
-          description: If a deposit needs to be paid upfront
-          type: object
-          $ref: '#/components/schemas/deposit'
-        amount:
-          description: The amount that can be charged
-          type: number
-          format: double
-        currency:
-          description: Currency in which payment needs to be made
-          type: string
-    accommodationBrandId:
-      description: 'A signed integer number that uniquely identifies an accommodation brand. Examples of brands are: Radisson Blu, WestCord Hotels, Westin etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/chains" target="_blank">/accommodations/chains</a>.'
-      type: integer
-      minimum: 1
-    productPaymentTimings:
-      description: The payment timings supported by this product.
+            $ref: '#/components/schemas/paymentCardId'
+    allocation:
+      description: The exact allocation of guests to rooms.
       type: array
       items:
-        type: string
-        enum:
-        - pay_at_the_property
-        - pay_online_later
-        - pay_online_now
-    facilityType:
-      title: AccommodationsFacilityTypeOutput
-      description: A more generic designation meant to group a set of facilities.
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/facilityTypeId'
-        name:
-          $ref: '#/components/schemas/translatedString'
-      required:
-      - id
-      - name
-      additionalProperties: false
+        properties:
+          children:
+            description: The children ages for this room.
+            type: array
+            items:
+              type: integer
+              minimum: 0
+              maximum: 17
+          number_of_adults:
+            description: The number of adults for this room.
+            type: integer
+            minimum: 1
+        required:
+        - number_of_adults
     description:
       title: AccommodationsDescriptionOutput
       description: Textual information about the accommodation. Requires `{"extras":["description"]}`.
@@ -6807,215 +5541,6 @@ components:
             trader_verified:
               description: Indicates whether the trader has successfully met Booking.com's internal verification process, based on established criteria and checklists
               type: boolean
-    paymentMethod:
-      type: string
-      enum:
-      - bank_transfer
-      - cash
-      - credit_card
-      - paypal
-      - other
-    productPoliciesMultiCurrencyAvailability:
-      title: AccommodationsProductPolicies
-      description: The policies for this product.
-      type: object
-      properties:
-        cancellation:
-          $ref: '#/components/schemas/productCancellationPolicyAvailabilityMultiCurrency'
-        meal_plan:
-          $ref: '#/components/schemas/productMealPlanPolicy'
-        payment:
-          $ref: '#/components/schemas/productPaymentPolicyNew'
-    checkin:
-      description: The checkin date. Must be within 500 days in the future and in the format yyyy-mm-dd.
-      type: string
-      format: date
-    roomAttribute:
-      type: string
-      enum:
-      - non_smoking
-      - smoking
-      - work_friendly
-    productCancellationPolicySearch:
-      title: AccommodationsProductCancellationPolicy
-      description: The cancellation policy for this product.
-      type: object
-      properties:
-        free_cancellation_until:
-          description: Until when the order for this product can be cancelled for free.
-          type:
-          - string
-          - 'null'
-          format: date-time
-        type:
-          $ref: '#/components/schemas/productCancellationType'
-    rating:
-      title: AccommodationsDetailsRatingOutput
-      type: object
-      properties:
-        number_of_reviews:
-          $ref: '#/components/schemas/number_of_reviews'
-        preferred:
-          description: Boolean value is "true" if this accommodation is in the Booking.com's preferred program and "false" otherwise.
-          type: boolean
-          example: true
-        review_score:
-          $ref: '#/components/schemas/review_score'
-          nullable: true
-        stars:
-          description: Number of stars of this accommodation property.
-          type: number
-          format: double
-          multipleOf: 0.1
-          nullable: true
-          minimum: 1
-          maximum: 5
-          example: 4
-        stars_type:
-          description: An enumerated value describing which type of stars this accommodation has.
-          type: string
-          nullable: true
-          enum:
-          - estimated_by_accommodation
-          - estimated_by_booking
-          - official
-    internetFacility:
-      title: AccommodationsInternetFacilityOutput
-      description: Information about the internet facilities available at the accommodation.
-      type: object
-      properties:
-        charge_mode:
-          type: string
-          description: The charging model for internet access at the accommodation.
-          nullable: true
-          enum:
-          - charges_are_applicable
-          - free
-          - per_day
-          - per_half_hour
-          - per_hour
-          - per_minute
-        connection_type:
-          type: string
-          description: The type of internet connection available, whether wireless (Wi-Fi) or wired.
-          nullable: true
-          enum:
-          - wifi
-          - wired
-        coverage:
-          type: string
-          description: The extent of the internet coverage within the accommodation, indicating the areas where internet access is available.
-          nullable: true
-          enum:
-          - all_rooms
-          - business_center
-          - entire_property
-          - public_areas
-          - some_rooms
-        price:
-          description: The price for using the internet facility, if applicable.
-          $ref: '#/components/schemas/monetaryAmount'
-          minimum: 0
-          nullable: true
-    inventoryOutput:
-      title: InventoryOutput
-      type: object
-      properties:
-        third_party:
-          type: boolean
-          description: Indicates whether the product is facilitated by a third-party supplier.
-        type:
-          $ref: '#/components/schemas/inventoryOutputType'
-    accommodationChain:
-      title: AccommodationsChainsOutput
-      description: Returns the internal code, name and list of associated brands for an accommodation chain.
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/accommodationChainId'
-        brands:
-          description: List of all the brands associated with this accommodation chain.
-          type: array
-          items:
-            $ref: '#/components/schemas/accommodationBrand'
-        name:
-          description: Name of the accommodation chain.
-          type: string
-    chargeTypeId:
-      description: 'A signed integer number that uniquely identifies an accommodation charge type. Examples of charges are: VAT, City Tax, etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
-      type: integer
-      minimum: 0
-    bundleId:
-      description: The bundle ID of the product comprising of value added products.
-      type: integer
-    requestId:
-      description: Uniquely identifies the request. Please provide this identifier when contacting support.
-      type: string
-    productDetailedCancellationPolicyMultiCurrency:
-      description: The cancellation policy schedule for this product.
-      type: array
-      items:
-        title: AccommodationsProductDetailedCancellationPolicyMultiCurrency
-        type: object
-        properties:
-          from:
-            description: The time from which this cancellation fee applies.
-            oneOf:
-            - title: Date-Time
-              type: string
-              format: date-time
-              description: ISO 8601 date-time
-              example: '2026-06-01T12:00:00Z'
-            - title: Literal 'now'
-              type: string
-              enum:
-              - now
-              description: Indicates that the cancellation fee applies immediately at booking time.
-            - title: Not applicable (Null)
-              type: 'null'
-          price:
-            description: The cancellation fee.
-            $ref: '#/components/schemas/priceCurrencyOutput'
-    bedOption:
-      title: AccommodationsBedOptionOutput
-      description: List of all possible bed arrangements. For apartments and other types of hotel accommodations, beds and bathrooms may be available as separate rooms.
-      type: object
-      properties:
-        bed_configurations:
-          description: Lists all alternative bed configurations that are supported.
-          type: array
-          items:
-            $ref: '#/components/schemas/bedConfiguration'
-        has_bathroom:
-          description: Flags if this area includes its own bathroom.
-          type: boolean
-        is_bedroom:
-          description: Flags if this area is marked as a bedroom, otherwise, it should be considered a living room.
-          type: boolean
-    accommodationType:
-      title: AccommodationsTypeOutput
-      description: The type of an accommodation. Examples of types are "Hotel", "Apartment", etc.
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/accommodationTypeId'
-        name:
-          $ref: '#/components/schemas/translatedString'
-      required:
-      - id
-      - name
-      additionalProperties: false
-    filters:
-      title: AccommodationsAvailabilityFiltersInput
-      description: The filters to apply in this availability request.
-      type: object
-      properties:
-        cancellation_type:
-          $ref: '#/components/schemas/free_cancellation_type_filter'
-        meal_plan:
-          $ref: '#/components/schemas/meal_plan_filter'
-        payment:
-          $ref: '#/components/schemas/paymentInputFilter'
     recommendation:
       title: AccommodationsAvailabilityRecommendationOutput
       description: The products recommended for the provided search criteria.
@@ -7028,75 +5553,185 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/productV32'
-    commission:
-      title: AccommodationsCommission
-      description: Commission details for the partner for a given accommodation
+    productCancellationPolicyAvailabilityMultiCurrency:
+      title: AccommodationsProductCancellationPolicyMultiCurrency
+      description: The cancellation policy for this product.
       type: object
       properties:
-        amount:
-          description: The actual commission amount for the partner.
-          type: number
-          format: double
-          minimum: 0
-        percentage:
-          description: Percentage of the fee that will be received as commission.
-          type: number
-          format: double
-          minimum: 0
-    constants_output:
-      title: AccommodationsConstantsOutput
+        free_cancellation_until:
+          description: Until when the order for this product can be cancelled for free.
+          type:
+          - string
+          - 'null'
+          format: date-time
+        schedule:
+          $ref: '#/components/schemas/productDetailedCancellationPolicyMultiCurrency'
+        type:
+          $ref: '#/components/schemas/dataTypes_productCancellationType'
+    traderAddress:
+      title: AccommodationsAddress
+      description: An address object.
       type: object
       properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          title: ConstantsDataOutput
-          type: object
-          properties:
-            accommodation_facilities:
-              type: array
-              items:
-                $ref: '#/components/schemas/accommodationFacility'
-            accommodation_themes:
-              type: array
-              items:
-                $ref: '#/components/schemas/accommodationTheme'
-            accommodation_types:
-              type: array
-              items:
-                $ref: '#/components/schemas/accommodationType'
-            bed_types:
-              type: array
-              items:
-                $ref: '#/components/schemas/bedType'
-            charge_types:
-              type: array
-              items:
-                $ref: '#/components/schemas/chargeType'
-            facility_types:
-              type: array
-              items:
-                $ref: '#/components/schemas/facilityType'
-            review_scores:
-              type: array
-              items:
-                $ref: '#/components/schemas/reviewScore'
-            room_facilities:
-              type: array
-              items:
-                $ref: '#/components/schemas/roomFacility'
-            room_types:
-              type: array
-              items:
-                $ref: '#/components/schemas/roomType'
-    landmarkId:
-      description: A signed integer number that uniquely identifies a relevant geographical landmark, like a monument or a natural attraction. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/landmarks" target="_blank">common/locations/landmarks</a>.
+        address_line:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        post_code:
+          type: string
+    bed:
+      title: AccommodationsBedOutput
+      description: Detail information about a type of bed and number of beds included in this configuration.
+      type: object
+      properties:
+        bed_type:
+          $ref: '#/components/schemas/bedTypeId'
+        number_of_beds:
+          description: Number of similar beds included in this configuration.
+          type: integer
+          minimum: 0
+    roomTypeId:
+      description: 'A signed integer number that uniquely identifies an accommodation property room type. Example of room types are: Suite, Apartment, Twin/Double etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
       type: integer
       minimum: 1
-    numberOfAdults:
-      description: The number of adults allocated to this product.
-      type: integer
-      minimum: 1
+    contact:
+      title: AccommodationsContactOutput
+      description: Contact information of the accommodation. It can be `null` if the data is missing.
+      type: object
+      properties:
+        email:
+          description: Email address of the accommodation. It can be `null` if the data is missing.
+          type: string
+          nullable: true
+        telephone:
+          description: Telephone number of the accommodation. It can be `null` if the data is missing.
+          type: string
+          nullable: true
+      nullable: true
+    children:
+      description: The information about maximum number of children and their allowed ages for this room.
+      type: array
+      items:
+        title: AccommodationsChildren
+        type: object
+        properties:
+          total:
+            description: The maximum number of children for this room.
+            type: integer
+            minimum: 1
+          from_age:
+            description: The youngest age of the children allowed in this room.
+            type: integer
+            minimum: 0
+            maximum: 17
+          to_age:
+            description: The oldest age of the children allowed in this room.
+            type: integer
+            minimum: 0
+            maximum: 17
+          free_stay:
+            description: Whether children in this age bracket will be staying for free. False indicates their cost was already included in the price.
+            type: boolean
+    free_cancellation_type_filter:
+      description: Filters the result for the cancellation type specified. Possible values are free_cancellation. The result will contain all the products with free_cancellation.
+      type: string
+      enum:
+      - free_cancellation
+    conditionId:
+      description: A signed integer number that uniquely identifies the condition ID. Find the full list in the <a href="/demand/docs/accommodations/prices-accommodations" target="_blank">Pricing guidelines</a>.
+      type:
+      - integer
+      - 'null'
+      minimum: 0
+    bedType:
+      title: AccommodationsBedTypeOutput
+      description: ''
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/bedTypeId'
+        description:
+          description: Translated description of the bed size in metric.
+          $ref: '#/components/schemas/translatedString'
+        description_imperial:
+          description: Translated description of the bed size in imperial.
+          $ref: '#/components/schemas/translatedString'
+        name:
+          description: Translated name of the bed type.
+          $ref: '#/components/schemas/translatedString'
+      required:
+      - id
+      - description
+      - description_imperial
+      - name
+      additionalProperties: false
+    availabilityInventoryOutput:
+      title: AccommodationsAvailabilityInventoryOutput
+      description: Inventory details for an accommodation product returned by `/accommodations/availability`.
+      type: object
+      properties:
+        third_party:
+          type: boolean
+          description: Indicates whether the product is facilitated by a third-party supplier.
+        third_party_supplier_id:
+          description: Unique identifier of the third-party supplier that facilitates this product. Returned only for third-party inventory (when `third_party` is `true`). The field may be omitted if the supplier information is unavailable. Use the [/accommodations/third-party-suppliers](#/accommodations/third-party-suppliers) endpoint to retrieve supplier details.
+          $ref: '#/components/schemas/thirdPartySupplierId'
+        type:
+          $ref: '#/components/schemas/inventoryOutputType'
+    payment:
+      title: AccommodationsPaymentOutput
+      description: Payment information related to this property. Requires `{"extras":["payment"]}`.
+      type: object
+      properties:
+        methods:
+          $ref: '#/components/schemas/paymentMethods'
+        timings:
+          $ref: '#/components/schemas/productPaymentTimings'
+        cvc_required:
+          description: Whether cvc is mandatory for creating order for this accommodation.
+          type: boolean
+        domestic_no_cc:
+          description: Whether domestic bookers can book without credit card for products with free cancellation policies.
+          type: boolean
+        amex_cvc_required:
+          description: If amex card is used as payment method to create order for this accommodation, whether cvc is mandatory for that.
+          type: boolean
+    recommendation_children:
+      description: The ages of the children allocated to this product.
+      type: array
+      items:
+        type: integer
+        minimum: 0
+        maximum: 17
+    chargeBreakdownSearchV32:
+      description: The charge breakdown. Includes taxes and fees.
+      type: array
+      items:
+        title: AccommodationsCharge
+        description: Detailed information about an individual charge, including where it is applied.
+        type: object
+        properties:
+          charge:
+            $ref: '#/components/schemas/chargeTypeId'
+          condition:
+            $ref: '#/components/schemas/conditionId'
+          included_in:
+            title: ChargeIncludedIn
+            description: Indicates where this charge is included
+            type: object
+            properties:
+              display:
+                $ref: '#/components/schemas/display'
+          mode:
+            $ref: '#/components/schemas/chargeMode'
+          percentage:
+            $ref: '#/components/schemas/chargePercentage'
+          total_amount:
+            $ref: '#/components/schemas/totalAmountV32'
+          unit_amount:
+            $ref: '#/components/schemas/unitAmountV32'
     accommodationDetail:
       title: AccommodationsDetailsDataOutput
       description: All static information related to an accommodation property (excludes information on availability).
@@ -7286,195 +5921,158 @@ components:
         work_friendly:
           description: Whether the accommodation is suitable for working remotely.
           type: boolean
-    recommendation_children:
-      description: The ages of the children allocated to this product.
-      type: array
-      items:
-        type: integer
-        minimum: 0
-        maximum: 17
-    reviews:
-      type: array
-      items:
-        title: AccommodationsReviewOutput
-        type: object
-        properties:
-          id:
-            description: Unique identifier of the review.
-            type: integer
-          date:
-            description: 'The date when the review was last modified. Format: YYYY-MM-DD.'
-            type: string
-            format: date
-          language:
+    detailsInput:
+      title: AccommodationsDetailsInput
+      type: object
+      properties:
+        accommodation_facilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/accommodationFacilityId'
+        accommodation_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/accommodationTypeId'
+        accommodations:
+          type: array
+          items:
+            $ref: '#/components/schemas/accommodationId'
+          maxItems: 100
+        airport:
+          $ref: '#/components/schemas/airportId'
+        brands:
+          type: array
+          items:
+            $ref: '#/components/schemas/accommodationBrandId'
+        city:
+          $ref: '#/components/schemas/cityId'
+        country:
+          $ref: '#/components/schemas/countryId'
+        extras:
+          $ref: '#/components/schemas/extrasV32'
+        languages:
+          type: array
+          items:
             $ref: '#/components/schemas/languageId'
-          negative:
-            description: Negative comments from this review.
-            type:
-            - string
-            - 'null'
-          positive:
-            description: Positive comments from this review.
-            type:
-            - string
-            - 'null'
-          reviewer:
-            title: AccommodationsReviewerOutput
-            type: object
-            properties:
-              country:
-                $ref: '#/components/schemas/countryId'
-              name:
-                description: Name of the reviewer. If the value is null then the reviewer is anonymous.
-                type:
-                - string
-                - 'null'
-              travel_purpose:
-                $ref: '#/components/schemas/travel_purpose'
-              type:
-                $ref: '#/components/schemas/reviewer_type'
-          score:
-            description: The aggregated score of the review.
-            type: number
-            multipleOf: 0.1
-            minimum: 1
-            maximum: 10
-          summary:
-            description: The summary of the review.
-            type:
-            - string
-            - 'null'
-          text_meets_guidelines:
-            description: Set to true when review meets the guidelines. The review text will be removed if it doesn't meet guidelines.
-            type: boolean
-    airportId:
-      description: A three-letter code that uniquely identifies an airport as defined by the International Air Transport Association (IATA). The full list can be obtained by calling  <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/airports" target="_blank">common/locations/airports</a>.
-      type: string
-      pattern: ^[A-Z]{3}$
-      example: AMS
-    sustainability:
-      title: AccommodationsSustainability
-      description: Sustainability certifications associated with the property.
+        page:
+          $ref: '#/components/schemas/page'
+        payment:
+          $ref: '#/components/schemas/paymentInputFilter'
+        region:
+          $ref: '#/components/schemas/regionId'
+        rows:
+          $ref: '#/components/schemas/maximumResults'
+          maximum: 1000
+    mealPrices:
+      title: MealPrices
+      description: Details regarding the meal pricing options offered at this accommodation.
       type: object
       properties:
-        certifications:
-          description: The external sustainability certifications awarded to the property.
-          type: array
-          items:
-            $ref: '#/components/schemas/sustainabilityCertification'
-      nullable: true
-    facilityDetails:
-      title: accommodationsFacilityDetailsOutput
-      description: Comprehensive information about the facilities available at the accommodation.
+        breakfast:
+          description: The price of breakfast per person, expressed in the accommodation's local currency. If the value is null, it indicates that breakfast pricing is not available.
+          type: number
+          minimum: 0
+          nullable: true
+        dinner:
+          description: The price of dinner per person, expressed in the accommodation's local currency. If the value is null, it indicates that dinner pricing is not available.
+          type: number
+          minimum: 0
+          nullable: true
+        lunch:
+          description: The price of lunch per person, expressed in the accommodation's local currency. If the value is null, it indicates that lunch pricing is not available.
+          type: number
+          minimum: 0
+          nullable: true
+    paymentInputFilter:
+      description: Payment input information to filter results.
+      properties:
+        timing:
+          $ref: '#/components/schemas/paymentTimingFilter'
+    booker:
+      title: Booker
+      description: The booker's information.
       type: object
       properties:
-        internet_facility:
-          description: Details about the internet facilities available at the accommodation, including price, charge mode and connection type.
-          type: object
-          $ref: '#/components/schemas/internetFacility'
-        parking_facilities:
-          type: array
-          description: A list of parking facilities available at the accommodation.
-          items:
-            $ref: '#/components/schemas/parkingFacility'
-        restaurant_facilities:
-          type: array
-          description: A list of restaurant facilities available at the accommodation.
-          items:
-            $ref: '#/components/schemas/restaurantFacility'
-        swimming_pool_facilities:
-          type: array
-          description: A list of swimming pool facilities available at the accommodation.
-          items:
-            $ref: '#/components/schemas/swimmingPoolFacility'
-    countryId:
-      description: 'A two-letter code that uniquely identifies a country. This code is defined by the ISO 3166-1 alpha-2 standard (ISO2) as described here: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/countries" target="_blank">common/locations/countries</a>.'
-      type: string
-      pattern: ^[a-z]{2}$
-      example: nl
-    paymentMethods:
-      title: AccommodationsDetailsPaymentMethodsOutput
-      description: Payment methods accepted by this property.
-      type: object
-      properties:
-        cards:
-          description: Credit cards accepted when paying at the property
+        country:
+          description: The booker country for showing the best price for that user and obeying laws regarding the display of taxes and fees.
+          type: string
+          pattern: ^[a-z]{2}$
+        platform:
+          description: The booker platform for showing the platform based deals and prices.
+          type: string
+          enum:
+          - android
+          - desktop
+          - ios
+          - mobile
+          - tablet
+        state:
+          description: The booker state for showing the best price for that user and obeying laws regarding the display of taxes and fees. Currently applicable only for country US.
+          type: string
+          pattern: ^[a-z]{2}$
+        travel_purpose:
+          description: The travel purpose of the booker.
+          type: string
+          enum:
+          - business
+          - leisure
+        user_groups:
+          description: The user groups that the booker is a member of.
           type: array
           items:
-            $ref: '#/components/schemas/paymentCardId'
-        cash:
-          description: Whether this property accepts cash
-          type: boolean
-          example: true
-        virtual_cards:
-          description: Virtual credit cards accepted when paying at the property
-          type: array
-          items:
-            $ref: '#/components/schemas/paymentCardId'
-    chargeableOnline:
-      description: Whether this charge is chargeable online or not. Not applicable to "pay_at_the_property" timing.
-      type: boolean
-      nullable: true
-    deepLinkUrl:
-      description: A mobile app URL that directs the user to a specific page or content within the Booking.com app. The link can only be used on a device with the Booking.com app installed. It typically includes an Affiliate ID (AID) to attribute bookings to the affiliate partner when users are redirected
-      type: string
-      format: url
-    changesOutput:
-      title: AccommodationsDetailsChangesOutput
+            type: string
+            enum:
+            - authenticated
+      required:
+      - country
+      - platform
+    detailsOutput:
+      title: AccommodationsDetailsOutput
       type: object
       properties:
         request_id:
           $ref: '#/components/schemas/requestId'
         data:
+          type: array
+          items:
+            $ref: '#/components/schemas/accommodationDetail'
+        metadata:
+          title: MetadataOutput
           type: object
           properties:
-            changes:
-              $ref: '#/components/schemas/changes'
-            from:
-              description: ISO 8601 timestamp which indicates the timestamp from which the changes are returned (inclusive).
-              type: string
-              format: date-time
-            next:
-              description: 'ISO 8601 timestamp which indicates the next timestamp to be used for `last_change`. This will be 1 second after the latest change returned in the result (all changes from the "last" second are returned). NOTE: this field will not be present unless changes are returned. In this case, repeat the call after one minute with the same `last_change` date.'
-              type: string
-              format: date-time
-            total_changes:
-              description: Total number of changed accommodation ids returned. If 0, then repeat the call after one minute with the same `last_change` date.
-              type: integer
-    photoUrl:
-      title: AccommodationsPhotoUrlOutput
+            next_page:
+              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
+              type:
+              - string
+              - 'null'
+    swimmingPoolFacility:
+      title: AccommodationsSwimmingPoolFacilityOutput
+      description: Details about the swimming pool occupancy limits and options.
       type: object
       properties:
-        large:
-          description: URL of the photo image with a maximum width of 1280 pixels.
+        allowed_age_type:
           type: string
-          format: url
-          example: https://q-xx.bstatic.com/xdata/images/hotel/max1280/20934654.jpg?k=806399263699a47361bdbbefc9c872a3db03eea26c4a815f5f4df95c93e38cdb&o=
-        standard:
-          description: URL of the photo image with a maximum width of 500 pixels.
+          description: The age group allowed to use the swimming pool (e.g., adults only, all ages, or kids only).
+          nullable: true
+          enum:
+          - adults_only
+          - all_ages
+          - kids_only
+        payment_type:
           type: string
-          format: url
-          example: https://q-xx.bstatic.com/xdata/images/hotel/max500/20934654.jpg?k=806399263699a47361bdbbefc9c872a3db03eea26c4a815f5f4df95c93e38cdb&o=
-        thumbnail:
-          description: URL of the photo thumbnail image with dimensions 100x100 pixels.
+          description: The payment model for pool access, either free or paid.
+          nullable: true
+          enum:
+          - free
+          - paid
+        type:
           type: string
-          format: url
-          example: https://q-xx.bstatic.com/xdata/images/hotel/100x100/20934654.jpg?k=806399263699a47361bdbbefc9c872a3db03eea26c4a815f5f4df95c93e38cdb&o=
-        thumbnail_large:
-          description: URL of the photo thumbnail image with dimensions 300x300 pixels.
-          type: string
-          format: url
-          example: https://q-xx.bstatic.com/xdata/images/hotel/300x300/20934654.jpg?k=806399263699a47361bdbbefc9c872a3db03eea26c4a815f5f4df95c93e38cdb&o=
-    locations_countryId:
-      description: ISO 3166 country code. The full list of countries can be retrieved from [/common/locations/countries](#/common/locations/countries).
-      type: string
-      pattern: '[a-z]{2}'
-    score:
-      description: A decimal number indicating the review score of this criteria, in the range 1..10.
-      type: number
-      multipleOf: 0.1
-      minimum: 1
-      maximum: 10
+          description: The type of swimming pool (indoor, outdoor, or a combination).
+          nullable: true
+          enum:
+          - indoor
+          - indoor_and_outdoor
+          - outdoor
     totalAmountV32:
       description: The total price for this charge.
       type: object
@@ -7483,117 +6081,104 @@ components:
           $ref: '#/components/schemas/monetaryAmount'
         booker_currency:
           $ref: '#/components/schemas/monetaryAmount'
-    restaurantFacility:
-      title: AccommodationsRestaurantFacilityOutput
-      description: Information about the restaurant facilities available at the accommodation.
+    maximumOccupancy:
+      title: AccommodationsMaximumOccupancy
+      description: Information related to maximum number of occupancy inside the room.
       type: object
       properties:
-        accept_reservations:
-          description: Indicates whether the restaurant accepts reservations.
-          type: boolean
-        guests_only:
-          description: Indicates whether the restaurant is exclusive to guests or open to the public.
-          type: boolean
-        name:
-          type: string
-          description: The name of the restaurant.
-        status:
-          type: string
-          description: The operational status of the restaurant (e.g., open or closed).
-          nullable: true
-          enum:
-          - closed
-          - open
-    meal_plan_filter:
-      description: 'Filter the result based on the selected meal plan. Example: When specified breakfast_included, it will show the product with free breakfast.'
-      type: string
-      enum:
-      - all_inclusive
-      - breakfast_included
-      - full_board
-      - half_board
-    coordinates:
-      title: AccommodationsSearchCoordinatesOutput
-      description: Limit the result list to the specified coordinates.
-      type: object
-      properties:
-        latitude:
-          description: Specify a latitude (as well as a longitude and radius) to do searches around a specific location.
-          type: number
-          format: double
-        longitude:
-          description: Specify a longitude (as well as a latitude and radius) to do searches around a specific location.
-          type: number
-          format: double
-        radius:
-          description: The radius is km to search around the specified latitude and longitude.
-          type: number
-          format: double
-    distribution_schema:
-      title: AccommodationsReviewsDistributionSchemaOutput
-      type: object
-      properties:
-        number_of_reviews:
-          description: Number of reviews with this score.
+        adults:
+          description: The maximum number of adults for this room.
           type: integer
-          minimum: 0
-        percentage:
-          description: Percent of score distribution for this score.
-          type: number
-          multipleOf: 0.01
-    checkout:
-      description: The checkout date. Must be later than {checkin}. Must be between 1 and 90 days after {checkin}. Must be within 500 days in the future and in the format yyyy-mm-dd.
-      type: string
-      format: date
-    thirdPartySupplier:
-      title: AccommodationsThirdPartySupplier
-      description: Information about a third-party accommodation supplier.
+          minimum: 1
+        children:
+          $ref: '#/components/schemas/children'
+        total:
+          description: The maximum number of guests for this room.
+          type: integer
+          minimum: 1
+    smartSearchInput:
+      title: AccommodationsSmartSearchInput
       type: object
       properties:
-        id:
-          $ref: '#/components/schemas/thirdPartySupplierId'
-        name:
-          description: Display name of the third-party supplier.
+        airport:
+          $ref: '#/components/schemas/airportId'
+        booker:
+          $ref: '#/components/schemas/booker'
+        checkin:
+          $ref: '#/components/schemas/checkin'
+        checkout:
+          $ref: '#/components/schemas/checkout'
+        city:
+          $ref: '#/components/schemas/cityId'
+        coordinates:
+          $ref: '#/components/schemas/coordinates'
+        country:
+          $ref: '#/components/schemas/countryId'
+        currency:
+          $ref: '#/components/schemas/currencyId'
+        district:
+          $ref: '#/components/schemas/districtId'
+        extras:
+          $ref: '#/components/schemas/extras'
+        guests:
+          $ref: '#/components/schemas/guests'
+        landmark:
+          $ref: '#/components/schemas/landmarkId'
+        page:
+          $ref: '#/components/schemas/page'
+        region:
+          $ref: '#/components/schemas/regionId'
+        rows:
+          $ref: '#/components/schemas/maximumResults'
+        search_query:
+          description: Natural language query describing the traveller’s accommodation preferences, intent, or desired experience. The query is interpreted semantically and may match accommodation features, amenities, location context, property types, traveller intent, or ranking signals.
           type: string
-        company_address:
-          description: Registered company address of the third-party supplier. May be omitted or `null` when the address is not available.
-          type: string
-          nullable: true
-    productId:
-      description: Unique ID of the product.
-      type: string
-    accommodationChainId:
-      description: 'A signed integer number that uniquely identifies an accommodation chain. Examples of chains are: Radisson Hotel Group, Hilton Worldwide etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/chains" target="_blank">/accommodations/chains</a>.'
-      type: integer
-      minimum: 1
-    productCancellationPolicyAvailabilityMultiCurrency:
-      title: AccommodationsProductCancellationPolicyMultiCurrency
-      description: The cancellation policy for this product.
+          minLength: 3
+          maxLength: 300
+        sort:
+          description: Controls how accommodation results are ordered in the response.
+          type: object
+          properties:
+            by:
+              description: Primary sorting strategy applied to the search results. Use `distance` together with `coordinates` to rank accommodations by proximity.
+              type: string
+              enum:
+              - distance
+              - price
+              - review_score
+              - stars
+            direction:
+              description: Sort direction applied to the selected sorting strategy. Descending order is not supported when sorting by `distance`.
+              type: string
+              enum:
+              - ascending
+              - descending
+      required:
+      - booker
+      - checkin
+      - checkout
+      - guests
+      - search_query
+    chargeableOnline:
+      description: Whether this charge is chargeable online or not. Not applicable to "pay_at_the_property" timing.
+      type: boolean
+      nullable: true
+    monetaryAmount:
+      type: number
+      format: double
+      multipleOf: 0.01
+      exclusiveMinimum: 0
+    filters:
+      title: AccommodationsAvailabilityFiltersInput
+      description: The filters to apply in this availability request.
       type: object
       properties:
-        free_cancellation_until:
-          description: Until when the order for this product can be cancelled for free.
-          type:
-          - string
-          - 'null'
-          format: date-time
-        schedule:
-          $ref: '#/components/schemas/productDetailedCancellationPolicyMultiCurrency'
-        type:
-          $ref: '#/components/schemas/dataTypes_productCancellationType'
-    free_cancellation_type_filter:
-      description: Filters the result for the cancellation type specified. Possible values are free_cancellation. The result will contain all the products with free_cancellation.
-      type: string
-      enum:
-      - free_cancellation
-    keyLocation:
-      description: Location of the key to access this accommodation property.
-      type: string
-      enum:
-      - at_the_property
-      - door_code
-      - different_place
-      - unknown
+        cancellation_type:
+          $ref: '#/components/schemas/free_cancellation_type_filter'
+        meal_plan:
+          $ref: '#/components/schemas/meal_plan_filter'
+        payment:
+          $ref: '#/components/schemas/paymentInputFilter'
     roomV32:
       title: AccommodationsDetailsRoomOutput
       type: object
@@ -7679,36 +6264,626 @@ components:
           type: number
           minimum: 0
           example: 20
-    contact:
-      title: AccommodationsContactOutput
-      description: Contact information of the accommodation. It can be `null` if the data is missing.
+    languageId:
+      description: 'A [IETF language tag code](https://en.wikipedia.org/wiki/IETF_language_tag) that uniquely identifies a supported human language or dialect. **Note:** Demand API only accepts lowercase for the language codes. Examples: "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.'
+      type: string
+      pattern: ^[a-z]{2}(-[a-z]{2})?$
+      example: en-us
+    currencyId:
+      description: A three-letter code that uniquely identifies a monetary currency as defined by the ISO 4217 standard. The full list can be obtained by calling <a href="/demand/docs/open-api/3.2/demand-api/commonpayments/common/payments/currencies" target="_blank">common/payments/currencies</a>.
+      type:
+      - string
+      - 'null'
+      pattern: ^[A-Z]{3}$
+      example: EUR
+    reviewsOutput:
+      title: AccommodationsReviewsOutput
       type: object
       properties:
-        email:
-          description: Email address of the accommodation. It can be `null` if the data is missing.
-          type: string
-          nullable: true
-        telephone:
-          description: Telephone number of the accommodation. It can be `null` if the data is missing.
-          type: string
-          nullable: true
-      nullable: true
-    roomFacility:
-      title: AccommodationsRoomFacilityOutput
-      description: 'A service, equipment or characteristic available at room level, like for example: "Coffee/Tea maker".'
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/accommodationReviews'
+        metadata:
+          title: MetadataOutput
+          type: object
+          properties:
+            next_page:
+              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
+              type:
+              - string
+              - 'null'
+    districtId:
+      description: A signed integer number that uniquely identifies a district. Typically, districts define known areas within a city. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/districts" target="_blank">common/locations/districts</a>.
+      type: integer
+      minimum: 1
+    productPaymentPolicyNew:
+      title: AccommodationsProductPaymentPolicyNew
+      description: Payment terms and conditions for this product.
+      type: object
+      properties:
+        prepayment_required:
+          description: Whether prepayment is required for this product.
+          type: boolean
+        timings:
+          $ref: '#/components/schemas/productPaymentTimings'
+    landmarkId:
+      description: A signed integer number that uniquely identifies a relevant geographical landmark, like a monument or a natural attraction. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/landmarks" target="_blank">common/locations/landmarks</a>.
+      type: integer
+      minimum: 1
+    checkinCheckoutTimes:
+      title: AccommodationsCheckinCheckoutTimesOutput
+      type: object
+      properties:
+        checkin_from:
+          description: The time from when checkin starts at this property.
+          type:
+          - string
+          - 'null'
+          pattern: (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:00
+        checkin_to:
+          description: The time till when checkin can be done at this property.
+          type:
+          - string
+          - 'null'
+          pattern: (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:00
+        checkout_from:
+          description: The time from when checkout starts at this property.
+          type:
+          - string
+          - 'null'
+          pattern: (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:00
+        checkout_to:
+          description: The time till when checkout can be done at this property.
+          type:
+          - string
+          - 'null'
+          pattern: (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:00
+    accommodationReviews:
+      title: AccommodationsReviewsDataOutput
+      description: ''
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/roomFacilityId'
-        facility_type:
-          $ref: '#/components/schemas/facilityTypeId'
+          $ref: '#/components/schemas/accommodationId'
+        reviews:
+          $ref: '#/components/schemas/reviews'
+        url:
+          $ref: '#/components/schemas/url'
+    accommodationTypeId:
+      description: 'A signed integer number that uniquely identifies an accommodation property type. Examples of accommodation types are: Apartment, Hostel, Hotel etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
+      type: integer
+      minimum: 1
+    productV32:
+      title: AccommodationsAvailabilityRecommendationProductOutput
+      description: Represents a recommended product and its allocation details.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/productId'
+        children:
+          $ref: '#/components/schemas/recommendation_children'
+        number_of_adults:
+          $ref: '#/components/schemas/numberOfAdults'
+        price:
+          $ref: '#/components/schemas/recommendation_priceV32'
+    accommodationThemeId:
+      description: 'A signed integer number that uniquely identifies an accommodation property theme. Examples of themes are: Beach/Seaside, Ski/Wintersports, Luxury etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
+      type: integer
+      minimum: 1
+    paymentRefundDate:
+      type: object
+      properties:
+        reference_date:
+          $ref: '#/components/schemas/referenceDate'
+        days_offset:
+          description: The number of days on or after reference date.
+          type: integer
+    constants_output:
+      title: AccommodationsConstantsOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          title: ConstantsDataOutput
+          type: object
+          properties:
+            accommodation_facilities:
+              type: array
+              items:
+                $ref: '#/components/schemas/accommodationFacility'
+            accommodation_themes:
+              type: array
+              items:
+                $ref: '#/components/schemas/accommodationTheme'
+            accommodation_types:
+              type: array
+              items:
+                $ref: '#/components/schemas/accommodationType'
+            bed_types:
+              type: array
+              items:
+                $ref: '#/components/schemas/bedType'
+            charge_types:
+              type: array
+              items:
+                $ref: '#/components/schemas/chargeType'
+            facility_types:
+              type: array
+              items:
+                $ref: '#/components/schemas/facilityType'
+            review_scores:
+              type: array
+              items:
+                $ref: '#/components/schemas/reviewScore'
+            room_facilities:
+              type: array
+              items:
+                $ref: '#/components/schemas/roomFacility'
+            room_types:
+              type: array
+              items:
+                $ref: '#/components/schemas/roomType'
+    reviewScore:
+      title: AccommodationsReviewScoreOutput
+      description: Review score category name for each score interval.
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/translatedString'
+        minimum_score:
+          description: The minimum score of this review score category.
+          type: number
+          multipleOf: 0.1
+          minimum: 1
+          maximum: 10
+        maximum_score:
+          description: The maximum score of this review score category
+          type: number
+          multipleOf: 0.1
+          minimum: 1
+          maximum: 10
+      required:
+      - name
+      - minimum_score
+      - maximum_score
+      additionalProperties: false
+    reviewer_type:
+      description: The reviewer type.
+      type: string
+      enum:
+      - couple
+      - extended_group
+      - family_with_children
+      - solo_traveller
+    accommodationChain:
+      title: AccommodationsChainsOutput
+      description: Returns the internal code, name and list of associated brands for an accommodation chain.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/accommodationChainId'
+        brands:
+          description: List of all the brands associated with this accommodation chain.
+          type: array
+          items:
+            $ref: '#/components/schemas/accommodationBrand'
+        name:
+          description: Name of the accommodation chain.
+          type: string
+    thirdPartySupplier:
+      title: AccommodationsThirdPartySupplier
+      description: Information about a third-party accommodation supplier.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/thirdPartySupplierId'
+        name:
+          description: Display name of the third-party supplier.
+          type: string
+        company_address:
+          description: Registered company address of the third-party supplier. May be omitted or `null` when the address is not available.
+          type: string
+          nullable: true
+    chargeBreakdownV32:
+      description: The charge breakdown. Includes taxes and fees.
+      type: array
+      items:
+        title: AccommodationsChargeWithChargeableOnline
+        description: Detailed information about an individual charge, including where it is applied.
+        type: object
+        properties:
+          charge:
+            $ref: '#/components/schemas/chargeTypeId'
+          condition:
+            $ref: '#/components/schemas/conditionId'
+          included_in:
+            title: ChargeIncludedIn
+            description: Indicates where this charge is included
+            type: object
+            properties:
+              chargeable_online:
+                $ref: '#/components/schemas/chargeableOnline'
+              display:
+                $ref: '#/components/schemas/display'
+          mode:
+            $ref: '#/components/schemas/chargeMode'
+          percentage:
+            $ref: '#/components/schemas/chargePercentage'
+          total_amount:
+            $ref: '#/components/schemas/totalAmountV32'
+          unit_amount:
+            $ref: '#/components/schemas/unitAmountV32'
+    sustainabilityCertification:
+      title: AccommodationsSustainabilityCertification
+      description: Details of a sustainability certification
+      type: object
+      properties:
+        name:
+          description: The name of the certification
+          type: string
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
+    programmes:
+      title: AccommodationsProgrammes
+      description: Programmes and initiatives associated with the property.
+      type: object
+      properties:
+        travel_proud:
+          $ref: '#/components/schemas/travelProud'
+        sustainable_offerings:
+          $ref: '#/components/schemas/sustainability'
+    accommodationId:
+      description: A signed integer number that uniquely identifies an accommodation property. The full list can be obtained by calling [accommodations/details](/demand/docs/open-api/demand-api/accommodations/accommodations/details).
+      type: integer
+      minimum: 1
+    reviewsInput:
+      title: AccommodationsReviewsInput
+      type: object
+      properties:
+        accommodations:
+          type: array
+          items:
+            $ref: '#/components/schemas/accommodationId'
+          minItems: 1
+          maxItems: 100
+        languages:
+          description: Limits reviews to those written in this language.
+          type: array
+          items:
+            $ref: '#/components/schemas/languageId'
+        last_change:
+          description: 'Limits the reviews to those changed after the given date. Format: YYYY-MM-DD.'
+          type: string
+          format: date
+        page:
+          $ref: '#/components/schemas/page'
+        reviewer:
+          $ref: '#/components/schemas/reviewer'
+        rows:
+          $ref: '#/components/schemas/maximumResults'
+        score:
+          title: AccommodationsReviewScoreInput
+          type: object
+          properties:
+            maximum:
+              description: Limits the reviews to those having score lesser or equal to this value.
+              type: integer
+              minimum: 1
+              maximum: 10
+            minimum:
+              description: Limits the reviews to those having score greater or equal to this value.
+              type: integer
+              minimum: 1
+              maximum: 10
+      required:
+      - accommodations
+    review_score:
+      description: A decimal number indicating the current review score of this accommodation property, in the range 1..10.
+      type: number
+      multipleOf: 0.1
+      minimum: 1
+      maximum: 10
+    changesInput:
+      title: AccommodationsDetailsChangesInput
+      type: object
+      properties:
+        last_change:
+          description: 'The timestamp in ISO-8601 format from which changes to accommodations are returned (inclusive). Only UTC time zone is supported. We support changes for last 24 hours. Format: YYYY-MM-DDTHH:mm:ss+00:00'
+          type: string
+          format: date-time
+        filters:
+          description: parameter basis which filtering needs to be done. Only one of (countries or cities) must be provided.
+          type: object
+          properties:
+            countries:
+              description: Filter changes based on these countries. The valid full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/countries" target="_blank">common/locations/countries</a>.
+              type: array
+              items:
+                $ref: '#/components/schemas/countryId'
+            cities:
+              description: Filter changes based on these cities. The valid full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/cities" target="_blank">common/locations/cities</a>.
+              type: array
+              items:
+                $ref: '#/components/schemas/cityId'
+      required:
+      - last_change
+    paymentMethod:
+      type: string
+      enum:
+      - bank_transfer
+      - cash
+      - credit_card
+      - paypal
+      - other
+    displayPriceV32:
+      description: The display price that must be shown to the traveller in accordance with local booker protection laws. This price includes the base accommodation cost and all charges that are legally required to be part of the displayed amount. Equivalent to base + charges where included_in.display=true.
+      type: object
+      properties:
+        accommodation_currency:
+          $ref: '#/components/schemas/monetaryAmount'
+        booker_currency:
+          $ref: '#/components/schemas/monetaryAmount'
+    chargeSummaryV32:
+      title: AccommodationsChargeSummary
+      description: A charge summed across multiple products.
+      type: object
+      properties:
+        charge:
+          $ref: '#/components/schemas/chargeTypeId'
+        condition:
+          $ref: '#/components/schemas/conditionId'
+        included_in:
+          title: ChargeIncludedIn
+          description: Indicates where this charge is included
+          type: object
+          properties:
+            display:
+              $ref: '#/components/schemas/display'
+            chargeable_online:
+              $ref: '#/components/schemas/chargeableOnline'
+        total_amount:
+          $ref: '#/components/schemas/totalAmountV32'
+    priceMultiCurrencyOutput:
+      title: AccommodationsPriceMultiCurrency
+      type: object
+      properties:
+        accommodation_currency:
+          $ref: '#/components/schemas/monetaryAmount'
+        booker_currency:
+          $ref: '#/components/schemas/monetaryAmount'
+    product:
+      title: AccommodationsSearchProductOutput
+      description: Details product information. It requires `{"extras":["products"]}`.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/productId'
+        bundle:
+          $ref: '#/components/schemas/bundleId'
+        children:
+          description: The ages of the children allocated to this product.
+          type: array
+          items:
+            type: integer
+            minimum: 0
+            maximum: 17
+        deal:
+          $ref: '#/components/schemas/dealV32'
+        inventory:
+          $ref: '#/components/schemas/inventoryOutput'
+        number_available:
+          description: Number of rooms available at this price.
+          type: integer
+          minimum: 1
+          nullable: true
+        number_of_adults:
+          description: The number of adults allocated to this product.
+          type: integer
+          minimum: 1
+        policies:
+          $ref: '#/components/schemas/productPoliciesSearch'
+        price:
+          $ref: '#/components/schemas/priceSearchV32'
+        room:
+          $ref: '#/components/schemas/roomIdString'
+    availability:
+      title: AccommodationsAvailabilityDataOutput,
+      description: ''
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/accommodationId'
+        currency:
+          $ref: '#/components/schemas/currency'
+        deep_link_url:
+          $ref: '#/components/schemas/deepLinkUrl'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/availabilityProduct'
+        recommendation:
+          $ref: '#/components/schemas/recommendation'
+        url:
+          $ref: '#/components/schemas/url'
+    inventoryOutput:
+      title: InventoryOutput
+      type: object
+      properties:
+        third_party:
+          type: boolean
+          description: Indicates whether the product is facilitated by a third-party supplier.
+        type:
+          $ref: '#/components/schemas/inventoryOutputType'
+    productCancellationPolicySearch:
+      title: AccommodationsProductCancellationPolicy
+      description: The cancellation policy for this product.
+      type: object
+      properties:
+        free_cancellation_until:
+          description: Until when the order for this product can be cancelled for free.
+          type:
+          - string
+          - 'null'
+          format: date-time
+        type:
+          $ref: '#/components/schemas/productCancellationType'
+    extras:
+      description: Input parameter to request for additional information about the products.
+      type: array
+      items:
+        type: string
+        enum:
+        - extra_charges
+        - products
+    petsPolicy:
+      title: AccommodationsPetsPolicyOutput
+      type: object
+      properties:
+        allowed:
+          description: An enumerated value describing if pets are allowed
+          type: string
+          enum:
+          - 'yes'
+          - 'no'
+          - upon_request
+        charge_mode:
+          description: An enumerated value describing the charge mode for pets
+          type: string
+          enum:
+          - free
+          - charges_may_apply
+    bedConfiguration:
+      title: AccommodationsBedConfigurationOutput
+      description: List of all beds available for this configuration.
+      type: object
+      properties:
+        id:
+          description: Uniquely identifies this bed configuration.
+          type: string
+        configuration:
+          description: Detail list of all different types and number of beds included in this configuration.
+          type: array
+          items:
+            $ref: '#/components/schemas/bed'
+    chargeType:
+      title: AccommodationsChargeTypeOutput
+      description: These are additional charges, which may be included or excluded from the reservation price. If excluded, the amounts may be added by the property upon checkout. The exclusions depend on several factors like local legislation, and sometimes can only be indicated but not be calculated at the time of the reservation.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/chargeTypeId'
         name:
           $ref: '#/components/schemas/translatedString'
       required:
       - id
-      - facility_type
       - name
       additionalProperties: false
+    scores:
+      title: AccommodationsReviewsScoresOutput
+      description: ''
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/accommodationId'
+        breakdown:
+          $ref: '#/components/schemas/breakdown'
+        distribution:
+          $ref: '#/components/schemas/distribution'
+        number_of_reviews:
+          $ref: '#/components/schemas/number_of_reviews'
+        score:
+          $ref: '#/components/schemas/review_score'
+        url:
+          $ref: '#/components/schemas/url'
+    accommodationBrand:
+      title: AccommodationsChainsBrandDataOutput
+      description: Returns the internal code and name of an accommodation brand.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/accommodationBrandId'
+        name:
+          description: Name of the accommodation brand.
+          type: string
+    meal_plan_filter:
+      description: 'Filter the result based on the selected meal plan. Example: When specified breakfast_included, it will show the product with free breakfast.'
+      type: string
+      enum:
+      - all_inclusive
+      - breakfast_included
+      - full_board
+      - half_board
+    accommodationFacilityId:
+      description: 'A signed integer number that uniquely identifies an accommodation property facility. Examples of facilities are: Parking, Restaurant, Room service etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
+      type: integer
+      minimum: 1
+    url:
+      description: Internet address for the property page on Booking.com.
+      type: string
+      format: url
+    restaurantFacility:
+      title: AccommodationsRestaurantFacilityOutput
+      description: Information about the restaurant facilities available at the accommodation.
+      type: object
+      properties:
+        accept_reservations:
+          description: Indicates whether the restaurant accepts reservations.
+          type: boolean
+        guests_only:
+          description: Indicates whether the restaurant is exclusive to guests or open to the public.
+          type: boolean
+        name:
+          type: string
+          description: The name of the restaurant.
+        status:
+          type: string
+          description: The operational status of the restaurant (e.g., open or closed).
+          nullable: true
+          enum:
+          - closed
+          - open
+    airportId:
+      description: A three-letter code that uniquely identifies an airport as defined by the International Air Transport Association (IATA). The full list can be obtained by calling  <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/airports" target="_blank">common/locations/airports</a>.
+      type: string
+      pattern: ^[A-Z]{3}$
+      example: AMS
+    locations_cityId:
+      description: Uniquely identifies a city. The full list of cities can be retrieved from [/common/locations/cities](#/common/locations/cities).
+      type: integer
+    numberOfAdults:
+      description: The number of adults allocated to this product.
+      type: integer
+      minimum: 1
+    dealV32:
+      title: Deal
+      description: This specifies the deal tagging for the product.
+      type:
+      - object
+      - 'null'
+      properties:
+        discount_percentage:
+          description: Discount percentage of the applied deal.
+          type: integer
+          minimum: 1
+        public_price:
+          description: Original price of this product, before applying any discounts.
+          $ref: '#/components/schemas/priceMultiCurrencyOutput'
+        tags:
+          description: The tags of all the applied deals.
+          type: array
+          items:
+            type: string
+            enum:
+            - black_friday
+            - limited_time_deal
+            - logged_in_deal
+            - mobile_rate
+            - seasonal_deal
     chargeMode:
       description: The mode of this charge. Determines how the price is calculated.
       type: string
@@ -7722,6 +6897,23 @@ components:
       - per_person_per_night
       - per_person_per_stay
       - per_stay
+    facilityType:
+      title: AccommodationsFacilityTypeOutput
+      description: A more generic designation meant to group a set of facilities.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/facilityTypeId'
+        name:
+          $ref: '#/components/schemas/translatedString'
+      required:
+      - id
+      - name
+      additionalProperties: false
+    deepLinkUrl:
+      description: A mobile app URL that directs the user to a specific page or content within the Booking.com app. The link can only be used on a device with the Booking.com app installed. It typically includes an Affiliate ID (AID) to attribute bookings to the affiliate partner when users are redirected
+      type: string
+      format: url
     productCancellationType:
       description: 'The cancellation policy applicable to this product: "free_cancellation" allows a period for free cancellation, "non_refundable" means immediate loss of total amount, "partially_refundable" means a portion of the amount may be refunded if the booking is cancelled.'
       type: string
@@ -7729,14 +6921,646 @@ components:
       - free_cancellation
       - non_refundable
       - partially_refundable
-    paymentRefundDate:
+    accommodationFacility:
+      title: AccommodationsFacilityOutput
+      description: 'A service, equipment or characteristic available at property level, like for example: "Swimming pool outdoor".'
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/accommodationFacilityId'
+        facility_type:
+          $ref: '#/components/schemas/facilityTypeId'
+        name:
+          $ref: '#/components/schemas/translatedString'
+      required:
+      - id
+      - facility_type
+      - name
+      additionalProperties: false
+    locations_countryId:
+      description: ISO 3166 country code. The full list of countries can be retrieved from [/common/locations/countries](#/common/locations/countries).
+      type: string
+      pattern: '[a-z]{2}'
+    productId:
+      description: Unique ID of the product.
+      type: string
+    input:
+      title: AccommodationsConstantsInput
+      type: object
+      properties:
+        constants:
+          description: Allows to filter the results only for specific sections.
+          type: array
+          items:
+            type: string
+            enum:
+            - accommodation_facilities
+            - accommodation_themes
+            - accommodation_types
+            - bed_types
+            - charge_types
+            - facility_types
+            - review_scores
+            - room_facilities
+            - room_types
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/languageId'
+          default:
+          - en-gb
+    facilityTypeId:
+      description: A signed integer number that uniquely identifies the accommodation facility type. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.
+      type: integer
+      minimum: 1
+    totalPriceV32:
+      description: The total price. Includes all extra charges.
+      type: object
+      properties:
+        accommodation_currency:
+          $ref: '#/components/schemas/monetaryAmount'
+        booker_currency:
+          $ref: '#/components/schemas/monetaryAmount'
+    travelProud:
+      description: Boolean value is "true" if property has travel proud badge and "false" otherwise.
+      type: boolean
+    bundleId:
+      description: The bundle ID of the product comprising of value added products.
+      type: integer
+    damagePolicy:
+      type: object
+      description: DamagePolicy of the property
+      properties:
+        deposit:
+          description: If a deposit needs to be paid upfront
+          type: object
+          $ref: '#/components/schemas/deposit'
+        amount:
+          description: The amount that can be charged
+          type: number
+          format: double
+        currency:
+          description: Currency in which payment needs to be made
+          type: string
+    fiscalInformation:
+      title: AccommodationsFiscalInformationOutput
+      description: All fiscal related information of this accommodation property.
+      type: object
+      properties:
+        legal_name:
+          type: string
+        vat_number:
+          type: string
+    searchOutput:
+      title: AccommodationsSearchOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/accommodationSearch'
+        metadata:
+          title: MetadataOutput
+          type: object
+          properties:
+            next_page:
+              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
+              type: string
+              nullable: true
+    chargePercentage:
+      description: The percentage of 'base' that this charge amounts to. Only applicable when 'mode' is 'percentage'.
+      type: number
+      multipleOf: 0.01
+      exclusiveMinimum: 0
+      nullable: true
+    travel_purpose:
+      description: Defines if this was a leisure or business trip.
+      type: string
+      enum:
+      - business
+      - leisure
+    extrasV32:
+      description: Input parameter to request for additional information about the accommodation property. It should be passed as a JSON array with one or more items.
+      type: array
+      items:
+        type: string
+        enum:
+        - bundles
+        - description
+        - facilities
+        - payment
+        - photos
+        - policies
+        - refuses_free_cancellation_requests
+        - rooms
+    productMealPlanPolicy:
+      title: AccommodationsProductMealPlanPolicy
+      description: The meal plan policy for this product.
+      type: object
+      properties:
+        meals:
+          description: The meals included in the meal plan.
+          type: array
+          items:
+            type: string
+            enum:
+            - breakfast
+            - dinner
+            - lunch
+        plan:
+          description: The meal plan included in this product.
+          type: string
+          enum:
+          - all_inclusive
+          - breakfast_included
+          - full_board
+          - half_board
+          - no_plan
+    availabilityProduct:
+      title: AccommodationsAvailabilityProductOutput
+      description: ''
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/productId'
+        bundle:
+          $ref: '#/components/schemas/bundleId'
+        deal:
+          $ref: '#/components/schemas/dealV32'
+        inventory:
+          $ref: '#/components/schemas/availabilityInventoryOutput'
+        maximum_occupancy:
+          $ref: '#/components/schemas/maximumOccupancy'
+        number_available:
+          description: How many units of this product are still available.
+          type: integer
+          minimum: 1
+        policies:
+          $ref: '#/components/schemas/productPoliciesMultiCurrencyAvailability'
+        price:
+          $ref: '#/components/schemas/priceV32'
+        room:
+          $ref: '#/components/schemas/roomIdString'
+    paymentCollectionDate:
       type: object
       properties:
         reference_date:
           $ref: '#/components/schemas/referenceDate'
         days_offset:
-          description: The number of days on or after reference date.
+          description: The number of days on or before reference date.
           type: integer
+    bundleTranslated:
+      title: BundleTranslatedOutput
+      type: object
+      description: List of value-added services included in this bundle.
+      properties:
+        id:
+          type: integer
+          description: Bundle identifier
+        value_adds:
+          type: array
+          items:
+            $ref: '#/components/schemas/valueAddTranslated'
+    coordinate:
+      type: number
+      multipleOf: 1.0e-06
+    checkinMethod:
+      description: An enumeration that describes the conditions for the checkin process and for collecting the key to access the property. This is typically relevant for non-hotel accommodations (like houses or apartments) without a 24 hours front-desk.
+      type: string
+      enum:
+      - door_code
+      - lock_box
+      - reception
+      - secret_spot
+      - someone_will_meet
+      - unknown
+    contacts:
+      title: AccommodationsContactsOutput
+      description: Contact information of the accommodation.
+      type: object
+      properties:
+        general:
+          $ref: '#/components/schemas/contact'
+        reservations:
+          $ref: '#/components/schemas/contact'
+    cityId:
+      description: A signed integer number that uniquely identifies a city. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/cities" target="_blank">common/locations/cities</a>.
+      type: integer
+    accommodationTheme:
+      title: AccommodationsThemeOutput
+      description: 'Accommodations can be grouped in "themes" depending on their characteristics. For example: "Beach/Seaside".'
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/accommodationThemeId'
+        name:
+          $ref: '#/components/schemas/translatedString'
+      required:
+      - id
+      - name
+      additionalProperties: false
+    countryId:
+      description: 'A two-letter code that uniquely identifies a country. This code is defined by the ISO 3166-1 alpha-2 standard (ISO2) as described here: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/countries" target="_blank">common/locations/countries</a>.'
+      type: string
+      pattern: ^[a-z]{2}$
+      example: nl
+    basePriceV32:
+      description: The base price. It does not include any extra charges.
+      type: object
+      properties:
+        accommodation_currency:
+          $ref: '#/components/schemas/monetaryAmount'
+        booker_currency:
+          $ref: '#/components/schemas/monetaryAmount'
+    breakdown:
+      title: AccommodationsReviewsBreakdownOutput
+      description: 'Review scores breakdown for each criteria. List of criteria includes: cleanliness, comfort, facilities, free_wifi, location, staff, value_for_money.'
+      type: object
+      patternProperties:
+        ^(cleanliness|comfort|facilities|free_wifi|location|staff|value_for_money)$:
+          $ref: '#/components/schemas/breakdown_schema'
+    currency:
+      type: object
+      properties:
+        accommodation:
+          $ref: '#/components/schemas/currencyId'
+        booker:
+          $ref: '#/components/schemas/currencyId'
+    roomIdString:
+      description: A unique identifier for a specific room within an accommodation property. You can retrieve the full list of available room IDs by calling [accommodations/details](/demand/docs/open-api/demand-api/accommodations/accommodations/details).
+      type: string
+    checkout:
+      description: The checkout date. Must be later than {checkin}. Must be between 1 and 90 days after {checkin}. Must be within 500 days in the future and in the format yyyy-mm-dd.
+      type: string
+      format: date
+    commission:
+      title: AccommodationsCommission
+      description: Commission details for the partner for a given accommodation
+      type: object
+      properties:
+        amount:
+          description: The actual commission amount for the partner.
+          type: number
+          format: double
+          minimum: 0
+        percentage:
+          description: Percentage of the fee that will be received as commission.
+          type: number
+          format: double
+          minimum: 0
+    productPaymentTimings:
+      description: The payment timings supported by this product.
+      type: array
+      items:
+        type: string
+        enum:
+        - pay_at_the_property
+        - pay_online_later
+        - pay_online_now
+    priceV32:
+      title: AccommodationsProductPrice
+      description: Contains the price components of an accommodation product. The 'base', 'display', 'chargeable_online' prices, and 'charges' are returned only when explicitly requested using extras=extra_charges.
+      type: object
+      properties:
+        base:
+          $ref: '#/components/schemas/basePriceV32'
+        charges:
+          $ref: '#/components/schemas/chargeBreakdownV32'
+        chargeable_online:
+          $ref: '#/components/schemas/chargeableOnlinePriceV32'
+        display:
+          $ref: '#/components/schemas/displayPriceV32'
+        total:
+          $ref: '#/components/schemas/totalPriceV32'
+    availabilityOutput:
+      title: AccommodationsAvailabilityOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/availability'
+    accommodationLocation:
+      title: AccommodationsLocationOutput
+      description: All location related information of this accommodation property.
+      type: object
+      properties:
+        address:
+          description: Translated accommodation address.
+          $ref: '#/components/schemas/translatedString'
+        city:
+          $ref: '#/components/schemas/locations_cityId'
+        coordinates:
+          $ref: '#/components/schemas/locations_coordinates'
+        country:
+          $ref: '#/components/schemas/locations_countryId'
+        districts:
+          type: array
+          items:
+            $ref: '#/components/schemas/districtId'
+        postal_code:
+          type: string
+        regions:
+          type: array
+          items:
+            $ref: '#/components/schemas/regionId'
+    page:
+      description: Pagination token used to retrieve the next page of results. Obtained from `next_page`.
+      type: string
+    score:
+      description: A decimal number indicating the review score of this criteria, in the range 1..10.
+      type: number
+      multipleOf: 0.1
+      minimum: 1
+      maximum: 10
+    reviewsScores_output:
+      title: AccommodationsReviewsOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/scores'
+    changesOutput:
+      title: AccommodationsDetailsChangesOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: object
+          properties:
+            changes:
+              $ref: '#/components/schemas/changes'
+            from:
+              description: ISO 8601 timestamp which indicates the timestamp from which the changes are returned (inclusive).
+              type: string
+              format: date-time
+            next:
+              description: 'ISO 8601 timestamp which indicates the next timestamp to be used for `last_change`. This will be 1 second after the latest change returned in the result (all changes from the "last" second are returned). NOTE: this field will not be present unless changes are returned. In this case, repeat the call after one minute with the same `last_change` date.'
+              type: string
+              format: date-time
+            total_changes:
+              description: Total number of changed accommodation ids returned. If 0, then repeat the call after one minute with the same `last_change` date.
+              type: integer
+    checkin:
+      description: The checkin date. Must be within 500 days in the future and in the format yyyy-mm-dd.
+      type: string
+      format: date
+    valueAddTranslated:
+      title: ValueAddTranslatedOutput
+      type: object
+      description: Value-added service with its type and descriptive text localised in multiple languages.
+      properties:
+        type:
+          $ref: '#/components/schemas/valueAddType'
+        description:
+          title: TranslatedStringArray
+          description: List of descriptive text lines for the value-added service, localised in multiple languages.
+          type: object
+          patternProperties:
+            ^[a-z]{2}(-[a-z]{2})$:
+              description: The content localised in this language.
+              type: array
+              nullable: true
+              items:
+                $ref: '#/components/schemas/translatedString'
+    coordinates:
+      title: AccommodationsSearchCoordinatesOutput
+      description: Limit the result list to the specified coordinates.
+      type: object
+      properties:
+        latitude:
+          description: Specify a latitude (as well as a longitude and radius) to do searches around a specific location.
+          type: number
+          format: double
+        longitude:
+          description: Specify a longitude (as well as a latitude and radius) to do searches around a specific location.
+          type: number
+          format: double
+        radius:
+          description: The radius is km to search around the specified latitude and longitude.
+          type: number
+          format: double
+    facilityDetails:
+      title: accommodationsFacilityDetailsOutput
+      description: Comprehensive information about the facilities available at the accommodation.
+      type: object
+      properties:
+        internet_facility:
+          description: Details about the internet facilities available at the accommodation, including price, charge mode and connection type.
+          type: object
+          $ref: '#/components/schemas/internetFacility'
+        parking_facilities:
+          type: array
+          description: A list of parking facilities available at the accommodation.
+          items:
+            $ref: '#/components/schemas/parkingFacility'
+        restaurant_facilities:
+          type: array
+          description: A list of restaurant facilities available at the accommodation.
+          items:
+            $ref: '#/components/schemas/restaurantFacility'
+        swimming_pool_facilities:
+          type: array
+          description: A list of swimming pool facilities available at the accommodation.
+          items:
+            $ref: '#/components/schemas/swimmingPoolFacility'
+    productDetailedCancellationPolicyMultiCurrency:
+      description: The cancellation policy schedule for this product.
+      type: array
+      items:
+        title: AccommodationsProductDetailedCancellationPolicyMultiCurrency
+        type: object
+        properties:
+          from:
+            description: The time from which this cancellation fee applies.
+            oneOf:
+            - title: Date-Time
+              type: string
+              format: date-time
+              description: ISO 8601 date-time
+              example: '2026-06-01T12:00:00Z'
+            - title: Literal 'now'
+              type: string
+              enum:
+              - now
+              description: Indicates that the cancellation fee applies immediately at booking time.
+            - title: Not applicable (Null)
+              type: 'null'
+          price:
+            description: The cancellation fee.
+            $ref: '#/components/schemas/priceCurrencyOutput'
+    photoUrl:
+      title: AccommodationsPhotoUrlOutput
+      type: object
+      properties:
+        large:
+          description: URL of the photo image with a maximum width of 1280 pixels.
+          type: string
+          format: url
+          example: https://q-xx.bstatic.com/xdata/images/hotel/max1280/20934654.jpg?k=806399263699a47361bdbbefc9c872a3db03eea26c4a815f5f4df95c93e38cdb&o=
+        standard:
+          description: URL of the photo image with a maximum width of 500 pixels.
+          type: string
+          format: url
+          example: https://q-xx.bstatic.com/xdata/images/hotel/max500/20934654.jpg?k=806399263699a47361bdbbefc9c872a3db03eea26c4a815f5f4df95c93e38cdb&o=
+        thumbnail:
+          description: URL of the photo thumbnail image with dimensions 100x100 pixels.
+          type: string
+          format: url
+          example: https://q-xx.bstatic.com/xdata/images/hotel/100x100/20934654.jpg?k=806399263699a47361bdbbefc9c872a3db03eea26c4a815f5f4df95c93e38cdb&o=
+        thumbnail_large:
+          description: URL of the photo thumbnail image with dimensions 300x300 pixels.
+          type: string
+          format: url
+          example: https://q-xx.bstatic.com/xdata/images/hotel/300x300/20934654.jpg?k=806399263699a47361bdbbefc9c872a3db03eea26c4a815f5f4df95c93e38cdb&o=
+    searchInput:
+      title: AccommodationsSearchInput
+      type: object
+      properties:
+        accommodations:
+          type: array
+          items:
+            $ref: '#/components/schemas/accommodationId'
+          maxItems: 100
+        airport:
+          $ref: '#/components/schemas/airportId'
+        booker:
+          $ref: '#/components/schemas/booker'
+        checkin:
+          $ref: '#/components/schemas/checkin'
+        checkout:
+          $ref: '#/components/schemas/checkout'
+        city:
+          $ref: '#/components/schemas/cityId'
+        coordinates:
+          $ref: '#/components/schemas/coordinates'
+        country:
+          $ref: '#/components/schemas/countryId'
+        currency:
+          $ref: '#/components/schemas/currencyId'
+        district:
+          $ref: '#/components/schemas/districtId'
+        extras:
+          $ref: '#/components/schemas/extras'
+        filters:
+          description: Filter criteria for the search results
+          type: object
+          properties:
+            24_hour_reception:
+              description: Filter the result based if the front desk reception is available 24/7. When specified true, the result will filter the products where front desk is available 24/7.
+              type: boolean
+            accommodation_facilities:
+              type: array
+              items:
+                $ref: '#/components/schemas/accommodationFacilityId'
+            accommodation_types:
+              type: array
+              items:
+                $ref: '#/components/schemas/accommodationTypeId'
+            brands:
+              type: array
+              items:
+                $ref: '#/components/schemas/accommodationBrandId'
+            cancellation_type:
+              $ref: '#/components/schemas/cancellation_type_filter'
+            dormitories:
+              description: This parameter specifies if the results should include dormitory beds or rooms. The default behaviour will include the dormitory beds or rooms with other results. When this flag is set to 'only', the response will only include dormitory beds or rooms. When this flag is set to 'exclude', the response will exclude dormitory beds or rooms. When this flag is set to 'include', the response will include dormitory beds or rooms with other results.
+              type: string
+              default: include
+              enum:
+              - include
+              - exclude
+              - only
+            meal_plan:
+              $ref: '#/components/schemas/meal_plan_filter'
+            payment:
+              description: The payment filter for the request
+              type: object
+              properties:
+                credit_card_required:
+                  description: Filter to show accommodations which require credit card
+                  type: boolean
+                timing:
+                  $ref: '#/components/schemas/paymentTimingFilter'
+            price:
+              description: If specified, will return only results where the price *per night* falls in the specified range (inclusive). This filter requires that a currency is passed
+              type: object
+              properties:
+                maximum:
+                  description: Set the maximum price per night, in the specified currency, or omit to indicate no upper limit.
+                  type: number
+                  format: double
+                minimum:
+                  description: Set the minimum price per night, in the specified currency, or omit to indicate no lower limit.
+                  type: number
+                  format: double
+            rating:
+              description: The rating filter for the request
+              type: object
+              properties:
+                minimum_review_score:
+                  description: Show only hotels with review_score >= that. Review score should be in the range 1 to 10.
+                  type: integer
+                  minimum: 1
+                  maximum: 10
+                stars:
+                  description: Limit to accommodations with the given number(s) of stars. Stars should be in the range of 1 to 5.
+                  type: array
+                  items:
+                    type: number
+                    minimum: 1
+                    maximum: 5
+            room_facilities:
+              type: array
+              items:
+                $ref: '#/components/schemas/roomFacilityId'
+            sustainability_certification:
+              description: Filter the result based on if the property has sustainability certification. When specified true, the result will filter and return only the accommodations that have sustainability certification.
+              type: boolean
+            travel_proud:
+              description: Filter the result based on if the property is LGBTQ+ friendly. When specified true, the result will filter and return only the accommodations that are Proud Certified.
+              type: boolean
+        guests:
+          $ref: '#/components/schemas/guests'
+        landmark:
+          $ref: '#/components/schemas/landmarkId'
+        page:
+          $ref: '#/components/schemas/page'
+        region:
+          $ref: '#/components/schemas/regionId'
+        rows:
+          $ref: '#/components/schemas/maximumResults'
+        sort:
+          description: The sorting parameters for the response
+          type: object
+          properties:
+            by:
+              description: 'The way to sort your results. NOTE: When ordering by distance please make sure to specify the latitude and longitude!'
+              type: string
+              enum:
+              - distance
+              - price
+              - review_score
+              - stars
+            direction:
+              description: Specifies the sort direction. Please note that descending order is not supported when sorting by distance.
+              type: string
+              enum:
+              - ascending
+              - descending
+      required:
+      - booker
+      - checkin
+      - checkout
+      - guests
     reviewsScores_input:
       title: AccommodationsReviewsInput
       type: object
@@ -7756,27 +7580,31 @@ components:
           $ref: '#/components/schemas/reviewer'
       required:
       - accommodations
-    paymentCollectionDate:
-      type: object
-      properties:
-        reference_date:
-          $ref: '#/components/schemas/referenceDate'
-        days_offset:
-          description: The number of days on or before reference date.
-          type: integer
-    fiscalInformation:
-      title: AccommodationsFiscalInformationOutput
-      description: All fiscal related information of this accommodation property.
-      type: object
-      properties:
-        legal_name:
-          type: string
-        vat_number:
-          type: string
-    paymentCardId:
-      description: A signed integer number that uniquely identifies a payment type. Examples of payment types are the different credit and debit cards. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonpayments/common/payments/cards" target="_blank">common/payments/cards</a>.
+    accommodationBrandId:
+      description: 'A signed integer number that uniquely identifies an accommodation brand. Examples of brands are: Radisson Blu, WestCord Hotels, Westin etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/chains" target="_blank">/accommodations/chains</a>.'
       type: integer
       minimum: 1
+    keyCollectionInformation:
+      title: AccommodationsKeyCollectionInformationOutput
+      type: object
+      properties:
+        checkin_method:
+          $ref: '#/components/schemas/checkinMethod'
+        key_location:
+          $ref: '#/components/schemas/keyLocation'
+    maximumResults:
+      description: The maximum number of results to return.
+      type: integer
+      multipleOf: 10
+      minimum: 10
+      maximum: 100
+      default: 100
+    cancellation_type_filter:
+      description: 'Filters the results by cancellation type. Currently, only ''free_cancellation'' is supported. This will return all products that can be cancelled without incurring any fees within a specified time frame. **⚠ DEPRECATED:** The ''non_refundable'' cancellation type filter is deprecated and will be removed in further versions. '
+      type: string
+      enum:
+      - free_cancellation
+      - non_refundable
     roomType:
       title: AccommodationsRoomTypeOutput
       description: 'Designations for different types of rooms, based on topology and/or setup. Examples: "Twin/Double" or "Dormitory room".'
@@ -7790,37 +7618,209 @@ components:
       - id
       - name
       additionalProperties: false
-    accommodationPhoto:
-      title: AccommodationsPhotoOutput
+    dataTypes_productCancellationType:
+      description: 'The cancellation policy applicable to this product: "free_cancellation" allows a period for free cancellation, "non_refundable" means immediate loss of total amount, "special_conditions" means partly refundable.'
+      type: string
+      enum:
+      - free_cancellation
+      - non_refundable
+      - special_conditions
+    accommodationChainId:
+      description: 'A signed integer number that uniquely identifies an accommodation chain. Examples of chains are: Radisson Hotel Group, Hilton Worldwide etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/chains" target="_blank">/accommodations/chains</a>.'
+      type: integer
+      minimum: 1
+    keyLocation:
+      description: Location of the key to access this accommodation property.
+      type: string
+      enum:
+      - at_the_property
+      - door_code
+      - different_place
+      - unknown
+    breakdown_schema:
+      title: AccommodationsReviewsBreakdownSchemaOutput
       type: object
       properties:
-        main_photo:
-          description: Flags this as the main photo. Not returned otherwise.
-          type: boolean
-          example: true
-        tags:
+        number_of_reviews:
+          description: Number of reviews for this criteria.
+          type: integer
+          minimum: 0
+        score:
+          $ref: '#/components/schemas/score'
+    availability_extras:
+      description: Input parameter to request for additional information about this product.
+      type: array
+      items:
+        type: string
+        enum:
+        - extra_charges
+    referenceDate:
+      type: string
+      enum:
+      - checkin
+      - checkout
+    valueAddType:
+      description: Identifies the type of value-added benefit included in the bundle, such as complimentary services, monetary credits, percentage discounts, or experiential amenities. Enum values encode how the benefit is applied, including time scope (per day or per stay) and unit scope (per room or per adult).
+      type: string
+      enum:
+      - parking
+      - food_drink_credit_per_day_per_room
+      - food_drink_credit_per_day_per_adult
+      - property_credit_per_day_per_room
+      - food_drink_credit_per_stay_per_adult
+      - food_drink_credit_per_stay_per_room
+      - property_credit_per_day_per_adult
+      - property_credit_per_stay_per_adult
+      - property_credit_per_stay_per_room
+      - food_drink_discount
+      - property_discount
+      - early_checkin
+      - late_checkout
+      - late_checkin
+      - spa_daily
+      - spa_hourly
+      - spa_massage
+      - high_speed_internet
+      - airport_transfer
+      - safari_game_drive
+      - safari_walk
+      - pets_stay
+      - bottle_of_wine
+      - bottle_of_champagne
+      - park_sleep_fly
+    bedOption:
+      title: AccommodationsBedOptionOutput
+      description: List of all possible bed arrangements. For apartments and other types of hotel accommodations, beds and bathrooms may be available as separate rooms.
+      type: object
+      properties:
+        bed_configurations:
+          description: Lists all alternative bed configurations that are supported.
           type: array
           items:
-            description: A list of tags associated with the photo. Manually generated.
-            type: string
-            example: Bathroom
-        url:
-          $ref: '#/components/schemas/photoUrl'
-    productV32:
-      title: AccommodationsAvailabilityRecommendationProductOutput
-      description: Represents a recommended product and its allocation details.
+            $ref: '#/components/schemas/bedConfiguration'
+        has_bathroom:
+          description: Flags if this area includes its own bathroom.
+          type: boolean
+        is_bedroom:
+          description: Flags if this area is marked as a bedroom, otherwise, it should be considered a living room.
+          type: boolean
+    accommodationSearch:
+      title: AccommodationsSearchDataOutput
+      description: ''
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/productId'
-        children:
-          $ref: '#/components/schemas/recommendation_children'
-        number_of_adults:
-          $ref: '#/components/schemas/numberOfAdults'
+          $ref: '#/components/schemas/accommodationId'
+        commission:
+          $ref: '#/components/schemas/commission'
+        currency:
+          $ref: '#/components/schemas/currency'
+        deep_link_url:
+          $ref: '#/components/schemas/deepLinkUrl'
         price:
-          $ref: '#/components/schemas/recommendation_priceV32'
-    accommodationTypeId:
-      description: 'A signed integer number that uniquely identifies an accommodation property type. Examples of accommodation types are: Apartment, Hostel, Hotel etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
+          $ref: '#/components/schemas/PriceSummarySearchV32'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/product'
+        url:
+          $ref: '#/components/schemas/url'
+    changes:
+      description: The list of changed accommodations.
+      type: object
+      properties:
+        changed:
+          description: 'Accommodations which have had relevant changes to their content since the given timestamp. Changes being tracked include: general information, standard phrase, photos, payments, facilities and rooms.'
+          type: array
+          items:
+            type: integer
+        closed:
+          description: Accommodations which have closed since the given timestamp. Note that these same accommodations may be re-opened shortly after.
+          type: object
+          properties:
+            fraud:
+              type: array
+              items:
+                type: integer
+            permanently:
+              type: array
+              items:
+                type: integer
+            temporarily:
+              type: array
+              items:
+                type: integer
+        opened:
+          description: Accommodations which have opened since the given timestamp. Note that sometimes accommodations may be closed again shortly after.
+          type: array
+          items:
+            type: integer
+    parkingFacility:
+      title: AccommodationsParkingFacilityOutput
+      description: Information about the parking facilities available at the accommodation, including pricing, type, location, and reservation requirements.
+      type: object
+      properties:
+        charge_mode:
+          type: string
+          description: The charging model for parking, such as per hour, per day, or free.
+          nullable: true
+          enum:
+          - free
+          - charges_are_applicable
+          - charges_may_apply
+          - per_hour
+          - per_day
+          - per_week
+          - per_stay
+        location:
+          type: string
+          description: The location of the parking facility relative to the accommodation (on-site or nearby).
+          nullable: true
+          enum:
+          - on_site
+          - nearby
+        price:
+          $ref: '#/components/schemas/monetaryAmount'
+          description: The price for using the parking facility, if applicable.
+          minimum: 0
+          nullable: true
+        reservation:
+          type: string
+          description: Indicates whether a reservation is required for parking at the accommodation.
+          nullable: true
+          enum:
+          - needed
+          - not_needed
+          - not_possible
+        type:
+          type: string
+          description: The type of parking available, either public or private.
+          nullable: true
+          enum:
+          - private
+          - public
+    roomAttribute:
+      type: string
+      enum:
+      - non_smoking
+      - smoking
+      - work_friendly
+    chargeTypeId:
+      description: 'A signed integer number that uniquely identifies an accommodation charge type. Examples of charges are: VAT, City Tax, etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
+      type: integer
+      minimum: 0
+    valueAdds_bundlesTranslated:
+      title: BundlesTranslatedOutput
+      description: List of value-added bundles available for this accommodation. Each bundle groups one or more value-added benefits and includes localised descriptive text for display.
+      type: array
+      items:
+        $ref: '#/components/schemas/bundleTranslated'
+    regionId:
+      description: A signed integer number that uniquely identifies a geographical region. Regions usually define official administrative areas within a country, but may also include multiple countries and in some cases un-official but popular designations for geographical areas. An example of a region that crosses multiple countries is the Alps in Europe. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/regions" target="_blank">common/locations/regions</a>.
+      type: integer
+      minimum: 1
+    roomFacilityId:
+      description: 'A signed integer number that uniquely identifies an accommodation property room facility. Examples of facilities are: Coffee/Tea maker, TV, Airconditioning, etc. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/accommodations/accommodations/constants" target="_blank">accommodations/constants</a>.'
       type: integer
       minimum: 1
   securitySchemes:

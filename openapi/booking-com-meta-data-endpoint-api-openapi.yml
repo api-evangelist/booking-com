@@ -52,42 +52,79 @@ paths:
     - url: https://supply-xml.booking.com/facilities-api/
 components:
   schemas:
+    DetailsType:
+      type: string
+      description: Name of a details object that can be used in facility instances
+      enum:
+      - AgeLimitDetails
+      - CribDetails
+      - InternetDetails
+      - KidsPoolDetails
+      - LinenDetails
+      - MealDetails
+      - OnsiteDetails
+      - ParkingDetails
+      - PaymentDetails
+      - RestaurantDetails
+      - ScheduleDetails
+      - SurchargeDetails
+      - SwimmingPoolDetails
+      - TemporarilyClosedDetails
+    RoomFacilityMetaSummary:
+      type: object
+      properties:
+        room_facility_id:
+          type: integer
+          description: Booking.com Room Facility ID
+          format: int32
+        ota_room_amenity_type:
+          type: integer
+          description: OTA RMA (Room Amenity Type Code)
+          format: int32
+        booking_extended_legacy_code:
+          type: integer
+          description: '[Legacy] Booking.com Extended RMA Room Facility Code'
+          format: int32
+        room_facility_name:
+          type: string
+          description: Name
+        allowed_details_list:
+          type: array
+          description: List of applicable detail type names
+          items:
+            $ref: '#/components/schemas/DetailsType'
+      description: Room Facility meta summary with detail type names
+    BathroomConfiguration:
+      type: object
+      properties:
+        unit_type_id:
+          type: integer
+          format: int32
+        unit_type_name:
+          type: string
+        allowed_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/BathroomOptions'
     ResponseMeta:
       type: object
       properties:
         ruid:
           type: string
-    FacilityMeta:
+    ApiError:
       type: object
       properties:
-        property_facility_metas:
-          type: array
-          items:
-            $ref: '#/components/schemas/PropertyFacilityMetaSummary'
-        room_facility_metas:
-          type: array
-          items:
-            $ref: '#/components/schemas/RoomFacilityMetaSummary'
-        bathroom_configurations:
-          type: array
-          items:
-            $ref: '#/components/schemas/BathroomConfiguration'
-      description: Contains meta data about property & room facilities
-    ApiResponseFacilityMeta:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/FacilityMeta'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
+        message:
+          type: string
+        code:
+          type: integer
+          description: Error code
+        description:
+          type: string
+          description: Detailed error description
+        details:
+          type: object
+          description: Additional error context
     PropertyFacilityMetaSummary:
       type: object
       properties:
@@ -117,44 +154,21 @@ components:
           items:
             $ref: '#/components/schemas/DetailsType'
       description: Property Facility meta summary with detail type names
-    RoomFacilityMetaSummary:
+    ApiResponseFacilityMeta:
       type: object
       properties:
-        room_facility_id:
-          type: integer
-          description: Booking.com Room Facility ID
-          format: int32
-        ota_room_amenity_type:
-          type: integer
-          description: OTA RMA (Room Amenity Type Code)
-          format: int32
-        booking_extended_legacy_code:
-          type: integer
-          description: '[Legacy] Booking.com Extended RMA Room Facility Code'
-          format: int32
-        room_facility_name:
-          type: string
-          description: Name
-        allowed_details_list:
+        data:
+          $ref: '#/components/schemas/FacilityMeta'
+        warnings:
           type: array
-          description: List of applicable detail type names
           items:
-            $ref: '#/components/schemas/DetailsType'
-      description: Room Facility meta summary with detail type names
-    ApiError:
-      type: object
-      properties:
-        message:
-          type: string
-        code:
-          type: integer
-          description: Error code
-        description:
-          type: string
-          description: Detailed error description
-        details:
-          type: object
-          description: Additional error context
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
     BathroomOptions:
       type: object
       properties:
@@ -175,36 +189,22 @@ components:
             - IN_THE_HALLWAY
             - OTHER
             - INSIDE_THE_UNIT
-    DetailsType:
-      type: string
-      description: Name of a details object that can be used in facility instances
-      enum:
-      - AgeLimitDetails
-      - CribDetails
-      - InternetDetails
-      - KidsPoolDetails
-      - LinenDetails
-      - MealDetails
-      - OnsiteDetails
-      - ParkingDetails
-      - PaymentDetails
-      - RestaurantDetails
-      - ScheduleDetails
-      - SurchargeDetails
-      - SwimmingPoolDetails
-      - TemporarilyClosedDetails
-    BathroomConfiguration:
+    FacilityMeta:
       type: object
       properties:
-        unit_type_id:
-          type: integer
-          format: int32
-        unit_type_name:
-          type: string
-        allowed_options:
+        property_facility_metas:
           type: array
           items:
-            $ref: '#/components/schemas/BathroomOptions'
+            $ref: '#/components/schemas/PropertyFacilityMetaSummary'
+        room_facility_metas:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomFacilityMetaSummary'
+        bathroom_configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/BathroomConfiguration'
+      description: Contains meta data about property & room facilities
     AgeLimitDetails:
       properties:
         age_limit:
@@ -224,88 +224,6 @@ components:
           - AGE_11
           - AGE_12
           - NO_RESTRICTION
-    ApiResponseFacilityMeta_2:
-      properties:
-        ruid:
-          type: string
-          writeOnly: true
-        data:
-          $ref: '#/components/schemas/FacilityMeta_2'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError_2'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError_2'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta_2'
-    TemporarilyClosedDetails:
-      description: Temporarily Closed Facility Details
-      properties:
-        closed:
-          type: array
-          items:
-            $ref: '#/components/schemas/TemporarilyClosedEntry'
-    InternetDetails:
-      description: Defines details of the Internet connection
-      properties:
-        area:
-          type: string
-          default: PUBLIC_AREAS
-          description: Connection location
-          enum:
-          - UNKNOWN_COVERAGE
-          - ALL_ROOMS
-          - SOME_ROOMS
-          - PUBLIC_AREAS
-          - BUSINESS_CENTER
-          - ENTIRE_PROPERTY
-        type:
-          type: string
-          default: WIFI
-          description: Connection type
-          enum:
-          - NONE
-          - WIRED
-          - WIFI
-        wifi_info:
-          $ref: '#/components/schemas/WifiInfo'
-      required:
-      - area
-      - type
-    LinenDetails:
-      description: Linen Details
-      properties:
-        has_crib_linen:
-          type: boolean
-          default: false
-          description: Crib (cot) linen
-        has_fitted_sheet:
-          type: boolean
-          default: false
-          description: Fitted sheet
-        has_top_sheet:
-          type: boolean
-          default: false
-          description: Top sheet
-        has_blanket:
-          type: boolean
-          default: false
-          description: Blanket
-        has_extra_blankets:
-          type: boolean
-          default: false
-          description: Extra blankets
-        has_pillow:
-          type: boolean
-          default: false
-          description: Pillow
-        has_mattress_protector:
-          type: boolean
-          default: false
-          description: Mattress protector
     RestaurantDetails:
       properties:
         name:
@@ -420,51 +338,161 @@ components:
           description: A la carte menu
       required:
       - name
-    SwimmingPoolDimensions:
+    BathroomConfiguration_2:
       properties:
-        length:
-          type: number
-          format: double
-          description: Pool length
-        width:
-          type: number
-          format: double
-          description: Pool width
-        depth_min:
-          type: number
-          format: double
-          description: Pool minimal depth
-        depth_max:
-          type: number
-          format: double
-          description: Pool maximal depth
-        unit:
+        unit_type_id:
+          type: integer
+          format: int32
+        unit_type_name:
           type: string
-          description: Measurement unit
+        allowed_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/BathroomOptions_2'
+    FacilityMeta_2:
+      description: Contains meta data about property & room facilities
+      properties:
+        property_facility_metas:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyFacilityMeta'
+        room_facility_metas:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomFacilityMeta'
+        bathroom_configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/BathroomConfiguration_2'
+    RoomFacilityMeta:
+      description: DEBUG ONLY. Contains Room Facility meta
+      properties:
+        room_facility_id:
+          type: integer
+          format: int32
+          description: Booking.com Room Facility ID
+        ota_room_amenity_type:
+          type: integer
+          format: int32
+          description: OTA RMA (Room Amenity Type Code)
+        booking_extended_legacy_code:
+          type: integer
+          format: int32
+          description: '[Legacy] Booking.com Extended RMA Room Facility Code'
+        room_facility_name:
+          type: string
+          description: Name
+        allowed_details_list:
+          type: array
+          description: List of applicable Details Objects
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/CribDetails'
+            - $ref: '#/components/schemas/LinenDetails'
+            description: List of applicable Details Objects
+    LinenDetails:
+      description: Linen Details
+      properties:
+        has_crib_linen:
+          type: boolean
+          default: false
+          description: Crib (cot) linen
+        has_fitted_sheet:
+          type: boolean
+          default: false
+          description: Fitted sheet
+        has_top_sheet:
+          type: boolean
+          default: false
+          description: Top sheet
+        has_blanket:
+          type: boolean
+          default: false
+          description: Blanket
+        has_extra_blankets:
+          type: boolean
+          default: false
+          description: Extra blankets
+        has_pillow:
+          type: boolean
+          default: false
+          description: Pillow
+        has_mattress_protector:
+          type: boolean
+          default: false
+          description: Mattress protector
+    WifiInfo:
+      description: Provides information about Wi-Fi connection
+      properties:
+        network_name:
+          type: string
+          description: Wi-fi network name (SSID)
+        speed_download:
+          type: number
+          format: double
+          description: Download speed, mbps
+        speed_upload:
+          type: number
+          format: double
+          description: Upload speed, mbps
+    KidsPoolDetails:
+      properties:
+        swimming_pool_dimensions:
+          $ref: '#/components/schemas/SwimmingPoolDimensions'
+        has_shallow_end:
+          type: boolean
+          default: false
+          description: Is there a shallow end?
+    TemporarilyClosedEntry:
+      description: A range of dates
+      properties:
+        start_date:
+          $ref: '#/components/schemas/Timestamp'
+        end_date:
+          $ref: '#/components/schemas/Timestamp'
+    BathroomOptions_2:
+      properties:
+        bathroom_type:
+          type: string
           enum:
-          - METER
-    ApiError_2:
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-        details:
-          type: object
-    SurchargeDetails:
-      description: Surcharge Details
-      properties:
-        surcharge_type:
-          type: string
-          description: Surcharge type (free/paid)
-          enum:
-          - DEFAULT
-          - FREE
-          - PAID
-    ResponseMeta_2:
+          - PRIVATE
+          - SHARED
+        bathroom_locations:
+          type: array
+          items:
+            type: string
+            enum:
+            - ENSUITE
+            - NEXT_DOOR
+            - DOWN_THE_HALL
+            - OPPOSITE_THE_ROOM
+            - IN_THE_HALLWAY
+            - OTHER
+            - INSIDE_THE_UNIT
+    ApiResponseFacilityMeta_2:
       properties:
         ruid:
           type: string
+          writeOnly: true
+        data:
+          $ref: '#/components/schemas/FacilityMeta_2'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta_2'
+    TemporarilyClosedDetails:
+      description: Temporarily Closed Facility Details
+      properties:
+        closed:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemporarilyClosedEntry'
     WeekTimeEntry:
       description: Describes opening times on a certain day of week
       properties:
@@ -572,61 +600,6 @@ components:
       required:
       - name
       - swimming_pool_type
-    OnSiteDetails:
-      description: Facility location details
-      properties:
-        onsite_type:
-          type: string
-          description: Facility location
-          enum:
-          - DEFAULT
-          - ONSITE
-          - OFFSITE
-    RoomFacilityMeta:
-      description: DEBUG ONLY. Contains Room Facility meta
-      properties:
-        room_facility_id:
-          type: integer
-          format: int32
-          description: Booking.com Room Facility ID
-        ota_room_amenity_type:
-          type: integer
-          format: int32
-          description: OTA RMA (Room Amenity Type Code)
-        booking_extended_legacy_code:
-          type: integer
-          format: int32
-          description: '[Legacy] Booking.com Extended RMA Room Facility Code'
-        room_facility_name:
-          type: string
-          description: Name
-        allowed_details_list:
-          type: array
-          description: List of applicable Details Objects
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/CribDetails'
-            - $ref: '#/components/schemas/LinenDetails'
-            description: List of applicable Details Objects
-    BathroomOptions_2:
-      properties:
-        bathroom_type:
-          type: string
-          enum:
-          - PRIVATE
-          - SHARED
-        bathroom_locations:
-          type: array
-          items:
-            type: string
-            enum:
-            - ENSUITE
-            - NEXT_DOOR
-            - DOWN_THE_HALL
-            - OPPOSITE_THE_ROOM
-            - IN_THE_HALLWAY
-            - OTHER
-            - INSIDE_THE_UNIT
     PropertyFacilityMeta:
       description: DEBUG ONLY. Contains Property Facility meta
       properties:
@@ -673,31 +646,55 @@ components:
             - $ref: '#/components/schemas/RestaurantDetails'
             - $ref: '#/components/schemas/SwimmingPoolDetails'
             description: List of required Details objects
-    WifiInfo:
-      description: Provides information about Wi-Fi connection
+    InternetDetails:
+      description: Defines details of the Internet connection
       properties:
-        network_name:
+        area:
           type: string
-          description: Wi-fi network name (SSID)
-        speed_download:
-          type: number
-          format: double
-          description: Download speed, mbps
-        speed_upload:
-          type: number
-          format: double
-          description: Upload speed, mbps
-    BathroomConfiguration_2:
+          default: PUBLIC_AREAS
+          description: Connection location
+          enum:
+          - UNKNOWN_COVERAGE
+          - ALL_ROOMS
+          - SOME_ROOMS
+          - PUBLIC_AREAS
+          - BUSINESS_CENTER
+          - ENTIRE_PROPERTY
+        type:
+          type: string
+          default: WIFI
+          description: Connection type
+          enum:
+          - NONE
+          - WIRED
+          - WIFI
+        wifi_info:
+          $ref: '#/components/schemas/WifiInfo'
+      required:
+      - area
+      - type
+    ResponseMeta_2:
       properties:
-        unit_type_id:
-          type: integer
-          format: int32
-        unit_type_name:
+        ruid:
           type: string
-        allowed_options:
-          type: array
-          items:
-            $ref: '#/components/schemas/BathroomOptions_2'
+    ApiError_2:
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          type: object
+    OnSiteDetails:
+      description: Facility location details
+      properties:
+        onsite_type:
+          type: string
+          description: Facility location
+          enum:
+          - DEFAULT
+          - ONSITE
+          - OFFSITE
     Timestamp:
       description: End date when facility are temporarily closed hotel timezone
       properties:
@@ -705,102 +702,6 @@ components:
           type: integer
           format: int64
           description: Unix timestamp in seconds since epoch
-    FacilityMeta_2:
-      description: Contains meta data about property & room facilities
-      properties:
-        property_facility_metas:
-          type: array
-          items:
-            $ref: '#/components/schemas/PropertyFacilityMeta'
-        room_facility_metas:
-          type: array
-          items:
-            $ref: '#/components/schemas/RoomFacilityMeta'
-        bathroom_configurations:
-          type: array
-          items:
-            $ref: '#/components/schemas/BathroomConfiguration_2'
-    ScheduleDetails:
-      description: 'Defines a schedule for a Facility. Corresponding legacy object in HDCN: OperationTimes'
-      properties:
-        schedule:
-          type: array
-          items:
-            $ref: '#/components/schemas/WeekTimeEntry'
-    TemporarilyClosedEntry:
-      description: A range of dates
-      properties:
-        start_date:
-          $ref: '#/components/schemas/Timestamp'
-        end_date:
-          $ref: '#/components/schemas/Timestamp'
-    CribDetails:
-      description: Crib Details
-      properties:
-        is_foldable:
-          type: boolean
-          default: false
-          description: Foldable
-        is_standalone:
-          type: boolean
-          default: false
-          description: Standalone
-    Daytime:
-      description: Definition of a time in the day
-      properties:
-        hours:
-          type: integer
-          format: int32
-          description: Hours, in 24h format
-          maximum: 23
-          minimum: 0
-        minutes:
-          type: integer
-          format: int32
-          description: Minutes
-          maximum: 59
-          minimum: 0
-    ChargeDetails:
-      description: Charge details
-      properties:
-        price:
-          type: number
-          format: double
-          description: Price, in property's currency
-        frequency:
-          type: string
-          description: Charging frequency
-          enum:
-          - UNKNOWN_FREQUENCY
-          - PER_STAY
-          - PER_MINUTE
-          - PER_HALF_HOUR
-          - PER_HOUR
-          - PER_DAY
-          - PER_WEEK
-    KidsPoolDetails:
-      properties:
-        swimming_pool_dimensions:
-          $ref: '#/components/schemas/SwimmingPoolDimensions'
-        has_shallow_end:
-          type: boolean
-          default: false
-          description: Is there a shallow end?
-    PaymentDetails:
-      description: Payment Details
-      properties:
-        charge_mode:
-          type: string
-          description: Charge mode
-          enum:
-          - UNKNOWN_CHARGE_MODE
-          - FREE
-          - PAID
-          - CHARGES_MAY_APPLY
-        charge_details:
-          $ref: '#/components/schemas/ChargeDetails'
-      required:
-      - charge_mode
     ParkingDetails:
       description: Parking Details
       properties:
@@ -894,6 +795,105 @@ components:
       - parking_access
       - parking_location
       - parking_reservation
+    SwimmingPoolDimensions:
+      properties:
+        length:
+          type: number
+          format: double
+          description: Pool length
+        width:
+          type: number
+          format: double
+          description: Pool width
+        depth_min:
+          type: number
+          format: double
+          description: Pool minimal depth
+        depth_max:
+          type: number
+          format: double
+          description: Pool maximal depth
+        unit:
+          type: string
+          description: Measurement unit
+          enum:
+          - METER
+    ScheduleDetails:
+      description: 'Defines a schedule for a Facility. Corresponding legacy object in HDCN: OperationTimes'
+      properties:
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeekTimeEntry'
+    SurchargeDetails:
+      description: Surcharge Details
+      properties:
+        surcharge_type:
+          type: string
+          description: Surcharge type (free/paid)
+          enum:
+          - DEFAULT
+          - FREE
+          - PAID
+    PaymentDetails:
+      description: Payment Details
+      properties:
+        charge_mode:
+          type: string
+          description: Charge mode
+          enum:
+          - UNKNOWN_CHARGE_MODE
+          - FREE
+          - PAID
+          - CHARGES_MAY_APPLY
+        charge_details:
+          $ref: '#/components/schemas/ChargeDetails'
+      required:
+      - charge_mode
+    ChargeDetails:
+      description: Charge details
+      properties:
+        price:
+          type: number
+          format: double
+          description: Price, in property's currency
+        frequency:
+          type: string
+          description: Charging frequency
+          enum:
+          - UNKNOWN_FREQUENCY
+          - PER_STAY
+          - PER_MINUTE
+          - PER_HALF_HOUR
+          - PER_HOUR
+          - PER_DAY
+          - PER_WEEK
+    CribDetails:
+      description: Crib Details
+      properties:
+        is_foldable:
+          type: boolean
+          default: false
+          description: Foldable
+        is_standalone:
+          type: boolean
+          default: false
+          description: Standalone
+    Daytime:
+      description: Definition of a time in the day
+      properties:
+        hours:
+          type: integer
+          format: int32
+          description: Hours, in 24h format
+          maximum: 23
+          minimum: 0
+        minutes:
+          type: integer
+          format: int32
+          description: Minutes
+          maximum: 59
+          minimum: 0
 x-refined-from:
 - booking-com-facilities-api-openapi.yml
 - booking-com-facilities-api-remote-sync-openapi.yml

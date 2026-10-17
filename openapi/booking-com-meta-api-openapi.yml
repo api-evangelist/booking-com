@@ -156,27 +156,13 @@ components:
           type: string
         is_active:
           type: boolean
-    ResponseMeta:
+    UnitName:
       properties:
-        ruid:
+        unit_name_id:
+          type: integer
+          format: int32
+        unit_name:
           type: string
-    ApiResponseUnitMeta:
-      properties:
-        ruid:
-          type: string
-          writeOnly: true
-        data:
-          $ref: '#/components/schemas/UnitMeta'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
     PropertyCategory:
       properties:
         code:
@@ -210,6 +196,52 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UnitName'
+    ResponseMeta:
+      properties:
+        ruid:
+          type: string
+    ApiResponseUnitMeta:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          $ref: '#/components/schemas/UnitMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ApiError:
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32
+          description: ''
+        details:
+          type: object
+          properties:
+            fields:
+              type: array
+              description: ''
+              items:
+                type: string
+        description:
+          type: string
+    UnitCategory:
+      properties:
+        category_id:
+          type: integer
+          format: int32
+        category_name:
+          type: string
     UnitMeta:
       properties:
         language_code:
@@ -282,38 +314,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UnitCategory'
-    ApiError:
-      properties:
-        message:
-          type: string
-        code:
-          type: integer
-          format: int32
-          description: ''
-        details:
-          type: object
-          properties:
-            fields:
-              type: array
-              description: ''
-              items:
-                type: string
-        description:
-          type: string
-    UnitCategory:
-      properties:
-        category_id:
-          type: integer
-          format: int32
-        category_name:
-          type: string
-    UnitName:
-      properties:
-        unit_name_id:
-          type: integer
-          format: int32
-        unit_name:
-          type: string
 x-tagGroups:
 - name: API Endpoints
   tags:

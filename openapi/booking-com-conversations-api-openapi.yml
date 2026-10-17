@@ -168,30 +168,6 @@ components:
       required: true
       description: Include here your Affiliate identifier number
   schemas:
-    conversations_input:
-      title: RetrieveConversationRequest
-      type: object
-      required:
-      - accommodation
-      properties:
-        accommodation:
-          type: string
-          description: The unique identifier of the property
-        conversation:
-          description: Uniquely identifies the conversation.
-          $ref: '#/components/schemas/conversation'
-        reservation:
-          type: string
-          description: Unique identifier of the reservation associated with this conversation.
-          $ref: '#/components/schemas/common_reservation'
-      oneOf:
-      - required:
-        - conversation
-      - required:
-        - reservation
-    conversation:
-      description: A unique identifier for the conversation thread.
-      type: string
     conversations_message:
       type: object
       required:
@@ -216,28 +192,30 @@ components:
             type: string
         timestamp:
           $ref: '#/components/schemas/timestamp'
-    conversations_metadata:
+    conversations_input:
+      title: RetrieveConversationRequest
       type: object
+      required:
+      - accommodation
       properties:
-        type:
-          description: Type of the metadata
+        accommodation:
           type: string
-          enum:
-          - guest
-          - property
-        name:
-          description: Uniquely identifies the metadata.
+          description: The unique identifier of the property
+        conversation:
+          description: Uniquely identifies the conversation.
+          $ref: '#/components/schemas/conversation'
+        reservation:
           type: string
+          description: Unique identifier of the reservation associated with this conversation.
+          $ref: '#/components/schemas/common_reservation'
+      oneOf:
+      - required:
+        - conversation
+      - required:
+        - reservation
     common_reservation:
       type: string
       description: The unique identifier of the reservation
-    timestamp:
-      description: 'The timestamp in ISO-8601 format from which the message is sent. Format: YYYY-MM-DDTHH:mm:ss+00:00'
-      type: string
-      format: date-time
-    requestId:
-      description: Uniquely identifies the request. Please provide this identifier when contacting support.
-      type: string
     participants:
       type: object
       required:
@@ -250,22 +228,12 @@ components:
         metadata:
           type: object
           $ref: '#/components/schemas/conversations_metadata'
-    conversations_output:
-      type: object
-      required:
-      - request_id
-      - data
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: object
-          required:
-          - conversation
-          properties:
-            conversation:
-              type: object
-              $ref: '#/components/schemas/conversations_conversation'
+    conversation:
+      description: A unique identifier for the conversation thread.
+      type: string
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
     conversations_conversation:
       type: object
       required:
@@ -290,6 +258,38 @@ components:
           description: List of participants in the conversation, including guest and property.
           items:
             $ref: '#/components/schemas/participants'
+    conversations_metadata:
+      type: object
+      properties:
+        type:
+          description: Type of the metadata
+          type: string
+          enum:
+          - guest
+          - property
+        name:
+          description: Uniquely identifies the metadata.
+          type: string
+    conversations_output:
+      type: object
+      required:
+      - request_id
+      - data
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: object
+          required:
+          - conversation
+          properties:
+            conversation:
+              type: object
+              $ref: '#/components/schemas/conversations_conversation'
+    timestamp:
+      description: 'The timestamp in ISO-8601 format from which the message is sent. Format: YYYY-MM-DDTHH:mm:ss+00:00'
+      type: string
+      format: date-time
   securitySchemes:
     BearerAuth:
       type: http

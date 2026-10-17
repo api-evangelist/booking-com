@@ -786,34 +786,24 @@ components:
       required: true
       description: Include here your Affiliate identifier number
   schemas:
-    country:
-      title: CountryOutput
-      description: The two-letter ISO2 country code and the translated name(s).
+    airportOutput:
+      title: AirportsOutput
       type: object
       properties:
-        id:
-          $ref: '#/components/schemas/countryId'
-        name:
-          $ref: '#/components/schemas/translatedString'
-    page:
-      description: Pagination token used to retrieve the next page of results. Obtained from `next_page`.
-      type: string
-    districtId:
-      description: A signed integer number that uniquely identifies a district. Typically, districts define known areas within a city. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/districts" target="_blank">common/locations/districts</a>.
-      type: integer
-      minimum: 1
-    region:
-      title: RegionOutput
-      description: The region id and the translated name(s).
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/regionId'
-        name:
-          $ref: '#/components/schemas/translatedString'
-    requestId:
-      description: Uniquely identifies the request. Please provide this identifier when contacting support.
-      type: string
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/airport'
+        metadata:
+          title: MetadataOutput
+          type: object
+          properties:
+            next_page:
+              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
+              type: string
+              nullable: true
     landmark:
       title: LandmarkOutput
       description: The landmark internal code and the translated name(s).
@@ -825,8 +815,99 @@ components:
           $ref: '#/components/schemas/translatedString'
         coordinates:
           $ref: '#/components/schemas/dataTypes_coordinates'
-    countriesOutput:
-      title: CountriesOutput
+    cityId:
+      description: A signed integer number that uniquely identifies a city. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/cities" target="_blank">common/locations/cities</a>.
+      type: integer
+    countryId:
+      description: 'A two-letter code that uniquely identifies a country. This code is defined by the ISO 3166-1 alpha-2 standard (ISO2) as described here: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/countries" target="_blank">common/locations/countries</a>.'
+      type: string
+      pattern: ^[a-z]{2}$
+      example: nl
+    cities_city:
+      title: CityOutput
+      description: The city internal code and the translated name(s).
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/cityId'
+        name:
+          $ref: '#/components/schemas/translatedString'
+        coordinates:
+          $ref: '#/components/schemas/dataTypes_coordinates'
+    translatedString:
+      title: TranslatedString
+      description: A string localised in multiple languages.
+      type: object
+      patternProperties:
+        ^[a-z]{2}(-[a-z]{2})$:
+          description: The content localised in this language.
+          type:
+          - string
+          - 'null'
+    page:
+      description: Pagination token used to retrieve the next page of results. Obtained from `next_page`.
+      type: string
+    districtsInput:
+      title: DistrictsInput
+      type: object
+      properties:
+        airport:
+          $ref: '#/components/schemas/airportId'
+        city:
+          $ref: '#/components/schemas/cityId'
+        country:
+          $ref: '#/components/schemas/countryId'
+        district:
+          $ref: '#/components/schemas/districtId'
+        landmark:
+          $ref: '#/components/schemas/landmarkId'
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/languageId'
+          default:
+          - en-gb
+        page:
+          $ref: '#/components/schemas/page'
+        region:
+          $ref: '#/components/schemas/regionId'
+        rows:
+          $ref: '#/components/schemas/maximumResults'
+          maximum: 1000
+    airportId:
+      description: A three-letter code that uniquely identifies an airport as defined by the International Air Transport Association (IATA). The full list can be obtained by calling  <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/airports" target="_blank">common/locations/airports</a>.
+      type: string
+      pattern: ^[A-Z]{3}$
+      example: AMS
+    landmarksInput:
+      title: LandmarksInput
+      type: object
+      properties:
+        airport:
+          $ref: '#/components/schemas/airportId'
+        city:
+          $ref: '#/components/schemas/cityId'
+        country:
+          $ref: '#/components/schemas/countryId'
+        district:
+          $ref: '#/components/schemas/districtId'
+        landmark:
+          $ref: '#/components/schemas/landmarkId'
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/languageId'
+          default:
+          - en-gb
+        page:
+          $ref: '#/components/schemas/page'
+        region:
+          $ref: '#/components/schemas/regionId'
+        rows:
+          $ref: '#/components/schemas/maximumResults'
+          maximum: 1000
+    landmarksOutput:
+      title: LandmarksOutput
       type: object
       properties:
         request_id:
@@ -834,7 +915,45 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/country'
+            $ref: '#/components/schemas/landmark'
+        metadata:
+          title: MetadataOutput
+          type: object
+          properties:
+            next_page:
+              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
+              type: string
+              nullable: true
+    languageId:
+      description: 'A [IETF language tag code](https://en.wikipedia.org/wiki/IETF_language_tag) that uniquely identifies a supported human language or dialect. **Note:** Demand API only accepts lowercase for the language codes. Examples: "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.'
+      type: string
+      pattern: ^[a-z]{2}(-[a-z]{2})?$
+      example: en-us
+    districtId:
+      description: A signed integer number that uniquely identifies a district. Typically, districts define known areas within a city. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/districts" target="_blank">common/locations/districts</a>.
+      type: integer
+      minimum: 1
+    maximumResults:
+      description: The maximum number of results to return.
+      type: integer
+      multipleOf: 10
+      minimum: 10
+      maximum: 100
+      default: 100
+    landmarkId:
+      description: A signed integer number that uniquely identifies a relevant geographical landmark, like a monument or a natural attraction. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/landmarks" target="_blank">common/locations/landmarks</a>.
+      type: integer
+      minimum: 1
+    districtsOutput:
+      title: DistrictsOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/district'
         metadata:
           title: MetadataOutput
           type: object
@@ -864,247 +983,6 @@ components:
           $ref: '#/components/schemas/translatedString'
         coordinates:
           $ref: '#/components/schemas/dataTypes_coordinates'
-    landmarkId:
-      description: A signed integer number that uniquely identifies a relevant geographical landmark, like a monument or a natural attraction. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/landmarks" target="_blank">common/locations/landmarks</a>.
-      type: integer
-      minimum: 1
-    regionsInput:
-      title: RegionsInput
-      type: object
-      properties:
-        airport:
-          $ref: '#/components/schemas/airportId'
-        city:
-          $ref: '#/components/schemas/cityId'
-        country:
-          $ref: '#/components/schemas/countryId'
-        landmark:
-          $ref: '#/components/schemas/landmarkId'
-        languages:
-          type: array
-          items:
-            $ref: '#/components/schemas/languageId'
-          default:
-          - en-gb
-        page:
-          $ref: '#/components/schemas/page'
-        region:
-          $ref: '#/components/schemas/regionId'
-        rows:
-          $ref: '#/components/schemas/maximumResults'
-          maximum: 1000
-    countriesInput:
-      title: CountriesInput
-      type: object
-      properties:
-        airport:
-          $ref: '#/components/schemas/airportId'
-        city:
-          $ref: '#/components/schemas/cityId'
-        country:
-          $ref: '#/components/schemas/countryId'
-        district:
-          $ref: '#/components/schemas/districtId'
-        landmark:
-          $ref: '#/components/schemas/landmarkId'
-        languages:
-          type: array
-          items:
-            $ref: '#/components/schemas/languageId'
-          default:
-          - en-gb
-        page:
-          $ref: '#/components/schemas/page'
-        region:
-          $ref: '#/components/schemas/regionId'
-        rows:
-          $ref: '#/components/schemas/maximumResults'
-          maximum: 1000
-    citiesOutput:
-      title: CitiesOutput
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/cities_city'
-        metadata:
-          title: MetadataOutput
-          type: object
-          properties:
-            next_page:
-              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
-              type: string
-              nullable: true
-    airportId:
-      description: A three-letter code that uniquely identifies an airport as defined by the International Air Transport Association (IATA). The full list can be obtained by calling  <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/airports" target="_blank">common/locations/airports</a>.
-      type: string
-      pattern: ^[A-Z]{3}$
-      example: AMS
-    districtsOutput:
-      title: DistrictsOutput
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/district'
-        metadata:
-          title: MetadataOutput
-          type: object
-          properties:
-            next_page:
-              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
-              type: string
-              nullable: true
-    countryId:
-      description: 'A two-letter code that uniquely identifies a country. This code is defined by the ISO 3166-1 alpha-2 standard (ISO2) as described here: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/countries" target="_blank">common/locations/countries</a>.'
-      type: string
-      pattern: ^[a-z]{2}$
-      example: nl
-    cities_city:
-      title: CityOutput
-      description: The city internal code and the translated name(s).
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/cityId'
-        name:
-          $ref: '#/components/schemas/translatedString'
-        coordinates:
-          $ref: '#/components/schemas/dataTypes_coordinates'
-    languageId:
-      description: 'A [IETF language tag code](https://en.wikipedia.org/wiki/IETF_language_tag) that uniquely identifies a supported human language or dialect. **Note:** Demand API only accepts lowercase for the language codes. Examples: "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.'
-      type: string
-      pattern: ^[a-z]{2}(-[a-z]{2})?$
-      example: en-us
-    districtsInput:
-      title: DistrictsInput
-      type: object
-      properties:
-        airport:
-          $ref: '#/components/schemas/airportId'
-        city:
-          $ref: '#/components/schemas/cityId'
-        country:
-          $ref: '#/components/schemas/countryId'
-        district:
-          $ref: '#/components/schemas/districtId'
-        landmark:
-          $ref: '#/components/schemas/landmarkId'
-        languages:
-          type: array
-          items:
-            $ref: '#/components/schemas/languageId'
-          default:
-          - en-gb
-        page:
-          $ref: '#/components/schemas/page'
-        region:
-          $ref: '#/components/schemas/regionId'
-        rows:
-          $ref: '#/components/schemas/maximumResults'
-          maximum: 1000
-    cityId:
-      description: A signed integer number that uniquely identifies a city. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/cities" target="_blank">common/locations/cities</a>.
-      type: integer
-    regionId:
-      description: A signed integer number that uniquely identifies a geographical region. Regions usually define official administrative areas within a country, but may also include multiple countries and in some cases un-official but popular designations for geographical areas. An example of a region that crosses multiple countries is the Alps in Europe. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/regions" target="_blank">common/locations/regions</a>.
-      type: integer
-      minimum: 1
-    regionsOutput:
-      title: RegionsOutput
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/region'
-        metadata:
-          title: MetadataOutput
-          type: object
-          properties:
-            next_page:
-              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
-              type: string
-              nullable: true
-    translatedString:
-      title: TranslatedString
-      description: A string localised in multiple languages.
-      type: object
-      patternProperties:
-        ^[a-z]{2}(-[a-z]{2})$:
-          description: The content localised in this language.
-          type:
-          - string
-          - 'null'
-    landmarksInput:
-      title: LandmarksInput
-      type: object
-      properties:
-        airport:
-          $ref: '#/components/schemas/airportId'
-        city:
-          $ref: '#/components/schemas/cityId'
-        country:
-          $ref: '#/components/schemas/countryId'
-        district:
-          $ref: '#/components/schemas/districtId'
-        landmark:
-          $ref: '#/components/schemas/landmarkId'
-        languages:
-          type: array
-          items:
-            $ref: '#/components/schemas/languageId'
-          default:
-          - en-gb
-        page:
-          $ref: '#/components/schemas/page'
-        region:
-          $ref: '#/components/schemas/regionId'
-        rows:
-          $ref: '#/components/schemas/maximumResults'
-          maximum: 1000
-    citiesInput:
-      title: CitiesInput
-      type: object
-      properties:
-        airport:
-          $ref: '#/components/schemas/airportId'
-        city:
-          $ref: '#/components/schemas/cityId'
-        country:
-          $ref: '#/components/schemas/countryId'
-        district:
-          $ref: '#/components/schemas/districtId'
-        landmark:
-          $ref: '#/components/schemas/landmarkId'
-        languages:
-          type: array
-          items:
-            $ref: '#/components/schemas/languageId'
-          default:
-          - en-gb
-        page:
-          $ref: '#/components/schemas/page'
-        region:
-          $ref: '#/components/schemas/regionId'
-        rows:
-          $ref: '#/components/schemas/maximumResults'
-          maximum: 1000
-    maximumResults:
-      description: The maximum number of results to return.
-      type: integer
-      multipleOf: 10
-      minimum: 10
-      maximum: 100
-      default: 100
     airportInput:
       title: AirportsInput
       type: object
@@ -1132,8 +1010,8 @@ components:
         rows:
           $ref: '#/components/schemas/maximumResults'
           maximum: 1000
-    airportOutput:
-      title: AirportsOutput
+    countriesOutput:
+      title: CountriesOutput
       type: object
       properties:
         request_id:
@@ -1141,7 +1019,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/airport'
+            $ref: '#/components/schemas/country'
         metadata:
           title: MetadataOutput
           type: object
@@ -1150,24 +1028,58 @@ components:
               description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
               type: string
               nullable: true
-    landmarksOutput:
-      title: LandmarksOutput
+    countriesInput:
+      title: CountriesInput
       type: object
       properties:
-        request_id:
-          $ref: '#/components/schemas/requestId'
-        data:
+        airport:
+          $ref: '#/components/schemas/airportId'
+        city:
+          $ref: '#/components/schemas/cityId'
+        country:
+          $ref: '#/components/schemas/countryId'
+        district:
+          $ref: '#/components/schemas/districtId'
+        landmark:
+          $ref: '#/components/schemas/landmarkId'
+        languages:
           type: array
           items:
-            $ref: '#/components/schemas/landmark'
-        metadata:
-          title: MetadataOutput
-          type: object
-          properties:
-            next_page:
-              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
-              type: string
-              nullable: true
+            $ref: '#/components/schemas/languageId'
+          default:
+          - en-gb
+        page:
+          $ref: '#/components/schemas/page'
+        region:
+          $ref: '#/components/schemas/regionId'
+        rows:
+          $ref: '#/components/schemas/maximumResults'
+          maximum: 1000
+    regionsInput:
+      title: RegionsInput
+      type: object
+      properties:
+        airport:
+          $ref: '#/components/schemas/airportId'
+        city:
+          $ref: '#/components/schemas/cityId'
+        country:
+          $ref: '#/components/schemas/countryId'
+        landmark:
+          $ref: '#/components/schemas/landmarkId'
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/languageId'
+          default:
+          - en-gb
+        page:
+          $ref: '#/components/schemas/page'
+        region:
+          $ref: '#/components/schemas/regionId'
+        rows:
+          $ref: '#/components/schemas/maximumResults'
+          maximum: 1000
     airport:
       title: AirportOutput
       description: The three-letter IATA airport code and the translated name(s).
@@ -1177,6 +1089,94 @@ components:
           $ref: '#/components/schemas/airportId'
         name:
           $ref: '#/components/schemas/translatedString'
+    region:
+      title: RegionOutput
+      description: The region id and the translated name(s).
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/regionId'
+        name:
+          $ref: '#/components/schemas/translatedString'
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
+    citiesOutput:
+      title: CitiesOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/cities_city'
+        metadata:
+          title: MetadataOutput
+          type: object
+          properties:
+            next_page:
+              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
+              type: string
+              nullable: true
+    regionsOutput:
+      title: RegionsOutput
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/requestId'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/region'
+        metadata:
+          title: MetadataOutput
+          type: object
+          properties:
+            next_page:
+              description: Indicates that more results are available. Use this pagination token to retrieve the next page of results (via parameter `page`).
+              type: string
+              nullable: true
+    country:
+      title: CountryOutput
+      description: The two-letter ISO2 country code and the translated name(s).
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/countryId'
+        name:
+          $ref: '#/components/schemas/translatedString'
+    citiesInput:
+      title: CitiesInput
+      type: object
+      properties:
+        airport:
+          $ref: '#/components/schemas/airportId'
+        city:
+          $ref: '#/components/schemas/cityId'
+        country:
+          $ref: '#/components/schemas/countryId'
+        district:
+          $ref: '#/components/schemas/districtId'
+        landmark:
+          $ref: '#/components/schemas/landmarkId'
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/languageId'
+          default:
+          - en-gb
+        page:
+          $ref: '#/components/schemas/page'
+        region:
+          $ref: '#/components/schemas/regionId'
+        rows:
+          $ref: '#/components/schemas/maximumResults'
+          maximum: 1000
+    regionId:
+      description: A signed integer number that uniquely identifies a geographical region. Regions usually define official administrative areas within a country, but may also include multiple countries and in some cases un-official but popular designations for geographical areas. An example of a region that crosses multiple countries is the Alps in Europe. The full list can be obtained by calling <a href="/demand/docs/open-api/demand-api/commonlocations/common/locations/regions" target="_blank">common/locations/regions</a>.
+      type: integer
+      minimum: 1
   securitySchemes:
     BearerAuth:
       type: http

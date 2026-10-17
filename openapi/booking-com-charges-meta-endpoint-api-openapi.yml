@@ -94,23 +94,6 @@ paths:
                 $ref: '#/components/schemas/ApiResponseListChargeTypeMetaEntry'
 components:
   schemas:
-    ApiResponseListChargeTypeMetaEntry:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChargeTypeMetaEntry'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
     ChargeTypeMetaEntry:
       type: object
       properties:
@@ -228,11 +211,23 @@ components:
             - INCALCULABLE
         discontinued:
           type: boolean
-    ResponseMeta:
+    ApiResponseListChargeTypeMetaEntry:
       type: object
       properties:
-        ruid:
-          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChargeTypeMetaEntry'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
     ApiError:
       type: object
       properties:
@@ -243,6 +238,11 @@ components:
         details:
           type: object
         description:
+          type: string
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
           type: string
 x-tagGroups:
 - name: API Endpoints
