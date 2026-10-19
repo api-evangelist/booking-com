@@ -105,111 +105,6 @@ components:
                 - string
                 - 'null'
                 description: Additional error details
-    ReservationStatusResponse:
-      type: object
-      description: Response containing reservation status information
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: Response metadata
-        data:
-          allOf:
-          - $ref: '#/components/schemas/ReservationStatusData'
-          description: Reservation status data
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
-    ReservationStatusData:
-      type: object
-      description: Reservation status information
-      properties:
-        reservationId:
-          type: string
-          description: Accommodation reservation identifier
-        payoutType:
-          type: string
-          description: 'Type of payout: GROSS, NET, or UNKNOWN.'
-        propertyId:
-          type: string
-          description: Property identifier
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    Warning:
-      type: object
-      description: Warning information
-      properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
-    UnauthorizedRequestResponse:
-      type: object
-      description: Response when the token is valid but does not have access to the requested resource.
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
     BadRequestErrorResponse:
       type: object
       description: Response when the request doesn't have valid parameters
@@ -231,6 +126,111 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+    ReservationStatusResponse:
+      type: object
+      description: Response containing reservation status information
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: Response metadata
+        data:
+          allOf:
+          - $ref: '#/components/schemas/ReservationStatusData'
+          description: Reservation status data
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    ReservationStatusData:
+      type: object
+      description: Reservation status information
+      properties:
+        reservationId:
+          type: string
+          description: Accommodation reservation identifier
+        payoutType:
+          type: string
+          description: 'Type of payout: GROSS, NET, or UNKNOWN.'
+        propertyId:
+          type: string
+          description: Property identifier
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
     CheckoutDateTooOldErrorResponse:
       type: object
       description: Response when the checkout date is older than the allowed 18-months window

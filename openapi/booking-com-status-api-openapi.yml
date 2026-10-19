@@ -153,6 +153,72 @@ paths:
       - Status
 components:
   schemas:
+    error_response:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Identifier for the request. Provide this value when contacting support.
+          example: 01kjan7r7yvff5yg95gxy1cjhy
+        errors:
+          type: array
+          description: Errors that occurred while processing the request.
+          items:
+            $ref: '#/components/schemas/error'
+          minItems: 1
+      required:
+      - errors
+      - request_id
+    endpoint_status:
+      type: object
+      description: The current operational status of a monitored Demand API endpoint.
+      properties:
+        endpoint:
+          type: string
+          description: The monitored Demand API endpoint path.
+          example: /orders/create
+        status:
+          $ref: '#/components/schemas/operational_status'
+        updated_at:
+          type: string
+          format: date-time
+          description: The UTC timestamp when the endpoint status was last evaluated.
+          example: '2026-04-20T14:32:00Z'
+        since:
+          type: string
+          format: date-time
+          description: 'The UTC timestamp when the current issue began.
+
+
+            Returned when `status` is `minor_outage` or `major_outage`.'
+          example: '2026-04-20T14:30:15Z'
+        reason:
+          type: string
+          description: 'Human-readable information about the current issue.
+
+
+            May be returned when `status` is `minor_outage` or `major_outage`.
+
+            Do not use this value to implement programmatic behaviour.'
+          example: Upstream provider issue
+      required:
+      - endpoint
+      - status
+      - updated_at
+    operational_status:
+      type: string
+      description: 'The current operational status of a monitored Demand API endpoint or
+
+        endpoint group.'
+      enum:
+      - up
+      - minor_outage
+      - major_outage
+      example: up
+      x-enumDescriptions:
+        major_outage: Experiencing significant disruption or unavailability.
+        minor_outage: Experiencing degraded operation or partial disruption.
+        up: Operating normally.
     group_status:
       type: object
       description: The current operational status of a group of related Demand API endpoints.
@@ -195,36 +261,17 @@ components:
       - group
       - status
       - updated_at
-    error_response:
+    status_response:
       type: object
+      description: The current operational status of the monitored Demand API endpoint groups.
       properties:
-        request_id:
-          type: string
-          description: Identifier for the request. Provide this value when contacting support.
-          example: 01kjan7r7yvff5yg95gxy1cjhy
-        errors:
+        data:
           type: array
-          description: Errors that occurred while processing the request.
+          description: The operational status of each monitored endpoint group.
           items:
-            $ref: '#/components/schemas/error'
-          minItems: 1
+            $ref: '#/components/schemas/group_status'
       required:
-      - errors
-      - request_id
-    operational_status:
-      type: string
-      description: 'The current operational status of a monitored Demand API endpoint or
-
-        endpoint group.'
-      enum:
-      - up
-      - minor_outage
-      - major_outage
-      example: up
-      x-enumDescriptions:
-        major_outage: Experiencing significant disruption or unavailability.
-        minor_outage: Experiencing degraded operation or partial disruption.
-        up: Operating normally.
+      - data
     error:
       type: object
       properties:
@@ -239,50 +286,3 @@ components:
       required:
       - id
       - message
-    status_response:
-      type: object
-      description: The current operational status of the monitored Demand API endpoint groups.
-      properties:
-        data:
-          type: array
-          description: The operational status of each monitored endpoint group.
-          items:
-            $ref: '#/components/schemas/group_status'
-      required:
-      - data
-    endpoint_status:
-      type: object
-      description: The current operational status of a monitored Demand API endpoint.
-      properties:
-        endpoint:
-          type: string
-          description: The monitored Demand API endpoint path.
-          example: /orders/create
-        status:
-          $ref: '#/components/schemas/operational_status'
-        updated_at:
-          type: string
-          format: date-time
-          description: The UTC timestamp when the endpoint status was last evaluated.
-          example: '2026-04-20T14:32:00Z'
-        since:
-          type: string
-          format: date-time
-          description: 'The UTC timestamp when the current issue began.
-
-
-            Returned when `status` is `minor_outage` or `major_outage`.'
-          example: '2026-04-20T14:30:15Z'
-        reason:
-          type: string
-          description: 'Human-readable information about the current issue.
-
-
-            May be returned when `status` is `minor_outage` or `major_outage`.
-
-            Do not use this value to implement programmatic behaviour.'
-          example: Upstream provider issue
-      required:
-      - endpoint
-      - status
-      - updated_at

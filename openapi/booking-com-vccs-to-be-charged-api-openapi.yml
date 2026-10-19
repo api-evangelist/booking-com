@@ -83,6 +83,19 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
+    AmountVCCBalance:
+      description: Contains information on the current balance of the VCC.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Current balance of the VCC.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
     InvalidTokenResponse:
       type: object
       description: Response when the authentication token is missing, invalid, or expired.
@@ -111,49 +124,9 @@ components:
                 - string
                 - 'null'
                 description: Additional error details
-    AccommodationPropertyVCCToChargeResponse:
-      description: Response regarding VCCs to be charged per accommodation property
-      properties:
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-        data:
-          type: array
-          description: Data containing required information
-          items:
-            $ref: '#/components/schemas/ChargeableVCCInformation'
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
-    Error:
+    BadRequestErrorResponse:
       type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
+      description: Response when the request doesn't have valid parameters
       properties:
         meta:
           allOf:
@@ -187,43 +160,6 @@ components:
           type: string
           description: VCC Status
           example: ACTIVE
-    PaginationMeta:
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-        total_count:
-          type: integer
-          format: int32
-          description: Total number of records.
-        next_page:
-          type: boolean
-          description: Next page exists
-      required:
-      - ruid
-      - total_count
-      - next_page
-    Warning:
-      type: object
-      description: Warning information
-      properties:
-        message:
-          type: string
-          description: Warning message
-          example: string
-    AmountVCCBalance:
-      description: Contains information on the current balance of the VCC.
-      properties:
-        currency:
-          type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Current balance of the VCC.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
     UnauthorizedRequestResponse:
       type: object
       description: Response when the token is valid but does not have access to the requested resource.
@@ -245,9 +181,9 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    BadRequestErrorResponse:
+    InternalServerErrorResponse:
       type: object
-      description: Response when the request doesn't have valid parameters
+      description: Response when the request failed with an internal reason
       properties:
         meta:
           allOf:
@@ -266,6 +202,70 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+    PaginationMeta:
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+        total_count:
+          type: integer
+          format: int32
+          description: Total number of records.
+        next_page:
+          type: boolean
+          description: Next page exists
+      required:
+      - ruid
+      - total_count
+      - next_page
+    AccommodationPropertyVCCToChargeResponse:
+      description: Response regarding VCCs to be charged per accommodation property
+      properties:
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+        data:
+          type: array
+          description: Data containing required information
+          items:
+            $ref: '#/components/schemas/ChargeableVCCInformation'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
   securitySchemes:
     bearerAuth:
       type: http

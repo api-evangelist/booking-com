@@ -1,0 +1,12 @@
+{
+ "url": "https://developers.booking.com/_bundle/connectivity/docs/openapispecs/contacts-api/contacts-api-specification.yaml?download",
+ "final": "https://developers.booking.com/_bundle/connectivity/docs/openapispecs/contacts-api/contacts-api-specification.yaml?download",
+ "status": 200,
+ "content_type": "application/yaml",
+ "bytes": 18395,
+ "sha256": "95ac795ba670ea419c190b7678f7faf97342e1784f3c8955e02ba847c8e08492",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

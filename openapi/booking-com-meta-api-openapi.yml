@@ -143,19 +143,6 @@ paths:
                 $ref: '#/components/schemas/ApiResponseUnitMeta'
 components:
   schemas:
-    BedType:
-      properties:
-        bed_type_id:
-          type: integer
-          format: int32
-        bed_type_name:
-          type: string
-        bed_type_description:
-          type: string
-        bed_type_description_imperial:
-          type: string
-        is_active:
-          type: boolean
     UnitName:
       properties:
         unit_name_id:
@@ -163,19 +150,10 @@ components:
           format: int32
         unit_name:
           type: string
-    PropertyCategory:
+    ResponseMeta:
       properties:
-        code:
-          type: integer
-          format: int32
-        name:
+        ruid:
           type: string
-        code_ota:
-          type: integer
-          format: int32
-        code_booking_extended:
-          type: integer
-          format: int32
     UnitType:
       properties:
         unit_type_id:
@@ -196,10 +174,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UnitName'
-    ResponseMeta:
-      properties:
-        ruid:
-          type: string
     ApiResponseUnitMeta:
       properties:
         ruid:
@@ -217,31 +191,19 @@ components:
             $ref: '#/components/schemas/ApiError'
         meta:
           $ref: '#/components/schemas/ResponseMeta'
-    ApiError:
+    PropertyCategory:
       properties:
-        message:
-          type: string
         code:
           type: integer
           format: int32
-          description: ''
-        details:
-          type: object
-          properties:
-            fields:
-              type: array
-              description: ''
-              items:
-                type: string
-        description:
+        name:
           type: string
-    UnitCategory:
-      properties:
-        category_id:
+        code_ota:
           type: integer
           format: int32
-        category_name:
-          type: string
+        code_booking_extended:
+          type: integer
+          format: int32
     UnitMeta:
       properties:
         language_code:
@@ -314,6 +276,44 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UnitCategory'
+    BedType:
+      properties:
+        bed_type_id:
+          type: integer
+          format: int32
+        bed_type_name:
+          type: string
+        bed_type_description:
+          type: string
+        bed_type_description_imperial:
+          type: string
+        is_active:
+          type: boolean
+    UnitCategory:
+      properties:
+        category_id:
+          type: integer
+          format: int32
+        category_name:
+          type: string
+    ApiError:
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32
+          description: ''
+        details:
+          type: object
+          properties:
+            fields:
+              type: array
+              description: ''
+              items:
+                type: string
+        description:
+          type: string
 x-tagGroups:
 - name: API Endpoints
   tags:

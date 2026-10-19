@@ -1,6 +1,18 @@
 openapi: 3.2.0
 info:
-  description: Use the Contracting API to invite a new partner on Booking.com, check whether a partner has signed the contract, resend invitation mail and retrieve the legal entity of the partner.
+  description: 'Use the Contracting API to invite a new partner on Booking.com, check whether a partner has signed the contract, resend invitation mail and retrieve the legal entity of the partner.
+
+    ## Authentication
+
+    The Contracting API supports token-based authentication. Each request must have an `Authorization` header containing a JWT token. Manage your machine accounts in the Connectivity Portal. See also the Authentication page of the documentation.
+
+    ## Message formats
+
+    The Contracting API accepts and returns JSON.
+
+    ## Documentation
+
+    Read the Contracting API documentation for more details about working with this API.'
   title: Contracting Request access API
   version: 1.0.0
 servers:

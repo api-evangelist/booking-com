@@ -101,6 +101,38 @@ paths:
                   ruid: 59dd3156-d175-412d-834f-bce976502bf3
 components:
   schemas:
+    Charge:
+      required:
+      - charge_key
+      - charge_periods
+      type: object
+      properties:
+        charge_key:
+          $ref: '#/components/schemas/ChargeKey'
+        charge_periods:
+          type: array
+          description: Contains the timeline of various configurations for the charge through time.
+          items:
+            $ref: '#/components/schemas/ChargePeriod'
+      description: List of charges for the room.
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+    ApiResponseObject:
+      type: object
+      properties:
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
     ChargeConfiguration:
       required:
       - amount
@@ -137,29 +169,62 @@ components:
 
 
         If specified as `null` it clears the charge for the specific period. This field cannot be omitted.'
-    ApiResponseObject:
-      type: object
-      properties:
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
-    ChargePeriod:
+    ApplicableWindow:
       required:
-      - applicable
+      - from
       type: object
       properties:
-        applicable:
-          $ref: '#/components/schemas/ApplicableWindow'
-        configuration:
-          $ref: '#/components/schemas/ChargeConfiguration'
-      description: Contains the timeline of various configurations for the charge through time.
+        from:
+          type: string
+          description: 'The start date for this charge period. The date is relative to the timezone of the property. If you are modifying an existing active charge, this date may be in the past if it matches the active charge''s date.
+
+
+            Format: ISO 8601 date (YYYY-MM-DD)
+
+
+            Charge periods with a start date more than 10 years in the future will be ignored, effectively making the charge extend indefinitely.
+
+
+            HDCN: N/A
+
+            '
+        to:
+          type: string
+          description: 'The end date for this charge period (inclusive). The date is relative to the timezone of the property. If null or undefined the current charge period extends forever.
+
+
+            Format: ISO 8601 date (YYYY-MM-DD)
+
+
+            Charge periods with an end date more than 10 years in the future will be created without an end date, effectively making the charge extend indefinitely.
+
+
+            HDCN: N/A
+
+            '
+      description: The date range for this charge period. Dates are inclusive and must not overlap.
+    RoomCharges:
+      required:
+      - charges
+      - room_id
+      type: object
+      properties:
+        room_id:
+          maximum: 4294967295
+          type: integer
+          description: 'The Room ID the charges apply to.
+
+
+            HDCN: FeePolicy->InvCode
+
+            '
+          format: int64
+        charges:
+          type: array
+          description: List of charges for the room.
+          items:
+            $ref: '#/components/schemas/Charge'
+      description: Room specific charges. Will override the same charge specified at the property level. Update requests must contain at least one charge between property and room arrays.
     ChargeKey:
       required:
       - guest_origin
@@ -364,40 +429,6 @@ components:
           - PERCENTAGE
           - INCALCULABLE
       description: Contains details about the charge price.
-    ApplicableWindow:
-      required:
-      - from
-      type: object
-      properties:
-        from:
-          type: string
-          description: 'The start date for this charge period. The date is relative to the timezone of the property. If you are modifying an existing active charge, this date may be in the past if it matches the active charge''s date.
-
-
-            Format: ISO 8601 date (YYYY-MM-DD)
-
-
-            Charge periods with a start date more than 10 years in the future will be ignored, effectively making the charge extend indefinitely.
-
-
-            HDCN: N/A
-
-            '
-        to:
-          type: string
-          description: 'The end date for this charge period (inclusive). The date is relative to the timezone of the property. If null or undefined the current charge period extends forever.
-
-
-            Format: ISO 8601 date (YYYY-MM-DD)
-
-
-            Charge periods with an end date more than 10 years in the future will be created without an end date, effectively making the charge extend indefinitely.
-
-
-            HDCN: N/A
-
-            '
-      description: The date range for this charge period. Dates are inclusive and must not overlap.
     AgeMultiplier:
       required:
       - lte
@@ -430,35 +461,6 @@ components:
         If multiple modifiers are configured, only the most specific age multiplier that matches the child''s age is applied. For example, if a .50 multiplier is configured for children under 8 years old, and a .80 multiplier is configured for children under 12 years old, a 7 year old child would get a .50 discount.
 
         '
-    ResponseMeta:
-      type: object
-      properties:
-        ruid:
-          type: string
-    ApiError:
-      type: object
-      properties:
-        message:
-          type: string
-        code:
-          type: integer
-        details:
-          type: object
-        description:
-          type: string
-    Charges:
-      type: object
-      properties:
-        property_charges:
-          type: array
-          description: Charges that apply across the property. Update requests must contain at least one charge between property and room arrays.
-          items:
-            $ref: '#/components/schemas/Charge'
-        room_charges:
-          type: array
-          description: Room specific charges. Will override the same charge specified at the property level. Update requests must contain at least one charge between property and room arrays.
-          items:
-            $ref: '#/components/schemas/RoomCharges'
     ApiResponseCharges:
       type: object
       properties:
@@ -474,42 +476,40 @@ components:
             $ref: '#/components/schemas/ApiError'
         meta:
           $ref: '#/components/schemas/ResponseMeta'
-    Charge:
+    ChargePeriod:
       required:
-      - charge_key
-      - charge_periods
+      - applicable
       type: object
       properties:
-        charge_key:
-          $ref: '#/components/schemas/ChargeKey'
-        charge_periods:
-          type: array
-          description: Contains the timeline of various configurations for the charge through time.
-          items:
-            $ref: '#/components/schemas/ChargePeriod'
-      description: List of charges for the room.
-    RoomCharges:
-      required:
-      - charges
-      - room_id
+        applicable:
+          $ref: '#/components/schemas/ApplicableWindow'
+        configuration:
+          $ref: '#/components/schemas/ChargeConfiguration'
+      description: Contains the timeline of various configurations for the charge through time.
+    Charges:
       type: object
       properties:
-        room_id:
-          maximum: 4294967295
-          type: integer
-          description: 'The Room ID the charges apply to.
-
-
-            HDCN: FeePolicy->InvCode
-
-            '
-          format: int64
-        charges:
+        property_charges:
           type: array
-          description: List of charges for the room.
+          description: Charges that apply across the property. Update requests must contain at least one charge between property and room arrays.
           items:
             $ref: '#/components/schemas/Charge'
-      description: Room specific charges. Will override the same charge specified at the property level. Update requests must contain at least one charge between property and room arrays.
+        room_charges:
+          type: array
+          description: Room specific charges. Will override the same charge specified at the property level. Update requests must contain at least one charge between property and room arrays.
+          items:
+            $ref: '#/components/schemas/RoomCharges'
+    ApiError:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+        details:
+          type: object
+        description:
+          type: string
 x-tagGroups:
 - name: API Endpoints
   tags:

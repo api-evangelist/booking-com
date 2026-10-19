@@ -156,13 +156,6 @@ components:
       required: true
       description: Include here your Affiliate identifier number
   schemas:
-    currencyId:
-      description: A three-letter code that uniquely identifies a monetary currency as defined by the ISO 4217 standard. The full list can be obtained by calling <a href="/demand/docs/open-api/3.2/demand-api/commonpayments/common/payments/currencies" target="_blank">common/payments/currencies</a>.
-      type:
-      - string
-      - 'null'
-      pattern: ^[A-Z]{3}$
-      example: EUR
     cards_output:
       title: CardsDataOutput
       type: object
@@ -173,15 +166,31 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/paymentCard'
-    dataTypes_paymentCardId:
-      description: A signed integer number that uniquely identifies a payment type. Examples of payment types are the different credit and debit cards. The full list can be obtained by calling <a href="/demand/docs/open-api/3.2/demand-api/commonpayments/common/payments/cards" target="_blank">common/payments/cards</a>.
-      type: integer
-      minimum: 1
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
     languageId:
       description: 'A [IETF language tag code](https://en.wikipedia.org/wiki/IETF_language_tag) that uniquely identifies a supported human language or dialect. **Note:** Demand API only accepts lowercase for the language codes. Examples: "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.'
       type: string
       pattern: ^[a-z]{2}(-[a-z]{2})?$
       example: en-us
+    currencies_input:
+      title: CurrenciesInput
+      type: object
+      properties:
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/languageId'
+          default:
+          - en-gb
+    currencyId:
+      description: A three-letter code that uniquely identifies a monetary currency as defined by the ISO 4217 standard. The full list can be obtained by calling <a href="/demand/docs/open-api/3.2/demand-api/commonpayments/common/payments/currencies" target="_blank">common/payments/currencies</a>.
+      type:
+      - string
+      - 'null'
+      pattern: ^[A-Z]{3}$
+      example: EUR
     currencies_currency:
       title: CurrencyOutput
       description: The ISO 4217 currency code and its designation in the selected language.
@@ -191,9 +200,6 @@ components:
           $ref: '#/components/schemas/currencyId'
         name:
           $ref: '#/components/schemas/translatedString'
-    requestId:
-      description: Uniquely identifies the request. Please provide this identifier when contacting support.
-      type: string
     paymentCard:
       title: PaymentCardOutput
       description: The payment card identifier code and its designation in English.
@@ -223,16 +229,10 @@ components:
           type:
           - string
           - 'null'
-    currencies_input:
-      title: CurrenciesInput
-      type: object
-      properties:
-        languages:
-          type: array
-          items:
-            $ref: '#/components/schemas/languageId'
-          default:
-          - en-gb
+    dataTypes_paymentCardId:
+      description: A signed integer number that uniquely identifies a payment type. Examples of payment types are the different credit and debit cards. The full list can be obtained by calling <a href="/demand/docs/open-api/3.2/demand-api/commonpayments/common/payments/cards" target="_blank">common/payments/cards</a>.
+      type: integer
+      minimum: 1
   securitySchemes:
     BearerAuth:
       type: http

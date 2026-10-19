@@ -80,6 +80,13 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
 components:
   schemas:
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+    ObjectNode:
+      type: object
     ApiResponse:
       type: object
       properties:
@@ -95,11 +102,6 @@ components:
             $ref: '#/components/schemas/ApiErrorOTA'
         meta:
           $ref: '#/components/schemas/ResponseMeta'
-    ResponseMeta:
-      type: object
-      properties:
-        ruid:
-          type: string
     ApiErrorOTA:
       type: object
       properties:
@@ -112,8 +114,6 @@ components:
           $ref: '#/components/schemas/ObjectNode'
         description:
           type: string
-    ObjectNode:
-      type: object
     ApiResponsePropertyDescription:
       type: object
       properties:

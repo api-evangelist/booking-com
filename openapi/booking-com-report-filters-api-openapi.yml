@@ -105,6 +105,19 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
+    ReportFilterOption:
+      type: object
+      description: An available report filter with all supported values.
+      properties:
+        filter_key:
+          type: string
+          description: 'The filter key. Possible values: `bank_accounts`, `payout_type`, `statement_descriptor`.'
+          example: bank_accounts
+        filter_values:
+          type: array
+          description: All supported filter values for this filter key. An empty array indicates the filter is available but has no pre-defined values.
+          items:
+            type: string
     InvalidTokenResponse:
       type: object
       description: Response when the authentication token is missing, invalid, or expired.
@@ -133,28 +146,9 @@ components:
                 - string
                 - 'null'
                 description: Additional error details
-    ReconReportFiltersData:
+    BadRequestErrorResponse:
       type: object
-      description: Available filter and configuration options for reconciliation report generation.
-      properties:
-        data_available_from_date:
-          type: string
-          format: date
-          description: The earliest date for which reconciliation report data is available, in `YYYY-MM-DD` format.
-          example: '2019-01-01'
-        report_configurations:
-          type: array
-          description: Available report configuration options, such as output format and locale.
-          items:
-            $ref: '#/components/schemas/ReportConfigurationOption'
-        report_filters:
-          type: array
-          description: Available report filters, such as bank accounts and payout types.
-          items:
-            $ref: '#/components/schemas/ReportFilterOption'
-    RateLimitErrorResponse:
-      type: object
-      description: Response when the rate limit has been exceeded
+      description: Response when the request doesn't have valid parameters
       properties:
         meta:
           allOf:
@@ -172,44 +166,26 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    ReportFilterOption:
+    UnauthorizedRequestResponse:
       type: object
-      description: An available report filter with all supported values.
+      description: Response when the token is valid but does not have access to the requested resource.
       properties:
-        filter_key:
-          type: string
-          description: 'The filter key. Possible values: `bank_accounts`, `payout_type`, `statement_descriptor`.'
-          example: bank_accounts
-        filter_values:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          type: object
+          description: Data containing required information
+        errors:
           type: array
-          description: All supported filter values for this filter key. An empty array indicates the filter is available but has no pre-defined values.
+          description: List of errors for the response
           items:
-            type: string
-    Error:
-      type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-        debug_message:
-          type: string
-          description: Detailed debug message for the error
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
     InternalServerErrorResponse:
       type: object
       description: Response when the request failed with an internal reason
@@ -230,24 +206,6 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    ReconReportFiltersResponse:
-      type: object
-      description: Response containing available filter and configuration options for reconciliation report generation.
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-        data:
-          allOf:
-          - $ref: '#/components/schemas/ReconReportFiltersData'
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
     Warning:
       type: object
       description: Warning information
@@ -277,9 +235,52 @@ components:
           type: string
           description: The default value applied when this configuration key is not specified in the report generation request.
           example: CSV
-    UnauthorizedRequestResponse:
+    Error:
       type: object
-      description: Response when the token is valid but does not have access to the requested resource.
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+        debug_message:
+          type: string
+          description: Detailed debug message for the error
+    DefaultMeta:
+      type: object
+      description: Metadata for the response
+      properties:
+        ruid:
+          type: string
+          description: Request unique identifier
+          example: string
+    ReconReportFiltersResponse:
+      type: object
+      description: Response containing available filter and configuration options for reconciliation report generation.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+        data:
+          allOf:
+          - $ref: '#/components/schemas/ReconReportFiltersData'
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    RateLimitErrorResponse:
+      type: object
+      description: Response when the rate limit has been exceeded
       properties:
         meta:
           allOf:
@@ -297,26 +298,25 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    BadRequestErrorResponse:
+    ReconReportFiltersData:
       type: object
-      description: Response when the request doesn't have valid parameters
+      description: Available filter and configuration options for reconciliation report generation.
       properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-        data:
-          type: object
-          description: Data containing required information
-        errors:
+        data_available_from_date:
+          type: string
+          format: date
+          description: The earliest date for which reconciliation report data is available, in `YYYY-MM-DD` format.
+          example: '2019-01-01'
+        report_configurations:
           type: array
-          description: List of errors for the response
+          description: Available report configuration options, such as output format and locale.
           items:
-            $ref: '#/components/schemas/Error'
-        warnings:
+            $ref: '#/components/schemas/ReportConfigurationOption'
+        report_filters:
           type: array
-          description: List of warnings for the response
+          description: Available report filters, such as bank accounts and payout types.
           items:
-            $ref: '#/components/schemas/Warning'
+            $ref: '#/components/schemas/ReportFilterOption'
   securitySchemes:
     bearerAuth:
       type: http

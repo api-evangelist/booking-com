@@ -75,23 +75,14 @@ components:
       required: true
       description: Include here your Affiliate identifier number
   schemas:
+    requestId:
+      description: Uniquely identifies the request. Please provide this identifier when contacting support.
+      type: string
     languageId:
       description: 'A [IETF language tag code](https://en.wikipedia.org/wiki/IETF_language_tag) that uniquely identifies a supported human language or dialect. **Note:** Demand API only accepts lowercase for the language codes. Examples: "nl" for Dutch/Nederlands or "en-us" for English (US). To retrieve the full list of supported languages, call the `/common/languages` endpoint in the same Demand API version you are using.'
       type: string
       pattern: ^[a-z]{2}(-[a-z]{2})?$
       example: en-us
-    language:
-      title: LanguageOutput
-      description: The language code and its designation in the corresponding language.
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/languageId'
-        name:
-          type: string
-    requestId:
-      description: Uniquely identifies the request. Please provide this identifier when contacting support.
-      type: string
     languages_output:
       title: LanguagesOutput
       type: object
@@ -102,6 +93,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/language'
+    language:
+      title: LanguageOutput
+      description: The language code and its designation in the corresponding language.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/languageId'
+        name:
+          type: string
   securitySchemes:
     BearerAuth:
       type: http

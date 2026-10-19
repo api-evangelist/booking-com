@@ -179,39 +179,45 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    Status:
+    PropertyHealthRequest:
       type: object
-      description: Current status details for a property.
+      description: Request payload for retrieving property health for the provider context.
       properties:
-        currentStatus:
-          anyOf:
-          - type: string
-            description: Current property status. Possible values include `Open`, `New - Pending Opening`, `Ready to Open`, `Closed - By Your Request`, `Auto-Closed - No Availability`, `Registration - Action Required`, and other property statuses.
-            example: Open
-          - type: 'null'
-        statusChangedAt:
-          anyOf:
-          - type: string
-            format: date-time
-            description: Timestamp when the current status started.
-            example: '2026-02-10T09:00:00Z'
-          - type: 'null'
-        statusDescription:
-          anyOf:
-          - type: string
-            description: Status description.
-            example: Your property is live and accepting bookings.
-          - type: 'null'
-        timeInStatusDays:
-          anyOf:
-          - type: integer
-            format: int64
-            description: Number of days the property has been in the current status.
-            example: 30
-          - type: 'null'
-    PropertyHealthResponse:
+        filterBy:
+          type: array
+          description: 'Optional filters for narrowing property health results. `field` must be one of the supported enum values, for example `STATUS_CURRENT_STATUS`. Multiple filters are combined with AND semantics. Supported fields: `PROPERTY_ID`, `PROPERTY_INFO_PROPERTY_NAME`, `PROPERTY_INFO_CURRENCY_CODE`, `STATUS_CURRENT_STATUS`, `STATUS_STATUS_CHANGED_AT`, `STATUS_STATUS_DESCRIPTION`, `STATUS_TIME_IN_STATUS_DAYS`, `AVAILABILITY_RISK`, `AVAILABILITY_BOOKABLE_UNTIL_DATE`, `AVAILABILITY_BOOKABLE_PERIOD`, `DATA_AS_OF`. String and enum fields support `EQUALS` and `NOT_EQUALS`. Numeric, date, and date-time fields also support `GREATER_THAN`, `GREATER_THAN_OR_EQUALS`, `LESS_THAN`, and `LESS_THAN_OR_EQUALS`. Values are strings and must match the field type, for example `1000123`, `30`, `Open`, `NO_RISK`, `2026-12-31`, or `2026-01-01T00:00:00Z`. Day-count fields such as `STATUS_TIME_IN_STATUS_DAYS` and `AVAILABILITY_BOOKABLE_PERIOD` are represented as integer day counts.'
+          example:
+          - field: STATUS_CURRENT_STATUS
+            operator: EQUALS
+            value: Open
+          - field: PROPERTY_INFO_CURRENCY_CODE
+            operator: EQUALS
+            value: EUR
+          - field: AVAILABILITY_BOOKABLE_UNTIL_DATE
+            operator: GREATER_THAN_OR_EQUALS
+            value: '2026-12-31'
+          items:
+            $ref: '#/components/schemas/PropertyHealthFilter'
+          maxItems: 10
+          minItems: 0
+    PropertyInfo:
       type: object
-      description: Response payload containing property health records.
+      description: Basic property information.
+      properties:
+        propertyName:
+          type: string
+          description: Property name.
+          example: Canal View Hotel
+        currencyCode:
+          type: string
+          description: Currency code.
+          example: EUR
+      required:
+      - currencyCode
+      - propertyName
+    PropertyHealthByPropertyIdsResponse:
+      type: object
+      description: Response payload for property-ID property health lookups.
       properties:
         properties:
           type: array
@@ -220,6 +226,14 @@ components:
             $ref: '#/components/schemas/PropertyHealthData'
         meta:
           $ref: '#/components/schemas/ApiResponseMeta'
+        notFoundIds:
+          type: array
+          description: Contains requested property IDs that could not be returned or are not linked to the machine account ID.
+          example:
+          - 999999
+          items:
+            type: integer
+            format: int64
       required:
       - meta
       - properties
@@ -268,27 +282,92 @@ components:
       - field
       - operator
       - value
-    PropertyHealthRequest:
+    ApiResponseMeta:
       type: object
-      description: Request payload for retrieving property health for the provider context.
+      description: Response metadata.
       properties:
-        filterBy:
+        ruid:
+          type: string
+          description: Request unique identifier.
+          example: ruid-1
+      required:
+      - ruid
+    PropertyHealthResponse:
+      type: object
+      description: Response payload containing property health records.
+      properties:
+        properties:
           type: array
-          description: 'Optional filters for narrowing property health results. `field` must be one of the supported enum values, for example `STATUS_CURRENT_STATUS`. Multiple filters are combined with AND semantics. Supported fields: `PROPERTY_ID`, `PROPERTY_INFO_PROPERTY_NAME`, `PROPERTY_INFO_CURRENCY_CODE`, `STATUS_CURRENT_STATUS`, `STATUS_STATUS_CHANGED_AT`, `STATUS_STATUS_DESCRIPTION`, `STATUS_TIME_IN_STATUS_DAYS`, `AVAILABILITY_RISK`, `AVAILABILITY_BOOKABLE_UNTIL_DATE`, `AVAILABILITY_BOOKABLE_PERIOD`, `DATA_AS_OF`. String and enum fields support `EQUALS` and `NOT_EQUALS`. Numeric, date, and date-time fields also support `GREATER_THAN`, `GREATER_THAN_OR_EQUALS`, `LESS_THAN`, and `LESS_THAN_OR_EQUALS`. Values are strings and must match the field type, for example `1000123`, `30`, `Open`, `NO_RISK`, `2026-12-31`, or `2026-01-01T00:00:00Z`. Day-count fields such as `STATUS_TIME_IN_STATUS_DAYS` and `AVAILABILITY_BOOKABLE_PERIOD` are represented as integer day counts.'
-          example:
-          - field: STATUS_CURRENT_STATUS
-            operator: EQUALS
-            value: Open
-          - field: PROPERTY_INFO_CURRENCY_CODE
-            operator: EQUALS
-            value: EUR
-          - field: AVAILABILITY_BOOKABLE_UNTIL_DATE
-            operator: GREATER_THAN_OR_EQUALS
-            value: '2026-12-31'
+          description: List of property health records matching the request.
           items:
-            $ref: '#/components/schemas/PropertyHealthFilter'
-          maxItems: 10
-          minItems: 0
+            $ref: '#/components/schemas/PropertyHealthData'
+        meta:
+          $ref: '#/components/schemas/ApiResponseMeta'
+      required:
+      - meta
+      - properties
+    Status:
+      type: object
+      description: Current status details for a property.
+      properties:
+        currentStatus:
+          anyOf:
+          - type: string
+            description: Current property status. Possible values include `Open`, `New - Pending Opening`, `Ready to Open`, `Closed - By Your Request`, `Auto-Closed - No Availability`, `Registration - Action Required`, and other property statuses.
+            example: Open
+          - type: 'null'
+        statusChangedAt:
+          anyOf:
+          - type: string
+            format: date-time
+            description: Timestamp when the current status started.
+            example: '2026-02-10T09:00:00Z'
+          - type: 'null'
+        statusDescription:
+          anyOf:
+          - type: string
+            description: Status description.
+            example: Your property is live and accepting bookings.
+          - type: 'null'
+        timeInStatusDays:
+          anyOf:
+          - type: integer
+            format: int64
+            description: Number of days the property has been in the current status.
+            example: 30
+          - type: 'null'
+    Availability:
+      type: object
+      description: Availability-related health signals for the property.
+      properties:
+        risk:
+          type: string
+          description: Availability risk categories based on the property's bookable-until window.
+          enum:
+          - HIGH_RISK
+          - MEDIUM_RISK
+          - LOW_RISK
+          - NO_RISK
+          example: NO_RISK
+        bookableUntilDate:
+          type: string
+          format: date
+          description: Last date currently available for booking.
+          example: '2026-12-31'
+        bookablePeriod:
+          type: integer
+          format: int64
+          description: Number of days until the property becomes unavailable.
+          example: 317
+        reason:
+          type: string
+          description: 'Explains how the property''s future bookable period maps to the availability risk. The value is derived from `risk`: `HIGH_RISK` means the property is bookable for 7 days or less, `MEDIUM_RISK` for 30 days or less, `LOW_RISK` for 60 days or less, and `NO_RISK` for more than 60 days.'
+          example: Availability is open well into the future. No action is needed if your property is open.
+      required:
+      - bookablePeriod
+      - bookableUntilDate
+      - reason
+      - risk
     PropertyHealthData:
       type: object
       description: Health snapshot for a single property.
@@ -350,63 +429,6 @@ components:
           minItems: 0
       required:
       - propertyIds
-    ApiResponseMeta:
-      type: object
-      description: Response metadata.
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier.
-          example: ruid-1
-      required:
-      - ruid
-    Availability:
-      type: object
-      description: Availability-related health signals for the property.
-      properties:
-        risk:
-          type: string
-          description: Availability risk categories based on the property's bookable-until window.
-          enum:
-          - HIGH_RISK
-          - MEDIUM_RISK
-          - LOW_RISK
-          - NO_RISK
-          example: NO_RISK
-        bookableUntilDate:
-          type: string
-          format: date
-          description: Last date currently available for booking.
-          example: '2026-12-31'
-        bookablePeriod:
-          type: integer
-          format: int64
-          description: Number of days until the property becomes unavailable.
-          example: 317
-        reason:
-          type: string
-          description: 'Explains how the property''s future bookable period maps to the availability risk. The value is derived from `risk`: `HIGH_RISK` means the property is bookable for 7 days or less, `MEDIUM_RISK` for 30 days or less, `LOW_RISK` for 60 days or less, and `NO_RISK` for more than 60 days.'
-          example: Availability is open well into the future. No action is needed if your property is open.
-      required:
-      - bookablePeriod
-      - bookableUntilDate
-      - reason
-      - risk
-    PropertyInfo:
-      type: object
-      description: Basic property information.
-      properties:
-        propertyName:
-          type: string
-          description: Property name.
-          example: Canal View Hotel
-        currencyCode:
-          type: string
-          description: Currency code.
-          example: EUR
-      required:
-      - currencyCode
-      - propertyName
     ApiError:
       type: object
       description: Standard error payload returned for non-success API responses.
@@ -428,28 +450,6 @@ components:
       required:
       - code
       - message
-    PropertyHealthByPropertyIdsResponse:
-      type: object
-      description: Response payload for property-ID property health lookups.
-      properties:
-        properties:
-          type: array
-          description: List of property health records matching the request.
-          items:
-            $ref: '#/components/schemas/PropertyHealthData'
-        meta:
-          $ref: '#/components/schemas/ApiResponseMeta'
-        notFoundIds:
-          type: array
-          description: Contains requested property IDs that could not be returned or are not linked to the machine account ID.
-          example:
-          - 999999
-          items:
-            type: integer
-            format: int64
-      required:
-      - meta
-      - properties
   securitySchemes:
     BearerAuth:
       type: http

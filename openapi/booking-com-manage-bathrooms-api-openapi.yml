@@ -415,13 +415,74 @@ paths:
     - url: https://supply-xml.booking.com/facilities-api/
 components:
   schemas:
-    BathroomDetailsResponse:
+    HostelBathroomDetailsRequest:
+      required:
+      - bathroom_facilities
+      type: object
+      description: 'Bathroom details for hostel-group properties. Property-level limits apply: maximum 1 private bathroom and 5 shared bathrooms per property. Rules for `gender` and `num_guests_with_access_type` differ by `bathroom_type`: required for SHARED bathrooms, prohibited for PRIVATE bathrooms.'
+      properties:
+        gender:
+          type: string
+          description: Gender access for this shared bathroom. Required when `bathroom_type` is SHARED. Must not be provided when `bathroom_type` is PRIVATE.
+          enum:
+          - FEMALE
+          - MALE
+          - MIXED
+        num_guests_with_access_type:
+          type: string
+          description: Approximate number of guests with access to this shared bathroom. Required when `bathroom_type` is SHARED. Must not be provided when `bathroom_type` is PRIVATE.
+          enum:
+          - NUMBER_LESS_THAN_5
+          - NUMBER_5_TO_10
+          - NUMBER_11_TO_20
+          - NUMBER_21_TO_30
+          - NUMBER_31_TO_40
+          - NUMBER_41_TO_50
+          - NUMBER_MORE_THAN_50
+        bathroom_facilities:
+          type: array
+          description: 'List of facilities in this bathroom. Must include at least one of: SHOWER, TOILET, SINK, BATH.'
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/HostelBathroomFacilityRequest'
+    PropertyBathroomDetailsRequest:
+      required:
+      - bathrooms
+      type: object
+      properties:
+        bathrooms:
+          maxItems: 20
+          minItems: 0
+          type: array
+          items:
+            $ref: '#/components/schemas/BathroomRequest'
+    BathroomDetailsRequest:
       type: object
       properties:
         property_bathroom_details:
-          $ref: '#/components/schemas/PropertyBathroomDetailsResponse'
+          $ref: '#/components/schemas/PropertyBathroomDetailsRequest'
         hotel_bathroom_details:
-          $ref: '#/components/schemas/HotelBathroomDetailsResponse'
+          $ref: '#/components/schemas/HotelBathroomDetailsRequest'
+    ApiResponseBathroomDetails:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/BathroomDetailsResponse'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    SuccessObject:
+      type: object
+      properties:
+        success:
+          type: boolean
     PropertyBathroomDetailsResponse:
       type: object
       properties:
@@ -431,38 +492,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BathroomResponse'
-    SuccessObject:
-      type: object
-      properties:
-        success:
-          type: boolean
-    HostelBathroomFacilityResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - SHOWER
-          - TOILET
-          - SINK
-          - BATH
-          - TOILET_PAPER
-          - HAIR_DRYER
-          - SLIPPERS
-          - BIDET
-          - TOOTHBRUSH
-          - SHAMPOO
-          - CONDITIONER
-          - BODY_SOAP
-          - TOWEL
-          - HOT_WATER
-        count:
-          maximum: 100
-          minimum: 1
-          type: integer
-          format: int32
-        is_paid:
-          type: boolean
     HostelBathroomDetailsResponse:
       type: object
       description: 'Bathroom details for hostel-group properties. Property-level limits apply: maximum 1 private bathroom and 5 shared bathrooms per property.'
@@ -487,26 +516,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/HostelBathroomFacilityResponse'
-    PrivateBathroomDetails:
+    BathroomDetailsResponse:
       type: object
       properties:
-        type:
-          type: string
-          enum:
-          - DEFAULT
-          - EXTERNAL_BATHROOM
-          - ATTACHED_BATHROOM
-        location_type:
-          type: string
-          enum:
-          - DEFAULT
-          - NEXT_DOOR
-          - DOWN_THE_HALL
-          - ACROSS_FROM_THE_ROOM
-          - IN_THE_LOBBY
-          - OTHER
-        location_other:
-          type: string
+        property_bathroom_details:
+          $ref: '#/components/schemas/PropertyBathroomDetailsResponse'
+        hotel_bathroom_details:
+          $ref: '#/components/schemas/HotelBathroomDetailsResponse'
     HostelBathroomFacilityRequest:
       required:
       - type
@@ -538,6 +554,45 @@ components:
         is_paid:
           type: boolean
           description: Whether guests are charged for this amenity. Only applicable to SLIPPERS, TOOTHBRUSH, SHAMPOO, CONDITIONER, BODY_SOAP, and TOWEL. Must not be provided for other facility types.
+    ResponseMeta:
+      type: object
+      properties:
+        ruid:
+          type: string
+    ApiError:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          description: Error code
+        description:
+          type: string
+          description: Detailed error description
+        details:
+          type: object
+          description: Additional error context
+    PrivateBathroomDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - DEFAULT
+          - EXTERNAL_BATHROOM
+          - ATTACHED_BATHROOM
+        location_type:
+          type: string
+          enum:
+          - DEFAULT
+          - NEXT_DOOR
+          - DOWN_THE_HALL
+          - ACROSS_FROM_THE_ROOM
+          - IN_THE_LOBBY
+          - OTHER
+        location_other:
+          type: string
     BathroomRequest:
       required:
       - bathroom_type
@@ -564,6 +619,27 @@ components:
           - INSIDE_THE_UNIT
         hostel_bathroom_details:
           $ref: '#/components/schemas/HostelBathroomDetailsRequest'
+    HotelBathroomDetailsResponse:
+      type: object
+      description: Bathroom details for hotel-group properties.
+      properties:
+        private_bathroom_state:
+          type: string
+          enum:
+          - MISSING
+          - PRESENT
+        shared_bathroom_state:
+          type: string
+          enum:
+          - MISSING
+          - PRESENT
+        private_bathroom_details:
+          $ref: '#/components/schemas/PrivateBathroomDetails'
+        number_of_bathrooms:
+          maximum: 20
+          minimum: 0
+          type: integer
+          format: int32
     HotelBathroomDetailsRequest:
       required:
       - number_of_bathrooms
@@ -592,98 +668,33 @@ components:
           type: integer
           format: int32
           description: Total number of bathrooms (private + shared combined). Must be 0 if both states are MISSING. Must be greater than 0 if either state is PRESENT.
-    BathroomDetailsRequest:
+    HostelBathroomFacilityResponse:
       type: object
       properties:
-        property_bathroom_details:
-          $ref: '#/components/schemas/PropertyBathroomDetailsRequest'
-        hotel_bathroom_details:
-          $ref: '#/components/schemas/HotelBathroomDetailsRequest'
-    ResponseMeta:
-      type: object
-      properties:
-        ruid:
-          type: string
-    ApiResponseBathroomDetails:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/BathroomDetailsResponse'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta'
-    ApiError:
-      type: object
-      properties:
-        message:
-          type: string
-        code:
-          type: integer
-          description: Error code
-        description:
-          type: string
-          description: Detailed error description
-        details:
-          type: object
-          description: Additional error context
-    HotelBathroomDetailsResponse:
-      type: object
-      description: Bathroom details for hotel-group properties.
-      properties:
-        private_bathroom_state:
+        type:
           type: string
           enum:
-          - MISSING
-          - PRESENT
-        shared_bathroom_state:
-          type: string
-          enum:
-          - MISSING
-          - PRESENT
-        private_bathroom_details:
-          $ref: '#/components/schemas/PrivateBathroomDetails'
-        number_of_bathrooms:
-          maximum: 20
-          minimum: 0
+          - SHOWER
+          - TOILET
+          - SINK
+          - BATH
+          - TOILET_PAPER
+          - HAIR_DRYER
+          - SLIPPERS
+          - BIDET
+          - TOOTHBRUSH
+          - SHAMPOO
+          - CONDITIONER
+          - BODY_SOAP
+          - TOWEL
+          - HOT_WATER
+        count:
+          maximum: 100
+          minimum: 1
           type: integer
           format: int32
-    HostelBathroomDetailsRequest:
-      required:
-      - bathroom_facilities
-      type: object
-      description: 'Bathroom details for hostel-group properties. Property-level limits apply: maximum 1 private bathroom and 5 shared bathrooms per property. Rules for `gender` and `num_guests_with_access_type` differ by `bathroom_type`: required for SHARED bathrooms, prohibited for PRIVATE bathrooms.'
-      properties:
-        gender:
-          type: string
-          description: Gender access for this shared bathroom. Required when `bathroom_type` is SHARED. Must not be provided when `bathroom_type` is PRIVATE.
-          enum:
-          - FEMALE
-          - MALE
-          - MIXED
-        num_guests_with_access_type:
-          type: string
-          description: Approximate number of guests with access to this shared bathroom. Required when `bathroom_type` is SHARED. Must not be provided when `bathroom_type` is PRIVATE.
-          enum:
-          - NUMBER_LESS_THAN_5
-          - NUMBER_5_TO_10
-          - NUMBER_11_TO_20
-          - NUMBER_21_TO_30
-          - NUMBER_31_TO_40
-          - NUMBER_41_TO_50
-          - NUMBER_MORE_THAN_50
-        bathroom_facilities:
-          type: array
-          description: 'List of facilities in this bathroom. Must include at least one of: SHOWER, TOILET, SINK, BATH.'
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/HostelBathroomFacilityRequest'
+        is_paid:
+          type: boolean
     BathroomResponse:
       type: object
       properties:
@@ -737,59 +748,10 @@ components:
             $ref: '#/components/schemas/ApiError'
         meta:
           $ref: '#/components/schemas/ResponseMeta'
-    PropertyBathroomDetailsRequest:
-      required:
-      - bathrooms
-      type: object
-      properties:
-        bathrooms:
-          maxItems: 20
-          minItems: 0
-          type: array
-          items:
-            $ref: '#/components/schemas/BathroomRequest'
-    HostelBathroomDetails:
-      properties:
-        gender:
-          type: string
-          enum:
-          - FEMALE
-          - MALE
-          - MIXED
-        num_guests_with_access_type:
-          type: string
-          enum:
-          - NUMBER_LESS_THAN_5
-          - NUMBER_5_TO_10
-          - NUMBER_11_TO_20
-          - NUMBER_21_TO_30
-          - NUMBER_31_TO_40
-          - NUMBER_41_TO_50
-          - NUMBER_MORE_THAN_50
-        bathroom_facilities:
-          type: array
-          items:
-            $ref: '#/components/schemas/HostelBathroomFacility'
-          minItems: 1
-      required:
-      - bathroom_facilities
-    ApiResponseSuccessObject_2:
+    ResponseMeta_2:
       properties:
         ruid:
           type: string
-          writeOnly: true
-        data:
-          $ref: '#/components/schemas/SuccessObject_2'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError_2'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiError_2'
-        meta:
-          $ref: '#/components/schemas/ResponseMeta_2'
     HotelBathroomDetails:
       properties:
         private_bathroom_state:
@@ -813,63 +775,6 @@ components:
       - number_of_bathrooms
       - private_bathroom_state
       - shared_bathroom_state
-    HostelBathroomFacility:
-      properties:
-        type:
-          type: string
-          enum:
-          - SHOWER
-          - TOILET
-          - SINK
-          - BATH
-          - TOILET_PAPER
-          - HAIR_DRYER
-          - SLIPPERS
-          - BIDET
-          - TOOTHBRUSH
-          - SHAMPOO
-          - CONDITIONER
-          - BODY_SOAP
-          - TOWEL
-          - HOT_WATER
-        count:
-          type: integer
-          format: int32
-          maximum: 100
-          minimum: 1
-        is_paid:
-          type: boolean
-      required:
-      - type
-    BathroomDetails:
-      properties:
-        property_bathroom_details:
-          $ref: '#/components/schemas/PropertyBathroomDetails'
-        hotel_bathroom_details:
-          $ref: '#/components/schemas/HotelBathroomDetails'
-    PrivateBathroomDetails_2:
-      properties:
-        type:
-          type: string
-          enum:
-          - DEFAULT
-          - EXTERNAL_BATHROOM
-          - ATTACHED_BATHROOM
-        location_type:
-          type: string
-          enum:
-          - DEFAULT
-          - NEXT_DOOR
-          - DOWN_THE_HALL
-          - ACROSS_FROM_THE_ROOM
-          - IN_THE_LOBBY
-          - OTHER
-        location_other:
-          type: string
-    ResponseMeta_2:
-      properties:
-        ruid:
-          type: string
     ApiResponseBathroomDetails_2:
       properties:
         ruid:
@@ -887,18 +792,6 @@ components:
             $ref: '#/components/schemas/ApiError_2'
         meta:
           $ref: '#/components/schemas/ResponseMeta_2'
-    ApiError_2:
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-        details:
-          type: object
-    SuccessObject_2:
-      properties:
-        success:
-          type: boolean
     Bathroom:
       properties:
         id:
@@ -933,6 +826,113 @@ components:
           minItems: 0
       required:
       - bathrooms
+    HostelBathroomDetails:
+      properties:
+        gender:
+          type: string
+          enum:
+          - FEMALE
+          - MALE
+          - MIXED
+        num_guests_with_access_type:
+          type: string
+          enum:
+          - NUMBER_LESS_THAN_5
+          - NUMBER_5_TO_10
+          - NUMBER_11_TO_20
+          - NUMBER_21_TO_30
+          - NUMBER_31_TO_40
+          - NUMBER_41_TO_50
+          - NUMBER_MORE_THAN_50
+        bathroom_facilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/HostelBathroomFacility'
+          minItems: 1
+      required:
+      - bathroom_facilities
+    BathroomDetails:
+      properties:
+        property_bathroom_details:
+          $ref: '#/components/schemas/PropertyBathroomDetails'
+        hotel_bathroom_details:
+          $ref: '#/components/schemas/HotelBathroomDetails'
+    SuccessObject_2:
+      properties:
+        success:
+          type: boolean
+    HostelBathroomFacility:
+      properties:
+        type:
+          type: string
+          enum:
+          - SHOWER
+          - TOILET
+          - SINK
+          - BATH
+          - TOILET_PAPER
+          - HAIR_DRYER
+          - SLIPPERS
+          - BIDET
+          - TOOTHBRUSH
+          - SHAMPOO
+          - CONDITIONER
+          - BODY_SOAP
+          - TOWEL
+          - HOT_WATER
+        count:
+          type: integer
+          format: int32
+          maximum: 100
+          minimum: 1
+        is_paid:
+          type: boolean
+      required:
+      - type
+    ApiResponseSuccessObject_2:
+      properties:
+        ruid:
+          type: string
+          writeOnly: true
+        data:
+          $ref: '#/components/schemas/SuccessObject_2'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiError_2'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta_2'
+    PrivateBathroomDetails_2:
+      properties:
+        type:
+          type: string
+          enum:
+          - DEFAULT
+          - EXTERNAL_BATHROOM
+          - ATTACHED_BATHROOM
+        location_type:
+          type: string
+          enum:
+          - DEFAULT
+          - NEXT_DOOR
+          - DOWN_THE_HALL
+          - ACROSS_FROM_THE_ROOM
+          - IN_THE_LOBBY
+          - OTHER
+        location_other:
+          type: string
+    ApiError_2:
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          type: object
 x-refined-from:
 - booking-com-facilities-api-openapi.yml
 - booking-com-facilities-api-remote-sync-openapi.yml

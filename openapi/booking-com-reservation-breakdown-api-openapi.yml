@@ -88,26 +88,6 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
 components:
   schemas:
-    AccommodationReservationPayoutBreakdownResponse:
-      type: object
-      description: Response of partner payout information with detailed breakdown for respective accommodation reservation
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          allOf:
-          - $ref: '#/components/schemas/BreakdownResponse'
-          description: The data
-        errors:
-          type: array
-          maxItems: 0
-          items: {}
-        warnings:
-          type: array
-          maxItems: 0
-          items: {}
     AmountCommissionsAndCharges:
       description: Contains information on the total amount of commissions and other charges such as fees.
       properties:
@@ -153,19 +133,6 @@ components:
                   type: integer
                   format: int32
                   description: Number of decimals in the amount.
-    AmountPayout:
-      description: Contains information on the total amount to be paid out to the partner.
-      properties:
-        currency:
-          type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Total payout amount.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
     InvalidTokenResponse:
       type: object
       description: Response when the authentication token is missing, invalid, or expired.
@@ -194,57 +161,9 @@ components:
                 - string
                 - 'null'
                 description: Additional error details
-    AmountCommissionable:
-      description: Contains information on the total commissionable price.
-      properties:
-        currency:
-          type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Total commissionable price.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
-    AmountPaid:
-      description: Contains information on the total amount the guest paid to Booking.com.
-      properties:
-        currency:
-          type: string
-          description: Currency of the amount.
-        value:
-          type: string
-          description: Amount paid by the guest.
-        decimals:
-          type: integer
-          format: int32
-          description: Number of decimals in the amount.
-    Error:
+    BadRequestErrorResponse:
       type: object
-      description: Error response containing details about the error
-      properties:
-        description:
-          type: string
-          description: Description of the error
-        message:
-          type: string
-          description: Error message
-        status_code:
-          type: integer
-          format: int32
-          description: HTTP status code for the error
-    DefaultMeta:
-      type: object
-      description: Metadata for the response
-      properties:
-        ruid:
-          type: string
-          description: Request unique identifier
-          example: string
-    InternalServerErrorResponse:
-      type: object
-      description: Response when the request failed with an internal reason
+      description: Response when the request doesn't have valid parameters
       properties:
         meta:
           allOf:
@@ -263,15 +182,36 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    AmountCharges:
-      description: Contains information on the total amount of all charges.
+    UnauthorizedRequestResponse:
+      type: object
+      description: Response when the token is valid but does not have access to the requested resource.
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    AmountCommissionable:
+      description: Contains information on the total commissionable price.
       properties:
         currency:
           type: string
           description: Currency of the amount.
         value:
           type: string
-          description: Total amount of all charges.
+          description: Total commissionable price.
         decimals:
           type: integer
           format: int32
@@ -373,6 +313,95 @@ components:
           type: integer
           format: int32
           description: Number of decimals in the amount.
+    InternalServerErrorResponse:
+      type: object
+      description: Response when the request failed with an internal reason
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          type: object
+          description: Data containing required information
+        errors:
+          type: array
+          description: List of errors for the response
+          items:
+            $ref: '#/components/schemas/Error'
+        warnings:
+          type: array
+          description: List of warnings for the response
+          items:
+            $ref: '#/components/schemas/Warning'
+    Error:
+      type: object
+      description: Error response containing details about the error
+      properties:
+        description:
+          type: string
+          description: Description of the error
+        message:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          format: int32
+          description: HTTP status code for the error
+    Warning:
+      type: object
+      description: Warning information
+      properties:
+        message:
+          type: string
+          description: Warning message
+          example: string
+    AmountCharges:
+      description: Contains information on the total amount of all charges.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Total amount of all charges.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
+    AccommodationReservationPayoutBreakdownResponse:
+      type: object
+      description: Response of partner payout information with detailed breakdown for respective accommodation reservation
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/DefaultMeta'
+          description: The meta
+        data:
+          allOf:
+          - $ref: '#/components/schemas/BreakdownResponse'
+          description: The data
+        errors:
+          type: array
+          maxItems: 0
+          items: {}
+        warnings:
+          type: array
+          maxItems: 0
+          items: {}
+    AmountPaid:
+      description: Contains information on the total amount the guest paid to Booking.com.
+      properties:
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Amount paid by the guest.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
     ReservationDataNotFoundErrorResponse:
       type: object
       description: Response when the reservation data is not found
@@ -394,56 +423,27 @@ components:
           description: List of warnings for the response
           items:
             $ref: '#/components/schemas/Warning'
-    Warning:
+    DefaultMeta:
       type: object
-      description: Warning information
+      description: Metadata for the response
       properties:
-        message:
+        ruid:
           type: string
-          description: Warning message
+          description: Request unique identifier
           example: string
-    UnauthorizedRequestResponse:
-      type: object
-      description: Response when the token is valid but does not have access to the requested resource.
+    AmountPayout:
+      description: Contains information on the total amount to be paid out to the partner.
       properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
-    BadRequestErrorResponse:
-      type: object
-      description: Response when the request doesn't have valid parameters
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/DefaultMeta'
-          description: The meta
-        data:
-          type: object
-          description: Data containing required information
-        errors:
-          type: array
-          description: List of errors for the response
-          items:
-            $ref: '#/components/schemas/Error'
-        warnings:
-          type: array
-          description: List of warnings for the response
-          items:
-            $ref: '#/components/schemas/Warning'
+        currency:
+          type: string
+          description: Currency of the amount.
+        value:
+          type: string
+          description: Total payout amount.
+        decimals:
+          type: integer
+          format: int32
+          description: Number of decimals in the amount.
     CheckoutDateTooOldErrorResponse:
       type: object
       description: Response when the checkout date is older than the allowed 18-months window
