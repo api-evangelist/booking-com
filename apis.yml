@@ -2126,6 +2126,8 @@ apis:
   humanURL: https://developers.booking.com/demand/docs/open-api/3.2/demand-api
   baseURL: https://demandapi.booking.com/3.2
   tags:
+  - Report Status
+  tags_raw:
   - Report status
   properties:
   - type: OpenAPI
